@@ -47,6 +47,19 @@ grep -q '<html lang="ar" dir="rtl">' <(curl -s "$BASE_URL/?lang=ar") && pass "ar
 expect "fichier .env inaccessible" 404 "$(curl -s -o /dev/null -w '%{http_code}' "$BASE_URL/../.env")"
 expect "dossier app/ inaccessible" 404 "$(curl -s -o /dev/null -w '%{http_code}' "$BASE_URL/../app/bootstrap.php")"
 
+echo "2 bis. Ressources"
+for lang in fr en ar; do
+    html=$(curl -s "$BASE_URL/?lang=$lang")
+    external=$(echo "$html" | grep -oE '<(link|script|img)[^>]+(href|src)="https?://[^"]+"' | grep -v "rel=\"canonical\"\|rel=\"alternate\"")
+    if [[ -z "$external" ]]; then pass "aucune ressource externe ($lang)"; else fail "ressource externe ($lang) : $external"; fi
+    if echo "$html" | grep -qE '>(À propos|About|من نحن)<'; then fail "« À propos » encore dans le menu ($lang)"; else pass "pas de « À propos » ($lang)"; fi
+done
+for weight in Regular Medium SemiBold Bold; do
+    expect "police IBMPlexSansArabic-$weight.woff2" 200 "$(curl -s -o /dev/null -w '%{http_code}' "$BASE_URL/assets/fonts/IBMPlexSansArabic-$weight.woff2")"
+done
+hero_size=$(curl -s -o /dev/null -w '%{size_download}' "$BASE_URL/assets/images/hero.webp")
+if [[ "$hero_size" -gt 0 && "$hero_size" -lt 256000 ]]; then pass "hero.webp sous 250 Ko ($hero_size octets)"; else fail "hero.webp : $hero_size octets"; fi
+
 echo "3. Formulaire de contact"
 rm -f storage/ratelimit/contact-*.log
 sql "DELETE FROM contact_requests WHERE email = '$TEST_EMAIL'"
@@ -92,7 +105,7 @@ else
     pass "aucun tiret cadratin"
 fi
 # CLAUDE.md énonce la règle « jamais djiboutien » : il est exclu de cette recherche.
-for word in djiboutien PromptEspace "Labo Tech" CEREBRO Reserva; do
+for word in djiboutien PromptEspace "Labo Tech" CEREBRO Reserva googleapis gstatic; do
     if grep -rni "$word" app lang public database >/dev/null 2>&1; then
         fail "« $word » présent :"; grep -rni "$word" app lang public database
     else
