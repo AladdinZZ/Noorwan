@@ -530,7 +530,7 @@ main:focus {
     position: relative;
     isolation: isolate;
     padding: clamp(72px, 10vw, 130px) var(--gutter) clamp(56px, 7vw, 90px);
-    background: #0A0E18 url("../images/hero.png") 58% center / cover no-repeat;
+    background: #0A0E18 url("../images/hero.webp") 58% center / cover no-repeat;
     color: var(--white);
 }
 
