@@ -1,0 +1,7 @@
+Options -Indexes
+DirectoryIndex index.php
+
+# Aucun fichier caché (.htaccess, .env éventuel) n'est servi.
+<FilesMatch "^\.">
+    Require all denied
+</FilesMatch>

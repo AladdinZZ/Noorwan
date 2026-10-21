@@ -1,0 +1,405 @@
+<?php
+
+declare(strict_types=1);
+
+// English strings. No em dash.
+
+return [
+    'meta' => [
+        'home_title' => 'Noorwan: consulting, solutions and publishing',
+        'home_description' => 'Consulting, digital solutions and publishing: three complementary fields that turn ideas into useful results.',
+        'edition_title' => 'Publishing | Noorwan',
+        'edition_description' => 'Noorwan Publishing guides authors all the way to publication on Amazon and publishes its {méta}Physique and Chemins de l\'Âme collections.',
+        'contact_title' => 'Contact | Noorwan',
+        'contact_description' => 'Consulting, a product demo or publishing a book: write to Noorwan.',
+        'mentions_title' => 'Legal notice | Noorwan',
+        'mentions_description' => 'Legal notice of the noorwan.com website.',
+        'privacy_title' => 'Privacy | Noorwan',
+        'privacy_description' => 'How Noorwan processes the data sent through the contact form.',
+        'cookies_title' => 'Cookies | Noorwan',
+        'cookies_description' => 'The noorwan.com website sets no cookies and does not measure its audience.',
+    ],
+    'nav' => [
+        'consulting' => 'Consulting',
+        'solutions' => 'Solutions',
+        'edition' => 'Publishing',
+        'contact' => 'Contact',
+        'skip' => 'Skip to content',
+        'home_label' => 'Noorwan, home',
+        'main_label' => 'Main navigation',
+        'mobile_label' => 'Mobile navigation',
+        'footer_label' => 'Footer',
+        'lang_label' => 'Language',
+        'menu' => 'Menu',
+    ],
+    'common' => [
+        'foot_line' => 'Ideas for concrete solutions.',
+        'copy' => '© :year Noorwan',
+        'arrow' => '→',
+        'arrow_up' => '↗',
+    ],
+    'legal_nav' => [
+        'mentions' => 'Legal notice',
+        'privacy' => 'Privacy',
+        'cookies' => 'Cookies',
+    ],
+    'home' => [
+        'eyebrow' => 'Noorwan · Vision & creation',
+        'title' => 'Ideas for concrete solutions',
+        'lead' => 'Consulting, digital solutions and publishing: three complementary fields that turn ideas into useful results.',
+        'btn_explore' => 'Explore our expertise',
+        'btn_talk' => 'Let\'s talk about your project',
+        'motto' => 'A clear vision. Concrete steps.',
+        'univ_eyebrow' => 'Our fields',
+        'univ_h' => 'Three fields, one standard',
+        'univers' => [
+            'consulting' => ['title' => 'Consulting', 'text' => 'Clarify your positioning, structure your priorities and steer your digital projects: strategy, digital marketing, eCommerce, training.'],
+            'solutions' => ['title' => 'Solutions', 'text' => 'Business software: human resources, mobile payment and artificial intelligence. Mobile first, in three languages.'],
+            'edition' => ['title' => 'Publishing', 'text' => 'We guide authors all the way to publishing their book on Amazon, and we publish our own collections.'],
+        ],
+        'app_eyebrow' => 'Our approach',
+        'app_h' => 'From idea to action',
+        'steps' => [
+            ['title' => 'Understand the need', 'text' => 'Listen before proposing.'],
+            ['title' => 'Structure the answer', 'text' => 'Prioritise what matters.'],
+            ['title' => 'Design the solution', 'text' => 'Deliver a useful tool.'],
+            ['title' => 'Learn and evolve', 'text' => 'Measure, adjust, pass on.'],
+        ],
+        'cons_eyebrow' => 'Consulting',
+        'cons_h' => 'Giving your projects a clear direction',
+        'cons_lead' => 'Strategic advice and digital support with a pragmatic approach, built on twenty years of digital, marketing and eCommerce experience.',
+        'expertises' => [
+            ['title' => 'Strategy and project structuring', 'text' => 'Clarify the goal, the model and the priorities, then move in realistic steps.'],
+            ['title' => 'Digital marketing and online presence', 'text' => 'Positioning, content, social media and campaigns.'],
+            ['title' => 'eCommerce and customer journey', 'text' => 'A store and a buying journey that convert.'],
+            ['title' => 'Web development and digital tools', 'text' => 'Websites, apps and custom tools, built to last.'],
+            ['title' => 'Training', 'text' => 'Train your teams in digital and tools, on site or remotely.'],
+        ],
+        'cons_app_h' => 'Clarify before you accelerate.',
+        'cons_app' => 'One useful step delivered beats a grand plan on paper.',
+        'sol_eyebrow' => 'Solutions',
+        'sol_h' => 'Tools built for businesses',
+        'solutions' => [
+            ['cat' => 'Human resources', 'name' => 'Inteek', 'text' => 'From hiring to team management, HR made simple.', 'confidential' => false],
+            ['cat' => 'Payment', 'name' => 'OnePay', 'text' => '', 'confidential' => true],
+            ['cat' => 'Artificial intelligence', 'name' => 'AI platform', 'text' => '', 'confidential' => true],
+        ],
+        'confidential' => 'Confidential',
+        'ed_eyebrow' => 'Another space for sharing',
+        'ed_h' => 'Ideas to read, discover and pass on',
+        'ed_text' => 'Noorwan Publishing guides authors through every step, all the way to publishing their book on Amazon. Our own collections, {méta}Physique and Chemins de l\'Âme, are the proof.',
+        'ed_btn' => 'Publish your book',
+        'ed_btn_catalogue' => 'See the catalogue',
+        'cta_h' => 'Have a project in mind?',
+        'cta_text' => 'Consulting, a product demo or publishing a book: let\'s talk about your goals.',
+        'cta_btn' => 'Let\'s talk about your project',
+    ],
+    'books' => [
+        'soon' => 'Forthcoming',
+        'cover_alt' => 'Cover: :title',
+        'items' => [
+            'harmonie' => [
+                'sub' => '{méta}Physique · Volume 1',
+                'lead' => 'This book explores the order of creation, from the universe to man.',
+                'summary' => 'It contrasts scientific discoveries (cosmos, life, consciousness) with teachings revealed through the prophets. It shows how man finds his rightful place when living in accordance with the order desired by the Creator.',
+            ],
+            'lumiere' => [
+                'sub' => '{méta}Physique · Volume 2',
+                'lead' => 'Light as the central reality of creation and revelation.',
+                'summary' => 'It addresses physical light, human perception, and Divine Light mentioned in Scriptures, showing how prophets were receptors and transmitters of this clarity.',
+            ],
+            'vibration' => ['sub' => '{méta}Physique · Volume 3, forthcoming'],
+            'le-mal' => [
+                'sub' => 'The 7 degrees of Shadow',
+                'lead' => 'Analysis of the 7 degrees of Shadow and darkened consciousness.',
+                'summary' => 'This book analyzes how consciousness is obscured by fear, lack, and forgetfulness of God. It details the inner mechanisms that distance man from his luminous nature.',
+            ],
+            'le-bien' => [
+                'sub' => 'The 7 degrees of Light',
+                'lead' => 'The progressive awakening of the heart and the 7 degrees of Light.',
+                'summary' => 'This work describes the path opposite to Evil: the progressive awakening of the heart, the clarity of intention, and the return to righteousness. It guides the reader towards an embodied and positive spirituality.',
+            ],
+            'etre-pour-avoir' => [
+                'sub' => 'Philosophical essay',
+                'lead' => 'Philosophical essay on possession and existence.',
+                'summary' => 'This book questions the relationship to possession and reminds us that balance is only found when Having remains in the service of Being, in accordance with the ethics taught by the prophets.',
+            ],
+        ],
+    ],
+    'edition' => [
+        'tag' => 'Noorwan Publishing',
+        'title' => 'From your manuscript to your book on Amazon',
+        'lead' => 'Noorwan Publishing guides authors through every step, all the way to publishing their book on Amazon. Our own collections, {méta}Physique and Chemins de l\'Âme, are the proof.',
+        'btn_publish' => 'Publish your book',
+        'btn_catalogue' => 'See the catalogue',
+        // A VALIDER PAR MARWAN : contenu des quatre étapes de la prestation.
+        'service_eyebrow' => 'Our service',
+        'service_title' => 'Four steps to publication',
+        'service_lead' => 'Support tailored to your project, whether your manuscript is finished or still a work in progress.',
+        'service_steps' => [
+            ['title' => 'Manuscript', 'text' => 'Proofreading, advice on structure and corrections, for a manuscript ready to publish.'],
+            ['title' => 'Layout', 'text' => 'Interior layout of the book, in print and digital editions.'],
+            ['title' => 'Cover', 'text' => 'A cover that reflects your book, in the formats Amazon requires.'],
+            ['title' => 'Going live', 'text' => 'Creating the book page on Amazon, choosing categories and price, publishing.'],
+        ],
+        'catalogue_eyebrow' => 'Catalogue',
+        'catalogue_title' => 'Our collections',
+        'collections' => [
+            'metaphysique' => [
+                'name' => '{méta}Physique',
+                'text' => 'This collection offers a cross-reading between science and revelation, demonstrating that the laws of creation and the messages transmitted by the prophets stem from the same source. The approach follows the continuity of revelations, from the first prophets to the Seal of Prophecy, without ever opposing them to rational knowledge.',
+            ],
+            'chemins' => [
+                'name' => 'Chemins de l\'Âme',
+                'text' => 'This collection is more inward and ethical. It focuses on the journey of the human heart, its wanderings and its rectification, in the light of revealed teachings.',
+            ],
+        ],
+        'buy' => 'Buy on Amazon',
+        'buy_label' => 'Buy :title on Amazon',
+        'writing' => 'Writing in progress',
+        'also_in_english' => 'Also available in English',
+    ],
+    'contact' => [
+        'tag' => 'Contact',
+        'title' => 'Let\'s talk about your project',
+        'lead' => 'Consulting, a product demo or publishing a book: write to us and your message goes to the right team.',
+        'form_label' => 'Contact form',
+        'required_note' => 'All fields are required unless marked otherwise.',
+        'name' => 'Name',
+        'email' => 'Email address',
+        'phone' => 'Phone',
+        'optional' => 'optional',
+        'universe' => 'Your request is about',
+        'universe_placeholder' => 'Choose',
+        'universes' => [
+            'consulting' => 'Consulting',
+            'solutions' => 'Solutions',
+            'edition' => 'Publishing',
+            'autre' => 'Other',
+        ],
+        'message' => 'Message',
+        'consents_legend' => 'Your preferences (optional)',
+        'consent_offers' => 'Receive offers from Noorwan',
+        'consent_partners' => 'Receive offers from Noorwan\'s partners',
+        'consent_hint' => 'You can withdraw your consent at any time.',
+        'honeypot' => 'Leave this field empty',
+        'submit' => 'Send message',
+        'privacy_note' => 'Your data is used to handle your request and, if you agree, to send you offers.',
+        'privacy_link' => 'Read our privacy policy',
+        'success_title' => 'Thank you, your message has been sent.',
+        'success_text' => 'The right team will reply to the address you gave.',
+        'success_again' => 'Send another message',
+        'errors_title' => 'Your message was not sent.',
+        'errors_summary' => 'Please correct the fields marked below.',
+        'errors' => [
+            'name_required' => 'Enter your name.',
+            'name_length' => 'Your name must be between 2 and 120 characters.',
+            'email_required' => 'Enter your email address.',
+            'email_invalid' => 'This email address is not valid.',
+            'phone_invalid' => 'This number is not valid (digits, spaces and + only).',
+            'universe_required' => 'Choose what your request is about.',
+            'message_required' => 'Write your message.',
+            'message_length' => 'Your message must be between 10 and 5,000 characters.',
+            'expired' => 'The form has expired. Check your details and send it again.',
+            'rate_limited' => 'Too many messages from your connection. Please try again in an hour.',
+            'server' => 'A technical error prevented sending. Please try again in a few minutes.',
+        ],
+    ],
+    // Pages légales : A FAIRE RELIRE PAR UN JURISTE.
+    'legal' => [
+        'eyebrow' => 'Legal information',
+        'updated' => 'Last updated: 21 October 2026',
+        'mentions' => [
+            'title' => 'Legal notice',
+            'intro' => 'Information about the publisher and the host of the noorwan.com website.',
+            'sections' => [
+                [
+                    'title' => 'Publisher',
+                    'body' => [
+                        'The noorwan.com website is published by:',
+                        [
+                            'list' => [
+                                'Company name: [À COMPLÉTER]',
+                                'Legal form and share capital: [À COMPLÉTER]',
+                                'Registered office: [À COMPLÉTER]',
+                                'Registration number: [À COMPLÉTER]',
+                                'Contact: the form on the Contact page of the website.',
+                            ],
+                        ],
+                    ],
+                ],
+                [
+                    'title' => 'Publication director',
+                    'body' => [
+                        '[À COMPLÉTER]',
+                    ],
+                ],
+                [
+                    'title' => 'Hosting',
+                    'body' => [
+                        [
+                            'list' => [
+                                'Host: [À COMPLÉTER]',
+                                'Address: [À COMPLÉTER]',
+                                'Phone: [À COMPLÉTER]',
+                            ],
+                        ],
+                    ],
+                ],
+                [
+                    'title' => 'Intellectual property',
+                    'body' => [
+                        'All content on the website (texts, logo, images, book covers) is protected by copyright and trademark law. Any reproduction or reuse, in whole or in part, without the prior written permission of Noorwan is prohibited.',
+                    ],
+                ],
+                [
+                    'title' => 'Links to other websites',
+                    'body' => [
+                        'The website contains links to third-party websites, including Amazon for buying the books. Noorwan is not responsible for the content of these websites or for how they process your data.',
+                    ],
+                ],
+                [
+                    'title' => 'Personal data and cookies',
+                    'body' => [
+                        'The processing of data sent through the contact form is described on the Privacy page. The website sets no cookies: see the Cookies page.',
+                    ],
+                ],
+                [
+                    'title' => 'Governing law',
+                    'body' => [
+                        'This legal notice is governed by the law of [À COMPLÉTER].',
+                    ],
+                ],
+            ],
+        ],
+        'privacy' => [
+            'title' => 'Privacy policy',
+            'intro' => 'What data Noorwan collects on noorwan.com, why, how long it is kept and how to exercise your rights. This policy is based on the General Data Protection Regulation (GDPR).',
+            'sections' => [
+                [
+                    'title' => 'Data controller',
+                    'body' => [
+                        'The data controller is [À COMPLÉTER] (company name), whose registered office is located at [À COMPLÉTER].',
+                        'For any question about your data: [À COMPLÉTER] (dedicated email address), or the form on the Contact page, choosing "Other".',
+                    ],
+                ],
+                [
+                    'title' => 'Data collected',
+                    'body' => [
+                        'The website only collects data when you send the contact form:',
+                        [
+                            'list' => [
+                                'your name and email address;',
+                                'your phone number, only if you give it;',
+                                'the subject of your request (Consulting, Solutions, Publishing or Other) and your message;',
+                                'your choices about offers from Noorwan and from its partners, with the version of the consent text shown;',
+                                'the language of the website, the date and time of sending, and the type of browser used;',
+                                'an encrypted, irreversible fingerprint of your IP address, computed with a secret key. The IP address itself is never stored.',
+                            ],
+                        ],
+                        'No other data is collected: no cookies, no audience measurement, no profiling. Pages, images and fonts are served by the website itself: your visit sends no data to any third-party service.',
+                    ],
+                ],
+                [
+                    'title' => 'Why this data is used',
+                    'body' => [
+                        [
+                            'list' => [
+                                'To answer your request. Legal basis: steps taken at your request before entering into a contract, or Noorwan\'s legitimate interest in answering the messages it receives.',
+                                'To send you offers from Noorwan, only if you ticked the matching box. Legal basis: your consent.',
+                                'To send you offers from Noorwan\'s partners, only if you ticked the matching box. Legal basis: your consent. Identity of the partners and how offers are sent (by Noorwan or by the partners): [À COMPLÉTER].',
+                                'To protect the form against abuse (sending limit, IP address fingerprint). Legal basis: Noorwan\'s legitimate interest in the security of the website.',
+                            ],
+                        ],
+                    ],
+                ],
+                [
+                    'title' => 'Who receives your data',
+                    'body' => [
+                        'Your data is only available to the Noorwan teams in charge of your request. It is stored with the website host ([À COMPLÉTER]) and may be transferred to Noorwan\'s internal customer relationship tool. It is never sold or rented.',
+                        'Hosting location and any transfers outside the European Union, with their safeguards: [À COMPLÉTER].',
+                    ],
+                ],
+                [
+                    'title' => 'How long data is kept',
+                    'body' => [
+                        [
+                            'list' => [
+                                'Contact requests and related data: 3 years after your last contact with Noorwan, then deleted.',
+                                'Consent to receive offers: until you withdraw it, and at most 3 years after your last contact.',
+                                'Sending limit data (IP address fingerprint): 1 hour.',
+                            ],
+                        ],
+                    ],
+                ],
+                [
+                    'title' => 'Withdrawing your consent',
+                    'body' => [
+                        'You can withdraw your consent to receive offers from Noorwan or its partners at any time: write to us through the form on the Contact page (subject "Other") or at [À COMPLÉTER]. Every offer sent by email will also contain an unsubscribe link. Withdrawal applies to the future and does not affect past mailings.',
+                    ],
+                ],
+                [
+                    'title' => 'Your rights',
+                    'body' => [
+                        'You have the right to access, rectify, erase, restrict, object to the processing of and port your data. To exercise these rights, use the contact details given above; proof of identity may be requested if there is any doubt.',
+                        'If you believe your rights are not respected, you can lodge a complaint with the competent data protection authority (in France, the CNIL).',
+                    ],
+                ],
+                [
+                    'title' => 'Security',
+                    'body' => [
+                        'Exchanges with the website are encrypted (HTTPS). Data is stored in a protected database that only authorised people can access.',
+                    ],
+                ],
+                [
+                    'title' => 'Changes',
+                    'body' => [
+                        'This policy may change. The date of the last update is shown at the top of the page.',
+                    ],
+                ],
+            ],
+        ],
+        'cookies' => [
+            'title' => 'Cookies',
+            'intro' => 'The noorwan.com website sets no cookies and does not measure its audience.',
+            'sections' => [
+                [
+                    'title' => 'No cookies',
+                    'body' => [
+                        'The website sets no cookies on your device, and no equivalent tracker (local storage, invisible pixel, browser fingerprinting).',
+                    ],
+                ],
+                [
+                    'title' => 'No audience measurement or advertising',
+                    'body' => [
+                        'The website uses no audience measurement, advertising or social media sharing tools. That is why no banner asks for your consent.',
+                    ],
+                ],
+                [
+                    'title' => 'Contact form',
+                    'body' => [
+                        'The form is protected by a token written into the page itself, without cookies or sessions.',
+                    ],
+                ],
+                [
+                    'title' => 'Fonts',
+                    'body' => [
+                        'Fonts, including the Arabic font, are hosted on the website itself: displaying them calls on no third-party service.',
+                    ],
+                ],
+                [
+                    'title' => 'Third-party websites',
+                    'body' => [
+                        'When you follow a link to Amazon or another website, that website\'s cookie policy applies.',
+                    ],
+                ],
+                [
+                    'title' => 'Changes',
+                    'body' => [
+                        'If the website were ever to use cookies that require your consent, this page would be updated and your consent would be asked for beforehand.',
+                    ],
+                ],
+            ],
+        ],
+    ],
+];
