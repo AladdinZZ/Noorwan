@@ -1156,3 +1156,188 @@ main:focus {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 }
+
+/* ---------- Contact ---------- */
+
+/* Formulaire aligné sur le titre de la page, sur une colonne de lecture confortable. */
+.contact-wrap > * {
+    max-width: 760px;
+}
+
+.contact-form {
+    display: grid;
+    gap: 22px;
+}
+
+.field {
+    display: grid;
+    gap: 8px;
+    min-width: 0;
+}
+
+.field-row {
+    display: grid;
+    gap: 22px;
+}
+
+@media (min-width: 640px) {
+    .field-row {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.field label,
+.consents legend {
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.optional {
+    color: var(--text-3);
+    font-weight: 400;
+}
+
+.field input,
+.field select,
+.field textarea {
+    width: 100%;
+    min-height: 48px;
+    padding: 12px 14px;
+    border: 1px solid var(--line-2);
+    border-radius: 8px;
+    background: var(--white);
+    color: var(--ink);
+    font: inherit;
+    font-size: 16px;
+    letter-spacing: 0;
+}
+
+/* Champs au format latin (e-mail, téléphone) : alignés selon la langue de la page. */
+.field input[dir="ltr"] {
+    text-align: start;
+}
+
+[dir="rtl"] .field input[dir="ltr"] {
+    text-align: right;
+}
+
+.field textarea {
+    min-height: 160px;
+    resize: vertical;
+}
+
+.field select {
+    appearance: none;
+    padding-inline-end: 40px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23515154' stroke-width='1.6'/%3E%3C/svg%3E");
+    background-position: right 16px center;
+    background-repeat: no-repeat;
+}
+
+[dir="rtl"] .field select {
+    background-position: left 16px center;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+    border-color: var(--blue);
+    outline: 2px solid rgba(0, 113, 227, 0.25);
+    outline-offset: 0;
+}
+
+.field [aria-invalid="true"] {
+    border-color: var(--error);
+}
+
+.field-error {
+    color: var(--error);
+    font-size: 14px;
+}
+
+.form-note {
+    color: var(--text-3);
+    font-size: 14px;
+}
+
+.consents {
+    display: grid;
+    gap: 12px;
+    margin: 0;
+    padding: 20px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+}
+
+.consents legend {
+    padding-inline: 6px;
+}
+
+.check {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.check input {
+    flex: none;
+    width: 22px;
+    height: 22px;
+    margin: 1px 0 0;
+    accent-color: var(--blue);
+}
+
+.form-submit {
+    display: grid;
+    justify-items: start;
+    gap: 14px;
+}
+
+/* Champ piège : hors écran, jamais affiché ni lu. */
+.hp {
+    position: absolute;
+    inset-inline-start: -10000px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}
+
+.alert {
+    display: grid;
+    gap: 6px;
+    margin-block-end: 28px;
+    padding: 20px 22px;
+    border-inline-start: 4px solid;
+    border-radius: 12px;
+}
+
+.alert:focus {
+    outline: none;
+}
+
+.alert-title {
+    font-weight: 650;
+}
+
+.alert ul {
+    margin: 4px 0 0;
+    padding-inline-start: 20px;
+}
+
+.alert a {
+    color: inherit;
+}
+
+.alert-error {
+    border-color: var(--error);
+    background: var(--error-tint);
+    color: var(--error);
+}
+
+.alert-success {
+    border-color: var(--success);
+    background: var(--success-tint);
+    color: var(--success);
+}

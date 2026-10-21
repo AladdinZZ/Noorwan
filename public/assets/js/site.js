@@ -46,3 +46,13 @@
         desktop.addEventListener('change', onChange);
     }
 })();
+
+// Après un envoi, le message de succès ou d'erreur reçoit le focus pour être annoncé.
+(function () {
+    'use strict';
+
+    var alert = document.querySelector('[data-autofocus]');
+    if (alert) {
+        alert.focus();
+    }
+})();

@@ -74,7 +74,7 @@ if (!headers_sent()) {
     header('Referrer-Policy: strict-origin-when-cross-origin');
     header('Permissions-Policy: camera=(), microphone=(), geolocation=(), interest-cohort=()');
     header(
-        "Content-Security-Policy: default-src 'self'; img-src 'self'; script-src 'self'; "
+        "Content-Security-Policy: default-src 'self'; img-src 'self' data:; script-src 'self'; "
         . "style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; "
         . "form-action 'self'; frame-ancestors 'none'; base-uri 'self'; object-src 'none'"
     );
