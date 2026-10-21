@@ -23,7 +23,6 @@ return [
         'consulting' => 'Consulting',
         'solutions' => 'Solutions',
         'edition' => 'Publishing',
-        'about' => 'About',
         'contact' => 'Contact',
         'skip' => 'Skip to content',
         'home_label' => 'Noorwan, home',

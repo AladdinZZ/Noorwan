@@ -5,12 +5,11 @@ declare(strict_types=1);
 // En-tête commun : <head>, bandeau avec logo, navigation, choix de langue et menu mobile.
 // Attend $meta = ['title' => ..., 'description' => ...] (chaînes brutes, échappées ici).
 
-// « À propos » pointe vers le haut de l'accueil, comme dans la maquette v1 (pas encore de page dédiée).
+// « À propos » viendra avec sa propre page : il n'est pas dans le menu en v1.
 $navItems = [
     ['label' => 'nav.consulting', 'href' => url('index', 'consulting')],
     ['label' => 'nav.solutions', 'href' => url('index', 'solutions')],
     ['label' => 'nav.edition', 'href' => url('index', 'edition')],
-    ['label' => 'nav.about', 'href' => url('index', 'top')],
     ['label' => 'nav.contact', 'href' => url('index', 'contact')],
 ];
 

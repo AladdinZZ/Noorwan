@@ -27,7 +27,6 @@ return [
         'consulting' => 'الاستشارات',
         'solutions' => 'الحلول',
         'edition' => 'النشر',
-        'about' => 'من نحن',
         'contact' => 'اتصل بنا',
         // À relire.
         'skip' => 'الانتقال إلى المحتوى',
