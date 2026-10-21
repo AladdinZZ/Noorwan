@@ -54,7 +54,7 @@ return [
         'univ_h' => 'Three fields, one standard',
         'univers' => [
             'consulting' => ['title' => 'Consulting', 'text' => 'Clarify your positioning, structure your priorities and steer your digital projects: strategy, digital marketing, eCommerce, training.'],
-            'solutions' => ['title' => 'Solutions', 'text' => 'Business software: bookings, human resources, mobile payment and artificial intelligence. Mobile first, in three languages.'],
+            'solutions' => ['title' => 'Solutions', 'text' => 'Business software: human resources, mobile payment and artificial intelligence. Mobile first, in three languages.'],
             'edition' => ['title' => 'Publishing', 'text' => 'We guide authors all the way to publishing their book on Amazon, and we publish our own collections.'],
         ],
         'app_eyebrow' => 'Our approach',

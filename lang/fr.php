@@ -54,7 +54,7 @@ return [
         'univ_h' => 'Trois univers, une même exigence',
         'univers' => [
             'consulting' => ['title' => 'Consulting', 'text' => 'Clarifier votre positionnement, structurer vos priorités et piloter vos projets numériques : stratégie, marketing digital, eCommerce, formation.'],
-            'solutions' => ['title' => 'Solutions', 'text' => 'Des logiciels pour les entreprises : réservation, ressources humaines, paiement mobile et intelligence artificielle. Mobiles d\'abord, en trois langues.'],
+            'solutions' => ['title' => 'Solutions', 'text' => 'Des logiciels pour les entreprises : ressources humaines, paiement mobile et intelligence artificielle. Mobiles d\'abord, en trois langues.'],
             'edition' => ['title' => 'Édition', 'text' => 'Nous accompagnons les auteurs jusqu\'à la publication de leur livre sur Amazon, et nous publions nos propres collections.'],
         ],
         'app_eyebrow' => 'Notre approche',
