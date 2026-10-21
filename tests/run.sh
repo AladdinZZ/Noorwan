@@ -1,20 +1,30 @@
 #!/usr/bin/env bash
-# Tests du site en local (MAMP). Usage : tests/run.sh
-# Variables facultatives : BASE_URL (défaut : APP_URL du .env), PHP, MYSQL.
+# Tests du site, en local (MAMP) comme en intégration continue. Usage : tests/run.sh
+# Variables facultatives, lues dans l'environnement puis dans .env :
+#   BASE_URL (défaut : APP_URL du .env, sinon l'adresse MAMP), DB_HOST, DB_NAME, DB_USER, DB_PASS,
+#   PHP, MYSQL (défaut : le client MySQL de MAMP s'il existe, sinon mysql).
+# En CI : BASE_URL=http://127.0.0.1:8000 avec le site servi par « php -S 127.0.0.1:8000 -t public ».
 # Attention : vide storage/ratelimit/ et supprime de la base les envois de test (@example.invalid).
 
 set -u
 cd "$(dirname "$0")/.."
 
-env_value() { grep -E "^$1=" .env | head -n 1 | cut -d= -f2- | sed -e "s/^[\"']//" -e "s/[\"']$//"; }
+env_value() { [[ -f .env ]] && grep -E "^$1=" .env | head -n 1 | cut -d= -f2- | sed -e "s/^[\"']//" -e "s/[\"']$//"; }
+# Valeur de l'environnement si elle est définie, sinon celle du .env, sinon la valeur par défaut.
+config() { local value="${!1:-}"; [[ -n "$value" ]] || value="$(env_value "$1")"; printf '%s' "${value:-${2:-}}"; }
 
+MAMP_MYSQL="/Applications/MAMP/Library/bin/mysql80/bin/mysql"
 PHP="${PHP:-php}"
-MYSQL="${MYSQL:-/Applications/MAMP/Library/bin/mysql80/bin/mysql}"
-BASE_URL="${BASE_URL:-$(env_value APP_URL)}"
-DB_HOST_PORT="$(env_value DB_HOST)"
+MYSQL="${MYSQL:-$([[ -x "$MAMP_MYSQL" ]] && echo "$MAMP_MYSQL" || echo mysql)}"
+BASE_URL="$(config BASE_URL "$(config APP_URL http://localhost:8888/noorwan-site/public)")"
+BASE_URL="${BASE_URL%/}"
+DB_HOST_PORT="$(config DB_HOST 127.0.0.1)"
 DB_HOST="${DB_HOST_PORT%%:*}"
 DB_PORT="3306"
 [[ "$DB_HOST_PORT" == *:* ]] && DB_PORT="${DB_HOST_PORT##*:}"
+DB_NAME="$(config DB_NAME noorwan_site)"
+DB_USER="$(config DB_USER)"
+DB_PASS="$(config DB_PASS)"
 TEST_EMAIL="test-run@example.invalid"
 
 failures=0
@@ -24,8 +34,7 @@ expect() { # expect LIBELLÉ ATTENDU OBTENU
     if [[ "$2" == "$3" ]]; then pass "$1 ($3)"; else fail "$1 : attendu $2, obtenu $3"; fi
 }
 sql() {
-    MYSQL_PWD="$(env_value DB_PASS)" "$MYSQL" -h"$DB_HOST" -P"$DB_PORT" -u"$(env_value DB_USER)" \
-        -N -B "$(env_value DB_NAME)" -e "$1" 2>/dev/null
+    MYSQL_PWD="$DB_PASS" "$MYSQL" -h"$DB_HOST" -P"$DB_PORT" -u"$DB_USER" -N -B "$DB_NAME" -e "$1" 2>/dev/null
 }
 token() { curl -s "$BASE_URL/contact.php?lang=fr" | grep -o 'name="token" value="[^"]*"' | sed -e 's/.*value="//' -e 's/"$//'; }
 
