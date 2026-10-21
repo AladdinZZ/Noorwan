@@ -19,7 +19,7 @@ declare(strict_types=1);
             </nav>
         </div>
         <div class="footer-bottom">
-            <span><?= t('common.copy', [':year' => date('Y')]) ?></span>
+            <span dir="ltr"><?= t('common.copy', [':year' => date('Y')]) ?></span>
             <div class="footer-legal">
                 <a href="<?= e(url('mentions-legales')) ?>"><?= t('legal_nav.mentions') ?></a>
                 <a href="<?= e(url('confidentialite')) ?>"><?= t('legal_nav.privacy') ?></a>

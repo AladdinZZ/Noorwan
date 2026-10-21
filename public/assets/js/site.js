@@ -1,0 +1,48 @@
+// Menu mobile. Sans JavaScript, le bouton reste masqué et la navigation mobile s'affiche telle quelle.
+(function () {
+    'use strict';
+
+    var button = document.querySelector('.menu-toggle');
+    var menu = button ? document.getElementById(button.getAttribute('aria-controls')) : null;
+    if (!button || !menu) {
+        return;
+    }
+
+    function setOpen(open) {
+        button.setAttribute('aria-expanded', open ? 'true' : 'false');
+        menu.hidden = !open;
+    }
+
+    setOpen(false);
+    button.hidden = false;
+
+    button.addEventListener('click', function () {
+        setOpen(button.getAttribute('aria-expanded') !== 'true');
+    });
+
+    // Un lien choisi ferme le menu (les liens sont surtout des ancres de la même page).
+    menu.addEventListener('click', function (event) {
+        if (event.target.closest('a')) {
+            setOpen(false);
+        }
+    });
+
+    // Échap ferme le menu et rend le focus au bouton.
+    document.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape' && button.getAttribute('aria-expanded') === 'true') {
+            setOpen(false);
+            button.focus();
+        }
+    });
+
+    // Passage en largeur bureau : le menu mobile se referme.
+    var desktop = window.matchMedia('(min-width: 881px)');
+    var onChange = function (event) {
+        if (event.matches) {
+            setOpen(false);
+        }
+    };
+    if (desktop.addEventListener) {
+        desktop.addEventListener('change', onChange);
+    }
+})();
