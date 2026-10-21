@@ -36,6 +36,21 @@ final class RateLimit
         fwrite($handle, implode("\n", $hits));
         flock($handle, LOCK_UN);
         fclose($handle);
+
+        $this->purge();
+    }
+
+    /**
+     * Supprime les fichiers sans envoi récent : rien n'est gardé au-delà de la fenêtre.
+     */
+    private function purge(): void
+    {
+        $since = time() - $this->window;
+        foreach (glob(STORAGE_DIR . '/ratelimit/' . $this->bucket . '-*.log') ?: [] as $file) {
+            if (@filemtime($file) < $since) {
+                @unlink($file);
+            }
+        }
     }
 
     private function recentHits(string $ip): array

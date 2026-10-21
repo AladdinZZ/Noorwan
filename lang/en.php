@@ -206,4 +206,201 @@ return [
             'server' => 'A technical error prevented sending. Please try again in a few minutes.',
         ],
     ],
+    // Pages légales : A FAIRE RELIRE PAR UN JURISTE.
+    'legal' => [
+        'eyebrow' => 'Legal information',
+        'updated' => 'Last updated: 21 October 2026',
+        'mentions' => [
+            'title' => 'Legal notice',
+            'intro' => 'Information about the publisher and the host of the noorwan.com website.',
+            'sections' => [
+                [
+                    'title' => 'Publisher',
+                    'body' => [
+                        'The noorwan.com website is published by:',
+                        [
+                            'list' => [
+                                'Company name: [À COMPLÉTER]',
+                                'Legal form and share capital: [À COMPLÉTER]',
+                                'Registered office: [À COMPLÉTER]',
+                                'Registration number: [À COMPLÉTER]',
+                                'Contact: the form on the Contact page of the website.',
+                            ],
+                        ],
+                    ],
+                ],
+                [
+                    'title' => 'Publication director',
+                    'body' => [
+                        '[À COMPLÉTER]',
+                    ],
+                ],
+                [
+                    'title' => 'Hosting',
+                    'body' => [
+                        [
+                            'list' => [
+                                'Host: [À COMPLÉTER]',
+                                'Address: [À COMPLÉTER]',
+                                'Phone: [À COMPLÉTER]',
+                            ],
+                        ],
+                    ],
+                ],
+                [
+                    'title' => 'Intellectual property',
+                    'body' => [
+                        'All content on the website (texts, logo, images, book covers) is protected by copyright and trademark law. Any reproduction or reuse, in whole or in part, without the prior written permission of Noorwan is prohibited.',
+                    ],
+                ],
+                [
+                    'title' => 'Links to other websites',
+                    'body' => [
+                        'The website contains links to third-party websites, including Amazon for buying the books. Noorwan is not responsible for the content of these websites or for how they process your data.',
+                    ],
+                ],
+                [
+                    'title' => 'Personal data and cookies',
+                    'body' => [
+                        'The processing of data sent through the contact form is described on the Privacy page. The website sets no cookies: see the Cookies page.',
+                    ],
+                ],
+                [
+                    'title' => 'Governing law',
+                    'body' => [
+                        'This legal notice is governed by the law of [À COMPLÉTER].',
+                    ],
+                ],
+            ],
+        ],
+        'privacy' => [
+            'title' => 'Privacy policy',
+            'intro' => 'What data Noorwan collects on noorwan.com, why, how long it is kept and how to exercise your rights. This policy is based on the General Data Protection Regulation (GDPR).',
+            'sections' => [
+                [
+                    'title' => 'Data controller',
+                    'body' => [
+                        'The data controller is [À COMPLÉTER] (company name), whose registered office is located at [À COMPLÉTER].',
+                        'For any question about your data: [À COMPLÉTER] (dedicated email address), or the form on the Contact page, choosing "Other".',
+                    ],
+                ],
+                [
+                    'title' => 'Data collected',
+                    'body' => [
+                        'The website only collects data when you send the contact form:',
+                        [
+                            'list' => [
+                                'your name and email address;',
+                                'your phone number, only if you give it;',
+                                'the subject of your request (Consulting, Solutions, Publishing or Other) and your message;',
+                                'your choices about offers from Noorwan and from its partners, with the version of the consent text shown;',
+                                'the language of the website, the date and time of sending, and the type of browser used;',
+                                'an encrypted, irreversible fingerprint of your IP address, computed with a secret key. The IP address itself is never stored.',
+                            ],
+                        ],
+                        'No other data is collected: no cookies, no audience measurement, no profiling.',
+                    ],
+                ],
+                [
+                    'title' => 'Why this data is used',
+                    'body' => [
+                        [
+                            'list' => [
+                                'To answer your request. Legal basis: steps taken at your request before entering into a contract, or Noorwan\'s legitimate interest in answering the messages it receives.',
+                                'To send you offers from Noorwan, only if you ticked the matching box. Legal basis: your consent.',
+                                'To send you offers from Noorwan\'s partners, only if you ticked the matching box. Legal basis: your consent. Identity of the partners and how offers are sent (by Noorwan or by the partners): [À COMPLÉTER].',
+                                'To protect the form against abuse (sending limit, IP address fingerprint). Legal basis: Noorwan\'s legitimate interest in the security of the website.',
+                            ],
+                        ],
+                    ],
+                ],
+                [
+                    'title' => 'Who receives your data',
+                    'body' => [
+                        'Your data is only available to the Noorwan teams in charge of your request. It is stored with the website host ([À COMPLÉTER]) and may be transferred to Noorwan\'s internal customer relationship tool. It is never sold or rented.',
+                        'Hosting location and any transfers outside the European Union, with their safeguards: [À COMPLÉTER].',
+                    ],
+                ],
+                [
+                    'title' => 'How long data is kept',
+                    'body' => [
+                        [
+                            'list' => [
+                                'Contact requests and related data: 3 years after your last contact with Noorwan, then deleted.',
+                                'Consent to receive offers: until you withdraw it, and at most 3 years after your last contact.',
+                                'Sending limit data (IP address fingerprint): 1 hour.',
+                            ],
+                        ],
+                    ],
+                ],
+                [
+                    'title' => 'Withdrawing your consent',
+                    'body' => [
+                        'You can withdraw your consent to receive offers from Noorwan or its partners at any time: write to us through the form on the Contact page (subject "Other") or at [À COMPLÉTER]. Every offer sent by email will also contain an unsubscribe link. Withdrawal applies to the future and does not affect past mailings.',
+                    ],
+                ],
+                [
+                    'title' => 'Your rights',
+                    'body' => [
+                        'You have the right to access, rectify, erase, restrict, object to the processing of and port your data. To exercise these rights, use the contact details given above; proof of identity may be requested if there is any doubt.',
+                        'If you believe your rights are not respected, you can lodge a complaint with the competent data protection authority (in France, the CNIL).',
+                    ],
+                ],
+                [
+                    'title' => 'Security',
+                    'body' => [
+                        'Exchanges with the website are encrypted (HTTPS). Data is stored in a protected database that only authorised people can access.',
+                    ],
+                ],
+                [
+                    'title' => 'Changes',
+                    'body' => [
+                        'This policy may change. The date of the last update is shown at the top of the page.',
+                    ],
+                ],
+            ],
+        ],
+        'cookies' => [
+            'title' => 'Cookies',
+            'intro' => 'The noorwan.com website sets no cookies and does not measure its audience.',
+            'sections' => [
+                [
+                    'title' => 'No cookies',
+                    'body' => [
+                        'The website sets no cookies on your device, and no equivalent tracker (local storage, invisible pixel, browser fingerprinting).',
+                    ],
+                ],
+                [
+                    'title' => 'No audience measurement or advertising',
+                    'body' => [
+                        'The website uses no audience measurement, advertising or social media sharing tools. That is why no banner asks for your consent.',
+                    ],
+                ],
+                [
+                    'title' => 'Contact form',
+                    'body' => [
+                        'The form is protected by a token written into the page itself, without cookies or sessions.',
+                    ],
+                ],
+                [
+                    'title' => 'Arabic font',
+                    'body' => [
+                        'Pages in Arabic load the IBM Plex Sans Arabic font from the Google Fonts service. This service sets no cookies, but your browser sends your IP address to Google to download the font.',
+                    ],
+                ],
+                [
+                    'title' => 'Third-party websites',
+                    'body' => [
+                        'When you follow a link to Amazon or another website, that website\'s cookie policy applies.',
+                    ],
+                ],
+                [
+                    'title' => 'Changes',
+                    'body' => [
+                        'If the website were ever to use cookies that require your consent, this page would be updated and your consent would be asked for beforehand.',
+                    ],
+                ],
+            ],
+        ],
+    ],
 ];

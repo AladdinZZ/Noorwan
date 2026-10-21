@@ -1341,3 +1341,55 @@ main:focus {
     background: var(--success-tint);
     color: var(--success);
 }
+
+/* ---------- Pages légales ---------- */
+
+.legal-updated {
+    margin-block-start: 14px;
+    color: var(--text-3);
+    font-size: 14px;
+}
+
+.legal {
+    max-width: 760px;
+}
+
+.legal h2 {
+    margin-block: 40px 12px;
+    font-size: 24px;
+    font-weight: 650;
+    line-height: 1.2;
+    letter-spacing: var(--ls-h3);
+}
+
+.legal h2:first-child {
+    margin-block-start: 0;
+}
+
+.legal p,
+.legal li {
+    color: var(--text-2);
+    font-size: 16px;
+}
+
+.legal p + p,
+.legal ul + p,
+.legal p + ul {
+    margin-block-start: 12px;
+}
+
+.legal ul {
+    display: grid;
+    gap: 8px;
+    margin: 0;
+    padding-inline-start: 22px;
+}
+
+.todo {
+    padding: 1px 6px;
+    border-radius: var(--radius-btn);
+    background: #FFE9A8;
+    color: #5C4400;
+    font-weight: 600;
+    white-space: nowrap;
+}

@@ -206,4 +206,201 @@ return [
             'server' => 'Une erreur technique empêche l\'envoi. Réessayez dans quelques minutes.',
         ],
     ],
+    // Pages légales : A FAIRE RELIRE PAR UN JURISTE.
+    'legal' => [
+        'eyebrow' => 'Informations légales',
+        'updated' => 'Dernière mise à jour : 21 octobre 2026',
+        'mentions' => [
+            'title' => 'Mentions légales',
+            'intro' => 'Informations sur l\'éditeur et l\'hébergeur du site noorwan.com.',
+            'sections' => [
+                [
+                    'title' => 'Éditeur du site',
+                    'body' => [
+                        'Le site noorwan.com est édité par :',
+                        [
+                            'list' => [
+                                'Raison sociale : [À COMPLÉTER]',
+                                'Forme juridique et capital social : [À COMPLÉTER]',
+                                'Siège social : [À COMPLÉTER]',
+                                'Numéro d\'immatriculation : [À COMPLÉTER]',
+                                'Contact : formulaire de la page Contact du site.',
+                            ],
+                        ],
+                    ],
+                ],
+                [
+                    'title' => 'Directeur de la publication',
+                    'body' => [
+                        '[À COMPLÉTER]',
+                    ],
+                ],
+                [
+                    'title' => 'Hébergement',
+                    'body' => [
+                        [
+                            'list' => [
+                                'Hébergeur : [À COMPLÉTER]',
+                                'Adresse : [À COMPLÉTER]',
+                                'Téléphone : [À COMPLÉTER]',
+                            ],
+                        ],
+                    ],
+                ],
+                [
+                    'title' => 'Propriété intellectuelle',
+                    'body' => [
+                        'L\'ensemble des contenus du site (textes, logo, images, couvertures de livres) est protégé par le droit d\'auteur et le droit des marques. Toute reproduction ou réutilisation, totale ou partielle, sans l\'autorisation écrite préalable de Noorwan est interdite.',
+                    ],
+                ],
+                [
+                    'title' => 'Liens vers d\'autres sites',
+                    'body' => [
+                        'Le site contient des liens vers des sites tiers, notamment Amazon pour l\'achat des livres. Noorwan n\'est pas responsable du contenu de ces sites ni de la manière dont ils traitent vos données.',
+                    ],
+                ],
+                [
+                    'title' => 'Données personnelles et cookies',
+                    'body' => [
+                        'Le traitement des données envoyées par le formulaire de contact est décrit dans la page Confidentialité. Le site ne dépose aucun cookie : voir la page Cookies.',
+                    ],
+                ],
+                [
+                    'title' => 'Droit applicable',
+                    'body' => [
+                        'Les présentes mentions sont régies par le droit [À COMPLÉTER].',
+                    ],
+                ],
+            ],
+        ],
+        'privacy' => [
+            'title' => 'Politique de confidentialité',
+            'intro' => 'Quelles données Noorwan collecte sur noorwan.com, pourquoi, combien de temps elles sont conservées et comment exercer vos droits. Cette politique s\'appuie sur le Règlement général sur la protection des données (RGPD).',
+            'sections' => [
+                [
+                    'title' => 'Responsable du traitement',
+                    'body' => [
+                        'Le responsable du traitement est [À COMPLÉTER] (raison sociale), dont le siège est situé [À COMPLÉTER].',
+                        'Pour toute question sur vos données : [À COMPLÉTER] (adresse e-mail dédiée), ou le formulaire de la page Contact en choisissant « Autre ».',
+                    ],
+                ],
+                [
+                    'title' => 'Données collectées',
+                    'body' => [
+                        'Le site ne collecte des données que lorsque vous envoyez le formulaire de contact :',
+                        [
+                            'list' => [
+                                'votre nom et votre adresse e-mail ;',
+                                'votre numéro de téléphone, seulement si vous le donnez ;',
+                                'l\'objet de votre demande (Consulting, Solutions, Édition ou Autre) et votre message ;',
+                                'vos choix concernant les offres de Noorwan et celles de ses partenaires, avec la version du texte de consentement affiché ;',
+                                'la langue du site, la date et l\'heure de l\'envoi, et le type de navigateur utilisé ;',
+                                'une empreinte chiffrée et irréversible de votre adresse IP, calculée avec une clé secrète. L\'adresse IP elle-même n\'est jamais enregistrée.',
+                            ],
+                        ],
+                        'Aucune autre donnée n\'est collectée : pas de cookie, pas de mesure d\'audience, pas de profilage.',
+                    ],
+                ],
+                [
+                    'title' => 'Pourquoi ces données sont utilisées',
+                    'body' => [
+                        [
+                            'list' => [
+                                'Répondre à votre demande. Base légale : les mesures précontractuelles prises à votre demande, ou l\'intérêt légitime de Noorwan à répondre aux messages reçus.',
+                                'Vous adresser les offres de Noorwan, seulement si vous avez coché la case correspondante. Base légale : votre consentement.',
+                                'Vous adresser les offres des partenaires de Noorwan, seulement si vous avez coché la case correspondante. Base légale : votre consentement. Identité des partenaires et mode d\'envoi (par Noorwan ou par les partenaires) : [À COMPLÉTER].',
+                                'Protéger le formulaire contre les abus (limite d\'envois, empreinte de l\'adresse IP). Base légale : l\'intérêt légitime de Noorwan à la sécurité du site.',
+                            ],
+                        ],
+                    ],
+                ],
+                [
+                    'title' => 'Qui reçoit vos données',
+                    'body' => [
+                        'Vos données sont réservées aux équipes de Noorwan chargées de traiter votre demande. Elles sont stockées chez l\'hébergeur du site ([À COMPLÉTER]) et pourront être reprises dans l\'outil interne de gestion de la relation client de Noorwan. Elles ne sont ni vendues ni louées.',
+                        'Lieu d\'hébergement et éventuels transferts hors de l\'Union européenne, avec leurs garanties : [À COMPLÉTER].',
+                    ],
+                ],
+                [
+                    'title' => 'Durée de conservation',
+                    'body' => [
+                        [
+                            'list' => [
+                                'Demandes de contact et données associées : 3 ans après votre dernier contact avec Noorwan, puis suppression.',
+                                'Accord pour recevoir des offres : jusqu\'à ce que vous le retiriez, et au plus 3 ans après votre dernier contact.',
+                                'Données de limitation des envois (empreinte de l\'adresse IP) : 1 heure.',
+                            ],
+                        ],
+                    ],
+                ],
+                [
+                    'title' => 'Retirer votre accord',
+                    'body' => [
+                        'Vous pouvez retirer à tout moment votre accord pour recevoir les offres de Noorwan ou de ses partenaires : écrivez-nous par le formulaire de la page Contact (objet « Autre ») ou à [À COMPLÉTER]. Chaque offre envoyée par e-mail contiendra aussi un lien de désinscription. Le retrait vaut pour l\'avenir et ne remet pas en cause les envois passés.',
+                    ],
+                ],
+                [
+                    'title' => 'Vos droits',
+                    'body' => [
+                        'Vous disposez d\'un droit d\'accès, de rectification, d\'effacement, de limitation, d\'opposition et de portabilité sur vos données. Pour les exercer, utilisez les moyens de contact indiqués plus haut ; une preuve d\'identité pourra vous être demandée en cas de doute.',
+                        'Si vous estimez que vos droits ne sont pas respectés, vous pouvez adresser une réclamation à l\'autorité de protection des données compétente (en France, la CNIL).',
+                    ],
+                ],
+                [
+                    'title' => 'Sécurité',
+                    'body' => [
+                        'Les échanges avec le site sont chiffrés (HTTPS). Les données sont enregistrées dans une base protégée, accessible aux seules personnes habilitées.',
+                    ],
+                ],
+                [
+                    'title' => 'Modifications',
+                    'body' => [
+                        'Cette politique peut évoluer. La date de dernière mise à jour figure en haut de la page.',
+                    ],
+                ],
+            ],
+        ],
+        'cookies' => [
+            'title' => 'Cookies',
+            'intro' => 'Le site noorwan.com ne dépose aucun cookie et ne mesure pas son audience.',
+            'sections' => [
+                [
+                    'title' => 'Aucun cookie',
+                    'body' => [
+                        'Le site ne dépose aucun cookie sur votre appareil, ni aucun traceur équivalent (stockage local, pixel invisible, empreinte du navigateur).',
+                    ],
+                ],
+                [
+                    'title' => 'Pas de mesure d\'audience ni de publicité',
+                    'body' => [
+                        'Le site n\'utilise aucun outil de mesure d\'audience, de publicité ou de partage sur les réseaux sociaux. C\'est pourquoi aucune bannière ne vous demande votre accord.',
+                    ],
+                ],
+                [
+                    'title' => 'Formulaire de contact',
+                    'body' => [
+                        'Le formulaire est protégé par un jeton inscrit dans la page elle-même, sans cookie ni session.',
+                    ],
+                ],
+                [
+                    'title' => 'Police de caractères en arabe',
+                    'body' => [
+                        'Les pages en arabe chargent la police IBM Plex Sans Arabic depuis le service Google Fonts. Ce service ne dépose pas de cookie, mais votre navigateur transmet votre adresse IP à Google pour télécharger la police.',
+                    ],
+                ],
+                [
+                    'title' => 'Sites tiers',
+                    'body' => [
+                        'En suivant un lien vers Amazon ou un autre site, vous êtes soumis à la politique de cookies de ce site.',
+                    ],
+                ],
+                [
+                    'title' => 'Évolution',
+                    'body' => [
+                        'Si le site venait à utiliser des cookies soumis à votre accord, cette page serait mise à jour et votre accord vous serait demandé au préalable.',
+                    ],
+                ],
+            ],
+        ],
+    ],
 ];
