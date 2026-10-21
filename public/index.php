@@ -123,14 +123,14 @@ require ROOT_DIR . '/app/layout/header.php';
 <?php foreach (books() as $id => $book): ?>
             <li>
 <?php if ($book['cover'] !== null): ?>
-                <img class="cover" src="assets/images/covers/<?= e($book['cover']) ?>" alt="<?= t('books.cover_alt', [':title' => $book['title']]) ?>" width="<?= $book['cover_size'][0] ?>" height="<?= $book['cover_size'][1] ?>" loading="lazy" decoding="async">
+                <img class="cover" src="assets/images/covers/<?= e($book['cover']) ?>" alt="<?= t('books.cover_alt', [':title' => book_title($book)]) ?>" width="<?= $book['cover_size'][0] ?>" height="<?= $book['cover_size'][1] ?>" loading="lazy" decoding="async">
 <?php else: ?>
                 <div class="cover-soon">
                     <span class="cover-soon-label"><?= t('books.soon') ?></span>
-                    <span class="cover-soon-title" aria-hidden="true"><bdi><?= e($book['title']) ?></bdi></span>
+                    <span class="cover-soon-title" aria-hidden="true"><bdi><?= e(book_title($book)) ?></bdi></span>
                 </div>
 <?php endif; ?>
-                <span class="shelf-title"><bdi><?= e($book['title']) ?></bdi></span>
+                <span class="shelf-title"><bdi><?= e(book_title($book)) ?></bdi></span>
                 <span class="shelf-sub"><?= t('books.items.' . $id . '.sub') ?></span>
             </li>
 <?php endforeach; ?>

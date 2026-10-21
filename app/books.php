@@ -2,7 +2,8 @@
 
 declare(strict_types=1);
 
-// Catalogue Noorwan Édition. Les titres restent en français dans toutes les langues (titres publiés).
+// Catalogue Noorwan Édition. Les titres publiés en français s'affichent en FR et en AR.
+// title_en : titre de l'édition anglaise, repris du site actuel (version anglaise) ; null si le livre n'existe qu'en français.
 // asin : identifiant Amazon de la fiche du livre, à fournir par Marwan. Ne jamais en inventer un.
 // Tant qu'il est vide, le bouton « Acheter » mène à la recherche Amazon utilisée par le site actuel.
 
@@ -19,6 +20,7 @@ function books(): array
     return [
         'harmonie' => [
             'title' => 'Harmonie',
+            'title_en' => null,
             'collection' => 'metaphysique',
             'cover' => 'couverture_harmonie.jpg',
             'cover_size' => [1000, 1430],
@@ -28,6 +30,7 @@ function books(): array
         ],
         'lumiere' => [
             'title' => 'Lumière',
+            'title_en' => null,
             'collection' => 'metaphysique',
             'cover' => 'couverture_lumiere.jpg',
             'cover_size' => [1000, 1430],
@@ -37,6 +40,7 @@ function books(): array
         ],
         'vibration' => [
             'title' => 'Vibration',
+            'title_en' => null,
             'collection' => 'metaphysique',
             'cover' => null,
             'cover_size' => null,
@@ -46,6 +50,7 @@ function books(): array
         ],
         'le-mal' => [
             'title' => 'Le Mal',
+            'title_en' => 'Evil',
             'collection' => 'chemins',
             'cover' => 'couverture_7mal.jpg',
             'cover_size' => [1000, 1499],
@@ -55,6 +60,7 @@ function books(): array
         ],
         'le-bien' => [
             'title' => 'Le Bien',
+            'title_en' => 'Good',
             'collection' => 'chemins',
             'cover' => 'couverture__7bein.jpg',
             'cover_size' => [1000, 1499],
@@ -64,6 +70,7 @@ function books(): array
         ],
         'etre-pour-avoir' => [
             'title' => 'Être pour Avoir',
+            'title_en' => 'Being vs Having',
             'collection' => 'chemins',
             'cover' => 'couverture_etre.jpg',
             'cover_size' => [1000, 1499],
@@ -72,6 +79,14 @@ function books(): array
             'also_in_english' => true,
         ],
     ];
+}
+
+/**
+ * Titre affiché : le titre anglais sur les pages en anglais quand le livre existe en anglais, sinon le titre français.
+ */
+function book_title(array $book): string
+{
+    return lang() === 'en' && $book['title_en'] !== null ? $book['title_en'] : $book['title'];
 }
 
 function amazon_url(array $book): string

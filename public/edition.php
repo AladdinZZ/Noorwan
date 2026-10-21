@@ -62,23 +62,23 @@ require ROOT_DIR . '/app/layout/header.php';
 <?php if ($book['collection'] !== $collection) { continue; } ?>
                 <article class="book" aria-labelledby="book-<?= e($id) ?>">
 <?php if ($book['cover'] !== null): ?>
-                    <img class="cover" src="assets/images/covers/<?= e($book['cover']) ?>" alt="<?= t('books.cover_alt', [':title' => $book['title']]) ?>" width="<?= $book['cover_size'][0] ?>" height="<?= $book['cover_size'][1] ?>" loading="lazy" decoding="async">
+                    <img class="cover" src="assets/images/covers/<?= e($book['cover']) ?>" alt="<?= t('books.cover_alt', [':title' => book_title($book)]) ?>" width="<?= $book['cover_size'][0] ?>" height="<?= $book['cover_size'][1] ?>" loading="lazy" decoding="async">
 <?php else: ?>
                     <div class="cover-soon" aria-hidden="true">
                         <span class="cover-soon-label"><?= t('books.soon') ?></span>
-                        <span class="cover-soon-title"><bdi><?= e($book['title']) ?></bdi></span>
+                        <span class="cover-soon-title"><bdi><?= e(book_title($book)) ?></bdi></span>
                     </div>
 <?php endif; ?>
                     <div class="book-body">
 <?php if ($book['also_in_english']): ?>
                         <p class="book-flag"><?= t('edition.also_in_english') ?></p>
 <?php endif; ?>
-                        <h4 id="book-<?= e($id) ?>"><bdi><?= e($book['title']) ?></bdi></h4>
+                        <h4 id="book-<?= e($id) ?>"><bdi><?= e(book_title($book)) ?></bdi></h4>
                         <p class="book-sub"><?= t('books.items.' . $id . '.sub') ?></p>
 <?php if ($book['published']): ?>
                         <p class="book-lead"><?= t('books.items.' . $id . '.lead') ?></p>
                         <p class="book-summary"><?= t('books.items.' . $id . '.summary') ?></p>
-                        <a class="btn btn-dark book-buy" href="<?= e(amazon_url($book)) ?>" rel="noopener" aria-label="<?= t('edition.buy_label', [':title' => $book['title']]) ?>"><?= t('edition.buy') ?> <span aria-hidden="true"><?= t('common.arrow_up') ?></span></a>
+                        <a class="btn btn-dark book-buy" href="<?= e(amazon_url($book)) ?>" rel="noopener" aria-label="<?= t('edition.buy_label', [':title' => book_title($book)]) ?>"><?= t('edition.buy') ?> <span aria-hidden="true"><?= t('common.arrow_up') ?></span></a>
 <?php else: ?>
                         <p class="book-status"><?= t('books.soon') ?> · <?= t('edition.writing') ?></p>
 <?php endif; ?>
