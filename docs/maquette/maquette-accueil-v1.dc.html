@@ -1,0 +1,485 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Noorwan, accueil</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&amp;display=swap">
+<style>
+body{margin:0;background:#FFFFFF}
+a{color:#0066CC}a:hover{color:#004E9E}
+.nw-desk{display:flex}
+.nw-mob{display:none}
+@media (max-width: 880px){.nw-desk{display:none}.nw-mob{display:flex}}
+</style>
+</helmet>
+<div dir="{{dir}}" lang="{{lang}}" style="background: #FFFFFF; color: #1D1D1F; font-family: {{ff}}; font-size: 17px; line-height: 1.55; letter-spacing: {{bodyLs}};">
+
+<header style="background: rgba(250, 250, 252, 0.92); border-bottom: 1px solid #E5E5EA; padding: 0 clamp(20px, 4vw, 56px);">
+<div style="max-width: 1200px; margin: 0 auto; min-height: 64px; display: flex; align-items: center; justify-content: space-between; gap: 20px;">
+<a href="#top" aria-label="Noorwan, accueil" style="text-decoration: none; color: #1D1D1F; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif; font-size: 25px; font-weight: 700; letter-spacing: -0.04em; line-height: 1;" dir="ltr">noorwan<span style="color: #0071E3;">.</span></a>
+<nav class="nw-desk" aria-label="Navigation principale" style="align-items: center; gap: 28px; font-size: 14px;">
+<sc-for list="{{t.nav}}" as="n" hint-placeholder-count="5">
+<a href="{{n.href}}" style="color: #1D1D1F; text-decoration: none;">{{n.label}}</a>
+</sc-for>
+</nav>
+<div style="display: flex; align-items: center; gap: 10px;">
+<div role="group" aria-label="Langue" style="display: flex; align-items: center; gap: 2px;">
+<sc-for list="{{langs}}" as="l" hint-placeholder-count="3">
+<sc-if value="{{l.on}}" hint-placeholder-val="{{false}}">
+<button type="button" onClick="{{l.pick}}" aria-pressed="true" style="min-width: 44px; height: 44px; border: 0; background: transparent; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0;"><span style="display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 999px; background: #1D1D1F; color: #FFFFFF; font: 600 12px/1 -apple-system, 'Helvetica Neue', 'IBM Plex Sans Arabic', sans-serif;">{{l.lab}}</span></button>
+</sc-if>
+<sc-if value="{{l.off}}" hint-placeholder-val="{{true}}">
+<button type="button" onClick="{{l.pick}}" aria-pressed="false" style="min-width: 44px; height: 44px; border: 0; background: transparent; cursor: pointer; color: #515154; font: 500 12px/1 -apple-system, 'Helvetica Neue', 'IBM Plex Sans Arabic', sans-serif;">{{l.lab}}</button>
+</sc-if>
+</sc-for>
+</div>
+<button class="nw-mob" type="button" onClick="{{toggleMenu}}" aria-label="Menu" style="align-items: center; justify-content: center; width: 44px; height: 44px; border: 1px solid #D2D2D7; background: #FFFFFF; border-radius: 10px; cursor: pointer;">
+<svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><g stroke="#1D1D1F" stroke-width="1.6" stroke-linecap="round"><line x1="3" y1="6.5" x2="17" y2="6.5"></line><line x1="3" y1="13.5" x2="17" y2="13.5"></line></g></svg>
+</button>
+</div>
+</div>
+<sc-if value="{{menu}}" hint-placeholder-val="{{false}}">
+<nav aria-label="Navigation mobile" style="display: flex; flex-direction: column; padding: 4px 0 18px;">
+<sc-for list="{{t.nav}}" as="n" hint-placeholder-count="5">
+<a href="{{n.href}}" onClick="{{toggleMenu}}" style="padding: 14px 0; border-top: 1px solid #E5E5EA; color: #1D1D1F; text-decoration: none; font-size: 20px; font-weight: 600; letter-spacing: {{hLs}};">{{n.label}}</a>
+</sc-for>
+</nav>
+</sc-if>
+</header>
+
+<section id="top" style="position: relative; background-color: #0A0E18; background-image: linear-gradient(90deg, rgba(0,0,0,0.72), rgba(0,0,0,0.25) 65%, rgba(0,0,0,0.05)), radial-gradient(60% 70% at 82% 38%, rgba(56, 110, 235, 0.55), rgba(56, 110, 235, 0) 70%), radial-gradient(40% 45% at 62% 78%, rgba(214, 170, 92, 0.35), rgba(214, 170, 92, 0) 70%), radial-gradient(35% 40% at 95% 90%, rgba(120, 160, 255, 0.35), rgba(120, 160, 255, 0) 70%); color: #FFFFFF; padding: clamp(72px, 10vw, 130px) clamp(20px, 4vw, 56px) clamp(56px, 7vw, 90px);">
+<div style="max-width: 1200px; margin: 0 auto; display: flex; flex-direction: column; gap: 26px;">
+<p style="margin: 0; font-size: 11px; font-weight: 600; letter-spacing: {{capsLs}}; text-transform: uppercase; color: #F5D58A;">{{t.eyebrow}}</p>
+<h1 style="margin: 0; font-size: clamp(44px, 6.6vw, 80px); font-weight: 650; line-height: {{h1Lh}}; letter-spacing: {{h1Ls}}; max-width: 13em;">{{t.title}}</h1>
+<p style="margin: 0; font-size: clamp(17px, 1.6vw, 20px); color: #E8E8ED; max-width: 33em;">{{t.lead}}</p>
+<div style="display: flex; flex-wrap: wrap; gap: 14px; margin-top: 6px;">
+<a href="#univers" style="display: flex; align-items: center; gap: 10px; height: 48px; padding: 0 24px; background: #0071E3; color: #FFFFFF; text-decoration: none; border-radius: 3px; font-size: 15px; font-weight: 500; letter-spacing: 0.01em;">{{t.btn1}} <span aria-hidden="true">{{t.arrow}}</span></a>
+<a href="#contact" style="display: flex; align-items: center; height: 48px; padding: 0 24px; border: 1px solid rgba(255,255,255,0.7); color: #FFFFFF; text-decoration: none; border-radius: 3px; font-size: 15px; font-weight: 500; letter-spacing: 0.01em;">{{t.btn2}}</a>
+</div>
+<div style="display: flex; align-items: center; gap: 14px; margin-top: clamp(32px, 6vw, 80px); font-size: 13px; color: #D2D2D7; letter-spacing: 0.02em;"><span style="width: 32px; height: 1px; background: #D2D2D7;"></span>{{t.motto}}</div>
+</div>
+</section>
+
+<section id="univers" style="padding: clamp(64px, 9vw, 100px) clamp(20px, 4vw, 56px);">
+<div style="max-width: 1200px; margin: 0 auto;">
+<p style="margin: 0 0 14px; font-size: 11px; font-weight: 600; letter-spacing: {{capsLs}}; text-transform: uppercase; color: #6E6E73;">{{t.univEyebrow}}</p>
+<h2 style="margin: 0 0 clamp(32px, 4vw, 48px); font-size: clamp(34px, 4.4vw, 52px); font-weight: 650; line-height: 1.06; letter-spacing: {{h2Ls}}; max-width: 16em;">{{t.univH}}</h2>
+<div style="display: flex; flex-wrap: wrap; gap: 20px;">
+<sc-for list="{{t.univers}}" as="u" hint-placeholder-count="3">
+<a href="{{u.href}}" style="flex: 1 1 300px; min-width: 0; background: #F5F5F7; border-radius: 24px; padding: 0; text-decoration: none; color: #1D1D1F; display: flex; flex-direction: column; overflow: hidden;">
+<span style="display: block; height: 4px; background: {{u.dot}};"></span>
+<div style="padding: 30px 32px 34px; display: flex; flex-direction: column; gap: 12px;">
+<div style="display: flex; justify-content: space-between; align-items: flex-start;"><span style="font-size: 44px; font-weight: 300; line-height: 1; letter-spacing: -0.04em; color: {{u.tone}};">{{u.n}}</span><span aria-hidden="true" style="font-size: 16px; color: {{u.tone}};">{{t.arrowUp}}</span></div>
+<h3 style="margin: 14px 0 0; font-size: 32px; font-weight: 650; line-height: 1.15; letter-spacing: {{h3Ls}};">{{u.title}}</h3>
+<p style="margin: 0; color: #515154; font-size: 16px;">{{u.text}}</p>
+</div>
+</a>
+</sc-for>
+</div>
+</div>
+</section>
+
+<section style="background: #1D1D1F; color: #FFFFFF; padding: clamp(64px, 9vw, 90px) clamp(20px, 4vw, 56px);">
+<div style="max-width: 1200px; margin: 0 auto;">
+<p style="margin: 0 0 14px; font-size: 11px; font-weight: 600; letter-spacing: {{capsLs}}; text-transform: uppercase; color: #A1A1A6;">{{t.appEyebrow}}</p>
+<h2 style="margin: 0 0 clamp(32px, 4vw, 48px); font-size: clamp(34px, 4.4vw, 52px); font-weight: 650; line-height: 1.06; letter-spacing: {{h2Ls}};">{{t.appH}}</h2>
+<ol style="margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 20px;">
+<sc-for list="{{t.steps}}" as="st" hint-placeholder-count="4">
+<li style="border-top: 1px solid #424245; padding-top: 22px; display: flex; flex-direction: column; gap: 8px;">
+<span style="font-size: 14px; color: #F5D58A;">{{st.n}}</span>
+<p style="margin: 0; font-size: 21px; font-weight: 600; letter-spacing: {{h3Ls}};">{{st.title}}</p>
+<p style="margin: 0; font-size: 15px; color: #A1A1A6;">{{st.text}}</p>
+</li>
+</sc-for>
+</ol>
+</div>
+</section>
+
+<section id="consulting" style="padding: clamp(64px, 9vw, 100px) clamp(20px, 4vw, 56px);">
+<div style="max-width: 1200px; margin: 0 auto;">
+<div style="display: flex; flex-wrap: wrap; gap: 20px clamp(36px, 5vw, 80px); align-items: flex-end; margin-bottom: clamp(32px, 4vw, 48px);">
+<div style="flex: 1 1 380px; min-width: 0;">
+<p style="margin: 0 0 18px; display: inline-flex; align-items: center; gap: 10px; padding: 7px 14px 7px 12px; background: #F3EEE3; border-radius: 3px; font-size: 11px; font-weight: 600; letter-spacing: {{capsLs}}; text-transform: uppercase; color: #6F5B2E;"><span style="width: 14px; height: 2px; background: #A8915F;"></span>{{t.consEyebrow}}</p>
+<h2 style="margin: 0; font-size: clamp(34px, 4.4vw, 52px); font-weight: 650; line-height: 1.06; letter-spacing: {{h2Ls}};">{{t.consH}}</h2>
+</div>
+<p style="flex: 1 1 340px; min-width: 0; margin: 0; color: #515154;">{{t.consLead}}</p>
+</div>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 16px;">
+<sc-for list="{{t.exp}}" as="e" hint-placeholder-count="5">
+<article style="background: #F5F5F7; border-radius: 20px; border-top: 3px solid #A8915F; padding: 26px 24px; display: flex; flex-direction: column; gap: 10px;">
+<span style="font-size: 13px; font-weight: 500; color: #6F5B2E;">{{e.n}}</span>
+<h3 style="margin: 6px 0 0; font-size: 20px; font-weight: 650; line-height: 1.25; letter-spacing: {{h3Ls}};">{{e.title}}</h3>
+<p style="margin: 0; color: #515154; font-size: 15px;">{{e.text}}</p>
+</article>
+</sc-for>
+</div>
+<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; margin-top: 24px;">
+<p style="margin: 0; font-size: 16px; color: #515154;"><span style="font-weight: 600; color: #1D1D1F;">{{t.consAppH}}</span> {{t.consApp}}</p>
+<a href="#contact" style="display: flex; align-items: center; gap: 10px; height: 48px; padding: 0 22px; background: #1D1D1F; color: #FFFFFF; text-decoration: none; border-radius: 3px; font-size: 15px; font-weight: 500; letter-spacing: 0.01em;">{{t.btn2}} <span aria-hidden="true">{{t.arrow}}</span></a>
+</div>
+</div>
+</section>
+
+<section id="solutions" style="background: #F5F5F7; padding: clamp(64px, 9vw, 100px) clamp(20px, 4vw, 56px);">
+<div style="max-width: 1200px; margin: 0 auto;">
+<p style="margin: 0 0 18px; display: inline-flex; align-items: center; gap: 10px; padding: 7px 14px 7px 12px; background: #E9EEF5; border-radius: 3px; font-size: 11px; font-weight: 600; letter-spacing: {{capsLs}}; text-transform: uppercase; color: #3D5A80;"><span style="width: 14px; height: 2px; background: #7C93B2;"></span>{{t.solEyebrow}}</p>
+<h2 style="margin: 0 0 clamp(32px, 4vw, 48px); font-size: clamp(34px, 4.4vw, 52px); font-weight: 650; line-height: 1.06; letter-spacing: {{h2Ls}};">{{t.solH}}</h2>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+<sc-for list="{{t.solutions}}" as="s" hint-placeholder-count="3">
+<article style="background: #FFFFFF; border-radius: 20px; box-shadow: 0 2px 14px rgba(0,0,0,0.045); border-top: 3px solid #7C93B2; padding: 30px; display: flex; flex-direction: column; gap: 10px; min-height: 200px; box-sizing: border-box;">
+<div style="display: flex; justify-content: space-between; align-items: center; gap: 10px;">
+<span style="font-size: 11px; font-weight: 600; letter-spacing: {{capsLs}}; text-transform: uppercase; color: #3D5A80;">{{s.cat}}</span>
+<sc-if value="{{s.conf}}" hint-placeholder-val="{{false}}">
+<span style="display: flex; align-items: center; gap: 7px; font-size: 12px; font-weight: 500; color: #515154; border: 1px solid #D2D2D7; padding: 5px 12px; border-radius: 3px;"><svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><rect x="2" y="5.5" width="8" height="5.5" rx="1.2" fill="none" stroke="#515154" stroke-width="1.2"></rect><path d="M4 5.5V4a2 2 0 0 1 4 0v1.5" fill="none" stroke="#515154" stroke-width="1.2"></path></svg>{{t.conf}}</span>
+</sc-if>
+</div>
+<h3 style="margin: 16px 0 0; font-size: 28px; font-weight: 650; line-height: 1.15; letter-spacing: {{h3Ls}};">{{s.name}}</h3>
+<p style="margin: 0; color: #515154; font-size: 16px;">{{s.text}}</p>
+</article>
+</sc-for>
+</div>
+</div>
+</section>
+
+<section id="edition" style="padding: clamp(64px, 9vw, 90px) clamp(20px, 4vw, 56px);">
+<div style="max-width: 1200px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: clamp(36px, 5vw, 64px); align-items: center;">
+<div style="flex: 1 1 360px; min-width: 0;">
+<p style="margin: 0 0 18px; display: inline-flex; align-items: center; gap: 10px; padding: 7px 14px 7px 12px; background: #F5E9EB; border-radius: 3px; font-size: 11px; font-weight: 600; letter-spacing: {{capsLs}}; text-transform: uppercase; color: #7D2E3B;"><span style="width: 14px; height: 2px; background: #B07A84;"></span>{{t.edEyebrow}}</p>
+<h2 style="margin: 0; font-size: clamp(34px, 4.4vw, 52px); font-weight: 650; line-height: 1.06; letter-spacing: {{h2Ls}};">{{t.edH}}</h2>
+<p style="margin: 22px 0 0; color: #515154; max-width: 30em;">{{t.edText}}</p>
+<div style="display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px;">
+<a href="#contact" style="display: flex; align-items: center; height: 48px; padding: 0 22px; background: #1D1D1F; color: #FFFFFF; text-decoration: none; border-radius: 3px; font-size: 15px; font-weight: 500; letter-spacing: 0.01em;">{{t.edBtn}}</a>
+<a href="#edition" style="display: flex; align-items: center; gap: 8px; height: 48px; padding: 0 4px; color: #7D2E3B; text-decoration: underline; text-underline-offset: 6px; text-decoration-thickness: 1px; font-size: 15px; font-weight: 500;">{{t.edBtn2}} <span aria-hidden="true">{{t.arrow}}</span></a>
+</div>
+</div>
+<div style="flex: 1 1 460px; min-width: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px;">
+<sc-for list="{{t.books}}" as="b" hint-placeholder-count="6">
+<div style="display: flex; flex-direction: column; gap: 8px;">
+<sc-if value="{{b.hasImg}}" hint-placeholder-val="{{true}}">
+<img src="{{b.img}}" alt="{{b.alt}}" style="display: block; width: 100%; aspect-ratio: 2 / 3; object-fit: cover; border-radius: 6px; box-shadow: 0 8px 20px rgba(0,0,0,0.14);">
+</sc-if>
+<sc-if value="{{b.noImg}}" hint-placeholder-val="{{false}}">
+<div style="aspect-ratio: 2 / 3; border-radius: 6px; border: 1px dashed #C7C7CC; background: #F5F5F7; padding: 14px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between; color: #515154;">
+<span style="font-size: 11px; font-weight: 600; letter-spacing: {{capsLs}}; text-transform: uppercase; color: #7D2E3B;">{{t.soonBook}}</span>
+<span style="font-size: clamp(14px, 1.4vw, 18px); font-weight: 650; line-height: 1.15; letter-spacing: -0.02em; color: #1D1D1F;" dir="ltr">{{b.title}}</span>
+</div>
+</sc-if>
+<span style="font-size: 13px; font-weight: 600; color: #1D1D1F; line-height: 1.3;" dir="ltr">{{b.title}}</span>
+<span style="font-size: 12px; color: #6E6E73; line-height: 1.35; margin-top: -4px;">{{b.sub}}</span>
+</div>
+</sc-for>
+</div>
+</div>
+</section>
+
+<section id="contact" style="background: #F5F5F7; padding: clamp(48px, 7vw, 64px) clamp(20px, 4vw, 56px);">
+<div style="max-width: 1200px; margin: 0 auto; background: #FFFFFF; border-radius: 24px; padding: clamp(28px, 4vw, 48px); display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 24px;">
+<div style="flex: 1 1 380px; min-width: 0;">
+<p style="margin: 0 0 12px; font-size: 11px; font-weight: 600; letter-spacing: {{capsLs}}; text-transform: uppercase; color: #6E6E73;">Noorwan</p>
+<h2 style="margin: 0; font-size: clamp(30px, 3.4vw, 41px); font-weight: 650; line-height: 1.06; letter-spacing: {{h2Ls}};">{{t.ctaH}}</h2>
+<p style="margin: 12px 0 0; color: #515154;">{{t.ctaText}}</p>
+</div>
+<a href="#contact" style="display: flex; align-items: center; gap: 10px; height: 48px; padding: 0 26px; background: #0071E3; color: #FFFFFF; text-decoration: none; border-radius: 3px; font-size: 15px; font-weight: 500; letter-spacing: 0.01em;">{{t.ctaBtn}} <span aria-hidden="true">{{t.arrow}}</span></a>
+</div>
+</section>
+
+<footer style="background: #F5F5F7; color: #515154; padding: 40px clamp(20px, 4vw, 56px) 24px;">
+<div style="max-width: 1200px; margin: 0 auto;">
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 24px; padding-bottom: 28px; border-bottom: 1px solid #D2D2D7;">
+<div style="display: flex; flex-direction: column; gap: 8px;">
+<span dir="ltr" style="font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif; font-size: 25px; font-weight: 700; letter-spacing: -0.04em; color: #1D1D1F;">noorwan<span style="color: #0071E3;">.</span></span>
+<span style="font-size: 14px; color: #6E6E73;">{{t.footLine}}</span>
+</div>
+<nav aria-label="Pied de page" style="display: flex; flex-wrap: wrap; gap: 10px 26px; font-size: 14px;">
+<sc-for list="{{t.nav}}" as="n" hint-placeholder-count="5">
+<a href="{{n.href}}" style="color: #515154; text-decoration: none;">{{n.label}}</a>
+</sc-for>
+</nav>
+</div>
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; padding-top: 18px; font-size: 12px; color: #6E6E73;">
+<span>{{t.copy}}</span>
+<div style="display: flex; flex-wrap: wrap; gap: 8px 20px;">
+<sc-for list="{{t.legal}}" as="lg" hint-placeholder-count="3">
+<a href="#" style="color: #6E6E73;">{{lg}}</a>
+</sc-for>
+</div>
+</div>
+</div>
+</footer>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":4400}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { lang: 'fr', menu: false };
+  }
+  books(sub) {
+    const img = [
+      "/_blob/82369bc8b6d6079449703f5703cb08c5",
+      "/_blob/ede1911bd02f87635706e2ac91fde91c",
+      "",
+      "/_blob/44990e7e628b0da433bd6af4892f46f9",
+      "/_blob/6e94948a82e04bc57823d7588a36b92e",
+      "/_blob/7d932042d20067b2fd3fed6a60149a47"
+    ];
+    const titles = ["Harmonie", "Lumière", "Vibration", "Le Mal", "Le Bien", "Être pour Avoir"];
+    return titles.map((title, i) => ({
+      title: title, sub: sub[i], img: img[i], alt: "Couverture : " + title,
+      hasImg: img[i] !== "", noImg: img[i] === ""
+    }));
+  }
+  exp(rows) {
+    return rows.map((r, i) => ({ n: "0" + (i + 1), title: r[0], text: r[1] }));
+  }
+  dict() {
+    return {
+      fr: {
+        nav: [
+          { label: "Consulting", href: "#consulting" },
+          { label: "Solutions", href: "#solutions" },
+          { label: "Édition", href: "#edition" },
+          { label: "À propos", href: "#top" },
+          { label: "Contact", href: "#contact" }
+        ],
+        eyebrow: "Noorwan · Vision & création",
+        title: "Des idées pour des solutions concrètes",
+        lead: "Conseil, solutions numériques et édition : trois univers complémentaires pour transformer les idées en réalisations utiles.",
+        btn1: "Découvrir nos expertises",
+        btn2: "Parlons de votre projet",
+        motto: "Une vision claire. Des étapes concrètes.",
+        tagline: "De l'idée au possible",
+        univEyebrow: "Nos univers",
+        univH: "Trois univers, une même exigence",
+        univers: [
+          { n: "01", title: "Consulting", href: "#consulting", text: "Clarifier votre positionnement, structurer vos priorités et piloter vos projets numériques : stratégie, marketing digital, eCommerce, formation." },
+          { n: "02", title: "Solutions", href: "#solutions", text: "Des logiciels pour les entreprises : réservation, ressources humaines, paiement mobile et intelligence artificielle. Mobiles d'abord, en trois langues." },
+          { n: "03", title: "Édition", href: "#edition", text: "Nous accompagnons les auteurs jusqu'à la publication de leur livre sur Amazon, et nous publions nos propres collections." }
+        ],
+        consEyebrow: "Consulting",
+        consH: "Donner une direction claire à vos projets",
+        consLead: "Un conseil stratégique et un accompagnement numérique, avec une approche pragmatique, fondés sur vingt ans de digital, de marketing et d'eCommerce.",
+        exp: this.exp([
+          ["Stratégie et structuration de projet", "Clarifier l'objectif, le modèle et les priorités, puis avancer par étapes réalistes."],
+          ["Marketing digital et présence en ligne", "Positionnement, contenus, réseaux sociaux et campagnes."],
+          ["E-commerce et parcours client", "Une boutique et un parcours d'achat qui convertissent."],
+          ["Développement web et outils numériques", "Sites, applications et outils sur mesure, faits pour durer."],
+          ["Formation", "Former vos équipes au digital et aux outils, sur site ou à distance."]
+        ]),
+        consAppH: "Clarifier avant d'accélérer.",
+        consApp: "Une étape utile livrée vaut mieux qu'un grand plan sur le papier.",
+        soonBook: "À paraître",
+        solEyebrow: "Solutions",
+        solH: "Des outils conçus pour les entreprises",
+        solutions: [
+          { cat: "Ressources humaines", name: "Inteek", text: "Du recrutement à la gestion des équipes, les RH simplifiées.", conf: false },
+          { cat: "Paiement", name: "OnePay", text: "", conf: true },
+          { cat: "Intelligence artificielle", name: "Plateforme IA", text: "", conf: true }
+        ],
+        conf: "Confidentiel",
+        appEyebrow: "Notre approche",
+        appH: "De l'idée à l'action",
+        steps: [
+          { n: "01", title: "Comprendre le besoin", text: "Écouter avant de proposer." },
+          { n: "02", title: "Structurer la réponse", text: "Prioriser ce qui compte." },
+          { n: "03", title: "Concevoir la solution", text: "Livrer un outil utile." },
+          { n: "04", title: "Apprendre et évoluer", text: "Mesurer, ajuster, transmettre." }
+        ],
+        edEyebrow: "Un autre espace de transmission",
+        edH: "Des idées à lire, découvrir et transmettre",
+        edText: "Noorwan Édition accompagne les auteurs à chaque étape, jusqu'à la publication de leur livre sur Amazon. Nos propres collections, {méta}Physique et Chemins de l'Âme, en sont la preuve.",
+        edBtn: "Publier votre livre",
+        edBtn2: "Voir le catalogue",
+        books: this.books(["{méta}Physique · Tome 1", "{méta}Physique · Tome 2", "{méta}Physique · Tome 3, à paraître", "Les 7 degrés de l'Ombre", "Les 7 degrés de la Lumière", "Essai philosophique"]),
+        growEyebrow: "Le groupe grandit",
+        growH: "Au-delà du numérique",
+        grow: ["Restauration", "Distribution automatique de boissons chaudes"],
+        ctaH: "Un projet en tête ?",
+        ctaText: "Conseil, démonstration d'une solution ou publication d'un livre : échangeons sur vos objectifs.",
+        ctaBtn: "Parlons de votre projet",
+        footLine: "Des idées pour des solutions concrètes.",
+        legal: ["Mentions légales", "Confidentialité", "Cookies"],
+        copy: "© 2026 Noorwan",
+        arrowUp: "↗",
+        arrow: "→"
+      },
+      en: {
+        nav: [
+          { label: "Consulting", href: "#consulting" },
+          { label: "Solutions", href: "#solutions" },
+          { label: "Publishing", href: "#edition" },
+          { label: "About", href: "#top" },
+          { label: "Contact", href: "#contact" }
+        ],
+        eyebrow: "Noorwan · Vision & creation",
+        title: "Ideas for concrete solutions",
+        lead: "Consulting, digital solutions and publishing: three complementary fields that turn ideas into useful results.",
+        btn1: "Explore our expertise",
+        btn2: "Let's talk about your project",
+        motto: "A clear vision. Concrete steps.",
+        tagline: "From idea to possible",
+        univEyebrow: "Our fields",
+        univH: "Three fields, one standard",
+        univers: [
+          { n: "01", title: "Consulting", href: "#consulting", text: "Clarify your positioning, structure your priorities and steer your digital projects: strategy, digital marketing, eCommerce, training." },
+          { n: "02", title: "Solutions", href: "#solutions", text: "Business software: bookings, human resources, mobile payment and artificial intelligence. Mobile first, in three languages." },
+          { n: "03", title: "Publishing", href: "#edition", text: "We guide authors all the way to publishing their book on Amazon, and we publish our own collections." }
+        ],
+        consEyebrow: "Consulting",
+        consH: "Giving your projects a clear direction",
+        consLead: "Strategic advice and digital support with a pragmatic approach, built on twenty years of digital, marketing and eCommerce experience.",
+        exp: this.exp([
+          ["Strategy and project structuring", "Clarify the goal, the model and the priorities, then move in realistic steps."],
+          ["Digital marketing and online presence", "Positioning, content, social media and campaigns."],
+          ["eCommerce and customer journey", "A store and a buying journey that convert."],
+          ["Web development and digital tools", "Websites, apps and custom tools, built to last."],
+          ["Training", "Train your teams in digital and tools, on site or remotely."]
+        ]),
+        consAppH: "Clarify before you accelerate.",
+        consApp: "One useful step delivered beats a grand plan on paper.",
+        soonBook: "Forthcoming",
+        solEyebrow: "Solutions",
+        solH: "Tools built for businesses",
+        solutions: [
+          { cat: "Human resources", name: "Inteek", text: "From hiring to team management, HR made simple.", conf: false },
+          { cat: "Payment", name: "OnePay", text: "", conf: true },
+          { cat: "Artificial intelligence", name: "AI platform", text: "", conf: true }
+        ],
+        conf: "Confidential",
+        appEyebrow: "Our approach",
+        appH: "From idea to action",
+        steps: [
+          { n: "01", title: "Understand the need", text: "Listen before proposing." },
+          { n: "02", title: "Structure the answer", text: "Prioritise what matters." },
+          { n: "03", title: "Design the solution", text: "Deliver a useful tool." },
+          { n: "04", title: "Learn and evolve", text: "Measure, adjust, pass on." }
+        ],
+        edEyebrow: "Another space for sharing",
+        edH: "Ideas to read, discover and pass on",
+        edText: "Noorwan Publishing guides authors through every step, all the way to publishing their book on Amazon. Our own collections, {méta}Physique and Chemins de l'Âme, are the proof.",
+        edBtn: "Publish your book",
+        edBtn2: "See the catalogue",
+        books: this.books(["{méta}Physique · Volume 1", "{méta}Physique · Volume 2", "{méta}Physique · Volume 3, forthcoming", "The 7 degrees of Shadow", "The 7 degrees of Light", "Philosophical essay"]),
+        growEyebrow: "The group is growing",
+        growH: "Beyond digital",
+        grow: ["Restaurants", "Hot drink vending"],
+        ctaH: "Have a project in mind?",
+        ctaText: "Consulting, a product demo or publishing a book: let's talk about your goals.",
+        ctaBtn: "Let's talk about your project",
+        footLine: "Ideas for concrete solutions.",
+        legal: ["Legal notice", "Privacy", "Cookies"],
+        copy: "© 2026 Noorwan",
+        arrowUp: "↗",
+        arrow: "→"
+      },
+      ar: {
+        nav: [
+          { label: "الاستشارات", href: "#consulting" },
+          { label: "الحلول", href: "#solutions" },
+          { label: "النشر", href: "#edition" },
+          { label: "من نحن", href: "#top" },
+          { label: "اتصل بنا", href: "#contact" }
+        ],
+        eyebrow: "نوروان · رؤية وإبداع",
+        title: "أفكار من أجل حلول ملموسة",
+        lead: "استشارات، وحلول رقمية، ونشر: ثلاثة مجالات متكاملة لتحويل الأفكار إلى إنجازات مفيدة.",
+        btn1: "اكتشف خبراتنا",
+        btn2: "لنتحدث عن مشروعك",
+        motto: "رؤية واضحة. خطوات ملموسة.",
+        tagline: "من الفكرة إلى الممكن",
+        univEyebrow: "مجالاتنا",
+        univH: "ثلاثة مجالات، ومعيار واحد",
+        univers: [
+          { n: "01", title: "الاستشارات", href: "#consulting", text: "توضيح موقعك، وترتيب أولوياتك، وقيادة مشاريعك الرقمية: الاستراتيجية، والتسويق الرقمي، والتجارة الإلكترونية، والتدريب." },
+          { n: "02", title: "الحلول", href: "#solutions", text: "برمجيات للمؤسسات: الحجوزات، والموارد البشرية، والدفع عبر الهاتف، والذكاء الاصطناعي. للهاتف أولًا، بثلاث لغات." },
+          { n: "03", title: "النشر", href: "#edition", text: "نرافق المؤلفين حتى نشر كتبهم على أمازون، وننشر سلاسلنا الخاصة." }
+        ],
+        consEyebrow: "الاستشارات",
+        consH: "توجيه واضح لمشاريعك",
+        consLead: "استشارات استراتيجية ومرافقة رقمية بمنهج عملي، تستند إلى عشرين عامًا من الخبرة في المجال الرقمي والتسويق والتجارة الإلكترونية.",
+        exp: this.exp([
+          ["الاستراتيجية وهيكلة المشاريع", "توضيح الهدف والنموذج والأولويات، ثم التقدم بخطوات واقعية."],
+          ["التسويق الرقمي والحضور على الإنترنت", "التموضع، والمحتوى، ووسائل التواصل الاجتماعي، والحملات."],
+          ["التجارة الإلكترونية ومسار العميل", "متجر ومسار شراء فعّالان."],
+          ["تطوير المواقع والأدوات الرقمية", "مواقع وتطبيقات وأدوات مخصصة، مصممة لتدوم."],
+          ["التدريب", "تدريب فرقك على المجال الرقمي والأدوات، حضوريًا أو عن بعد."]
+        ]),
+        consAppH: "التوضيح قبل التسريع.",
+        consApp: "خطوة مفيدة منجزة خير من خطة كبيرة على الورق.",
+        soonBook: "قريبًا",
+        solEyebrow: "الحلول",
+        solH: "أدوات مصممة للمؤسسات",
+        solutions: [
+          { cat: "الموارد البشرية", name: "Inteek", text: "من التوظيف إلى إدارة الفرق، موارد بشرية مبسطة.", conf: false },
+          { cat: "الدفع", name: "OnePay", text: "", conf: true },
+          { cat: "الذكاء الاصطناعي", name: "منصة الذكاء الاصطناعي", text: "", conf: true }
+        ],
+        conf: "سري",
+        appEyebrow: "منهجنا",
+        appH: "من الفكرة إلى الفعل",
+        steps: [
+          { n: "01", title: "فهم الحاجة", text: "الإصغاء قبل الاقتراح." },
+          { n: "02", title: "هيكلة الاستجابة", text: "إعطاء الأولوية لما يهم." },
+          { n: "03", title: "تصميم الحل", text: "تقديم أداة مفيدة." },
+          { n: "04", title: "التعلم والتطور", text: "القياس والتعديل ونقل المعرفة." }
+        ],
+        edEyebrow: "فضاء آخر لنقل المعرفة",
+        edH: "أفكار للقراءة والاكتشاف والنقل",
+        edText: "ترافق نوروان للنشر المؤلفين في كل مرحلة حتى نشر كتبهم على أمازون، وسلسلتانا {méta}Physique ودروب الروح خير دليل على ذلك.",
+        edBtn: "انشر كتابك",
+        edBtn2: "تصفح الإصدارات",
+        books: this.books(["{méta}Physique · الجزء الأول", "{méta}Physique · الجزء الثاني", "{méta}Physique · الجزء الثالث، قريبًا", "الدرجات السبع للظل", "الدرجات السبع للنور", "مقالة فلسفية"]),
+        growEyebrow: "المجموعة تنمو",
+        growH: "أبعد من الرقمي",
+        grow: ["المطاعم", "التوزيع الآلي للمشروبات الساخنة"],
+        ctaH: "لديك مشروع؟",
+        ctaText: "استشارة، أو عرض توضيحي لأحد حلولنا، أو نشر كتاب: لنتحدث عن أهدافك.",
+        ctaBtn: "لنتحدث عن مشروعك",
+        footLine: "أفكار من أجل حلول ملموسة.",
+        legal: ["الإشعارات القانونية", "الخصوصية", "ملفات تعريف الارتباط"],
+        copy: "© 2026 Noorwan",
+        arrowUp: "↖",
+        arrow: "←"
+      }
+    };
+  }
+  renderVals() {
+    const lang = (this.state && this.state.lang) || 'fr';
+    const ar = lang === 'ar';
+    const t0 = this.dict()[lang];
+    const dots = ["#A8915F", "#7C93B2", "#B07A84"];
+    const tones = ["#6F5B2E", "#3D5A80", "#7D2E3B"];
+    const t = Object.assign({}, t0, { univers: t0.univers.map((u, i) => Object.assign({}, u, { dot: dots[i], tone: tones[i] })) });
+    const langs = [['fr', 'FR'], ['en', 'EN'], ['ar', 'عربي']].map(([k, lab]) => ({
+      lab: lab,
+      on: k === lang,
+      off: k !== lang,
+      pick: () => this.setState({ lang: k, menu: false })
+    }));
+    return {
+      t: t,
+      langs: langs,
+      lang: lang,
+      dir: ar ? 'rtl' : 'ltr',
+      ff: ar ? "'IBM Plex Sans Arabic', -apple-system, sans-serif" : "-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', Helvetica, Arial, sans-serif",
+      bodyLs: ar ? '0' : '-0.01em',
+      h1Ls: ar ? '0' : '-0.065em',
+      h2Ls: ar ? '0' : '-0.055em',
+      h3Ls: ar ? '0' : '-0.045em',
+      hLs: ar ? '0' : '-0.03em',
+      h1Lh: ar ? '1.3' : '0.98',
+      capsLs: ar ? '0' : '0.13em',
+      menu: !!(this.state && this.state.menu),
+      toggleMenu: () => this.setState({ menu: !(this.state && this.state.menu) })
+    };
+  }
+}
+</script>
+</body>
+</html>
