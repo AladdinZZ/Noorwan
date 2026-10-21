@@ -3,7 +3,7 @@
 # Variables facultatives, lues dans l'environnement puis dans .env :
 #   BASE_URL (défaut : APP_URL du .env, sinon l'adresse MAMP), DB_HOST, DB_NAME, DB_USER, DB_PASS,
 #   DB_MAINT_USER, DB_MAINT_PASS (défaut : DB_USER et DB_PASS, comme sur un poste local),
-#   PHP, MYSQL (défaut : le client MySQL de MAMP s'il existe, sinon mysql).
+#   APP_ENV (doit être celui du site testé), PHP, MYSQL (défaut : le client MySQL de MAMP s'il existe, sinon mysql).
 # En CI : BASE_URL=http://127.0.0.1:8000 avec le site servi par « php -S 127.0.0.1:8000 -t public ».
 # Attention : vide storage/ratelimit/ et supprime de la base les envois de test (@example.invalid).
 
@@ -26,6 +26,7 @@ DB_PORT="3306"
 DB_NAME="$(config DB_NAME noorwan_site)"
 DB_USER="$(config DB_USER)"
 DB_PASS="$(config DB_PASS)"
+APP_ENV="$(config APP_ENV production)"
 DB_MAINT_USER="$(config DB_MAINT_USER "$DB_USER")"
 DB_MAINT_PASS="$(config DB_MAINT_PASS "$DB_PASS")"
 TEST_EMAIL="test-run@example.invalid"
@@ -76,6 +77,29 @@ for weight in Regular Medium SemiBold Bold; do
 done
 hero_size=$(curl -s -o /dev/null -w '%{size_download}' "$BASE_URL/assets/images/hero.webp")
 if [[ "$hero_size" -gt 0 && "$hero_size" -lt 256000 ]]; then pass "hero.webp sous 250 Ko ($hero_size octets)"; else fail "hero.webp : $hero_size octets"; fi
+
+echo "2 ter. Indexation (APP_ENV=$APP_ENV)"
+if [[ "$APP_ENV" == "production" ]]; then
+    for path in "/" "/?lang=ar" "/robots.txt"; do
+        if curl -sI "$BASE_URL$path" | grep -qi '^X-Robots-Tag:'; then fail "X-Robots-Tag présent en production ($path)"; else pass "pas de X-Robots-Tag en production ($path)"; fi
+    done
+    grep -q '^Sitemap: ' <(curl -s "$BASE_URL/robots.txt") && pass "robots.txt indique le plan du site" || fail "robots.txt sans plan du site"
+else
+    for path in "/" "/?lang=ar" "/contact.php?lang=en" "/robots.txt" "/sitemap.xml"; do
+        if curl -sI "$BASE_URL$path" | grep -qi '^X-Robots-Tag: noindex, nofollow'; then pass "X-Robots-Tag noindex ($path)"; else fail "X-Robots-Tag absent ($path)"; fi
+    done
+    expect "robots.txt interdit tout" "User-agent: *|Disallow: /" "$(curl -s "$BASE_URL/robots.txt" | paste -sd '|' -)"
+fi
+expect "robots.txt en texte" "text/plain; charset=utf-8" "$(curl -s -o /dev/null -w '%{content_type}' "$BASE_URL/robots.txt")"
+# Contenu de production, calculé hors serveur : autorise tout et indique le plan du site.
+robots_prod=$("$PHP" -r 'require "app/bootstrap.php"; require "app/seo.php"; echo robots_txt(true);' 2>&1)
+if [[ "$robots_prod" == $'User-agent: *\nAllow: /\n\nSitemap: '*'/sitemap.xml' ]]; then pass "robots.txt de production"; else fail "robots.txt de production : $robots_prod"; fi
+sitemap=$(curl -s "$BASE_URL/sitemap.xml")
+expect "sitemap.xml : 6 pages x 3 langues" 18 "$(grep -c '<loc>' <<< "$sitemap")"
+expect "sitemap.xml : 4 versions par adresse (fr, en, ar, x-default)" 72 "$(grep -c 'hreflang=' <<< "$sitemap")"
+if command -v xmllint >/dev/null; then
+    xmllint --noout - <<< "$sitemap" 2>/dev/null && pass "sitemap.xml bien formé" || fail "sitemap.xml mal formé"
+fi
 
 echo "3. Formulaire de contact"
 rm -f storage/ratelimit/contact-*.log

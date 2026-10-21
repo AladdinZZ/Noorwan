@@ -42,6 +42,15 @@ function is_local(): bool
     return env('APP_ENV', 'production') === 'local';
 }
 
+/**
+ * Seule la production se laisse indexer, et seulement si APP_ENV le dit explicitement :
+ * un .env incomplet donne un site non indexé plutôt qu'un site de démonstration dans les moteurs.
+ */
+function is_indexable(): bool
+{
+    return env('APP_ENV') === 'production';
+}
+
 function app_secret(): string
 {
     $secret = env('APP_SECRET', '');
@@ -78,6 +87,9 @@ if (!headers_sent()) {
         . "style-src 'self'; font-src 'self'; "
         . "form-action 'self'; frame-ancestors 'none'; base-uri 'self'; object-src 'none'"
     );
+    if (!is_indexable()) {
+        header('X-Robots-Tag: noindex, nofollow');
+    }
 }
 
 require __DIR__ . '/i18n.php';
