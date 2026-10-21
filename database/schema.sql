@@ -2,6 +2,7 @@
 -- Création locale de la base :
 --   CREATE DATABASE noorwan_site CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 -- puis : mysql noorwan_site < database/schema.sql
+-- Utilisateurs et droits (site : INSERT ; maintenance : SELECT, DELETE) : docs/Tech-Notes/Deploiement-VPS.md.
 
 -- Demandes reçues par le formulaire de contact. Dates en UTC.
 -- ip_hash : HMAC-SHA256 de l'IP salé par APP_SECRET, jamais l'IP en clair.
