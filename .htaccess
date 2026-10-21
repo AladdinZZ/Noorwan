@@ -1,0 +1,10 @@
+# Sous MAMP, la racine Apache est htdocs/ : seul public/ doit être servi.
+# En production, la racine web pointe directement sur public/ et ce fichier n'est pas lu.
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule ^$ %{REQUEST_URI}public/ [R=302,L]
+    RewriteRule ^(?!public(?:/|$)) - [R=404,L]
+</IfModule>
+<IfModule !mod_rewrite.c>
+    Require all denied
+</IfModule>
