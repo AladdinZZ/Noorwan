@@ -101,6 +101,13 @@ if command -v xmllint >/dev/null; then
     xmllint --noout - <<< "$sitemap" 2>/dev/null && pass "sitemap.xml bien formé" || fail "sitemap.xml mal formé"
 fi
 
+echo "2 ter. Pages légales"
+for lang in fr en ar; do
+    html=$(curl -s "$BASE_URL/confidentialite.php?lang=$lang")
+    if grep -q 'COMPLÉTER' <<< "$html"; then fail "Confidentialité ($lang) : marqueur [À COMPLÉTER] restant"; else pass "Confidentialité ($lang) : aucun [À COMPLÉTER]"; fi
+    grep -q 'href="mailto:noorwan.contact@gmail.com"' <<< "$html" && pass "Confidentialité ($lang) : adresse de contact" || fail "Confidentialité ($lang) : adresse de contact absente"
+done
+
 echo "3. Formulaire de contact"
 rm -f storage/ratelimit/contact-*.log
 sql "DELETE FROM contact_requests WHERE email = '$TEST_EMAIL'"

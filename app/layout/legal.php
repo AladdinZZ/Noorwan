@@ -6,10 +6,11 @@ declare(strict_types=1);
 // Chaque section : ['title' => ..., 'body' => [paragraphe, ['list' => [...]], ...]].
 
 // Les marqueurs [À COMPLÉTER] sont surlignés pour rester visibles tant qu'ils ne sont pas remplacés.
-$legalText = static fn (string $text): string => str_replace(
-    '[À COMPLÉTER]',
-    '<mark class="todo">[À COMPLÉTER]</mark>',
-    e($text),
+// Les adresses e-mail deviennent des liens, toujours lues de gauche à droite (pages en arabe).
+$legalText = static fn (string $text): string => preg_replace(
+    '/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/',
+    '<a href="mailto:$0" dir="ltr">$0</a>',
+    str_replace('[À COMPLÉTER]', '<mark class="todo">[À COMPLÉTER]</mark>', e($text)),
 );
 ?>
 <section class="page-hero" aria-labelledby="page-title">

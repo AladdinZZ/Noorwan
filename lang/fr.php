@@ -208,7 +208,7 @@ return [
     // Pages légales : A FAIRE RELIRE PAR UN JURISTE.
     'legal' => [
         'eyebrow' => 'Informations légales',
-        'updated' => 'Dernière mise à jour : 21 octobre 2026',
+        'updated' => 'Dernière mise à jour : 22 octobre 2026',
         'mentions' => [
             'title' => 'Mentions légales',
             'intro' => 'Informations sur l\'éditeur et l\'hébergeur du site noorwan.com.',
@@ -279,8 +279,8 @@ return [
                 [
                     'title' => 'Responsable du traitement',
                     'body' => [
-                        'Le responsable du traitement est [À COMPLÉTER] (raison sociale), dont le siège est situé [À COMPLÉTER].',
-                        'Pour toute question sur vos données : [À COMPLÉTER] (adresse e-mail dédiée), ou le formulaire de la page Contact en choisissant « Autre ».',
+                        'Le responsable du traitement est Noorwan, éditeur du site noorwan.com.',
+                        'Pour toute question sur vos données : noorwan.contact@gmail.com, ou le formulaire de la page Contact en choisissant « Autre ».',
                     ],
                 ],
                 [
@@ -307,7 +307,7 @@ return [
                             'list' => [
                                 'Répondre à votre demande. Base légale : les mesures précontractuelles prises à votre demande, ou l\'intérêt légitime de Noorwan à répondre aux messages reçus.',
                                 'Vous adresser les offres de Noorwan, seulement si vous avez coché la case correspondante. Base légale : votre consentement.',
-                                'Vous adresser les offres des partenaires de Noorwan, seulement si vous avez coché la case correspondante. Base légale : votre consentement. Identité des partenaires et mode d\'envoi (par Noorwan ou par les partenaires) : [À COMPLÉTER].',
+                                'Vous adresser les offres des partenaires de Noorwan, seulement si vous avez coché la case correspondante. Base légale : votre consentement. Aucune donnée n\'est transmise à un partenaire à ce jour. La liste des partenaires sera publiée ici avant toute transmission.',
                                 'Protéger le formulaire contre les abus (limite d\'envois, empreinte de l\'adresse IP). Base légale : l\'intérêt légitime de Noorwan à la sécurité du site.',
                             ],
                         ],
@@ -316,8 +316,7 @@ return [
                 [
                     'title' => 'Qui reçoit vos données',
                     'body' => [
-                        'Vos données sont réservées aux équipes de Noorwan chargées de traiter votre demande. Elles sont stockées chez l\'hébergeur du site ([À COMPLÉTER]) et pourront être reprises dans l\'outil interne de gestion de la relation client de Noorwan. Elles ne sont ni vendues ni louées.',
-                        'Lieu d\'hébergement et éventuels transferts hors de l\'Union européenne, avec leurs garanties : [À COMPLÉTER].',
+                        'Vos données sont réservées aux équipes de Noorwan chargées de traiter votre demande. Elles sont stockées sur un serveur IONOS et pourront être reprises dans l\'outil interne de gestion de la relation client de Noorwan. Elles ne sont ni vendues ni louées.',
                     ],
                 ],
                 [
@@ -325,8 +324,8 @@ return [
                     'body' => [
                         [
                             'list' => [
-                                'Demandes de contact et données associées : 3 ans après votre dernier contact avec Noorwan, puis suppression.',
-                                'Accord pour recevoir des offres : jusqu\'à ce que vous le retiriez, et au plus 3 ans après votre dernier contact.',
+                                'Demandes de contact et données associées : 3 ans après votre dernière demande envoyée par ce formulaire, puis suppression.',
+                                'Accord pour recevoir des offres : jusqu\'à ce que vous le retiriez, et au plus 3 ans après votre dernière demande envoyée par ce formulaire.',
                                 'Données de limitation des envois (empreinte de l\'adresse IP) : 1 heure.',
                             ],
                         ],
@@ -335,7 +334,7 @@ return [
                 [
                     'title' => 'Retirer votre accord',
                     'body' => [
-                        'Vous pouvez retirer à tout moment votre accord pour recevoir les offres de Noorwan ou de ses partenaires : écrivez-nous par le formulaire de la page Contact (objet « Autre ») ou à [À COMPLÉTER]. Chaque offre envoyée par e-mail contiendra aussi un lien de désinscription. Le retrait vaut pour l\'avenir et ne remet pas en cause les envois passés.',
+                        'Vous pouvez retirer à tout moment votre accord pour recevoir les offres de Noorwan ou de ses partenaires : écrivez-nous par le formulaire de la page Contact (objet « Autre ») ou à noorwan.contact@gmail.com. Chaque offre envoyée par e-mail contiendra aussi un lien de désinscription. Le retrait vaut pour l\'avenir et ne remet pas en cause les envois passés.',
                     ],
                 ],
                 [
