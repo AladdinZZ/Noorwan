@@ -3,6 +3,40 @@
  * Propriétés logiques partout (inline = sens de lecture) : le RTL n'a besoin d'aucune feuille à part.
  */
 
+/* ---------- Police arabe hébergée sur le site (IBM Plex Sans Arabic, licence OFL : fonts/OFL.txt) ---------- */
+
+@font-face {
+    font-family: 'IBM Plex Sans Arabic';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url("../fonts/IBMPlexSansArabic-Regular.woff2") format("woff2");
+}
+
+@font-face {
+    font-family: 'IBM Plex Sans Arabic';
+    font-style: normal;
+    font-weight: 500;
+    font-display: swap;
+    src: url("../fonts/IBMPlexSansArabic-Medium.woff2") format("woff2");
+}
+
+@font-face {
+    font-family: 'IBM Plex Sans Arabic';
+    font-style: normal;
+    font-weight: 600;
+    font-display: swap;
+    src: url("../fonts/IBMPlexSansArabic-SemiBold.woff2") format("woff2");
+}
+
+@font-face {
+    font-family: 'IBM Plex Sans Arabic';
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url("../fonts/IBMPlexSansArabic-Bold.woff2") format("woff2");
+}
+
 /* ---------- Variables (reprises de la maquette v1) ---------- */
 
 :root {
@@ -404,7 +438,7 @@ main:focus {
     min-width: 44px;
     height: 44px;
     color: var(--text-2);
-    font: 500 12px/1 -apple-system, 'Helvetica Neue', 'IBM Plex Sans Arabic', sans-serif;
+    font: 500 12px/1 var(--font);
     letter-spacing: 0;
     text-decoration: none;
 }

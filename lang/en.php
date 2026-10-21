@@ -297,7 +297,7 @@ return [
                                 'an encrypted, irreversible fingerprint of your IP address, computed with a secret key. The IP address itself is never stored.',
                             ],
                         ],
-                        'No other data is collected: no cookies, no audience measurement, no profiling.',
+                        'No other data is collected: no cookies, no audience measurement, no profiling. Pages, images and fonts are served by the website itself: your visit sends no data to any third-party service.',
                     ],
                 ],
                 [
@@ -382,9 +382,9 @@ return [
                     ],
                 ],
                 [
-                    'title' => 'Arabic font',
+                    'title' => 'Fonts',
                     'body' => [
-                        'Pages in Arabic load the IBM Plex Sans Arabic font from the Google Fonts service. This service sets no cookies, but your browser sends your IP address to Google to download the font.',
+                        'Fonts, including the Arabic font, are hosted on the website itself: displaying them calls on no third-party service.',
                     ],
                 ],
                 [

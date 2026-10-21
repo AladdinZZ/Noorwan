@@ -29,9 +29,7 @@ $asset = static fn (string $path): string => $path . '?v=' . (string) @filemtime
 <link rel="alternate" hreflang="x-default" href="<?= e(absolute_url(current_page(), DEFAULT_LANG)) ?>">
 <link rel="icon" href="<?= e($asset('assets/images/favicon.svg')) ?>" type="image/svg+xml">
 <?php if (is_rtl()): ?>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&amp;display=swap">
+<link rel="preload" href="assets/fonts/IBMPlexSansArabic-Regular.woff2" as="font" type="font/woff2" crossorigin>
 <?php endif; ?>
 <link rel="stylesheet" href="<?= e($asset('assets/css/site.css')) ?>">
 <script src="<?= e($asset('assets/js/site.js')) ?>" defer></script>

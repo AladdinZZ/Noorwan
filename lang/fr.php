@@ -297,7 +297,7 @@ return [
                                 'une empreinte chiffrée et irréversible de votre adresse IP, calculée avec une clé secrète. L\'adresse IP elle-même n\'est jamais enregistrée.',
                             ],
                         ],
-                        'Aucune autre donnée n\'est collectée : pas de cookie, pas de mesure d\'audience, pas de profilage.',
+                        'Aucune autre donnée n\'est collectée : pas de cookie, pas de mesure d\'audience, pas de profilage. Les pages, les images et les polices de caractères sont servies par le site lui-même : votre visite ne transmet aucune donnée à un service tiers.',
                     ],
                 ],
                 [
@@ -382,9 +382,9 @@ return [
                     ],
                 ],
                 [
-                    'title' => 'Police de caractères en arabe',
+                    'title' => 'Polices de caractères',
                     'body' => [
-                        'Les pages en arabe chargent la police IBM Plex Sans Arabic depuis le service Google Fonts. Ce service ne dépose pas de cookie, mais votre navigateur transmet votre adresse IP à Google pour télécharger la police.',
+                        'Les polices de caractères, y compris la police arabe, sont hébergées sur le site lui-même : leur affichage ne fait appel à aucun service tiers.',
                     ],
                 ],
                 [
