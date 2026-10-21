@@ -336,6 +336,11 @@ main:focus {
     backdrop-filter: saturate(180%) blur(16px);
 }
 
+/* Menu ouvert : fond opaque pour que la page ne transparaisse pas sous les liens. */
+.site-header:has(.menu-toggle[aria-expanded="true"]) {
+    background: #FAFAFC;
+}
+
 .header-bar {
     display: flex;
     align-items: center;
