@@ -29,16 +29,10 @@ $expired = 'SELECT email FROM contact_requests GROUP BY email
             HAVING MAX(created_at) < UTC_TIMESTAMP() - INTERVAL ' . RETENTION_YEARS . ' YEAR';
 
 try {
-    $pdo = Db::maintenance();
-    if ($dryRun) {
-        $count = (int) $pdo->query(
-            'SELECT COUNT(*) FROM contact_requests c JOIN (' . $expired . ') expired ON expired.email = c.email'
-        )->fetchColumn();
-    } else {
-        $count = $pdo->exec(
-            'DELETE c FROM contact_requests c JOIN (' . $expired . ') expired ON expired.email = c.email'
-        );
-    }
+    $join = 'contact_requests c JOIN (' . $expired . ') expired ON expired.email = c.email';
+    $statement = Db::maintenance()->prepare($dryRun ? 'SELECT COUNT(*) FROM ' . $join : 'DELETE c FROM ' . $join);
+    $statement->execute();
+    $count = $dryRun ? (int) $statement->fetchColumn() : $statement->rowCount();
 } catch (Throwable $exception) {
     fwrite(STDERR, gmdate('Y-m-d\TH:i:s\Z') . ' purge-contacts ERREUR : ' . $exception->getMessage() . PHP_EOL);
     exit(1);
