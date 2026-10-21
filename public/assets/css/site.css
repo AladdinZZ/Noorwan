@@ -1009,3 +1009,150 @@ main:focus {
 .footer-legal a:hover {
     color: var(--ink);
 }
+
+/* ---------- En-tête des pages intérieures ---------- */
+
+.page-hero {
+    padding: clamp(56px, 8vw, 104px) var(--gutter) clamp(48px, 6vw, 80px);
+    background: var(--gray);
+}
+
+.page-hero h1 {
+    max-width: 15em;
+    font-size: clamp(38px, 5.4vw, 64px);
+    font-weight: 650;
+    line-height: calc(var(--lh-h1) + 0.06);
+    letter-spacing: var(--ls-h1);
+}
+
+.page-lead {
+    max-width: 36em;
+    margin-block-start: 22px;
+    color: var(--text-2);
+    font-size: clamp(17px, 1.6vw, 20px);
+}
+
+.page-hero .actions {
+    margin-block-start: 30px;
+}
+
+/* ---------- Édition : prestation ---------- */
+
+.cards-steps {
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+/* ---------- Édition : catalogue ---------- */
+
+.collection + .collection {
+    margin-block-start: clamp(48px, 7vw, 80px);
+}
+
+.collection-head {
+    max-width: 46em;
+    margin-block-end: 28px;
+}
+
+.collection-head h3 {
+    margin-block-end: 12px;
+    padding-block-start: 14px;
+    border-block-start: 3px solid var(--dot);
+    font-size: clamp(26px, 3vw, 34px);
+    font-weight: 650;
+    line-height: 1.15;
+    letter-spacing: var(--ls-h3);
+}
+
+.books {
+    display: grid;
+    gap: 20px;
+}
+
+.book {
+    display: grid;
+    grid-template-columns: minmax(96px, 30%) 1fr;
+    align-items: start;
+    gap: 18px;
+    padding: 20px;
+    border-radius: var(--radius-card);
+    background: var(--white);
+    box-shadow: 0 2px 14px rgba(0, 0, 0, 0.045);
+}
+
+.book-body {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    min-width: 0;
+}
+
+.book h4 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 650;
+    line-height: 1.15;
+    letter-spacing: var(--ls-h3);
+}
+
+.book-sub {
+    margin-block-start: -4px;
+    color: var(--text-3);
+    font-size: 14px;
+}
+
+.book-flag {
+    padding: 3px 10px;
+    border-radius: var(--radius-btn);
+    background: var(--tint);
+    color: var(--tone);
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.book-lead {
+    margin-block-start: 6px;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+.book-summary {
+    color: var(--text-2);
+    font-size: 15px;
+}
+
+.book-status {
+    margin-block-start: 6px;
+    color: var(--tone);
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.book-buy {
+    margin-block-start: 10px;
+    min-height: 44px;
+    padding-inline: 18px;
+    font-size: 14px;
+}
+
+/* Sous 520 px, la couverture passe au-dessus du texte pour laisser respirer le résumé. */
+@media (max-width: 519px) {
+    .book {
+        grid-template-columns: 1fr;
+    }
+
+    .book .cover,
+    .book .cover-soon {
+        width: 46%;
+    }
+}
+
+@media (min-width: 900px) {
+    .books {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}

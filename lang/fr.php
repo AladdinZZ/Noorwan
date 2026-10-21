@@ -99,12 +99,65 @@ return [
         'soon' => 'À paraître',
         'cover_alt' => 'Couverture : :title',
         'items' => [
-            'harmonie' => ['sub' => '{méta}Physique · Tome 1'],
-            'lumiere' => ['sub' => '{méta}Physique · Tome 2'],
+            'harmonie' => [
+                'sub' => '{méta}Physique · Tome 1',
+                'lead' => 'Ce livre explore l\'ordre de la création, de l\'univers à l\'homme.',
+                'summary' => 'Il met en regard les découvertes scientifiques (cosmos, vie, conscience) et les enseignements révélés à travers les prophètes. Il montre comment l\'homme retrouve sa juste place lorsqu\'il vit en accord avec l\'ordre voulu par le Créateur.',
+            ],
+            'lumiere' => [
+                'sub' => '{méta}Physique · Tome 2',
+                'lead' => 'La lumière comme réalité centrale de la création et de la révélation.',
+                'summary' => 'Il aborde la lumière physique, la perception humaine et la Lumière divine évoquée dans les Écritures, en montrant comment les prophètes ont été des récepteurs et des transmetteurs de cette clarté.',
+            ],
             'vibration' => ['sub' => '{méta}Physique · Tome 3, à paraître'],
-            'le-mal' => ['sub' => 'Les 7 degrés de l\'Ombre'],
-            'le-bien' => ['sub' => 'Les 7 degrés de la Lumière'],
-            'etre-pour-avoir' => ['sub' => 'Essai philosophique'],
+            'le-mal' => [
+                'sub' => 'Les 7 degrés de l\'Ombre',
+                'lead' => 'Analyse des 7 degrés de l\'Ombre et de la conscience obscurcie.',
+                'summary' => 'Ce livre analyse comment la conscience s\'obscurcit par la peur, le manque et l\'oubli de Dieu. Il détaille les mécanismes intérieurs qui éloignent l\'homme de sa nature lumineuse.',
+            ],
+            'le-bien' => [
+                'sub' => 'Les 7 degrés de la Lumière',
+                'lead' => 'L\'éveil progressif du cœur et les 7 degrés de la Lumière.',
+                'summary' => 'Cet ouvrage décrit le chemin inverse du Mal : l\'éveil progressif du cœur, la clarté de l\'intention et le retour à la droiture. Il guide le lecteur vers une spiritualité incarnée et positive.',
+            ],
+            'etre-pour-avoir' => [
+                'sub' => 'Essai philosophique',
+                'lead' => 'Essai philosophique sur la possession et l\'existence.',
+                'summary' => 'Ce livre interroge le rapport à la possession et rappelle que l\'équilibre ne se trouve que lorsque l\'Avoir reste au service de l\'Être, conformément à l\'éthique enseignée par les prophètes.',
+            ],
         ],
+    ],
+    'edition' => [
+        'tag' => 'Noorwan Édition',
+        'title' => 'De votre manuscrit à votre livre sur Amazon',
+        'lead' => 'Noorwan Édition accompagne les auteurs à chaque étape, jusqu\'à la publication de leur livre sur Amazon. Nos propres collections, {méta}Physique et Chemins de l\'Âme, en sont la preuve.',
+        'btn_publish' => 'Publier votre livre',
+        'btn_catalogue' => 'Voir le catalogue',
+        // A VALIDER PAR MARWAN : contenu des quatre étapes de la prestation.
+        'service_eyebrow' => 'La prestation',
+        'service_title' => 'Quatre étapes jusqu\'à la publication',
+        'service_lead' => 'Un accompagnement adapté à votre projet, que vous ayez un manuscrit achevé ou un texte encore en chantier.',
+        'service_steps' => [
+            ['title' => 'Manuscrit', 'text' => 'Relecture de votre texte, conseils de structure et corrections, pour un manuscrit prêt à publier.'],
+            ['title' => 'Mise en forme', 'text' => 'Mise en page de l\'intérieur du livre, en version imprimée et en version numérique.'],
+            ['title' => 'Couverture', 'text' => 'Une couverture à l\'image de votre livre, aux formats demandés par Amazon.'],
+            ['title' => 'Mise en ligne', 'text' => 'Création de la fiche du livre sur Amazon, choix des catégories et du prix, publication.'],
+        ],
+        'catalogue_eyebrow' => 'Catalogue',
+        'catalogue_title' => 'Nos collections',
+        'collections' => [
+            'metaphysique' => [
+                'name' => '{méta}Physique',
+                'text' => 'Cette collection propose une lecture croisée entre science et révélation, en montrant que les lois de la création et les messages transmis par les prophètes procèdent d\'une même source. L\'approche s\'inscrit dans la continuité des révélations, depuis les premiers prophètes jusqu\'au Sceau de la prophétie, sans jamais les opposer au savoir rationnel.',
+            ],
+            'chemins' => [
+                'name' => 'Chemins de l\'Âme',
+                'text' => 'Cette collection est plus intérieure et éthique. Elle s\'intéresse au cheminement du cœur humain, à ses égarements et à son redressement, à la lumière des enseignements révélés.',
+            ],
+        ],
+        'buy' => 'Acheter sur Amazon',
+        'buy_label' => 'Acheter :title sur Amazon',
+        'writing' => 'En cours de rédaction',
+        'also_in_english' => 'Disponible aussi en anglais',
     ],
 ];

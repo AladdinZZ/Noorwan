@@ -99,12 +99,65 @@ return [
         'soon' => 'Forthcoming',
         'cover_alt' => 'Cover: :title',
         'items' => [
-            'harmonie' => ['sub' => '{méta}Physique · Volume 1'],
-            'lumiere' => ['sub' => '{méta}Physique · Volume 2'],
+            'harmonie' => [
+                'sub' => '{méta}Physique · Volume 1',
+                'lead' => 'This book explores the order of creation, from the universe to man.',
+                'summary' => 'It contrasts scientific discoveries (cosmos, life, consciousness) with teachings revealed through the prophets. It shows how man finds his rightful place when living in accordance with the order desired by the Creator.',
+            ],
+            'lumiere' => [
+                'sub' => '{méta}Physique · Volume 2',
+                'lead' => 'Light as the central reality of creation and revelation.',
+                'summary' => 'It addresses physical light, human perception, and Divine Light mentioned in Scriptures, showing how prophets were receptors and transmitters of this clarity.',
+            ],
             'vibration' => ['sub' => '{méta}Physique · Volume 3, forthcoming'],
-            'le-mal' => ['sub' => 'The 7 degrees of Shadow'],
-            'le-bien' => ['sub' => 'The 7 degrees of Light'],
-            'etre-pour-avoir' => ['sub' => 'Philosophical essay'],
+            'le-mal' => [
+                'sub' => 'The 7 degrees of Shadow',
+                'lead' => 'Analysis of the 7 degrees of Shadow and darkened consciousness.',
+                'summary' => 'This book analyzes how consciousness is obscured by fear, lack, and forgetfulness of God. It details the inner mechanisms that distance man from his luminous nature.',
+            ],
+            'le-bien' => [
+                'sub' => 'The 7 degrees of Light',
+                'lead' => 'The progressive awakening of the heart and the 7 degrees of Light.',
+                'summary' => 'This work describes the path opposite to Evil: the progressive awakening of the heart, the clarity of intention, and the return to righteousness. It guides the reader towards an embodied and positive spirituality.',
+            ],
+            'etre-pour-avoir' => [
+                'sub' => 'Philosophical essay',
+                'lead' => 'Philosophical essay on possession and existence.',
+                'summary' => 'This book questions the relationship to possession and reminds us that balance is only found when Having remains in the service of Being, in accordance with the ethics taught by the prophets.',
+            ],
         ],
+    ],
+    'edition' => [
+        'tag' => 'Noorwan Publishing',
+        'title' => 'From your manuscript to your book on Amazon',
+        'lead' => 'Noorwan Publishing guides authors through every step, all the way to publishing their book on Amazon. Our own collections, {méta}Physique and Chemins de l\'Âme, are the proof.',
+        'btn_publish' => 'Publish your book',
+        'btn_catalogue' => 'See the catalogue',
+        // A VALIDER PAR MARWAN : contenu des quatre étapes de la prestation.
+        'service_eyebrow' => 'Our service',
+        'service_title' => 'Four steps to publication',
+        'service_lead' => 'Support tailored to your project, whether your manuscript is finished or still a work in progress.',
+        'service_steps' => [
+            ['title' => 'Manuscript', 'text' => 'Proofreading, advice on structure and corrections, for a manuscript ready to publish.'],
+            ['title' => 'Layout', 'text' => 'Interior layout of the book, in print and digital editions.'],
+            ['title' => 'Cover', 'text' => 'A cover that reflects your book, in the formats Amazon requires.'],
+            ['title' => 'Going live', 'text' => 'Creating the book page on Amazon, choosing categories and price, publishing.'],
+        ],
+        'catalogue_eyebrow' => 'Catalogue',
+        'catalogue_title' => 'Our collections',
+        'collections' => [
+            'metaphysique' => [
+                'name' => '{méta}Physique',
+                'text' => 'This collection offers a cross-reading between science and revelation, demonstrating that the laws of creation and the messages transmitted by the prophets stem from the same source. The approach follows the continuity of revelations, from the first prophets to the Seal of Prophecy, without ever opposing them to rational knowledge.',
+            ],
+            'chemins' => [
+                'name' => 'Chemins de l\'Âme',
+                'text' => 'This collection is more inward and ethical. It focuses on the journey of the human heart, its wanderings and its rectification, in the light of revealed teachings.',
+            ],
+        ],
+        'buy' => 'Buy on Amazon',
+        'buy_label' => 'Buy :title on Amazon',
+        'writing' => 'Writing in progress',
+        'also_in_english' => 'Also available in English',
     ],
 ];
