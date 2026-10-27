@@ -325,7 +325,7 @@ return [
                             'list' => [
                                 'Demandes de contact et données associées : 3 ans après votre dernière demande envoyée par ce formulaire, puis suppression.',
                                 'Accord pour recevoir des offres : jusqu\'à ce que vous le retiriez, et au plus 3 ans après votre dernière demande envoyée par ce formulaire.',
-                                'Données de limitation des envois (empreinte de l\'adresse IP) : 1 heure.',
+                                'Données de limitation des envois (empreinte de l\'adresse IP) : 2 heures au plus.',
                             ],
                         ],
                     ],

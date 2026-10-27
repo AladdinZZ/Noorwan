@@ -325,7 +325,7 @@ return [
                             'list' => [
                                 'Contact requests and related data: 3 years after the last request you sent through this form, then deleted.',
                                 'Consent to receive offers: until you withdraw it, and at most 3 years after the last request you sent through this form.',
-                                'Sending limit data (IP address fingerprint): 1 hour.',
+                                'Sending limit data (IP address fingerprint): 2 hours at most.',
                             ],
                         ],
                     ],

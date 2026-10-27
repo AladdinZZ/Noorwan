@@ -45,6 +45,8 @@ sql_site() {
     MYSQL_PWD="$DB_PASS" "$MYSQL" -h"$DB_HOST" -P"$DB_PORT" -u"$DB_USER" -N -B "$DB_NAME" -e "$1" 2>/dev/null
 }
 token() { curl -s "$BASE_URL/contact.php?lang=fr" | grep -o 'name="token" value="[^"]*"' | sed -e 's/.*value="//' -e 's/"$//'; }
+# Textes attendus par langue (bash 3.2 de macOS : pas de tableau associatif). by_lang LANGUE FR EN AR
+by_lang() { case "$1" in fr) echo "$2" ;; en) echo "$3" ;; ar) echo "$4" ;; esac; }
 
 echo "1. Syntaxe PHP"
 while IFS= read -r file; do
@@ -106,6 +108,10 @@ for lang in fr en ar; do
     html=$(curl -s "$BASE_URL/confidentialite.php?lang=$lang")
     if grep -q 'COMPLÉTER' <<< "$html"; then fail "Confidentialité ($lang) : marqueur [À COMPLÉTER] restant"; else pass "Confidentialité ($lang) : aucun [À COMPLÉTER]"; fi
     grep -q 'href="mailto:contact@noorwan.com"' <<< "$html" && pass "Confidentialité ($lang) : adresse de contact" || fail "Confidentialité ($lang) : adresse de contact absente"
+    # Fichiers de limite d'envoi purgés toutes les heures après une heure d'inactivité : 2 heures au plus.
+    duration=$(by_lang "$lang" "2 heures au plus" "2 hours at most" "ساعتان على الأكثر")
+    grep -q "$duration" <<< "$html" && pass "Confidentialité ($lang) : limite d'envoi, « $duration »" || fail "Confidentialité ($lang) : durée de la limite d'envoi"
+    if grep -qE ': 1 heure\.|: 1 hour\.|: ساعة واحدة\.' <<< "$html"; then fail "Confidentialité ($lang) : ancienne durée « 1 heure » restante"; else pass "Confidentialité ($lang) : plus de « 1 heure »"; fi
 done
 
 for lang in fr en ar; do
@@ -135,8 +141,6 @@ for lang in fr en ar; do
 done
 
 echo "2 septies. Accueil : section Édition"
-# Textes attendus par langue (bash 3.2 de macOS : pas de tableau associatif). by_lang LANGUE FR EN AR
-by_lang() { case "$1" in fr) echo "$2" ;; en) echo "$3" ;; ar) echo "$4" ;; esac; }
 for lang in fr en ar; do
     tag=$(by_lang "$lang" "Édition" "Publishing" "النشر")
     section=$(curl -s "$BASE_URL/?lang=$lang" | sed -n '/<section id="edition"/,/<\/section>/p')
