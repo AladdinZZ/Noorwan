@@ -116,6 +116,17 @@ for lang in fr en ar; do
     grep -q 'A FAIRE RELIRE PAR UN JURISTE' <<< "$html" && pass "Mentions légales ($lang) : commentaire juriste conservé" || fail "Mentions légales ($lang) : commentaire juriste absent"
 done
 
+echo "2 quinquies. Menu des langues"
+for lang in fr en ar; do
+    header=$(curl -s "$BASE_URL/edition.php?lang=$lang" | sed -n '/<header/,/<\/header>/p')
+    grep -q '<details class="lang-menu">' <<< "$header" && pass "menu des langues en <details> ($lang)" || fail "menu des langues absent ($lang)"
+    if grep -q 'lang-switch' <<< "$header"; then fail "anciens boutons de langue encore présents ($lang)"; else pass "plus de boutons de langue ($lang)"; fi
+    expect "trois langues dans leur propre langue ($lang)" "Français|English|العربية" \
+        "$(grep -oE 'hreflang="(fr|en|ar)"[^>]*>[^<]+' <<< "$header" | sed 's/.*>//' | paste -sd '|' -)"
+    expect "liens du menu sur la même page ($lang)" 3 "$(grep -cE 'href="edition\.php\?lang=(fr|en|ar)" lang=' <<< "$header")"
+    expect "langue courante marquée ($lang)" "$lang" "$(grep -oE 'lang="[a-z]+" hreflang="[a-z]+" aria-current="true"' <<< "$header" | sed -E 's/lang="([a-z]+)".*/\1/')"
+done
+
 echo "3. Formulaire de contact"
 rm -f storage/ratelimit/contact-*.log
 sql "DELETE FROM contact_requests WHERE email = '$TEST_EMAIL'"

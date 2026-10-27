@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 // Langues, chaînes traduites et construction des liens (le paramètre ?lang= suit partout).
 
+// label : code court affiché sur le bouton du menu des langues ; name : nom de la langue dans cette langue.
+// Ajouter une langue ici l'ajoute au menu sans toucher à la mise en page.
 const LANGS = [
     'fr' => ['label' => 'FR', 'name' => 'Français', 'dir' => 'ltr'],
     'en' => ['label' => 'EN', 'name' => 'English', 'dir' => 'ltr'],
-    'ar' => ['label' => 'عربي', 'name' => 'العربية', 'dir' => 'rtl'],
+    'ar' => ['label' => 'AR', 'name' => 'العربية', 'dir' => 'rtl'],
 ];
 const DEFAULT_LANG = 'fr';
 

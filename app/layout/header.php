@@ -45,11 +45,14 @@ $asset = static fn (string $path): string => $path . '?v=' . (string) @filemtime
 <?php endforeach; ?>
         </nav>
         <div class="header-tools">
-            <div class="lang-switch" role="group" aria-label="<?= t('nav.lang_label') ?>">
+            <details class="lang-menu">
+                <summary><span class="visually-hidden"><?= t('nav.lang_label') ?>, <?= e(LANGS[lang()]['name']) ?></span><span aria-hidden="true"><?= e(LANGS[lang()]['label']) ?></span><svg class="lang-chevron" width="10" height="10" viewBox="0 0 10 10" aria-hidden="true" focusable="false"><path d="M2 3.5l3 3 3-3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
+                <ul class="lang-list" aria-label="<?= t('nav.lang_label') ?>">
 <?php foreach (LANGS as $code => $info): ?>
-                <a href="<?= e(url(current_page(), '', [], $code)) ?>" lang="<?= e($code) ?>" hreflang="<?= e($code) ?>" title="<?= e($info['name']) ?>"<?= $code === lang() ? ' aria-current="true"' : '' ?>><span><?= e($info['label']) ?></span></a>
+                    <li><a href="<?= e(url(current_page(), '', [], $code)) ?>" lang="<?= e($code) ?>" hreflang="<?= e($code) ?>"<?= $code === lang() ? ' aria-current="true"' : '' ?>><?= e($info['name']) ?></a></li>
 <?php endforeach; ?>
-            </div>
+                </ul>
+            </details>
             <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="nav-mobile" hidden>
                 <span class="visually-hidden"><?= t('nav.menu') ?></span>
                 <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><g stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><line class="menu-line-1" x1="3" y1="6.5" x2="17" y2="6.5"/><line class="menu-line-2" x1="3" y1="13.5" x2="17" y2="13.5"/></g></svg>
