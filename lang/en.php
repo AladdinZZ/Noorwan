@@ -212,40 +212,16 @@ return [
         'mentions' => [
             'title' => 'Legal notice',
             'intro' => 'Information about the publisher and the host of the noorwan.com website.',
+            'notice' => [
+                'title' => 'Page being updated',
+                'text' => 'The full legal information will be published soon. What is known to date:',
+                'list' => [
+                    'Website published by Noorwan.',
+                    'Contact: contact@noorwan.com',
+                    'Hosting: IONOS server.',
+                ],
+            ],
             'sections' => [
-                [
-                    'title' => 'Publisher',
-                    'body' => [
-                        'The noorwan.com website is published by:',
-                        [
-                            'list' => [
-                                'Company name: [À COMPLÉTER]',
-                                'Legal form and share capital: [À COMPLÉTER]',
-                                'Registered office: [À COMPLÉTER]',
-                                'Registration number: [À COMPLÉTER]',
-                                'Contact: the form on the Contact page of the website.',
-                            ],
-                        ],
-                    ],
-                ],
-                [
-                    'title' => 'Publication director',
-                    'body' => [
-                        '[À COMPLÉTER]',
-                    ],
-                ],
-                [
-                    'title' => 'Hosting',
-                    'body' => [
-                        [
-                            'list' => [
-                                'Host: [À COMPLÉTER]',
-                                'Address: [À COMPLÉTER]',
-                                'Phone: [À COMPLÉTER]',
-                            ],
-                        ],
-                    ],
-                ],
                 [
                     'title' => 'Intellectual property',
                     'body' => [
@@ -262,12 +238,6 @@ return [
                     'title' => 'Personal data and cookies',
                     'body' => [
                         'The processing of data sent through the contact form is described on the Privacy page. The website sets no cookies: see the Cookies page.',
-                    ],
-                ],
-                [
-                    'title' => 'Governing law',
-                    'body' => [
-                        'This legal notice is governed by the law of [À COMPLÉTER].',
                     ],
                 ],
             ],

@@ -212,40 +212,16 @@ return [
         'mentions' => [
             'title' => 'Mentions légales',
             'intro' => 'Informations sur l\'éditeur et l\'hébergeur du site noorwan.com.',
+            'notice' => [
+                'title' => 'Page en cours de mise à jour',
+                'text' => 'Les informations légales complètes seront publiées prochainement. Ce qui est connu à ce jour :',
+                'list' => [
+                    'Site édité par Noorwan.',
+                    'Contact : contact@noorwan.com',
+                    'Hébergement : serveur IONOS.',
+                ],
+            ],
             'sections' => [
-                [
-                    'title' => 'Éditeur du site',
-                    'body' => [
-                        'Le site noorwan.com est édité par :',
-                        [
-                            'list' => [
-                                'Raison sociale : [À COMPLÉTER]',
-                                'Forme juridique et capital social : [À COMPLÉTER]',
-                                'Siège social : [À COMPLÉTER]',
-                                'Numéro d\'immatriculation : [À COMPLÉTER]',
-                                'Contact : formulaire de la page Contact du site.',
-                            ],
-                        ],
-                    ],
-                ],
-                [
-                    'title' => 'Directeur de la publication',
-                    'body' => [
-                        '[À COMPLÉTER]',
-                    ],
-                ],
-                [
-                    'title' => 'Hébergement',
-                    'body' => [
-                        [
-                            'list' => [
-                                'Hébergeur : [À COMPLÉTER]',
-                                'Adresse : [À COMPLÉTER]',
-                                'Téléphone : [À COMPLÉTER]',
-                            ],
-                        ],
-                    ],
-                ],
                 [
                     'title' => 'Propriété intellectuelle',
                     'body' => [
@@ -262,12 +238,6 @@ return [
                     'title' => 'Données personnelles et cookies',
                     'body' => [
                         'Le traitement des données envoyées par le formulaire de contact est décrit dans la page Confidentialité. Le site ne dépose aucun cookie : voir la page Cookies.',
-                    ],
-                ],
-                [
-                    'title' => 'Droit applicable',
-                    'body' => [
-                        'Les présentes mentions sont régies par le droit [À COMPLÉTER].',
                     ],
                 ],
             ],

@@ -108,6 +108,14 @@ for lang in fr en ar; do
     grep -q 'href="mailto:contact@noorwan.com"' <<< "$html" && pass "Confidentialité ($lang) : adresse de contact" || fail "Confidentialité ($lang) : adresse de contact absente"
 done
 
+for lang in fr en ar; do
+    html=$(curl -s "$BASE_URL/mentions-legales.php?lang=$lang")
+    if grep -q 'COMPLÉTER' <<< "$html"; then fail "Mentions légales ($lang) : marqueur [À COMPLÉTER] restant"; else pass "Mentions légales ($lang) : aucun [À COMPLÉTER]"; fi
+    grep -q 'class="legal-notice"' <<< "$html" && grep -q 'href="mailto:contact@noorwan.com"' <<< "$html" && grep -q 'IONOS' <<< "$html" \
+        && pass "Mentions légales ($lang) : encadré avec éditeur, contact et hébergement" || fail "Mentions légales ($lang) : encadré incomplet"
+    grep -q 'A FAIRE RELIRE PAR UN JURISTE' <<< "$html" && pass "Mentions légales ($lang) : commentaire juriste conservé" || fail "Mentions légales ($lang) : commentaire juriste absent"
+done
+
 echo "3. Formulaire de contact"
 rm -f storage/ratelimit/contact-*.log
 sql "DELETE FROM contact_requests WHERE email = '$TEST_EMAIL'"
