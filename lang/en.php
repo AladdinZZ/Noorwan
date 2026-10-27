@@ -280,7 +280,7 @@ return [
                     'title' => 'Data controller',
                     'body' => [
                         'The data controller is Noorwan, publisher of the noorwan.com website.',
-                        'For any question about your data: noorwan.contact@gmail.com, or the form on the Contact page, choosing "Other".',
+                        'For any question about your data: contact@noorwan.com, or the form on the Contact page, choosing "Other".',
                     ],
                 ],
                 [
@@ -334,7 +334,7 @@ return [
                 [
                     'title' => 'Withdrawing your consent',
                     'body' => [
-                        'You can withdraw your consent to receive offers from Noorwan or its partners at any time: write to us through the form on the Contact page (subject "Other") or at noorwan.contact@gmail.com. Every offer sent by email will also contain an unsubscribe link. Withdrawal applies to the future and does not affect past mailings.',
+                        'You can withdraw your consent to receive offers from Noorwan or its partners at any time: write to us through the form on the Contact page (subject "Other") or at contact@noorwan.com. Every offer sent by email will also contain an unsubscribe link. Withdrawal applies to the future and does not affect past mailings.',
                     ],
                 ],
                 [

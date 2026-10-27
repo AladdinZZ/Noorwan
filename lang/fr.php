@@ -280,7 +280,7 @@ return [
                     'title' => 'Responsable du traitement',
                     'body' => [
                         'Le responsable du traitement est Noorwan, éditeur du site noorwan.com.',
-                        'Pour toute question sur vos données : noorwan.contact@gmail.com, ou le formulaire de la page Contact en choisissant « Autre ».',
+                        'Pour toute question sur vos données : contact@noorwan.com, ou le formulaire de la page Contact en choisissant « Autre ».',
                     ],
                 ],
                 [
@@ -334,7 +334,7 @@ return [
                 [
                     'title' => 'Retirer votre accord',
                     'body' => [
-                        'Vous pouvez retirer à tout moment votre accord pour recevoir les offres de Noorwan ou de ses partenaires : écrivez-nous par le formulaire de la page Contact (objet « Autre ») ou à noorwan.contact@gmail.com. Chaque offre envoyée par e-mail contiendra aussi un lien de désinscription. Le retrait vaut pour l\'avenir et ne remet pas en cause les envois passés.',
+                        'Vous pouvez retirer à tout moment votre accord pour recevoir les offres de Noorwan ou de ses partenaires : écrivez-nous par le formulaire de la page Contact (objet « Autre ») ou à contact@noorwan.com. Chaque offre envoyée par e-mail contiendra aussi un lien de désinscription. Le retrait vaut pour l\'avenir et ne remet pas en cause les envois passés.',
                     ],
                 ],
                 [
