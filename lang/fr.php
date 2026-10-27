@@ -10,6 +10,8 @@ return [
         'home_description' => 'Conseil, solutions numériques et édition : trois univers complémentaires pour transformer les idées en réalisations utiles.',
         'edition_title' => 'Édition | Noorwan',
         'edition_description' => 'Noorwan Édition accompagne les auteurs jusqu\'à la publication sur Amazon et publie ses collections {méta}Physique et Chemins de l\'Âme.',
+        'solutions_title' => 'Solutions | Noorwan',
+        'solutions_description' => 'Des logiciels pour les entreprises, conçus pour le téléphone d\'abord et disponibles en trois langues, dont Inteek pour les ressources humaines.',
         'contact_title' => 'Contact | Noorwan',
         'contact_description' => 'Conseil, démonstration d\'une solution ou publication d\'un livre : écrivez à Noorwan.',
         'mentions_title' => 'Mentions légales | Noorwan',
@@ -79,6 +81,9 @@ return [
         'cons_app' => 'Une étape utile livrée vaut mieux qu\'un grand plan sur le papier.',
         'sol_eyebrow' => 'Solutions',
         'sol_h' => 'Des outils conçus pour les entreprises',
+        // A VALIDER PAR MARWAN : introduction de la section Solutions (reprise en tête de la page Solutions).
+        'sol_text' => 'Des logiciels pensés pour les entreprises, conçus pour le téléphone d\'abord et disponibles en trois langues. Certains sont en service, d\'autres en préparation.',
+        'sol_btn' => 'Découvrir nos solutions',
         'solutions' => [
             ['cat' => 'Ressources humaines', 'name' => 'Inteek', 'text' => 'Du recrutement à la gestion des équipes, les RH simplifiées.', 'confidential' => false],
             ['cat' => 'Paiement', 'name' => 'OnePay', 'text' => '', 'confidential' => true],
@@ -165,6 +170,23 @@ return [
         'writing' => 'En cours de rédaction',
         'also_in_english' => 'Disponible aussi en anglais',
         'upcoming' => 'Prochainement',
+    ],
+    // Page Solutions : TEXTES A VALIDER PAR MARWAN. Le titre et l'introduction sont ceux de l'accueil (home.sol_h, home.sol_text).
+    'solutions' => [
+        'tag' => 'Noorwan Solutions',
+        'btn_demo' => 'Demander une présentation',
+        'approach_title' => 'Notre façon de faire',
+        'principles' => [
+            ['title' => 'Pensés pour le téléphone d\'abord', 'text' => 'Chaque écran est conçu pour le téléphone, puis adapté à l\'ordinateur.'],
+            ['title' => 'Trois langues, dont l\'arabe', 'text' => 'Français, anglais et arabe, avec un affichage de droite à gauche pour l\'arabe.'],
+            ['title' => 'Des données protégées', 'text' => 'Données hébergées et protégées, accès selon le rôle de chacun.'],
+        ],
+        'inteek_lead' => 'Les ressources humaines en modules, à activer selon les besoins de votre entreprise.',
+        'inteek_text' => 'Vous commencez par les modules qui comptent pour vous et ajoutez les autres quand le besoin se présente.',
+        'modules_title' => 'Les modules',
+        'modules' => ['Recrutement et base de CV', 'Enquêtes auprès des équipes', 'Congés', 'Pointage', 'Dossiers du personnel'],
+        'others_title' => 'Autres solutions',
+        'on_request' => 'Présentation sur rendez-vous.',
     ],
     'contact' => [
         'tag' => 'Contact',

@@ -16,6 +16,7 @@ const DEFAULT_LANG = 'fr';
 // Pages publiques : identifiant => fichier dans public/.
 const PAGES = [
     'index' => '',
+    'solutions' => 'solutions.php',
     'edition' => 'edition.php',
     'contact' => 'contact.php',
     'mentions-legales' => 'mentions-legales.php',

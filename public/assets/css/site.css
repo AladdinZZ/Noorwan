@@ -864,6 +864,20 @@ main:focus {
 
 /* ---------- Solutions ---------- */
 
+/* Accueil : titre, introduction et lien vers la page Solutions. */
+.sol-head {
+    max-width: 44em;
+    margin-block-end: clamp(32px, 4vw, 48px);
+}
+
+.sol-head .muted {
+    margin-block: 18px 10px;
+}
+
+.sol-head .btn-text {
+    margin-inline-start: -4px;
+}
+
 .cards-solutions {
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 20px;
@@ -1163,6 +1177,79 @@ main:focus {
     margin: 0;
     padding: 0;
     list-style: none;
+}
+
+/* ---------- Solutions : Inteek ---------- */
+
+.inteek {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: clamp(32px, 5vw, 72px);
+}
+
+.inteek-intro {
+    flex: 1 1 380px;
+    min-width: 0;
+}
+
+.inteek-lead {
+    max-width: 26em;
+    margin-block: 18px 12px;
+    font-size: clamp(19px, 1.8vw, 22px);
+    font-weight: 600;
+    line-height: 1.35;
+    letter-spacing: var(--ls-h);
+}
+
+.inteek-intro .muted {
+    max-width: 32em;
+}
+
+.inteek-modules {
+    flex: 1 1 340px;
+    min-width: 0;
+    padding: clamp(22px, 3vw, 32px);
+    border-block-start: 3px solid var(--dot);
+    border-radius: var(--radius-card);
+    background: var(--white);
+    box-shadow: 0 2px 14px rgba(0, 0, 0, 0.045);
+}
+
+.inteek-modules h3 {
+    color: var(--tone);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: var(--ls-caps);
+    text-transform: uppercase;
+}
+
+.inteek-modules ul {
+    margin: 10px 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.inteek-modules li {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding-block: 14px;
+    font-size: 17px;
+    font-weight: 500;
+}
+
+.inteek-modules li + li {
+    border-block-start: 1px solid var(--line);
+}
+
+.inteek-modules li::before {
+    content: "";
+    flex: none;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--dot);
 }
 
 /* ---------- Édition : catalogue ---------- */

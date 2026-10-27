@@ -8,7 +8,7 @@ declare(strict_types=1);
 // « À propos » viendra avec sa propre page : il n'est pas dans le menu en v1.
 $navItems = [
     ['label' => 'nav.consulting', 'href' => url('index', 'consulting')],
-    ['label' => 'nav.solutions', 'href' => url('index', 'solutions')],
+    ['label' => 'nav.solutions', 'href' => url('solutions')],
     ['label' => 'nav.edition', 'href' => url('index', 'edition')],
     ['label' => 'nav.contact', 'href' => url('index', 'contact')],
 ];

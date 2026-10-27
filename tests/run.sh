@@ -53,7 +53,7 @@ done < <(find app bin lang public -name '*.php')
 [[ $failures -eq 0 ]] && pass "php -l sur tous les fichiers"
 
 echo "2. Pages (code 200 attendu) sur $BASE_URL"
-for page in "" edition.php contact.php mentions-legales.php confidentialite.php cookies.php; do
+for page in "" solutions.php edition.php contact.php mentions-legales.php confidentialite.php cookies.php; do
     for lang in fr en ar; do
         code=$(curl -s -o /dev/null -w '%{http_code}' "$BASE_URL/$page?lang=$lang")
         expect "/${page:-index} lang=$lang" 200 "$code"
@@ -95,8 +95,8 @@ expect "robots.txt en texte" "text/plain; charset=utf-8" "$(curl -s -o /dev/null
 robots_prod=$("$PHP" -r 'require "app/bootstrap.php"; require "app/seo.php"; echo robots_txt(true);' 2>&1)
 if [[ "$robots_prod" == $'User-agent: *\nAllow: /\n\nSitemap: '*'/sitemap.xml' ]]; then pass "robots.txt de production"; else fail "robots.txt de production : $robots_prod"; fi
 sitemap=$(curl -s "$BASE_URL/sitemap.xml")
-expect "sitemap.xml : 6 pages x 3 langues" 18 "$(grep -c '<loc>' <<< "$sitemap")"
-expect "sitemap.xml : 4 versions par adresse (fr, en, ar, x-default)" 72 "$(grep -c 'hreflang=' <<< "$sitemap")"
+expect "sitemap.xml : 7 pages x 3 langues" 21 "$(grep -c '<loc>' <<< "$sitemap")"
+expect "sitemap.xml : 4 versions par adresse (fr, en, ar, x-default)" 84 "$(grep -c 'hreflang=' <<< "$sitemap")"
 if command -v xmllint >/dev/null; then
     xmllint --noout - <<< "$sitemap" 2>/dev/null && pass "sitemap.xml bien formé" || fail "sitemap.xml mal formé"
 fi
@@ -168,6 +168,36 @@ for lang in fr en ar; do
     expect "boutons « Acheter » des livres parus ($lang)" 5 "$(grep -c 'class="btn btn-dark book-buy"' <<< "$html")"
 done
 expect "couverture_belles_manieres.webp servie" 200 "$(curl -s -o /dev/null -w '%{http_code}' "$BASE_URL/assets/images/covers/couverture_belles_manieres.webp")"
+
+echo "2 nonies. Solutions : accueil et page"
+grep -q '/solutions.php?lang=fr</loc>' <<< "$sitemap" && pass "page Solutions dans le plan du site" || fail "page Solutions absente du plan du site"
+for lang in fr en ar; do
+    home=$(curl -s "$BASE_URL/?lang=$lang")
+    nav=$(sed -n '/<nav class="nav-desktop"/,/<\/nav>/p' <<< "$home")
+    grep -q "href=\"solutions.php?lang=$lang\">$(by_lang "$lang" "Solutions" "Solutions" "الحلول")<" <<< "$nav" && pass "menu : Solutions mène à solutions.php ($lang)" || fail "menu : lien Solutions ($lang)"
+    section=$(sed -n '/<section id="solutions"/,/<\/section>/p' <<< "$home")
+    intro=$(by_lang "$lang" "Des logiciels pensés pour les entreprises" "Software designed for businesses" "برمجيات مصممة للمؤسسات")
+    grep -q "<p class=\"muted\">$intro" <<< "$section" && pass "accueil : introduction Solutions ($lang)" || fail "accueil : introduction Solutions absente ($lang)"
+    grep -q "class=\"btn btn-text\" href=\"solutions.php?lang=$lang\">$(by_lang "$lang" "Découvrir nos solutions" "Discover our solutions" "اكتشف حلولنا")" <<< "$section" \
+        && pass "accueil : lien « Découvrir nos solutions » ($lang)" || fail "accueil : lien vers la page Solutions ($lang)"
+    expect "accueil : trois cartes, dont deux confidentielles ($lang)" "3|2" \
+        "$(grep -c '<article class="card solution">' <<< "$section")|$(grep -c 'class="badge-confidential"' <<< "$section")"
+
+    page=$(curl -s "$BASE_URL/solutions.php?lang=$lang")
+    grep -q '<!-- TEXTES A VALIDER PAR MARWAN -->' <<< "$page" && pass "page Solutions : textes marqués à valider ($lang)" || fail "page Solutions : commentaire de validation absent ($lang)"
+    grep -q "<h1 id=\"page-title\">$(by_lang "$lang" "Des outils conçus pour les entreprises" "Tools built for businesses" "أدوات مصممة للمؤسسات")</h1>" <<< "$page" \
+        && pass "page Solutions : titre ($lang)" || fail "page Solutions : titre ($lang)"
+    expect "page Solutions : 3 principes, 5 modules d'Inteek ($lang)" "3|5" \
+        "$(sed -n '/aria-labelledby="approach-title"/,/<\/section>/p' <<< "$page" | grep -c '<li class="card">')|$(sed -n '/class="inteek-modules"/,/<\/ul>/p' <<< "$page" | grep -c '<li>')"
+    others=$(sed -n '/aria-labelledby="others-title"/,/<\/section>/p' <<< "$page")
+    expect "page Solutions : OnePay et Plateforme IA confidentiels, sur rendez-vous ($lang)" "2|2" \
+        "$(grep -c 'class="badge-confidential"' <<< "$others")|$(grep -c "<p>$(by_lang "$lang" "Présentation sur rendez-vous." "Presentation by appointment." "العرض بموعد مسبق.")</p>" <<< "$others")"
+    expect "page Solutions : « Demander une présentation » vers le formulaire, univers Solutions ($lang)" 2 \
+        "$(grep -c "href=\"contact.php?lang=$lang&amp;universe=solutions\">$(by_lang "$lang" "Demander une présentation" "Request a presentation" "اطلب عرضًا تقديميًا")" <<< "$page")"
+    # Ni prix ni chiffres de clients : aucun montant ni symbole monétaire sur la page.
+    if sed -n '/<main/,/<\/main>/p' <<< "$page" | grep -qiE '[0-9] ?(€|\$|FDJ|USD|EUR)|€|prix|price|clients'; then fail "page Solutions : prix ou clients cités ($lang)"; else pass "page Solutions : ni prix ni clients ($lang)"; fi
+done
+grep -q '<option value="solutions" selected>' <<< "$(curl -s "$BASE_URL/contact.php?lang=fr&universe=solutions")" && pass "formulaire : univers Solutions présélectionné" || fail "formulaire : univers Solutions non présélectionné"
 
 echo "3. Formulaire de contact"
 rm -f storage/ratelimit/contact-*.log

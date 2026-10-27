@@ -10,6 +10,8 @@ return [
         'home_description' => 'Consulting, digital solutions and publishing: three complementary fields that turn ideas into useful results.',
         'edition_title' => 'Publishing | Noorwan',
         'edition_description' => 'Noorwan Publishing guides authors all the way to publication on Amazon and publishes its {méta}Physique and Chemins de l\'Âme collections.',
+        'solutions_title' => 'Solutions | Noorwan',
+        'solutions_description' => 'Business software, built for the phone first and available in three languages, including Inteek for human resources.',
         'contact_title' => 'Contact | Noorwan',
         'contact_description' => 'Consulting, a product demo or publishing a book: write to Noorwan.',
         'mentions_title' => 'Legal notice | Noorwan',
@@ -79,6 +81,9 @@ return [
         'cons_app' => 'One useful step delivered beats a grand plan on paper.',
         'sol_eyebrow' => 'Solutions',
         'sol_h' => 'Tools built for businesses',
+        // A VALIDER PAR MARWAN : Solutions section introduction (also used at the top of the Solutions page).
+        'sol_text' => 'Software designed for businesses, built for the phone first and available in three languages. Some are in service, others in preparation.',
+        'sol_btn' => 'Discover our solutions',
         'solutions' => [
             ['cat' => 'Human resources', 'name' => 'Inteek', 'text' => 'From hiring to team management, HR made simple.', 'confidential' => false],
             ['cat' => 'Payment', 'name' => 'OnePay', 'text' => '', 'confidential' => true],
@@ -165,6 +170,23 @@ return [
         'writing' => 'Writing in progress',
         'also_in_english' => 'Also available in English',
         'upcoming' => 'Coming soon',
+    ],
+    // Solutions page: TEXTES A VALIDER PAR MARWAN. Title and introduction come from the home page (home.sol_h, home.sol_text).
+    'solutions' => [
+        'tag' => 'Noorwan Solutions',
+        'btn_demo' => 'Request a presentation',
+        'approach_title' => 'How we work',
+        'principles' => [
+            ['title' => 'Phone first', 'text' => 'Every screen is designed for the phone, then adapted to the computer.'],
+            ['title' => 'Three languages, including Arabic', 'text' => 'French, English and Arabic, with right-to-left display for Arabic.'],
+            ['title' => 'Protected data', 'text' => 'Hosted and protected data, with access based on each person\'s role.'],
+        ],
+        'inteek_lead' => 'Human resources in modules, switched on according to your company\'s needs.',
+        'inteek_text' => 'Start with the modules that matter to you and add the others when the need arises.',
+        'modules_title' => 'Modules',
+        'modules' => ['Recruitment and CV database', 'Team surveys', 'Leave', 'Time tracking', 'Personnel files'],
+        'others_title' => 'Other solutions',
+        'on_request' => 'Presentation by appointment.',
     ],
     'contact' => [
         'tag' => 'Contact',

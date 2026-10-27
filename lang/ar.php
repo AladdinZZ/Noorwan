@@ -14,6 +14,9 @@ return [
         // À relire.
         'edition_title' => 'النشر | Noorwan',
         'edition_description' => 'ترافق نوروان للنشر المؤلفين حتى نشر كتبهم على أمازون، وتنشر سلسلتي ' . $metaphysique . ' ودروب الروح.',
+        // À relire.
+        'solutions_title' => 'الحلول | Noorwan',
+        'solutions_description' => 'برمجيات للمؤسسات، مصممة للهاتف أولًا ومتاحة بثلاث لغات، ومنها Inteek للموارد البشرية.',
         'contact_title' => 'اتصل بنا | Noorwan',
         'contact_description' => 'استشارة، أو عرض توضيحي لأحد حلولنا، أو نشر كتاب: راسل نوروان.',
         'mentions_title' => 'الإشعارات القانونية | Noorwan',
@@ -84,6 +87,9 @@ return [
         'cons_app' => 'خطوة مفيدة منجزة خير من خطة كبيرة على الورق.',
         'sol_eyebrow' => 'الحلول',
         'sol_h' => 'أدوات مصممة للمؤسسات',
+        // A VALIDER PAR MARWAN, à relire par un arabophone : introduction de la section Solutions.
+        'sol_text' => 'برمجيات مصممة للمؤسسات، للهاتف أولًا ومتاحة بثلاث لغات. بعضها في الخدمة، وبعضها الآخر قيد الإعداد.',
+        'sol_btn' => 'اكتشف حلولنا',
         'solutions' => [
             ['cat' => 'الموارد البشرية', 'name' => 'Inteek', 'text' => 'من التوظيف إلى إدارة الفرق، موارد بشرية مبسطة.', 'confidential' => false],
             ['cat' => 'الدفع', 'name' => 'OnePay', 'text' => '', 'confidential' => true],
@@ -175,6 +181,24 @@ return [
         'also_in_english' => 'متوفر أيضًا بالإنجليزية',
         // À relire.
         'upcoming' => 'قريبًا',
+    ],
+    // Page Solutions : TEXTES A VALIDER PAR MARWAN, traduction à relire par un arabophone.
+    // Le titre et l'introduction sont ceux de l'accueil (home.sol_h, home.sol_text).
+    'solutions' => [
+        'tag' => 'نوروان للحلول',
+        'btn_demo' => 'اطلب عرضًا تقديميًا',
+        'approach_title' => 'طريقتنا في العمل',
+        'principles' => [
+            ['title' => 'للهاتف أولًا', 'text' => 'كل شاشة مصممة للهاتف أولًا، ثم مهيأة للحاسوب.'],
+            ['title' => 'ثلاث لغات منها العربية', 'text' => 'الفرنسية والإنجليزية والعربية، مع عرض من اليمين إلى اليسار للعربية.'],
+            ['title' => 'بيانات محمية', 'text' => 'بيانات مستضافة ومحمية، وصلاحيات وصول حسب دور كل مستخدم.'],
+        ],
+        'inteek_lead' => 'الموارد البشرية في وحدات، تُفعَّل حسب احتياجات مؤسستك.',
+        'inteek_text' => 'ابدأ بالوحدات التي تهمك، وأضف غيرها عند الحاجة.',
+        'modules_title' => 'الوحدات',
+        'modules' => ['التوظيف وقاعدة السير الذاتية', 'استطلاعات آراء الفرق', 'الإجازات', 'تسجيل الحضور', 'ملفات الموظفين'],
+        'others_title' => 'حلول أخرى',
+        'on_request' => 'العرض بموعد مسبق.',
     ],
     // Formulaire de contact : traduction à relire par un arabophone.
     'contact' => [
