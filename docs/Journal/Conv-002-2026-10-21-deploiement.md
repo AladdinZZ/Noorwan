@@ -1,4 +1,6 @@
-# Conv-002 : déploiement sur dev.noorwan.com (21/10/2026)
+# Conv-002 : déploiement sur le VPS (21/10/2026, corrections du 27/10/2026)
+
+**Cible changée le 27/10/2026 : production directe sur `https://noorwan.com`, plus de `dev.noorwan.com`** (voir « Corrections avant fusion »). Les sections suivantes décrivent la version du 21/10 ; la note technique est à jour.
 
 Branche `feat/deploiement`, non fusionnée : relecture de Marwan, puis `git merge --no-ff feat/deploiement` et push. Tant que `DEPLOY_ENABLED` n'est pas à `true`, la poussée lance seulement les tests.
 
@@ -47,7 +49,9 @@ Détail et commandes : `docs/Tech-Notes/Deploiement-VPS.md`.
 8. GITHUB : `VPS_HOST`, `VPS_USER`, `VPS_SSH_KEY`, `APP_PUBLIC_URL`, puis `DEPLOY_ENABLED=true` en dernier.
 9. GITHUB : « Run workflow », puis vérifications.
 
-## Points à trancher
+## Points à trancher (état au 21/10/2026)
+
+Tranchés le 27/10/2026 : 1 (texte précisé), 2 (purge nocturne des fichiers de limite), 3 (journaux sans IP), 4 (clé supprimée du Mac). Restent 5 (heure du cron) et 6 (tests sur toutes les branches), plus les nouveaux points en fin de journal.
 
 1. **Page Confidentialité et purge.** La page dit « 3 ans après votre dernier contact avec Noorwan » ; la purge compte 3 ans après la dernière demande envoyée **par le formulaire** avec la même adresse. Un échange ultérieur par e-mail ou téléphone ne repousse pas la suppression. La purge supprime donc au plus tard à la date annoncée, jamais après, mais le texte n'est pas « exactement » le comportement. Deux options : préciser le texte (« 3 ans après votre dernière demande envoyée par ce formulaire », FR, EN, AR) ou garder la formule, qui couvrira aussi le futur CRM. Texte non modifié en attendant ta décision.
 2. **« Données de limitation des envois : 1 heure ».** Les fichiers de `storage/ratelimit/` ne sont effacés que lors d'un envoi suivant ; sans nouvel envoi, une empreinte peut rester plus d'une heure. À choisir : faire aussi nettoyer ces fichiers par la purge nocturne (au plus environ 25 heures), ajouter un second cron horaire, ou ajuster le texte.
@@ -55,3 +59,30 @@ Détail et commandes : `docs/Tech-Notes/Deploiement-VPS.md`.
 4. **Clé privée `noorwan-site-deploy` sur le Mac** après enregistrement du secret GitHub : la supprimer ou la garder pour relancer un déploiement à la main.
 5. **Heure du cron** : 3 h 45 à l'heure du serveur (fuseau du VPS à vérifier, `timedatectl`).
 6. **Tests à chaque poussée sur toutes les branches** : une pull request ouverte depuis une branche du dépôt lance donc les tests deux fois (poussée et pull request). Sans gravité ; à restreindre à `main` si cela gêne.
+
+## Corrections avant fusion (27/10/2026)
+
+| Commit | Correction |
+|---|---|
+| Compléter la page Confidentialité | conservation « 3 ans après votre dernière demande envoyée par ce formulaire » (comme la purge), partenaires « aucune donnée transmise à ce jour, liste publiée avant toute transmission », responsable Noorwan, hébergement IONOS ; plus aucun `[À COMPLÉTER]` (FR, EN, AR) |
+| Corriger l'adresse de contact de la page Confidentialité | l'adresse est `contact@noorwan.com`, pas l'adresse Gmail du commit précédent |
+| Remplacer les champs manquants des Mentions légales par un encadré | encadré « Page en cours de mise à jour » : site édité par Noorwan, `contact@noorwan.com`, serveur IONOS ; sections Éditeur, Directeur de la publication, Hébergement, Droit applicable retirées ; commentaire juriste conservé |
+| Purger aussi les fichiers de limite d'envoi de plus d'une heure | `RateLimit::purgeExpired()`, nombre de fichiers dans la ligne de journal et dans `--dry-run`, test dédié |
+| Déployer directement en production sur noorwan.com | note technique (étape 0 bis sauvegarde, DNS en lecture seule, hôte virtuel `noorwan-site.conf`, certbot pour les deux noms, journaux sans IP, suppression de la clé privée à l'étape 6), workflow sur `https://noorwan.com` |
+
+Vérifications :
+
+- `tests/run.sh` sous MAMP : 85 contrôles au vert (pages légales sans marqueur, adresse et encadré dans les 3 langues, purge des fichiers de limite en simulation puis réelle).
+- Hôte virtuel de la note testé avec l'Apache de MAMP (2.4.62, port de test, copie isolée) : `apache2ctl -t` équivalent OK, `www` renvoie `301 https://noorwan.com/<chemin>?<requête>`, journal d'accès et journal d'erreurs sans adresse IP. `%b` (taille de la réponse) au lieu de `%O` pour ne pas dépendre du module `logio`.
+- Workflow : YAML valide. **Toujours pas exécuté sur GitHub.**
+- DNS lu le 22/10/2026 : `noorwan.com` et `www` déjà en `A 212.132.106.181`, aucun `AAAA`, MX `mx00/mx01.ionos.fr`. **L'ancien site tourne donc déjà sur ce VPS** : la bascule se fait par les hôtes virtuels Apache (étape 5), pas par le DNS.
+
+Points à trancher :
+
+1. **Fichiers de limite d'envoi et « 1 heure ».** La purge nocturne supprime les fichiers de plus d'une heure, mais un fichier créé juste après son passage peut rester environ 25 heures, alors que la page Confidentialité annonce 1 heure. Proposition : lancer la purge toutes les heures (`17 * * * *` au lieu de `45 3 * * *`, sans risque : elle est légère) ou écrire « 24 heures ».
+2. **Hébergement et transferts hors UE** : la phrase `[À COMPLÉTER]` sur le lieu d'hébergement a été retirée de la Confidentialité faute d'information. À rétablir quand la localisation du serveur IONOS est connue.
+3. **Mentions légales** : raison sociale, siège, immatriculation, directeur de la publication, adresse de l'hébergeur et droit applicable restent à fournir ; l'encadré les remplace en attendant.
+4. **Ancien site** : il disparaît à la bascule, `/test/` compris. S'il enregistrait les messages de son formulaire dans une base, l'étape 0 bis l'exporte ; décider ensuite de leur sort.
+5. **Coupure HTTPS** : une à deux minutes avec un mauvais certificat entre la désactivation de l'ancien hôte virtuel et la fin de certbot (étape 5). À faire à une heure creuse.
+6. **`AGENTS.md`** non suivi à la racine : copie de `CLAUDE.md` créée par Codex Desktop le 22/10/2026 (voir le rapport de session). Non versionné en attendant la décision.
+
