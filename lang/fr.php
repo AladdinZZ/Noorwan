@@ -124,6 +124,12 @@ return [
                 'lead' => 'Essai philosophique sur la possession et l\'existence.',
                 'summary' => 'Ce livre interroge le rapport à la possession et rappelle que l\'équilibre ne se trouve que lorsque l\'Avoir reste au service de l\'Être, conformément à l\'éthique enseignée par les prophètes.',
             ],
+            // A VALIDER PAR MARWAN : annonce de la collection Zahra (le titre reste en français dans les trois langues).
+            'belles-manieres' => [
+                'sub' => 'Collection Zahra · Volume 1',
+                'lead' => 'Un livre de coloriage pour les enfants de 6 à 8 ans.',
+                'summary' => '15 morales autour de la bienveillance, du respect et de la gratitude, un guide pour les parents et 3 niveaux de difficulté.',
+            ],
         ],
     ],
     'edition' => [
@@ -158,6 +164,7 @@ return [
         'buy_label' => 'Acheter :title sur Amazon',
         'writing' => 'En cours de rédaction',
         'also_in_english' => 'Disponible aussi en anglais',
+        'upcoming' => 'Prochainement',
     ],
     'contact' => [
         'tag' => 'Contact',

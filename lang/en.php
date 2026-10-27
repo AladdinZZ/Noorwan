@@ -124,6 +124,12 @@ return [
                 'lead' => 'Philosophical essay on possession and existence.',
                 'summary' => 'This book questions the relationship to possession and reminds us that balance is only found when Having remains in the service of Being, in accordance with the ethics taught by the prophets.',
             ],
+            // A VALIDER PAR MARWAN : Zahra collection announcement (the title stays in French).
+            'belles-manieres' => [
+                'sub' => 'Zahra Collection · Volume 1',
+                'lead' => 'A colouring book for children aged 6 to 8.',
+                'summary' => '15 moral lessons built around kindness, respect and gratitude, a guide for parents and 3 levels of difficulty.',
+            ],
         ],
     ],
     'edition' => [
@@ -158,6 +164,7 @@ return [
         'buy_label' => 'Buy :title on Amazon',
         'writing' => 'Writing in progress',
         'also_in_english' => 'Also available in English',
+        'upcoming' => 'Coming soon',
     ],
     'contact' => [
         'tag' => 'Contact',

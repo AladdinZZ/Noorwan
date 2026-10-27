@@ -153,6 +153,22 @@ for lang in fr en ar; do
     expect "bouton « Publier votre livre » ($lang)" 1 "$(grep -c 'class="btn btn-dark"' <<< "$section")"
 done
 
+echo "2 octies. Page Édition : livre à paraître"
+for lang in fr en ar; do
+    html=$(curl -s "$BASE_URL/edition.php?lang=$lang")
+    heading=$(by_lang "$lang" "Prochainement" "Coming soon" "قريبًا")
+    grep -q "<h3 id=\"collection-upcoming\">$heading</h3>" <<< "$html" && pass "rubrique « $heading » ($lang)" || fail "rubrique « $heading » absente ($lang)"
+    expect "rubrique placée après les deux collections ($lang)" "collection-metaphysique|collection-chemins|collection-upcoming" \
+        "$(grep -oE '<h3 id="collection-[a-z]+"' <<< "$html" | sed -E 's/.*"(collection-[a-z]+)"/\1/' | paste -sd '|' -)"
+    book=$(sed -n '/<article class="book" aria-labelledby="book-belles-manieres">/,/<\/article>/p' <<< "$html")
+    grep -q '<bdi>Les belles manières du petit musulman</bdi>' <<< "$book" && pass "titre en français ($lang)" || fail "titre du livre à paraître ($lang)"
+    grep -q 'src="assets/images/covers/couverture_belles_manieres.webp"' <<< "$book" && pass "couverture du livre à paraître ($lang)" || fail "couverture du livre à paraître ($lang)"
+    expect "étiquette « À paraître », sans bouton « Acheter » ($lang)" "1|0" \
+        "$(grep -c "<p class=\"book-flag\">$(by_lang "$lang" "À paraître" "Forthcoming" "قريبًا")</p>" <<< "$book")|$(grep -c 'book-buy' <<< "$book")"
+    expect "boutons « Acheter » des livres parus ($lang)" 5 "$(grep -c 'class="btn btn-dark book-buy"' <<< "$html")"
+done
+expect "couverture_belles_manieres.webp servie" 200 "$(curl -s -o /dev/null -w '%{http_code}' "$BASE_URL/assets/images/covers/couverture_belles_manieres.webp")"
+
 echo "3. Formulaire de contact"
 rm -f storage/ratelimit/contact-*.log
 sql "DELETE FROM contact_requests WHERE email = '$TEST_EMAIL'"

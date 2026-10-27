@@ -131,6 +131,13 @@ return [
                 'lead' => 'مقالة فلسفية في التملك والوجود.',
                 'summary' => 'يسائل هذا الكتاب علاقتنا بالتملك، ويذكّر بأن التوازن لا يتحقق إلا حين يبقى «الامتلاك» في خدمة «الكينونة»، وفقًا للأخلاق التي علّمها الأنبياء.',
             ],
+            // A VALIDER PAR MARWAN, à relire par un arabophone : annonce de la collection Zahra (titre en français).
+            // Zahra reste en latin, isolé comme {méta}Physique : l'orthographe arabe (زهرة ou زهراء) est à confirmer.
+            'belles-manieres' => [
+                'sub' => "سلسلة \u{2066}Zahra\u{2069} · الجزء الأول",
+                'lead' => 'كتاب تلوين للأطفال من 6 إلى 8 سنوات.',
+                'summary' => '15 درسًا أخلاقيًا حول اللطف والاحترام والامتنان، مع دليل للوالدين و3 مستويات من الصعوبة.',
+            ],
         ],
     ],
     // Page Édition : textes traduits du français, à relire par un arabophone.
@@ -166,6 +173,8 @@ return [
         'buy_label' => 'اشترِ :title على أمازون',
         'writing' => 'قيد الكتابة',
         'also_in_english' => 'متوفر أيضًا بالإنجليزية',
+        // À relire.
+        'upcoming' => 'قريبًا',
     ],
     // Formulaire de contact : traduction à relire par un arabophone.
     'contact' => [
