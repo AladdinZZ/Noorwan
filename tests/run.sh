@@ -134,6 +134,25 @@ for lang in fr en ar; do
         "$(grep -c '<h1 id="hero-title">' <<< "$hero")|$(grep -c 'class="hero-lead"' <<< "$hero")|$(grep -c 'class="btn ' <<< "$hero")|$(grep -c 'class="hero-motto"' <<< "$hero")"
 done
 
+echo "2 septies. Accueil : section Édition"
+# Textes attendus par langue (bash 3.2 de macOS : pas de tableau associatif). by_lang LANGUE FR EN AR
+by_lang() { case "$1" in fr) echo "$2" ;; en) echo "$3" ;; ar) echo "$4" ;; esac; }
+for lang in fr en ar; do
+    tag=$(by_lang "$lang" "Édition" "Publishing" "النشر")
+    section=$(curl -s "$BASE_URL/?lang=$lang" | sed -n '/<section id="edition"/,/<\/section>/p')
+    grep -q "<p class=\"tag\">$tag</p>" <<< "$section" && pass "petit titre « $tag » ($lang)" || fail "petit titre de la section Édition ($lang)"
+    if grep -q 'class="cover' <<< "$section"; then fail "couvertures encore sur l'accueil ($lang)"; else pass "plus de couvertures sur l'accueil ($lang)"; fi
+    expect "quatre étapes de la prestation ($lang)" 4 "$(grep -c '<li class="card">' <<< "$section")"
+    # Mêmes chaînes que la page Édition : le titre du bloc et la première étape s'y retrouvent à l'identique.
+    edition=$(curl -s "$BASE_URL/edition.php?lang=$lang")
+    for marker in "$(grep -o '<h3>[^<]*</h3>' <<< "$section" | head -n 1 | sed -e 's/<h3>//' -e 's/<\/h3>//')" \
+                  "$(grep -o '<h4>[^<]*</h4>' <<< "$section" | head -n 1 | sed -e 's/<h4>//' -e 's/<\/h4>//')"; do
+        [[ -n "$marker" ]] && grep -qF "$marker" <<< "$edition" && pass "texte repris de la page Édition : $marker ($lang)" || fail "texte absent de la page Édition : « $marker » ($lang)"
+    done
+    grep -q "href=\"edition.php?lang=$lang\"" <<< "$section" && pass "lien vers le catalogue ($lang)" || fail "lien vers le catalogue absent ($lang)"
+    expect "bouton « Publier votre livre » ($lang)" 1 "$(grep -c 'class="btn btn-dark"' <<< "$section")"
+done
+
 echo "3. Formulaire de contact"
 rm -f storage/ratelimit/contact-*.log
 sql "DELETE FROM contact_requests WHERE email = '$TEST_EMAIL'"

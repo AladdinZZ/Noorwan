@@ -85,7 +85,7 @@ return [
             ['cat' => 'Artificial intelligence', 'name' => 'AI platform', 'text' => '', 'confidential' => true],
         ],
         'confidential' => 'Confidential',
-        'ed_eyebrow' => 'Another space for sharing',
+        'ed_eyebrow' => 'Publishing',
         'ed_h' => 'Ideas to read, discover and pass on',
         'ed_text' => 'Noorwan Publishing guides authors through every step, all the way to publishing their book on Amazon. Our own collections, {méta}Physique and Chemins de l\'Âme, are the proof.',
         'ed_btn' => 'Publish your book',

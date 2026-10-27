@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 require __DIR__ . '/../app/bootstrap.php';
-require ROOT_DIR . '/app/books.php';
 
 // Accueil, conforme à la maquette v1 validée le 21/10/2026 (docs/maquette/).
 current_page('index');
@@ -119,22 +118,20 @@ require ROOT_DIR . '/app/layout/header.php';
                 <a class="btn btn-text" href="<?= e(url('edition')) ?>"><?= t('home.ed_btn_catalogue') ?> <span aria-hidden="true"><?= t('common.arrow') ?></span></a>
             </div>
         </div>
-        <ul class="shelf">
-<?php foreach (books() as $id => $book): ?>
-            <li>
-<?php if ($book['cover'] !== null): ?>
-                <img class="cover" src="assets/images/covers/<?= e($book['cover']) ?>" alt="<?= t('books.cover_alt', [':title' => book_title($book)]) ?>" width="<?= $book['cover_size'][0] ?>" height="<?= $book['cover_size'][1] ?>" loading="lazy" decoding="async">
-<?php else: ?>
-                <div class="cover-soon">
-                    <span class="cover-soon-label"><?= t('books.soon') ?></span>
-                    <span class="cover-soon-title" aria-hidden="true"><bdi><?= e(book_title($book)) ?></bdi></span>
-                </div>
-<?php endif; ?>
-                <span class="shelf-title"><bdi><?= e(book_title($book)) ?></bdi></span>
-                <span class="shelf-sub"><?= t('books.items.' . $id . '.sub') ?></span>
-            </li>
+        <!-- A VALIDER PAR MARWAN : les quatre étapes, mêmes textes que la page Édition (lang/*.php, edition.service_*). -->
+        <div class="edition-steps">
+            <h3><?= t('edition.service_title') ?></h3>
+            <p class="muted"><?= t('edition.service_lead') ?></p>
+            <ol class="cards cards-steps-compact">
+<?php foreach (tl('edition.service_steps') as $i => $step): ?>
+                <li class="card">
+                    <span class="card-num">0<?= $i + 1 ?></span>
+                    <h4><?= e($step['title']) ?></h4>
+                    <p><?= e($step['text']) ?></p>
+                </li>
 <?php endforeach; ?>
-        </ul>
+            </ol>
+        </div>
     </div>
 </section>
 

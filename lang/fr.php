@@ -85,7 +85,7 @@ return [
             ['cat' => 'Intelligence artificielle', 'name' => 'Plateforme IA', 'text' => '', 'confidential' => true],
         ],
         'confidential' => 'Confidentiel',
-        'ed_eyebrow' => 'Un autre espace de transmission',
+        'ed_eyebrow' => 'Édition',
         'ed_h' => 'Des idées à lire, découvrir et transmettre',
         'ed_text' => 'Noorwan Édition accompagne les auteurs à chaque étape, jusqu\'à la publication de leur livre sur Amazon. Nos propres collections, {méta}Physique et Chemins de l\'Âme, en sont la preuve.',
         'ed_btn' => 'Publier votre livre',
