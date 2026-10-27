@@ -6,13 +6,15 @@
 
 | Page | État |
 |---|---|
-| Accueil | **Validé v1 le 21/10/2026** (maquette `data/noorwan-site/maquette-accueil-v1.dc.html`, FR/EN/AR). Une v2 est prévue plus tard. |
-| Consulting | À rédiger |
-| Solutions (Reserva, Inteek, OnePay, plateforme IA, Développeurs) | À rédiger |
-| Édition (prestation, catalogue, Nour Kids) | À rédiger |
-| À propos | À rédiger |
-| Contact | À rédiger |
-| Mentions légales, Confidentialité | À rédiger (modèle commun Maestro) |
+| Accueil | **En ligne.** v1 validée le 21/10/2026 (maquette `docs/maquette/maquette-accueil-v1.dc.html`), modifiée par le lot v1.1 du 27/10/2026 : introduction Solutions et section Édition **à valider**. Une v2 est prévue plus tard. |
+| Consulting | Section de l'accueil (5 expertises), pas de page propre. |
+| Solutions | **En ligne, textes à valider** (lot v1.1, 27/10/2026) : `solutions.php`. Reserva, Immobilier, Shopping et page Développeurs hors site. |
+| Édition | **En ligne.** Prestation (4 étapes **à valider**) et catalogue ; annonce Zahra **à valider** (27/10/2026). |
+| À propos | À rédiger (hors menu). |
+| Contact | En ligne. |
+| Mentions légales, Confidentialité, Cookies | En ligne, **à faire relire par un juriste**. Mentions légales en cours de mise à jour (encadré). |
+
+L'état réel du site est décrit dans « État du site au 27/10/2026 », en fin de document. Les sections intermédiaires sont l'historique des décisions.
 
 ## Cadrage acté le 21/10/2026
 
@@ -32,7 +34,7 @@
 - M-31 : nom de la plateforme IA (recommandation : NourIA).
 - M-32 : registre de consentements unique (Compte Noorwan pour les personnes, Référentiel pour les entreprises), au lieu d'une table par produit.
 
-## Accueil (FR, brouillon v1)
+## Accueil (FR, brouillon v1, historique : remplacé par la v1 validée)
 
 ### Bandeau
 
@@ -90,3 +92,59 @@ Contenus arrêtés :
 - Plus de « djiboutien » ; plus de bloc « Bientôt » restauration ou boissons ; plus de bandeau API ; un seul message en haut (« Une vision claire. Des étapes concrètes. »).
 - Solutions : Inteek (ressources humaines, avec description), OnePay et Plateforme IA marqués « Confidentiel » sans description. Reserva, Immobilier, Shopping retirés du site.
 - Édition : vraies couvertures (Harmonie, Lumière, Le Mal, Le Bien, Être pour Avoir), Vibration « À paraître ». Couvertures dans `data/noorwan-site/couvertures/` (non versionné). Liens Amazon par livre à fournir.
+
+## État du site au 27/10/2026 (lot v1.1)
+
+Textes français tels qu'en ligne, sources dans `lang/fr.php` (EN dans `lang/en.php`, AR dans `lang/ar.php`). Les textes arabes hors maquette sont des traductions à relire par un arabophone. Marqueur dans le code : `A VALIDER PAR MARWAN`.
+
+### Commun
+
+- Menu : Consulting (accueil), Solutions (`solutions.php`), Édition (accueil), Contact (accueil). « À propos » hors menu.
+- Choix de la langue : un bouton « FR / EN / AR » qui ouvre la liste Français, English, العربية.
+- Pied de page : « Des idées pour des solutions concrètes. », liens légaux (Mentions légales, Confidentialité, Cookies).
+- Bandeau de contact en bas de chaque page : « Un projet en tête ? » ; « Conseil, démonstration d'une solution ou publication d'un livre : échangeons sur vos objectifs. » ; bouton « Parlons de votre projet » (« Demander une présentation » sur la page Solutions).
+
+### Accueil
+
+Ordre : haut de page · trois univers · approche · Consulting · Solutions · Édition · contact.
+
+- **Haut de page** (moins haut depuis le lot v1.1, titre sur une ligne à 1440 px) : « Noorwan · Vision & création » ; « Des idées pour des solutions concrètes » ; « Conseil, solutions numériques et édition : trois univers complémentaires pour transformer les idées en réalisations utiles. » ; boutons [Découvrir nos expertises] [Parlons de votre projet] ; « Une vision claire. Des étapes concrètes. »
+- **Nos univers**, « Trois univers, une même exigence » :
+  - 01 Consulting : « Clarifier votre positionnement, structurer vos priorités et piloter vos projets numériques : stratégie, marketing digital, eCommerce, formation. »
+  - 02 Solutions : « Des logiciels pour les entreprises : ressources humaines, paiement mobile et intelligence artificielle. Mobiles d'abord, en trois langues. »
+  - 03 Édition : « Nous accompagnons les auteurs jusqu'à la publication de leur livre sur Amazon, et nous publions nos propres collections. »
+- **Notre approche**, « De l'idée à l'action » : Comprendre le besoin (Écouter avant de proposer.) · Structurer la réponse (Prioriser ce qui compte.) · Concevoir la solution (Livrer un outil utile.) · Apprendre et évoluer (Mesurer, ajuster, transmettre.).
+- **Consulting**, « Donner une direction claire à vos projets » : « Un conseil stratégique et un accompagnement numérique, avec une approche pragmatique, fondés sur vingt ans de digital, de marketing et d'eCommerce. » Cinq expertises : Stratégie et structuration de projet ; Marketing digital et présence en ligne ; E-commerce et parcours client ; Développement web et outils numériques ; Formation. « Clarifier avant d'accélérer. Une étape utile livrée vaut mieux qu'un grand plan sur le papier. »
+- **Solutions**, « Des outils conçus pour les entreprises » :
+  - introduction **à valider** : « Des logiciels pensés pour les entreprises, conçus pour le téléphone d'abord et disponibles en trois langues. Certains sont en service, d'autres en préparation. » ; lien « Découvrir nos solutions » vers la page Solutions ;
+  - cartes : Inteek (Ressources humaines, « Du recrutement à la gestion des équipes, les RH simplifiées. ») ; OnePay (Paiement) et Plateforme IA (Intelligence artificielle) marqués « Confidentiel », sans description.
+- **Édition** (petit titre « Édition » depuis le lot v1.1), « Des idées à lire, découvrir et transmettre » : « Noorwan Édition accompagne les auteurs à chaque étape, jusqu'à la publication de leur livre sur Amazon. Nos propres collections, {méta}Physique et Chemins de l'Âme, en sont la preuve. » Les couvertures ont laissé place au bloc « Quatre étapes jusqu'à la publication » (mêmes textes que la page Édition, **à valider**). Boutons [Publier votre livre] [Voir le catalogue].
+
+### Page Solutions (`solutions.php`) : textes à valider
+
+- En-tête : étiquette « Noorwan Solutions », titre et introduction de la section Solutions de l'accueil, bouton [Demander une présentation] (formulaire, univers Solutions présélectionné).
+- « Notre façon de faire » :
+  - Pensés pour le téléphone d'abord : « Chaque écran est conçu pour le téléphone, puis adapté à l'ordinateur. »
+  - Trois langues, dont l'arabe : « Français, anglais et arabe, avec un affichage de droite à gauche pour l'arabe. »
+  - Des données protégées : « Données hébergées et protégées, accès selon le rôle de chacun. »
+- Inteek (Ressources humaines) : « Les ressources humaines en modules, à activer selon les besoins de votre entreprise. » ; « Vous commencez par les modules qui comptent pour vous et ajoutez les autres quand le besoin se présente. » Modules : Recrutement et base de CV ; Enquêtes auprès des équipes ; Congés ; Pointage ; Dossiers du personnel. Ni prix, ni clients, ni chiffres.
+- « Autres solutions » : OnePay et Plateforme IA, « Confidentiel », « Présentation sur rendez-vous. »
+
+### Page Édition (`edition.php`)
+
+- En-tête : « Noorwan Édition » ; « De votre manuscrit à votre livre sur Amazon » ; même introduction que l'accueil ; [Publier votre livre] [Voir le catalogue].
+- « La prestation », « Quatre étapes jusqu'à la publication » (**à valider**) : « Un accompagnement adapté à votre projet, que vous ayez un manuscrit achevé ou un texte encore en chantier. »
+  - Manuscrit : « Relecture de votre texte, conseils de structure et corrections, pour un manuscrit prêt à publier. »
+  - Mise en forme : « Mise en page de l'intérieur du livre, en version imprimée et en version numérique. »
+  - Couverture : « Une couverture à l'image de votre livre, aux formats demandés par Amazon. »
+  - Mise en ligne : « Création de la fiche du livre sur Amazon, choix des catégories et du prix, publication. »
+- Catalogue, « Nos collections » :
+  - {méta}Physique : Harmonie (tome 1), Lumière (tome 2), Vibration (tome 3, « À paraître · En cours de rédaction »).
+  - Chemins de l'Âme : Le Mal, Le Bien, Être pour Avoir (disponibles aussi en anglais : Evil, Good, Being vs Having).
+  - Bouton « Acheter sur Amazon » par livre paru ; liens vers la recherche Amazon « noorwan » tant que les ASIN manquent.
+- « Prochainement » (après les collections) : *Les belles manières du petit musulman*, Collection Zahra · Volume 1, étiquette « À paraître », sans bouton « Acheter ». Titre en français dans les trois langues ; « Zahra » reste en latin en arabe. Textes **à valider** : « Un livre de coloriage pour les enfants de 6 à 8 ans. » ; « 15 morales autour de la bienveillance, du respect et de la gratitude, un guide pour les parents et 3 niveaux de difficulté. »
+
+### Contact et pages légales
+
+- Contact : « Parlons de votre projet », un formulaire (nom, e-mail, téléphone facultatif, univers Consulting / Solutions / Édition / Autre, message), deux accords facultatifs non cochés (offres de Noorwan, offres de partenaires).
+- Pages légales datées du 27 octobre 2026, à faire relire par un juriste. Confidentialité : demandes conservées 3 ans après la dernière demande envoyée par le formulaire ; données de limitation des envois 2 heures au plus. Cookies : aucun cookie, aucune mesure d'audience.
