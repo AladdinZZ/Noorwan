@@ -21,7 +21,7 @@
 | Utilisateur de déploiement | `marwan` (groupes `sudo` et `www-data`) |
 | Base | `noorwan_site`, deux utilisateurs : `noorwan_site` (le site : `INSERT` sur `contact_requests`, il ne lit jamais la table) et `noorwan_site_maint` (la maintenance : `SELECT`, `DELETE` sur `contact_requests`) |
 | Environnement | `APP_ENV=staging` : erreurs masquées, `X-Robots-Tag: noindex, nofollow` sur toutes les réponses PHP, `robots.txt` en `Disallow: /`. Seul `APP_ENV=production` rend le site indexable (`robots.txt` ouvert, avec `Sitemap:`). |
-| Tâche de fond | Purge des demandes de plus de 3 ans chaque nuit à 3 h 45 (`bin/purge-contacts.php`) |
+| Tâche de fond | Chaque nuit à 3 h 45 (`bin/purge-contacts.php`) : demandes de plus de 3 ans, fichiers de limite d'envoi de plus d'une heure |
 
 ## Installation initiale
 
@@ -226,7 +226,7 @@ Attendu : `== Déploiement noorwan-site ...` puis `== Déploiement terminé.`
 
 ### 7. Purge nocturne
 
-**VPS** : essai à blanc (attendu : `... purge-contacts simulation : 0 demande(s) à supprimer, rien n'est supprimé`) :
+**VPS** : essai à blanc (attendu : `... purge-contacts simulation : 0 demande(s) et 0 fichier(s) de limite d'envoi à supprimer, rien n'est supprimé`) :
 
 ```bash
 cd /var/www/noorwan-site && php bin/purge-contacts.php --dry-run
@@ -244,7 +244,7 @@ cd /var/www/noorwan-site && php bin/purge-contacts.php --dry-run
 crontab -l | grep purge-contacts
 ```
 
-Le journal `storage/logs/purge.log` reçoit une ligne par nuit (date UTC, nombre de demandes supprimées), ou une ligne `ERREUR` si la base refuse.
+Le journal `storage/logs/purge.log` reçoit une ligne par nuit (date UTC, nombre de demandes supprimées, nombre de fichiers de `storage/ratelimit/` de plus d'une heure supprimés), ou une ligne `ERREUR` si la base refuse.
 
 ### 8. Secrets et variables GitHub
 

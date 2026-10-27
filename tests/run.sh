@@ -101,7 +101,7 @@ if command -v xmllint >/dev/null; then
     xmllint --noout - <<< "$sitemap" 2>/dev/null && pass "sitemap.xml bien formé" || fail "sitemap.xml mal formé"
 fi
 
-echo "2 ter. Pages légales"
+echo "2 quater. Pages légales"
 for lang in fr en ar; do
     html=$(curl -s "$BASE_URL/confidentialite.php?lang=$lang")
     if grep -q 'COMPLÉTER' <<< "$html"; then fail "Confidentialité ($lang) : marqueur [À COMPLÉTER] restant"; else pass "Confidentialité ($lang) : aucun [À COMPLÉTER]"; fi
@@ -195,6 +195,33 @@ expect "purge : seule l'adresse dont le dernier envoi a plus de 3 ans est suppri
     "$(purge_count "$PURGE_OLD")|$(purge_count "$PURGE_MIXED")|$(purge_count "$PURGE_RECENT")"
 expect "purge : option inconnue refusée" 2 "$("$PHP" bin/purge-contacts.php --tout >/dev/null 2>&1; echo $?)"
 sql "DELETE FROM contact_requests WHERE email IN ($purge_emails)"
+
+echo "3 ter. Purge des fichiers de limite d'envoi (plus d'une heure)"
+mkdir -p storage/ratelimit
+RL_OLD="storage/ratelimit/purgetest-old.log"
+RL_RECENT="storage/ratelimit/purgetest-recent.log"
+printf '1\n' > "$RL_OLD"
+printf '1\n' > "$RL_RECENT"
+# Âge fixé par PHP pour rester portable (touch -d et date -v diffèrent entre macOS et Linux).
+"$PHP" -r 'touch($argv[1], time() - 7200); touch($argv[2], time() - 600);' "$RL_OLD" "$RL_RECENT"
+rl_state() { printf '%s|%s' "$([[ -f "$RL_OLD" ]] && echo ancien || echo -)" "$([[ -f "$RL_RECENT" ]] && echo récent || echo -)"; }
+
+output=$("$PHP" bin/purge-contacts.php --dry-run 2>&1)
+if [[ "$output" =~ simulation\ :\ [0-9]+\ demande\(s\)\ et\ ([0-9]+)\ fichier\(s\)\ de\ limite\ d\'envoi\ à\ supprimer ]] && [[ "${BASH_REMATCH[1]}" -ge 1 ]]; then
+    pass "simulation : fichiers comptés dans le journal ($output)"
+else
+    fail "simulation : compte des fichiers absent ($output)"
+fi
+expect "simulation : aucun fichier supprimé" "ancien|récent" "$(rl_state)"
+
+output=$("$PHP" bin/purge-contacts.php 2>&1)
+if [[ "$output" =~ demande\(s\)\ supprimée\(s\),\ ([0-9]+)\ fichier\(s\)\ de\ limite\ d\'envoi\ supprimé ]] && [[ "${BASH_REMATCH[1]}" -ge 1 ]]; then
+    pass "purge : fichiers comptés dans le journal ($output)"
+else
+    fail "purge : compte des fichiers absent ($output)"
+fi
+expect "purge : seul le fichier de plus d'une heure est supprimé" "-|récent" "$(rl_state)"
+rm -f "$RL_OLD" "$RL_RECENT"
 
 echo "4. Textes interdits"
 files=(app bin lang public database CLAUDE.md)
