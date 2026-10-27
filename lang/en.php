@@ -208,44 +208,20 @@ return [
     // Pages légales : A FAIRE RELIRE PAR UN JURISTE.
     'legal' => [
         'eyebrow' => 'Legal information',
-        'updated' => 'Last updated: 21 October 2026',
+        'updated' => 'Last updated: 22 October 2026',
         'mentions' => [
             'title' => 'Legal notice',
             'intro' => 'Information about the publisher and the host of the noorwan.com website.',
+            'notice' => [
+                'title' => 'Page being updated',
+                'text' => 'The full legal information will be published soon. What is known to date:',
+                'list' => [
+                    'Website published by Noorwan.',
+                    'Contact: contact@noorwan.com',
+                    'Hosting: IONOS server.',
+                ],
+            ],
             'sections' => [
-                [
-                    'title' => 'Publisher',
-                    'body' => [
-                        'The noorwan.com website is published by:',
-                        [
-                            'list' => [
-                                'Company name: [À COMPLÉTER]',
-                                'Legal form and share capital: [À COMPLÉTER]',
-                                'Registered office: [À COMPLÉTER]',
-                                'Registration number: [À COMPLÉTER]',
-                                'Contact: the form on the Contact page of the website.',
-                            ],
-                        ],
-                    ],
-                ],
-                [
-                    'title' => 'Publication director',
-                    'body' => [
-                        '[À COMPLÉTER]',
-                    ],
-                ],
-                [
-                    'title' => 'Hosting',
-                    'body' => [
-                        [
-                            'list' => [
-                                'Host: [À COMPLÉTER]',
-                                'Address: [À COMPLÉTER]',
-                                'Phone: [À COMPLÉTER]',
-                            ],
-                        ],
-                    ],
-                ],
                 [
                     'title' => 'Intellectual property',
                     'body' => [
@@ -264,12 +240,6 @@ return [
                         'The processing of data sent through the contact form is described on the Privacy page. The website sets no cookies: see the Cookies page.',
                     ],
                 ],
-                [
-                    'title' => 'Governing law',
-                    'body' => [
-                        'This legal notice is governed by the law of [À COMPLÉTER].',
-                    ],
-                ],
             ],
         ],
         'privacy' => [
@@ -279,8 +249,8 @@ return [
                 [
                     'title' => 'Data controller',
                     'body' => [
-                        'The data controller is [À COMPLÉTER] (company name), whose registered office is located at [À COMPLÉTER].',
-                        'For any question about your data: [À COMPLÉTER] (dedicated email address), or the form on the Contact page, choosing "Other".',
+                        'The data controller is Noorwan, publisher of the noorwan.com website.',
+                        'For any question about your data: contact@noorwan.com, or the form on the Contact page, choosing "Other".',
                     ],
                 ],
                 [
@@ -307,7 +277,7 @@ return [
                             'list' => [
                                 'To answer your request. Legal basis: steps taken at your request before entering into a contract, or Noorwan\'s legitimate interest in answering the messages it receives.',
                                 'To send you offers from Noorwan, only if you ticked the matching box. Legal basis: your consent.',
-                                'To send you offers from Noorwan\'s partners, only if you ticked the matching box. Legal basis: your consent. Identity of the partners and how offers are sent (by Noorwan or by the partners): [À COMPLÉTER].',
+                                'To send you offers from Noorwan\'s partners, only if you ticked the matching box. Legal basis: your consent. No data is passed on to any partner to date. The list of partners will be published here before any data is passed on.',
                                 'To protect the form against abuse (sending limit, IP address fingerprint). Legal basis: Noorwan\'s legitimate interest in the security of the website.',
                             ],
                         ],
@@ -316,8 +286,7 @@ return [
                 [
                     'title' => 'Who receives your data',
                     'body' => [
-                        'Your data is only available to the Noorwan teams in charge of your request. It is stored with the website host ([À COMPLÉTER]) and may be transferred to Noorwan\'s internal customer relationship tool. It is never sold or rented.',
-                        'Hosting location and any transfers outside the European Union, with their safeguards: [À COMPLÉTER].',
+                        'Your data is only available to the Noorwan teams in charge of your request. It is stored on an IONOS server and may be transferred to Noorwan\'s internal customer relationship tool. It is never sold or rented.',
                     ],
                 ],
                 [
@@ -325,8 +294,8 @@ return [
                     'body' => [
                         [
                             'list' => [
-                                'Contact requests and related data: 3 years after your last contact with Noorwan, then deleted.',
-                                'Consent to receive offers: until you withdraw it, and at most 3 years after your last contact.',
+                                'Contact requests and related data: 3 years after the last request you sent through this form, then deleted.',
+                                'Consent to receive offers: until you withdraw it, and at most 3 years after the last request you sent through this form.',
                                 'Sending limit data (IP address fingerprint): 1 hour.',
                             ],
                         ],
@@ -335,7 +304,7 @@ return [
                 [
                     'title' => 'Withdrawing your consent',
                     'body' => [
-                        'You can withdraw your consent to receive offers from Noorwan or its partners at any time: write to us through the form on the Contact page (subject "Other") or at [À COMPLÉTER]. Every offer sent by email will also contain an unsubscribe link. Withdrawal applies to the future and does not affect past mailings.',
+                        'You can withdraw your consent to receive offers from Noorwan or its partners at any time: write to us through the form on the Contact page (subject "Other") or at contact@noorwan.com. Every offer sent by email will also contain an unsubscribe link. Withdrawal applies to the future and does not affect past mailings.',
                     ],
                 ],
                 [

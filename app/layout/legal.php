@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 // Gabarit des pages légales. $legalKey : « mentions », « privacy » ou « cookies » (clés legal.* de lang/).
 // Chaque section : ['title' => ..., 'body' => [paragraphe, ['list' => [...]], ...]].
+// 'notice' (facultatif) : encadré « Page en cours de mise à jour » affiché avant les sections.
 
 // Les marqueurs [À COMPLÉTER] sont surlignés pour rester visibles tant qu'ils ne sont pas remplacés.
-$legalText = static fn (string $text): string => str_replace(
-    '[À COMPLÉTER]',
-    '<mark class="todo">[À COMPLÉTER]</mark>',
-    e($text),
+// Les adresses e-mail deviennent des liens, toujours lues de gauche à droite (pages en arabe).
+$legalText = static fn (string $text): string => preg_replace(
+    '/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/',
+    '<a href="mailto:$0" dir="ltr">$0</a>',
+    str_replace('[À COMPLÉTER]', '<mark class="todo">[À COMPLÉTER]</mark>', e($text)),
 );
 ?>
 <section class="page-hero" aria-labelledby="page-title">
@@ -24,6 +26,18 @@ $legalText = static fn (string $text): string => str_replace(
 <section class="section">
     <div class="wrap">
     <div class="legal">
+<?php $notice = tl('legal.' . $legalKey . '.notice'); ?>
+<?php if ($notice !== []): ?>
+        <aside class="legal-notice" aria-labelledby="legal-notice-title">
+            <h2 id="legal-notice-title"><?= e($notice['title']) ?></h2>
+            <p><?= $legalText($notice['text']) ?></p>
+            <ul>
+<?php foreach ($notice['list'] as $item): ?>
+                <li><?= $legalText($item) ?></li>
+<?php endforeach; ?>
+            </ul>
+        </aside>
+<?php endif; ?>
 <?php foreach (tl('legal.' . $legalKey . '.sections') as $section): ?>
         <h2><?= e($section['title']) ?></h2>
 <?php foreach ($section['body'] as $block): ?>

@@ -1424,6 +1424,27 @@ main:focus {
     padding-inline-start: 22px;
 }
 
+/* Encadré « Page en cours de mise à jour ». */
+.legal-notice {
+    display: grid;
+    gap: 10px;
+    margin-block-end: 40px;
+    padding: 22px 24px;
+    border: 1px solid var(--line-2);
+    border-inline-start: 4px solid var(--ink);
+    border-radius: 12px;
+    background: var(--gray);
+}
+
+.legal .legal-notice h2 {
+    margin: 0;
+    font-size: 19px;
+}
+
+.legal .legal-notice ul {
+    gap: 4px;
+}
+
 .todo {
     padding: 1px 6px;
     border-radius: var(--radius-btn);

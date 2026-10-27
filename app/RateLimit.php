@@ -45,12 +45,26 @@ final class RateLimit
      */
     private function purge(): void
     {
-        $since = time() - $this->window;
-        foreach (glob(STORAGE_DIR . '/ratelimit/' . $this->bucket . '-*.log') ?: [] as $file) {
-            if (@filemtime($file) < $since) {
-                @unlink($file);
+        self::purgeExpired($this->window);
+    }
+
+    /**
+     * Fichiers de limite (tous compteurs confondus) sans envoi depuis plus de $maxAge secondes.
+     * Appelée aussi par bin/purge-contacts.php : sans nouvel envoi, rien d'autre ne les efface.
+     * Renvoie le nombre de fichiers supprimés, ou à supprimer si $dryRun.
+     */
+    public static function purgeExpired(int $maxAge = 3600, bool $dryRun = false): int
+    {
+        $since = time() - $maxAge;
+        $count = 0;
+        foreach (glob(STORAGE_DIR . '/ratelimit/*.log') ?: [] as $file) {
+            $mtime = @filemtime($file);
+            if ($mtime !== false && $mtime < $since && ($dryRun || @unlink($file))) {
+                $count++;
             }
         }
+
+        return $count;
     }
 
     private function recentHits(string $ip): array

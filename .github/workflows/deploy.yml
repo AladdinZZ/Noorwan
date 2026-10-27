@@ -1,0 +1,152 @@
+name: Tests et déploiement VPS
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  # 1. tests/run.sh sur le serveur intégré de PHP et un vrai MySQL 8, avec les deux utilisateurs
+  #    du VPS (site : INSERT ; maintenance : SELECT, DELETE) pour vérifier la séparation des droits.
+  tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: ci-root
+        ports: ['3306:3306']
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -pci-root"
+          --health-interval=5s --health-timeout=5s --health-retries=30
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: mbstring, pdo_mysql
+          coverage: none
+
+      - name: Créer la base et les utilisateurs
+        run: |
+          # En CI, MySQL tourne dans un conteneur : les utilisateurs sont déclarés sur « % »
+          # (sur le VPS : « localhost »). Droits identiques à ceux de la note technique.
+          root() { mysql -h127.0.0.1 -P3306 -uroot -pci-root "$@"; }
+          root -e "CREATE DATABASE noorwan_site CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci"
+          root noorwan_site < database/schema.sql
+          root -e "
+            CREATE USER 'noorwan_site'@'%' IDENTIFIED BY 'ci-site';
+            GRANT INSERT ON noorwan_site.contact_requests TO 'noorwan_site'@'%';
+            CREATE USER 'noorwan_site_maint'@'%' IDENTIFIED BY 'ci-maint';
+            GRANT SELECT, DELETE ON noorwan_site.contact_requests TO 'noorwan_site_maint'@'%';"
+
+      - name: Préparer l'environnement
+        run: |
+          cat > .env <<ENV
+          DB_HOST=127.0.0.1:3306
+          DB_NAME=noorwan_site
+          DB_USER=noorwan_site
+          DB_PASS=ci-site
+          DB_MAINT_USER=noorwan_site_maint
+          DB_MAINT_PASS=ci-maint
+          APP_ENV=staging
+          APP_URL=http://127.0.0.1:8000
+          APP_SECRET=$(openssl rand -hex 32)
+          ENV
+          mkdir -p storage/ratelimit storage/logs
+
+      - name: Démarrer le site
+        run: |
+          php -S 127.0.0.1:8000 -t public tests/router.php > php-server.log 2>&1 &
+          for i in $(seq 1 30); do
+            curl -s -o /dev/null http://127.0.0.1:8000/ && exit 0
+            sleep 1
+          done
+          echo "::error::Le serveur intégré de PHP ne répond pas."
+          cat php-server.log
+          exit 1
+
+      - name: Tests
+        env:
+          BASE_URL: http://127.0.0.1:8000
+          MYSQL: mysql
+        run: tests/run.sh
+
+      - name: Journal du serveur PHP en cas d'échec
+        if: failure()
+        run: cat php-server.log || true
+
+  # 2. Déploiement sur le VPS, seulement depuis main et seulement si les tests sont passés.
+  #    Désactivé tant que la variable de dépôt DEPLOY_ENABLED ne vaut pas "true" (serveur pas encore prêt).
+  deploy:
+    needs: tests
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request' && vars.DEPLOY_ENABLED == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Préparer la clé SSH
+        env:
+          VPS_SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
+        run: |
+          install -m 700 -d ~/.ssh
+          # tr -d '\r' : protège contre une clé collée avec des fins de ligne Windows
+          printf '%s\n' "$VPS_SSH_KEY" | tr -d '\r' > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          # Empreintes publiques du VPS (ssh-keyscan 212.132.106.181, mêmes qu'Inteek et OnePay), vérification stricte
+          cat > ~/.ssh/known_hosts <<'EOF'
+          212.132.106.181 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKA3lb9chDbGhkSEZ4KQkEpuDq2tPa61bwgfLDkx8dlp
+          212.132.106.181 ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBD7tEXOuZNzWamcD0/c/v3q2WvuVMfWltaBCNv1NxzJofmYDukCDbBh+eEewUaltsBIrVAsxkBm58lsnOdLwf7I=
+          EOF
+          if ! fp=$(ssh-keygen -l -f ~/.ssh/deploy_key 2>&1); then
+            echo "::error::Le secret VPS_SSH_KEY n'est pas une clé privée valide : $fp"
+            exit 1
+          fi
+          echo "::notice::Empreinte de la clé utilisée : $fp"
+
+      - name: Lancer le déploiement sur le VPS
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_USER: ${{ secrets.VPS_USER }}
+        run: |
+          # La clé est limitée côté serveur au seul script deploy/deploy.sh ; rien sur l'entrée standard.
+          set +e
+          ssh -i ~/.ssh/deploy_key -o BatchMode=yes -o StrictHostKeyChecking=yes \
+              -o ConnectTimeout=20 "$VPS_USER@$VPS_HOST" deploy < /dev/null > deploy.log 2>&1
+          code=$?
+          set -e
+          cat deploy.log
+          if [ "$code" -ne 0 ]; then
+            msg=$(sed 's/\x1b\[[0-9;]*m//g' deploy.log | grep -v '^\s*$' | tail -n 6 | tr '\n' ' ' | cut -c1-900)
+            echo "::error::Échec du déploiement (code $code) : $msg"
+            exit "$code"
+          fi
+
+      - name: Vérifier le site
+        env:
+          SITE_URL: https://noorwan.com
+        run: |
+          sleep 3
+          for path in "/" "/?lang=ar"; do
+            code=$(curl -s -o /dev/null -w '%{http_code}' "$SITE_URL$path")
+            echo "$SITE_URL$path : HTTP $code"
+            test "$code" = "200"
+          done
+          # Production : le site doit rester indexable. Un X-Robots-Tag signale un .env sans APP_ENV=production.
+          if curl -sI "$SITE_URL/" | grep -qi '^x-robots-tag:'; then
+            echo "::error::En-tête X-Robots-Tag présent sur $SITE_URL : APP_ENV doit valoir production."
+            exit 1
+          fi
+          # Une seule adresse publique : www renvoie en 301 vers noorwan.com.
+          www=$(curl -s -o /dev/null -w '%{http_code} %{redirect_url}' https://www.noorwan.com/)
+          echo "https://www.noorwan.com/ : $www"
+          test "$www" = "301 $SITE_URL/"
+
+      - name: Nettoyer la clé
+        if: always()
+        run: rm -f ~/.ssh/deploy_key
