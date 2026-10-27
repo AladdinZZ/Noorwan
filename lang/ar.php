@@ -106,7 +106,7 @@ return [
         'cta_btn' => 'لنتحدث عن مشروعك',
     ],
     'books' => [
-        'soon' => 'قريبًا',
+        'soon' => 'سيصدر قريبًا',
         // À relire.
         'cover_alt' => 'غلاف: :title',
         // Résumés traduits des textes français du site actuel : à relire par un arabophone.
