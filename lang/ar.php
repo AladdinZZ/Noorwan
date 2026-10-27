@@ -250,7 +250,7 @@ return [
     // Pages légales : A FAIRE RELIRE PAR UN JURISTE, traduction à relire par un arabophone.
     'legal' => [
         'eyebrow' => 'معلومات قانونية',
-        'updated' => 'آخر تحديث: 22 أكتوبر 2026',
+        'updated' => 'آخر تحديث: 27 أكتوبر 2026',
         'mentions' => [
             'title' => 'الإشعارات القانونية',
             'intro' => 'معلومات عن ناشر موقع noorwan.com والجهة المستضيفة له.',

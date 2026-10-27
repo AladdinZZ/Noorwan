@@ -237,7 +237,7 @@ return [
     // Pages légales : A FAIRE RELIRE PAR UN JURISTE.
     'legal' => [
         'eyebrow' => 'Informations légales',
-        'updated' => 'Dernière mise à jour : 22 octobre 2026',
+        'updated' => 'Dernière mise à jour : 27 octobre 2026',
         'mentions' => [
             'title' => 'Mentions légales',
             'intro' => 'Informations sur l\'éditeur et l\'hébergeur du site noorwan.com.',
