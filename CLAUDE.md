@@ -26,7 +26,7 @@ Site institutionnel noorwan.com. C'est un produit Noorwan (M-15, M-26) : groupe 
 - `app/` : amorçage, i18n, gabarits, classes (`Db`, `Csrf`, `RateLimit`, `ContactForm`), données des livres.
 - `lang/` : tableaux de chaînes `fr.php`, `en.php`, `ar.php`.
 - `bin/purge-contacts.php` : purge des demandes de plus de 3 ans et des fichiers de limite d'envoi de plus d'une heure (ligne de commande, cron du VPS).
-- `deploy/deploy.sh`, `.github/workflows/deploy.yml` : déploiement sur dev.noorwan.com (`docs/Tech-Notes/Deploiement-VPS.md`).
+- `deploy/deploy.sh`, `.github/workflows/deploy.yml` : déploiement en production sur noorwan.com (`docs/Tech-Notes/Deploiement-VPS.md`).
 - `database/schema.sql`, `tests/run.sh`, `tests/router.php` (serveur intégré de PHP en CI), `storage/` (non versionné : limites d'envoi, journaux).
 
 ## Git

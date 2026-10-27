@@ -129,24 +129,23 @@ jobs:
 
       - name: Vérifier le site
         env:
-          APP_PUBLIC_URL: ${{ vars.APP_PUBLIC_URL }}
+          SITE_URL: https://noorwan.com
         run: |
           sleep 3
           for path in "/" "/?lang=ar"; do
-            code=$(curl -s -o /dev/null -w '%{http_code}' "$APP_PUBLIC_URL$path")
-            echo "$path : HTTP $code"
+            code=$(curl -s -o /dev/null -w '%{http_code}' "$SITE_URL$path")
+            echo "$SITE_URL$path : HTTP $code"
             test "$code" = "200"
           done
-          # Toute adresse autre que noorwan.com est une démonstration : elle doit refuser l'indexation.
-          case "$APP_PUBLIC_URL" in
-            https://noorwan.com|https://www.noorwan.com) ;;
-            *)
-              if ! curl -sI "$APP_PUBLIC_URL/" | grep -qi '^x-robots-tag: noindex'; then
-                echo "::error::En-tête X-Robots-Tag absent sur $APP_PUBLIC_URL (APP_ENV doit valoir staging)."
-                exit 1
-              fi
-              echo "X-Robots-Tag présent." ;;
-          esac
+          # Production : le site doit rester indexable. Un X-Robots-Tag signale un .env sans APP_ENV=production.
+          if curl -sI "$SITE_URL/" | grep -qi '^x-robots-tag:'; then
+            echo "::error::En-tête X-Robots-Tag présent sur $SITE_URL : APP_ENV doit valoir production."
+            exit 1
+          fi
+          # Une seule adresse publique : www renvoie en 301 vers noorwan.com.
+          www=$(curl -s -o /dev/null -w '%{http_code} %{redirect_url}' https://www.noorwan.com/)
+          echo "https://www.noorwan.com/ : $www"
+          test "$www" = "301 $SITE_URL/"
 
       - name: Nettoyer la clé
         if: always()

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Déploiement de noorwan-site sur le VPS (dev.noorwan.com).
+# Déploiement de noorwan-site sur le VPS (production : noorwan.com).
 # Lancé par GitHub Actions via une clé SSH dédiée, limitée à ce seul script
 # (authorized_keys : restrict,command="bash /var/www/noorwan-site/deploy/deploy.sh").
 # Site sans état : ni Composer, ni Node, ni mode maintenance.
