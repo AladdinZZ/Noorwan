@@ -22,7 +22,7 @@
 | Base | `noorwan_site`, deux utilisateurs : `noorwan_site` (le site : `INSERT` sur `contact_requests`, il ne lit jamais la table) et `noorwan_site_maint` (la maintenance : `SELECT`, `DELETE` sur `contact_requests`) |
 | Environnement | `APP_ENV=production`, `APP_URL=https://noorwan.com` : erreurs masquées, site indexable (`robots.txt` ouvert, avec `Sitemap: https://noorwan.com/sitemap.xml`), aucun `X-Robots-Tag`. |
 | Journaux Apache | Format `noorwan_noip` : ni adresse IP dans le journal d'accès, ni dans le journal d'erreurs (politique de confidentialité). |
-| Tâche de fond | Chaque nuit à 3 h 45 (`bin/purge-contacts.php`) : demandes de plus de 3 ans, fichiers de limite d'envoi de plus d'une heure |
+| Tâche de fond | Toutes les heures, à la 17e minute (`bin/purge-contacts.php`) : demandes de plus de 3 ans, fichiers de limite d'envoi de plus d'une heure |
 
 ## Installation initiale
 
@@ -311,7 +311,7 @@ gh secret set VPS_SSH_KEY -R AladdinZZ/Noorwan < ~/.ssh/noorwan-site-deploy
 gh secret list -R AladdinZZ/Noorwan | grep VPS_SSH_KEY && rm -f ~/.ssh/noorwan-site-deploy
 ```
 
-### 7. Purge nocturne
+### 7. Purge horaire
 
 **VPS** : essai à blanc (attendu : `... purge-contacts simulation : 0 demande(s) et 0 fichier(s) de limite d'envoi à supprimer, rien n'est supprimé`) :
 
@@ -322,7 +322,7 @@ cd /var/www/noorwan-site && php bin/purge-contacts.php --dry-run
 **VPS** : ajouter la ligne au cron de `marwan` (heure du serveur) :
 
 ```bash
-(crontab -l 2>/dev/null; echo '45 3 * * * cd /var/www/noorwan-site && php bin/purge-contacts.php >> storage/logs/purge.log 2>&1') | crontab -
+(crontab -l 2>/dev/null; echo '17 * * * * cd /var/www/noorwan-site && php bin/purge-contacts.php >> storage/logs/purge.log 2>&1') | crontab -
 ```
 
 **VPS** : contrôle :
@@ -331,7 +331,7 @@ cd /var/www/noorwan-site && php bin/purge-contacts.php --dry-run
 crontab -l | grep purge-contacts
 ```
 
-Le journal `storage/logs/purge.log` reçoit une ligne par nuit (date UTC, nombre de demandes supprimées, nombre de fichiers de `storage/ratelimit/` de plus d'une heure supprimés), ou une ligne `ERREUR` si la base refuse.
+Toutes les heures, et non une fois par nuit, pour coller à la page Confidentialité (données de limitation des envois : 1 heure) : un fichier sans nouvel envoi disparaît entre 1 et 2 heures après le dernier envoi, au lieu de 25 heures au plus avec une purge nocturne. Le journal `storage/logs/purge.log` reçoit une ligne par heure (date UTC, nombre de demandes supprimées, nombre de fichiers de `storage/ratelimit/` de plus d'une heure supprimés), ou une ligne `ERREUR` si la base refuse.
 
 ### 8. Secrets et variables GitHub
 

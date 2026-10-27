@@ -45,13 +45,13 @@ Détail et commandes : `docs/Tech-Notes/Deploiement-VPS.md`.
 4. VPS : `.env` de démonstration, 640, groupe `www-data`.
 5. VPS : hôte virtuel `dev.noorwan.com.conf`, `certbot --apache -d dev.noorwan.com`.
 6. MAC + VPS : clé `noorwan-site-deploy` limitée à `deploy/deploy.sh`.
-7. VPS : cron de purge à 3 h 45.
+7. VPS : cron de purge toutes les heures (`17 * * * *`, changé le 27/10/2026 ; à l'origine 3 h 45).
 8. GITHUB : `VPS_HOST`, `VPS_USER`, `VPS_SSH_KEY`, `APP_PUBLIC_URL`, puis `DEPLOY_ENABLED=true` en dernier.
 9. GITHUB : « Run workflow », puis vérifications.
 
 ## Points à trancher (état au 21/10/2026)
 
-Tranchés le 27/10/2026 : 1 (texte précisé), 2 (purge nocturne des fichiers de limite), 3 (journaux sans IP), 4 (clé supprimée du Mac). Restent 5 (heure du cron) et 6 (tests sur toutes les branches), plus les nouveaux points en fin de journal.
+Tranchés le 27/10/2026 : 1 (texte précisé), 2 (purge horaire des fichiers de limite), 3 (journaux sans IP), 4 (clé supprimée du Mac), 5 (sans objet : la purge tourne toutes les heures, le fuseau du VPS ne compte plus). Reste 6 (tests sur toutes les branches), plus les nouveaux points en fin de journal.
 
 1. **Page Confidentialité et purge.** La page dit « 3 ans après votre dernier contact avec Noorwan » ; la purge compte 3 ans après la dernière demande envoyée **par le formulaire** avec la même adresse. Un échange ultérieur par e-mail ou téléphone ne repousse pas la suppression. La purge supprime donc au plus tard à la date annoncée, jamais après, mais le texte n'est pas « exactement » le comportement. Deux options : préciser le texte (« 3 ans après votre dernière demande envoyée par ce formulaire », FR, EN, AR) ou garder la formule, qui couvrira aussi le futur CRM. Texte non modifié en attendant ta décision.
 2. **« Données de limitation des envois : 1 heure ».** Les fichiers de `storage/ratelimit/` ne sont effacés que lors d'un envoi suivant ; sans nouvel envoi, une empreinte peut rester plus d'une heure. À choisir : faire aussi nettoyer ces fichiers par la purge nocturne (au plus environ 25 heures), ajouter un second cron horaire, ou ajuster le texte.
@@ -69,6 +69,7 @@ Tranchés le 27/10/2026 : 1 (texte précisé), 2 (purge nocturne des fichiers de
 | Remplacer les champs manquants des Mentions légales par un encadré | encadré « Page en cours de mise à jour » : site édité par Noorwan, `contact@noorwan.com`, serveur IONOS ; sections Éditeur, Directeur de la publication, Hébergement, Droit applicable retirées ; commentaire juriste conservé |
 | Purger aussi les fichiers de limite d'envoi de plus d'une heure | `RateLimit::purgeExpired()`, nombre de fichiers dans la ligne de journal et dans `--dry-run`, test dédié |
 | Déployer directement en production sur noorwan.com | note technique (étape 0 bis sauvegarde, DNS en lecture seule, hôte virtuel `noorwan-site.conf`, certbot pour les deux noms, journaux sans IP, suppression de la clé privée à l'étape 6), workflow sur `https://noorwan.com` |
+| Lancer la purge toutes les heures | cron `17 * * * *` au lieu de `45 3 * * *` dans la note technique (étape 7) |
 
 Vérifications :
 
@@ -79,7 +80,7 @@ Vérifications :
 
 Points à trancher :
 
-1. **Fichiers de limite d'envoi et « 1 heure ».** La purge nocturne supprime les fichiers de plus d'une heure, mais un fichier créé juste après son passage peut rester environ 25 heures, alors que la page Confidentialité annonce 1 heure. Proposition : lancer la purge toutes les heures (`17 * * * *` au lieu de `45 3 * * *`, sans risque : elle est légère) ou écrire « 24 heures ».
+1. **Fichiers de limite d'envoi et « 1 heure » : tranché le 27/10/2026.** purge toutes les heures (`17 * * * *`). Un fichier sans nouvel envoi disparaît désormais entre 1 et 2 heures après le dernier envoi (25 heures au plus avec la purge nocturne). Le journal `purge.log` passe à 24 lignes par jour (de l'ordre de 1 Mo par an).
 2. **Hébergement et transferts hors UE** : la phrase `[À COMPLÉTER]` sur le lieu d'hébergement a été retirée de la Confidentialité faute d'information. À rétablir quand la localisation du serveur IONOS est connue.
 3. **Mentions légales** : raison sociale, siège, immatriculation, directeur de la publication, adresse de l'hébergeur et droit applicable restent à fournir ; l'encadré les remplace en attendant.
 4. **Ancien site** : il disparaît à la bascule, `/test/` compris. S'il enregistrait les messages de son formulaire dans une base, l'étape 0 bis l'exporte ; décider ensuite de leur sort.
