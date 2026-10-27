@@ -85,5 +85,5 @@ Points à trancher :
 3. **Mentions légales** : raison sociale, siège, immatriculation, directeur de la publication, adresse de l'hébergeur et droit applicable restent à fournir ; l'encadré les remplace en attendant.
 4. **Ancien site** : il disparaît à la bascule, `/test/` compris. S'il enregistrait les messages de son formulaire dans une base, l'étape 0 bis l'exporte ; décider ensuite de leur sort.
 5. **Coupure HTTPS** : une à deux minutes avec un mauvais certificat entre la désactivation de l'ancien hôte virtuel et la fin de certbot (étape 5). À faire à une heure creuse.
-6. **`AGENTS.md`** non suivi à la racine : copie de `CLAUDE.md` créée par Codex Desktop le 22/10/2026 (voir le rapport de session). Non versionné en attendant la décision.
+6. **`AGENTS.md`** : copie de `CLAUDE.md` créée par Codex Desktop le 22/10/2026. Tranché le 27/10/2026 : réduit à une ligne qui renvoie à `CLAUDE.md` et versionné, pour qu'il n'y ait qu'une seule source de règles.
 
