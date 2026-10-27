@@ -127,6 +127,13 @@ for lang in fr en ar; do
     expect "langue courante marquée ($lang)" "$lang" "$(grep -oE 'lang="[a-z]+" hreflang="[a-z]+" aria-current="true"' <<< "$header" | sed -E 's/lang="([a-z]+)".*/\1/')"
 done
 
+echo "2 sexies. Haut de page de l'accueil (rien de retiré en le réduisant)"
+for lang in fr en ar; do
+    hero=$(curl -s "$BASE_URL/?lang=$lang" | sed -n '/<section id="top" class="hero"/,/<\/section>/p')
+    expect "haut de page : titre, accroche, 2 boutons, devise ($lang)" "1|1|2|1" \
+        "$(grep -c '<h1 id="hero-title">' <<< "$hero")|$(grep -c 'class="hero-lead"' <<< "$hero")|$(grep -c 'class="btn ' <<< "$hero")|$(grep -c 'class="hero-motto"' <<< "$hero")"
+done
+
 echo "3. Formulaire de contact"
 rm -f storage/ratelimit/contact-*.log
 sql "DELETE FROM contact_requests WHERE email = '$TEST_EMAIL'"

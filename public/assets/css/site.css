@@ -590,7 +590,7 @@ main:focus {
 .hero {
     position: relative;
     isolation: isolate;
-    padding: clamp(72px, 10vw, 130px) var(--gutter) clamp(56px, 7vw, 90px);
+    padding: clamp(44px, 6vw, 84px) var(--gutter) clamp(36px, 4vw, 56px);
     background: #0A0E18 url("../images/hero.webp") 58% center / cover no-repeat;
     color: var(--white);
 }
@@ -615,7 +615,7 @@ main:focus {
 .hero-inner {
     display: flex;
     flex-direction: column;
-    gap: 26px;
+    gap: 20px;
 }
 
 .hero .eyebrow {
@@ -624,8 +624,8 @@ main:focus {
 }
 
 .hero h1 {
-    max-width: 13em;
-    font-size: clamp(44px, 6.6vw, 80px);
+    max-width: 16em;
+    font-size: clamp(40px, 5.2vw, 68px);
     font-weight: 650;
     line-height: var(--lh-h1);
     letter-spacing: var(--ls-h1);
@@ -650,7 +650,7 @@ main:focus {
     display: flex;
     align-items: center;
     gap: 14px;
-    margin-block-start: clamp(32px, 6vw, 80px);
+    margin-block-start: clamp(12px, 2vw, 28px);
     color: var(--line-2);
     font-size: 13px;
     letter-spacing: 0.02em;
