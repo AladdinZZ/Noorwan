@@ -80,11 +80,11 @@ function books(): array
             'status' => 'published',
             'also_in_english' => true,
         ],
-        // A VALIDER PAR MARWAN : annonce du premier volume de la collection Zahra.
+        // A VALIDER PAR MARWAN : annonce du premier volume de la collection Ikra.M.
         'belles-manieres' => [
             'title' => 'Les belles manières du petit musulman',
             'title_en' => null,
-            'collection' => 'zahra',
+            'collection' => 'ikram',
             'cover' => 'couverture_belles_manieres.webp',
             'cover_size' => [1000, 1339],
             'asin' => '',
