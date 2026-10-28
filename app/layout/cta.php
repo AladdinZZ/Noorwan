@@ -2,7 +2,8 @@
 
 declare(strict_types=1);
 
-// Bandeau « Un projet en tête ? » qui mène au formulaire. $ctaId : ancre de la section (facultative).
+// Bandeau « Un projet en tête ? » qui mène au formulaire. $ctaId : ancre de la section (facultative),
+// $ctaParams : paramètres du lien (univers présélectionné), $ctaButton : clé du libellé du bouton (facultatifs).
 ?>
 <section<?= isset($ctaId) ? ' id="' . e($ctaId) . '"' : '' ?> class="cta" aria-labelledby="cta-title">
     <div class="wrap cta-panel">
@@ -11,6 +12,6 @@ declare(strict_types=1);
             <h2 id="cta-title" class="h2"><?= t('home.cta_h') ?></h2>
             <p class="muted"><?= t('home.cta_text') ?></p>
         </div>
-        <a class="btn btn-blue" href="<?= e(url('contact', '', $ctaParams ?? [])) ?>"><?= t('home.cta_btn') ?> <span aria-hidden="true"><?= t('common.arrow') ?></span></a>
+        <a class="btn btn-blue" href="<?= e(url('contact', '', $ctaParams ?? [])) ?>"><?= t($ctaButton ?? 'home.cta_btn') ?> <span aria-hidden="true"><?= t('common.arrow') ?></span></a>
     </div>
 </section>

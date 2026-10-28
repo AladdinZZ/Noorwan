@@ -47,6 +47,38 @@
     }
 })();
 
+// Menu des langues. Sans JavaScript, <details> s'ouvre et se ferme seul (clic, Entrée, Espace) ;
+// ici s'ajoutent la fermeture par Échap, par un clic extérieur et quand le focus quitte le menu.
+(function () {
+    'use strict';
+
+    var menu = document.querySelector('.lang-menu');
+    if (!menu) {
+        return;
+    }
+    var summary = menu.querySelector('summary');
+
+    document.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape' && menu.open) {
+            menu.open = false;
+            summary.focus();
+        }
+    });
+
+    document.addEventListener('click', function (event) {
+        if (menu.open && !menu.contains(event.target)) {
+            menu.open = false;
+        }
+    });
+
+    // Tabulation au-delà de la dernière langue : le menu se referme.
+    document.addEventListener('focusin', function (event) {
+        if (menu.open && !menu.contains(event.target)) {
+            menu.open = false;
+        }
+    });
+})();
+
 // Après un envoi, le message de succès ou d'erreur reçoit le focus pour être annoncé.
 (function () {
     'use strict';

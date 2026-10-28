@@ -6,6 +6,8 @@ declare(strict_types=1);
 // title_en : titre de l'édition anglaise, repris du site actuel (version anglaise) ; null si le livre n'existe qu'en français.
 // asin : identifiant Amazon de la fiche du livre, à fournir par Marwan. Ne jamais en inventer un.
 // Tant qu'il est vide, le bouton « Acheter » mène à la recherche Amazon utilisée par le site actuel.
+// status : « published » (en vente, bouton « Acheter »), « writing » (à paraître, affiché dans sa collection),
+// « upcoming » (à paraître, affiché dans la rubrique « Prochainement » après les collections, sans bouton « Acheter »).
 
 const AMAZON_SEARCH_URL = 'https://www.amazon.fr/s?k=noorwan';
 const AMAZON_PRODUCT_URL = 'https://www.amazon.fr/dp/';
@@ -25,7 +27,7 @@ function books(): array
             'cover' => 'couverture_harmonie.jpg',
             'cover_size' => [1000, 1430],
             'asin' => '',
-            'published' => true,
+            'status' => 'published',
             'also_in_english' => false,
         ],
         'lumiere' => [
@@ -35,7 +37,7 @@ function books(): array
             'cover' => 'couverture_lumiere.jpg',
             'cover_size' => [1000, 1430],
             'asin' => '',
-            'published' => true,
+            'status' => 'published',
             'also_in_english' => false,
         ],
         'vibration' => [
@@ -45,7 +47,7 @@ function books(): array
             'cover' => null,
             'cover_size' => null,
             'asin' => '',
-            'published' => false,
+            'status' => 'writing',
             'also_in_english' => false,
         ],
         'le-mal' => [
@@ -55,7 +57,7 @@ function books(): array
             'cover' => 'couverture_7mal.jpg',
             'cover_size' => [1000, 1499],
             'asin' => '',
-            'published' => true,
+            'status' => 'published',
             'also_in_english' => true,
         ],
         'le-bien' => [
@@ -65,7 +67,7 @@ function books(): array
             'cover' => 'couverture__7bein.jpg',
             'cover_size' => [1000, 1499],
             'asin' => '',
-            'published' => true,
+            'status' => 'published',
             'also_in_english' => true,
         ],
         'etre-pour-avoir' => [
@@ -75,10 +77,34 @@ function books(): array
             'cover' => 'couverture_etre.jpg',
             'cover_size' => [1000, 1499],
             'asin' => '',
-            'published' => true,
+            'status' => 'published',
             'also_in_english' => true,
         ],
+        // A VALIDER PAR MARWAN : annonce du premier volume de la collection Zahra.
+        'belles-manieres' => [
+            'title' => 'Les belles manières du petit musulman',
+            'title_en' => null,
+            'collection' => 'zahra',
+            'cover' => 'couverture_belles_manieres.webp',
+            'cover_size' => [1000, 1339],
+            'asin' => '',
+            'status' => 'upcoming',
+            'also_in_english' => false,
+        ],
     ];
+}
+
+/**
+ * Livres d'une collection, ou de la rubrique « Prochainement » ($collection === null).
+ */
+function books_in(?string $collection): array
+{
+    return array_filter(
+        books(),
+        static fn (array $book): bool => $collection === null
+            ? $book['status'] === 'upcoming'
+            : $book['status'] !== 'upcoming' && $book['collection'] === $collection,
+    );
 }
 
 /**

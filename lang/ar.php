@@ -14,6 +14,9 @@ return [
         // À relire.
         'edition_title' => 'النشر | Noorwan',
         'edition_description' => 'ترافق نوروان للنشر المؤلفين حتى نشر كتبهم على أمازون، وتنشر سلسلتي ' . $metaphysique . ' ودروب الروح.',
+        // À relire.
+        'solutions_title' => 'الحلول | Noorwan',
+        'solutions_description' => 'برمجيات للمؤسسات، مصممة للهاتف أولًا ومتاحة بثلاث لغات، ومنها Inteek للموارد البشرية.',
         'contact_title' => 'اتصل بنا | Noorwan',
         'contact_description' => 'استشارة، أو عرض توضيحي لأحد حلولنا، أو نشر كتاب: راسل نوروان.',
         'mentions_title' => 'الإشعارات القانونية | Noorwan',
@@ -84,13 +87,16 @@ return [
         'cons_app' => 'خطوة مفيدة منجزة خير من خطة كبيرة على الورق.',
         'sol_eyebrow' => 'الحلول',
         'sol_h' => 'أدوات مصممة للمؤسسات',
+        // A VALIDER PAR MARWAN, à relire par un arabophone : introduction de la section Solutions.
+        'sol_text' => 'برمجيات مصممة للمؤسسات، للهاتف أولًا ومتاحة بثلاث لغات. بعضها في الخدمة، وبعضها الآخر قيد الإعداد.',
+        'sol_btn' => 'اكتشف حلولنا',
         'solutions' => [
             ['cat' => 'الموارد البشرية', 'name' => 'Inteek', 'text' => 'من التوظيف إلى إدارة الفرق، موارد بشرية مبسطة.', 'confidential' => false],
             ['cat' => 'الدفع', 'name' => 'OnePay', 'text' => '', 'confidential' => true],
             ['cat' => 'الذكاء الاصطناعي', 'name' => 'منصة الذكاء الاصطناعي', 'text' => '', 'confidential' => true],
         ],
         'confidential' => 'سري',
-        'ed_eyebrow' => 'فضاء آخر لنقل المعرفة',
+        'ed_eyebrow' => 'النشر',
         'ed_h' => 'أفكار للقراءة والاكتشاف والنقل',
         'ed_text' => 'ترافق نوروان للنشر المؤلفين في كل مرحلة حتى نشر كتبهم على أمازون، وسلسلتانا ' . $metaphysique . ' ودروب الروح خير دليل على ذلك.',
         'ed_btn' => 'انشر كتابك',
@@ -100,7 +106,7 @@ return [
         'cta_btn' => 'لنتحدث عن مشروعك',
     ],
     'books' => [
-        'soon' => 'قريبًا',
+        'soon' => 'سيصدر قريبًا',
         // À relire.
         'cover_alt' => 'غلاف: :title',
         // Résumés traduits des textes français du site actuel : à relire par un arabophone.
@@ -130,6 +136,13 @@ return [
                 'sub' => 'مقالة فلسفية',
                 'lead' => 'مقالة فلسفية في التملك والوجود.',
                 'summary' => 'يسائل هذا الكتاب علاقتنا بالتملك، ويذكّر بأن التوازن لا يتحقق إلا حين يبقى «الامتلاك» في خدمة «الكينونة»، وفقًا للأخلاق التي علّمها الأنبياء.',
+            ],
+            // A VALIDER PAR MARWAN, à relire par un arabophone : annonce de la collection Zahra (titre en français).
+            // Zahra reste en latin, isolé comme {méta}Physique : l'orthographe arabe (زهرة ou زهراء) est à confirmer.
+            'belles-manieres' => [
+                'sub' => "سلسلة \u{2066}Zahra\u{2069} · الجزء الأول",
+                'lead' => 'كتاب تلوين للأطفال من 6 إلى 8 سنوات.',
+                'summary' => '15 درسًا أخلاقيًا حول اللطف والاحترام والامتنان، مع دليل للوالدين و3 مستويات من الصعوبة.',
             ],
         ],
     ],
@@ -166,6 +179,26 @@ return [
         'buy_label' => 'اشترِ :title على أمازون',
         'writing' => 'قيد الكتابة',
         'also_in_english' => 'متوفر أيضًا بالإنجليزية',
+        // À relire.
+        'upcoming' => 'قريبًا',
+    ],
+    // Page Solutions : TEXTES A VALIDER PAR MARWAN, traduction à relire par un arabophone.
+    // Le titre et l'introduction sont ceux de l'accueil (home.sol_h, home.sol_text).
+    'solutions' => [
+        'tag' => 'نوروان للحلول',
+        'btn_demo' => 'اطلب عرضًا تقديميًا',
+        'approach_title' => 'طريقتنا في العمل',
+        'principles' => [
+            ['title' => 'للهاتف أولًا', 'text' => 'كل شاشة مصممة للهاتف أولًا، ثم مهيأة للحاسوب.'],
+            ['title' => 'ثلاث لغات منها العربية', 'text' => 'الفرنسية والإنجليزية والعربية، مع عرض من اليمين إلى اليسار للعربية.'],
+            ['title' => 'بيانات محمية', 'text' => 'بيانات مستضافة ومحمية، وصلاحيات وصول حسب دور كل مستخدم.'],
+        ],
+        'inteek_lead' => 'الموارد البشرية في وحدات، تُفعَّل حسب احتياجات مؤسستك.',
+        'inteek_text' => 'ابدأ بالوحدات التي تهمك، وأضف غيرها عند الحاجة.',
+        'modules_title' => 'الوحدات',
+        'modules' => ['التوظيف وقاعدة السير الذاتية', 'استطلاعات آراء الفرق', 'الإجازات', 'تسجيل الحضور', 'ملفات الموظفين'],
+        'others_title' => 'حلول أخرى',
+        'on_request' => 'العرض بموعد مسبق.',
     ],
     // Formulaire de contact : traduction à relire par un arabophone.
     'contact' => [
@@ -217,7 +250,7 @@ return [
     // Pages légales : A FAIRE RELIRE PAR UN JURISTE, traduction à relire par un arabophone.
     'legal' => [
         'eyebrow' => 'معلومات قانونية',
-        'updated' => 'آخر تحديث: 22 أكتوبر 2026',
+        'updated' => 'آخر تحديث: 27 أكتوبر 2026',
         'mentions' => [
             'title' => 'الإشعارات القانونية',
             'intro' => 'معلومات عن ناشر موقع noorwan.com والجهة المستضيفة له.',
@@ -305,7 +338,7 @@ return [
                             'list' => [
                                 'طلبات الاتصال والبيانات المرتبطة بها: 3 سنوات بعد آخر طلب أرسلته عبر هذا النموذج، ثم تُحذف.',
                                 'الموافقة على تلقي العروض: إلى أن تسحبها، وبحد أقصى 3 سنوات بعد آخر طلب أرسلته عبر هذا النموذج.',
-                                'بيانات الحد من الإرسال (بصمة عنوان IP): ساعة واحدة.',
+                                'بيانات الحد من الإرسال (بصمة عنوان IP): ساعتان على الأكثر.',
                             ],
                         ],
                     ],

@@ -425,42 +425,103 @@ main:focus {
     gap: 10px;
 }
 
-.lang-switch {
-    display: flex;
-    align-items: center;
-    gap: 2px;
+/* Menu des langues : <details> natif, utilisable sans JavaScript ; site.js ajoute Échap et le clic extérieur. */
+.lang-menu {
+    position: relative;
 }
 
-.lang-switch a {
+.lang-menu summary {
     display: flex;
     align-items: center;
-    justify-content: center;
+    gap: 6px;
     min-width: 44px;
     height: 44px;
-    color: var(--text-2);
-    font: 500 12px/1 var(--font);
+    padding-inline: 12px 10px;
+    border: 1px solid var(--line-2);
+    border-radius: 10px;
+    background: var(--white);
+    color: var(--ink);
+    font: 600 13px/1 var(--font);
+    letter-spacing: 0.02em;
+    list-style: none;
+    cursor: pointer;
+    user-select: none;
+}
+
+.lang-menu summary::-webkit-details-marker {
+    display: none;
+}
+
+.lang-menu summary:hover {
+    border-color: var(--ink);
+}
+
+.lang-chevron {
+    flex: none;
+    transition: transform 0.15s;
+}
+
+.lang-menu[open] .lang-chevron {
+    transform: rotate(180deg);
+}
+
+/* La liste s'aligne sur le bord extérieur du bouton (à droite en LTR, à gauche en RTL). */
+.lang-list {
+    position: absolute;
+    inset-block-start: calc(100% + 6px);
+    inset-inline-end: 0;
+    z-index: 60;
+    min-width: 168px;
+    margin: 0;
+    padding: 6px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: var(--white);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+    list-style: none;
+}
+
+.lang-list a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    min-height: 44px;
+    padding-inline: 12px;
+    border-radius: 8px;
+    color: var(--ink);
+    font: 500 15px/1.2 var(--font);
     letter-spacing: 0;
+    text-align: start;
     text-decoration: none;
 }
 
-.lang-switch a:hover {
+.lang-list a[lang="ar"] {
+    font-family: 'IBM Plex Sans Arabic', var(--font);
+}
+
+.lang-list a:hover {
+    background: var(--gray);
     color: var(--ink);
 }
 
-.lang-switch a span {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 32px;
-    height: 32px;
-    padding-inline: 4px;
-    border-radius: 999px;
+.lang-list a:focus-visible {
+    outline-offset: -2px;
 }
 
-.lang-switch a[aria-current="true"] span {
-    background: var(--ink);
-    color: var(--white);
-    font-weight: 600;
+/* Langue courante : coche à la fin de la ligne (bords physiques : la coche ne se retourne pas en RTL). */
+.lang-list a[aria-current="true"] {
+    font-weight: 650;
+}
+
+.lang-list a[aria-current="true"]::after {
+    content: "";
+    width: 10px;
+    height: 6px;
+    margin-block-start: -3px;
+    border-bottom: 2px solid var(--blue);
+    border-left: 2px solid var(--blue);
+    transform: rotate(-45deg);
 }
 
 .menu-toggle {
@@ -529,7 +590,7 @@ main:focus {
 .hero {
     position: relative;
     isolation: isolate;
-    padding: clamp(72px, 10vw, 130px) var(--gutter) clamp(56px, 7vw, 90px);
+    padding: clamp(44px, 6vw, 84px) var(--gutter) clamp(36px, 4vw, 56px);
     background: #0A0E18 url("../images/hero.webp") 58% center / cover no-repeat;
     color: var(--white);
 }
@@ -554,7 +615,7 @@ main:focus {
 .hero-inner {
     display: flex;
     flex-direction: column;
-    gap: 26px;
+    gap: 20px;
 }
 
 .hero .eyebrow {
@@ -563,8 +624,8 @@ main:focus {
 }
 
 .hero h1 {
-    max-width: 13em;
-    font-size: clamp(44px, 6.6vw, 80px);
+    max-width: 16em;
+    font-size: clamp(40px, 5.2vw, 68px);
     font-weight: 650;
     line-height: var(--lh-h1);
     letter-spacing: var(--ls-h1);
@@ -589,7 +650,7 @@ main:focus {
     display: flex;
     align-items: center;
     gap: 14px;
-    margin-block-start: clamp(32px, 6vw, 80px);
+    margin-block-start: clamp(12px, 2vw, 28px);
     color: var(--line-2);
     font-size: 13px;
     letter-spacing: 0.02em;
@@ -803,6 +864,20 @@ main:focus {
 
 /* ---------- Solutions ---------- */
 
+/* Accueil : titre, introduction et lien vers la page Solutions. */
+.sol-head {
+    max-width: 44em;
+    margin-block-end: clamp(32px, 4vw, 48px);
+}
+
+.sol-head .muted {
+    margin-block: 18px 10px;
+}
+
+.sol-head .btn-text {
+    margin-inline-start: -4px;
+}
+
 .cards-solutions {
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 20px;
@@ -876,22 +951,56 @@ main:focus {
     margin-block-start: 30px;
 }
 
-.shelf {
-    display: grid;
-    flex: 1 1 460px;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 14px;
+/* Les quatre étapes de la prestation, en cartes compactes (2 x 2 dès 520 px). */
+.edition-steps {
+    flex: 1 1 520px;
     min-width: 0;
+}
+
+.edition-steps h3 {
+    font-size: clamp(22px, 2.2vw, 26px);
+    font-weight: 650;
+    line-height: 1.2;
+    letter-spacing: var(--ls-h3);
+}
+
+.edition-steps > .muted {
+    margin-block: 8px 20px;
+    font-size: 15px;
+}
+
+.cards-steps-compact {
+    gap: 12px;
     margin: 0;
     padding: 0;
     list-style: none;
 }
 
-.shelf li {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+.cards-steps-compact .card {
+    gap: 6px;
+    padding: 18px 20px 20px;
 }
+
+.cards-steps-compact h4 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 650;
+    line-height: 1.25;
+    letter-spacing: var(--ls-h3);
+}
+
+.cards-steps-compact p {
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+@media (min-width: 520px) {
+    .cards-steps-compact {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+/* ---------- Couvertures (page Édition) ---------- */
 
 .cover {
     width: 100%;
@@ -927,20 +1036,6 @@ main:focus {
     font-weight: 650;
     line-height: 1.15;
     letter-spacing: -0.02em;
-}
-
-.shelf-title {
-    color: var(--ink);
-    font-size: 13px;
-    font-weight: 600;
-    line-height: 1.3;
-}
-
-.shelf-sub {
-    margin-block-start: -4px;
-    color: var(--text-3);
-    font-size: 12px;
-    line-height: 1.35;
 }
 
 /* ---------- Bandeau contact ---------- */
@@ -1082,6 +1177,79 @@ main:focus {
     margin: 0;
     padding: 0;
     list-style: none;
+}
+
+/* ---------- Solutions : Inteek ---------- */
+
+.inteek {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: clamp(32px, 5vw, 72px);
+}
+
+.inteek-intro {
+    flex: 1 1 380px;
+    min-width: 0;
+}
+
+.inteek-lead {
+    max-width: 26em;
+    margin-block: 18px 12px;
+    font-size: clamp(19px, 1.8vw, 22px);
+    font-weight: 600;
+    line-height: 1.35;
+    letter-spacing: var(--ls-h);
+}
+
+.inteek-intro .muted {
+    max-width: 32em;
+}
+
+.inteek-modules {
+    flex: 1 1 340px;
+    min-width: 0;
+    padding: clamp(22px, 3vw, 32px);
+    border-block-start: 3px solid var(--dot);
+    border-radius: var(--radius-card);
+    background: var(--white);
+    box-shadow: 0 2px 14px rgba(0, 0, 0, 0.045);
+}
+
+.inteek-modules h3 {
+    color: var(--tone);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: var(--ls-caps);
+    text-transform: uppercase;
+}
+
+.inteek-modules ul {
+    margin: 10px 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.inteek-modules li {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding-block: 14px;
+    font-size: 17px;
+    font-weight: 500;
+}
+
+.inteek-modules li + li {
+    border-block-start: 1px solid var(--line);
+}
+
+.inteek-modules li::before {
+    content: "";
+    flex: none;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--dot);
 }
 
 /* ---------- Édition : catalogue ---------- */

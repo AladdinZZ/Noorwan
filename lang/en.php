@@ -10,6 +10,8 @@ return [
         'home_description' => 'Consulting, digital solutions and publishing: three complementary fields that turn ideas into useful results.',
         'edition_title' => 'Publishing | Noorwan',
         'edition_description' => 'Noorwan Publishing guides authors all the way to publication on Amazon and publishes its {méta}Physique and Chemins de l\'Âme collections.',
+        'solutions_title' => 'Solutions | Noorwan',
+        'solutions_description' => 'Business software, built for the phone first and available in three languages, including Inteek for human resources.',
         'contact_title' => 'Contact | Noorwan',
         'contact_description' => 'Consulting, a product demo or publishing a book: write to Noorwan.',
         'mentions_title' => 'Legal notice | Noorwan',
@@ -79,13 +81,16 @@ return [
         'cons_app' => 'One useful step delivered beats a grand plan on paper.',
         'sol_eyebrow' => 'Solutions',
         'sol_h' => 'Tools built for businesses',
+        // A VALIDER PAR MARWAN : Solutions section introduction (also used at the top of the Solutions page).
+        'sol_text' => 'Software designed for businesses, built for the phone first and available in three languages. Some are in service, others in preparation.',
+        'sol_btn' => 'Discover our solutions',
         'solutions' => [
             ['cat' => 'Human resources', 'name' => 'Inteek', 'text' => 'From hiring to team management, HR made simple.', 'confidential' => false],
             ['cat' => 'Payment', 'name' => 'OnePay', 'text' => '', 'confidential' => true],
             ['cat' => 'Artificial intelligence', 'name' => 'AI platform', 'text' => '', 'confidential' => true],
         ],
         'confidential' => 'Confidential',
-        'ed_eyebrow' => 'Another space for sharing',
+        'ed_eyebrow' => 'Publishing',
         'ed_h' => 'Ideas to read, discover and pass on',
         'ed_text' => 'Noorwan Publishing guides authors through every step, all the way to publishing their book on Amazon. Our own collections, {méta}Physique and Chemins de l\'Âme, are the proof.',
         'ed_btn' => 'Publish your book',
@@ -124,6 +129,12 @@ return [
                 'lead' => 'Philosophical essay on possession and existence.',
                 'summary' => 'This book questions the relationship to possession and reminds us that balance is only found when Having remains in the service of Being, in accordance with the ethics taught by the prophets.',
             ],
+            // A VALIDER PAR MARWAN : Zahra collection announcement (the title stays in French).
+            'belles-manieres' => [
+                'sub' => 'Zahra Collection · Volume 1',
+                'lead' => 'A colouring book for children aged 6 to 8.',
+                'summary' => '15 moral lessons built around kindness, respect and gratitude, a guide for parents and 3 levels of difficulty.',
+            ],
         ],
     ],
     'edition' => [
@@ -158,6 +169,24 @@ return [
         'buy_label' => 'Buy :title on Amazon',
         'writing' => 'Writing in progress',
         'also_in_english' => 'Also available in English',
+        'upcoming' => 'Coming soon',
+    ],
+    // Solutions page: TEXTES A VALIDER PAR MARWAN. Title and introduction come from the home page (home.sol_h, home.sol_text).
+    'solutions' => [
+        'tag' => 'Noorwan Solutions',
+        'btn_demo' => 'Request a presentation',
+        'approach_title' => 'How we work',
+        'principles' => [
+            ['title' => 'Phone first', 'text' => 'Every screen is designed for the phone, then adapted to the computer.'],
+            ['title' => 'Three languages, including Arabic', 'text' => 'French, English and Arabic, with right-to-left display for Arabic.'],
+            ['title' => 'Protected data', 'text' => 'Hosted and protected data, with access based on each person\'s role.'],
+        ],
+        'inteek_lead' => 'Human resources in modules, switched on according to your company\'s needs.',
+        'inteek_text' => 'Start with the modules that matter to you and add the others when the need arises.',
+        'modules_title' => 'Modules',
+        'modules' => ['Recruitment and CV database', 'Team surveys', 'Leave', 'Time tracking', 'Personnel files'],
+        'others_title' => 'Other solutions',
+        'on_request' => 'Presentation by appointment.',
     ],
     'contact' => [
         'tag' => 'Contact',
@@ -208,7 +237,7 @@ return [
     // Pages légales : A FAIRE RELIRE PAR UN JURISTE.
     'legal' => [
         'eyebrow' => 'Legal information',
-        'updated' => 'Last updated: 22 October 2026',
+        'updated' => 'Last updated: 27 October 2026',
         'mentions' => [
             'title' => 'Legal notice',
             'intro' => 'Information about the publisher and the host of the noorwan.com website.',
@@ -296,7 +325,7 @@ return [
                             'list' => [
                                 'Contact requests and related data: 3 years after the last request you sent through this form, then deleted.',
                                 'Consent to receive offers: until you withdraw it, and at most 3 years after the last request you sent through this form.',
-                                'Sending limit data (IP address fingerprint): 1 hour.',
+                                'Sending limit data (IP address fingerprint): 2 hours at most.',
                             ],
                         ],
                     ],

@@ -45,6 +45,8 @@ sql_site() {
     MYSQL_PWD="$DB_PASS" "$MYSQL" -h"$DB_HOST" -P"$DB_PORT" -u"$DB_USER" -N -B "$DB_NAME" -e "$1" 2>/dev/null
 }
 token() { curl -s "$BASE_URL/contact.php?lang=fr" | grep -o 'name="token" value="[^"]*"' | sed -e 's/.*value="//' -e 's/"$//'; }
+# Textes attendus par langue (bash 3.2 de macOS : pas de tableau associatif). by_lang LANGUE FR EN AR
+by_lang() { case "$1" in fr) echo "$2" ;; en) echo "$3" ;; ar) echo "$4" ;; esac; }
 
 echo "1. Syntaxe PHP"
 while IFS= read -r file; do
@@ -53,7 +55,7 @@ done < <(find app bin lang public -name '*.php')
 [[ $failures -eq 0 ]] && pass "php -l sur tous les fichiers"
 
 echo "2. Pages (code 200 attendu) sur $BASE_URL"
-for page in "" edition.php contact.php mentions-legales.php confidentialite.php cookies.php; do
+for page in "" solutions.php edition.php contact.php mentions-legales.php confidentialite.php cookies.php; do
     for lang in fr en ar; do
         code=$(curl -s -o /dev/null -w '%{http_code}' "$BASE_URL/$page?lang=$lang")
         expect "/${page:-index} lang=$lang" 200 "$code"
@@ -95,8 +97,8 @@ expect "robots.txt en texte" "text/plain; charset=utf-8" "$(curl -s -o /dev/null
 robots_prod=$("$PHP" -r 'require "app/bootstrap.php"; require "app/seo.php"; echo robots_txt(true);' 2>&1)
 if [[ "$robots_prod" == $'User-agent: *\nAllow: /\n\nSitemap: '*'/sitemap.xml' ]]; then pass "robots.txt de production"; else fail "robots.txt de production : $robots_prod"; fi
 sitemap=$(curl -s "$BASE_URL/sitemap.xml")
-expect "sitemap.xml : 6 pages x 3 langues" 18 "$(grep -c '<loc>' <<< "$sitemap")"
-expect "sitemap.xml : 4 versions par adresse (fr, en, ar, x-default)" 72 "$(grep -c 'hreflang=' <<< "$sitemap")"
+expect "sitemap.xml : 7 pages x 3 langues" 21 "$(grep -c '<loc>' <<< "$sitemap")"
+expect "sitemap.xml : 4 versions par adresse (fr, en, ar, x-default)" 84 "$(grep -c 'hreflang=' <<< "$sitemap")"
 if command -v xmllint >/dev/null; then
     xmllint --noout - <<< "$sitemap" 2>/dev/null && pass "sitemap.xml bien formé" || fail "sitemap.xml mal formé"
 fi
@@ -106,6 +108,10 @@ for lang in fr en ar; do
     html=$(curl -s "$BASE_URL/confidentialite.php?lang=$lang")
     if grep -q 'COMPLÉTER' <<< "$html"; then fail "Confidentialité ($lang) : marqueur [À COMPLÉTER] restant"; else pass "Confidentialité ($lang) : aucun [À COMPLÉTER]"; fi
     grep -q 'href="mailto:contact@noorwan.com"' <<< "$html" && pass "Confidentialité ($lang) : adresse de contact" || fail "Confidentialité ($lang) : adresse de contact absente"
+    # Fichiers de limite d'envoi purgés toutes les heures après une heure d'inactivité : 2 heures au plus.
+    duration=$(by_lang "$lang" "2 heures au plus" "2 hours at most" "ساعتان على الأكثر")
+    grep -q "$duration" <<< "$html" && pass "Confidentialité ($lang) : limite d'envoi, « $duration »" || fail "Confidentialité ($lang) : durée de la limite d'envoi"
+    if grep -qE ': 1 heure\.|: 1 hour\.|: ساعة واحدة\.' <<< "$html"; then fail "Confidentialité ($lang) : ancienne durée « 1 heure » restante"; else pass "Confidentialité ($lang) : plus de « 1 heure »"; fi
 done
 
 for lang in fr en ar; do
@@ -114,6 +120,95 @@ for lang in fr en ar; do
     grep -q 'class="legal-notice"' <<< "$html" && grep -q 'href="mailto:contact@noorwan.com"' <<< "$html" && grep -q 'IONOS' <<< "$html" \
         && pass "Mentions légales ($lang) : encadré avec éditeur, contact et hébergement" || fail "Mentions légales ($lang) : encadré incomplet"
     grep -q 'A FAIRE RELIRE PAR UN JURISTE' <<< "$html" && pass "Mentions légales ($lang) : commentaire juriste conservé" || fail "Mentions légales ($lang) : commentaire juriste absent"
+done
+
+echo "2 quinquies. Menu des langues"
+for lang in fr en ar; do
+    header=$(curl -s "$BASE_URL/edition.php?lang=$lang" | sed -n '/<header/,/<\/header>/p')
+    grep -q '<details class="lang-menu">' <<< "$header" && pass "menu des langues en <details> ($lang)" || fail "menu des langues absent ($lang)"
+    if grep -q 'lang-switch' <<< "$header"; then fail "anciens boutons de langue encore présents ($lang)"; else pass "plus de boutons de langue ($lang)"; fi
+    expect "trois langues dans leur propre langue ($lang)" "Français|English|العربية" \
+        "$(grep -oE 'hreflang="(fr|en|ar)"[^>]*>[^<]+' <<< "$header" | sed 's/.*>//' | paste -sd '|' -)"
+    expect "liens du menu sur la même page ($lang)" 3 "$(grep -cE 'href="edition\.php\?lang=(fr|en|ar)" lang=' <<< "$header")"
+    expect "langue courante marquée ($lang)" "$lang" "$(grep -oE 'lang="[a-z]+" hreflang="[a-z]+" aria-current="true"' <<< "$header" | sed -E 's/lang="([a-z]+)".*/\1/')"
+done
+
+echo "2 sexies. Haut de page de l'accueil (rien de retiré en le réduisant)"
+for lang in fr en ar; do
+    hero=$(curl -s "$BASE_URL/?lang=$lang" | sed -n '/<section id="top" class="hero"/,/<\/section>/p')
+    expect "haut de page : titre, accroche, 2 boutons, devise ($lang)" "1|1|2|1" \
+        "$(grep -c '<h1 id="hero-title">' <<< "$hero")|$(grep -c 'class="hero-lead"' <<< "$hero")|$(grep -c 'class="btn ' <<< "$hero")|$(grep -c 'class="hero-motto"' <<< "$hero")"
+done
+
+echo "2 septies. Accueil : section Édition"
+for lang in fr en ar; do
+    tag=$(by_lang "$lang" "Édition" "Publishing" "النشر")
+    section=$(curl -s "$BASE_URL/?lang=$lang" | sed -n '/<section id="edition"/,/<\/section>/p')
+    grep -q "<p class=\"tag\">$tag</p>" <<< "$section" && pass "petit titre « $tag » ($lang)" || fail "petit titre de la section Édition ($lang)"
+    if grep -q 'class="cover' <<< "$section"; then fail "couvertures encore sur l'accueil ($lang)"; else pass "plus de couvertures sur l'accueil ($lang)"; fi
+    expect "quatre étapes de la prestation ($lang)" 4 "$(grep -c '<li class="card">' <<< "$section")"
+    # Mêmes chaînes que la page Édition : le titre du bloc et la première étape s'y retrouvent à l'identique.
+    edition=$(curl -s "$BASE_URL/edition.php?lang=$lang")
+    for marker in "$(grep -o '<h3>[^<]*</h3>' <<< "$section" | head -n 1 | sed -e 's/<h3>//' -e 's/<\/h3>//')" \
+                  "$(grep -o '<h4>[^<]*</h4>' <<< "$section" | head -n 1 | sed -e 's/<h4>//' -e 's/<\/h4>//')"; do
+        [[ -n "$marker" ]] && grep -qF "$marker" <<< "$edition" && pass "texte repris de la page Édition : $marker ($lang)" || fail "texte absent de la page Édition : « $marker » ($lang)"
+    done
+    grep -q "href=\"edition.php?lang=$lang\"" <<< "$section" && pass "lien vers le catalogue ($lang)" || fail "lien vers le catalogue absent ($lang)"
+    expect "bouton « Publier votre livre » ($lang)" 1 "$(grep -c 'class="btn btn-dark"' <<< "$section")"
+done
+
+echo "2 octies. Page Édition : livre à paraître"
+for lang in fr en ar; do
+    html=$(curl -s "$BASE_URL/edition.php?lang=$lang")
+    heading=$(by_lang "$lang" "Prochainement" "Coming soon" "قريبًا")
+    grep -q "<h3 id=\"collection-upcoming\">$heading</h3>" <<< "$html" && pass "rubrique « $heading » ($lang)" || fail "rubrique « $heading » absente ($lang)"
+    expect "rubrique placée après les deux collections ($lang)" "collection-metaphysique|collection-chemins|collection-upcoming" \
+        "$(grep -oE '<h3 id="collection-[a-z]+"' <<< "$html" | sed -E 's/.*"(collection-[a-z]+)"/\1/' | paste -sd '|' -)"
+    book=$(sed -n '/<article class="book" aria-labelledby="book-belles-manieres">/,/<\/article>/p' <<< "$html")
+    grep -q '<bdi>Les belles manières du petit musulman</bdi>' <<< "$book" && pass "titre en français ($lang)" || fail "titre du livre à paraître ($lang)"
+    grep -q 'src="assets/images/covers/couverture_belles_manieres.webp"' <<< "$book" && pass "couverture du livre à paraître ($lang)" || fail "couverture du livre à paraître ($lang)"
+    expect "étiquette « À paraître », sans bouton « Acheter » ($lang)" "1|0" \
+        "$(grep -c "<p class=\"book-flag\">$(by_lang "$lang" "À paraître" "Forthcoming" "سيصدر قريبًا")</p>" <<< "$book")|$(grep -c 'book-buy' <<< "$book")"
+    expect "boutons « Acheter » des livres parus ($lang)" 5 "$(grep -c 'class="btn btn-dark book-buy"' <<< "$html")"
+done
+expect "couverture_belles_manieres.webp servie" 200 "$(curl -s -o /dev/null -w '%{http_code}' "$BASE_URL/assets/images/covers/couverture_belles_manieres.webp")"
+
+echo "2 nonies. Solutions : accueil et page"
+grep -q '/solutions.php?lang=fr</loc>' <<< "$sitemap" && pass "page Solutions dans le plan du site" || fail "page Solutions absente du plan du site"
+for lang in fr en ar; do
+    home=$(curl -s "$BASE_URL/?lang=$lang")
+    nav=$(sed -n '/<nav class="nav-desktop"/,/<\/nav>/p' <<< "$home")
+    grep -q "href=\"solutions.php?lang=$lang\">$(by_lang "$lang" "Solutions" "Solutions" "الحلول")<" <<< "$nav" && pass "menu : Solutions mène à solutions.php ($lang)" || fail "menu : lien Solutions ($lang)"
+    section=$(sed -n '/<section id="solutions"/,/<\/section>/p' <<< "$home")
+    intro=$(by_lang "$lang" "Des logiciels pensés pour les entreprises" "Software designed for businesses" "برمجيات مصممة للمؤسسات")
+    grep -q "<p class=\"muted\">$intro" <<< "$section" && pass "accueil : introduction Solutions ($lang)" || fail "accueil : introduction Solutions absente ($lang)"
+    grep -q "class=\"btn btn-text\" href=\"solutions.php?lang=$lang\">$(by_lang "$lang" "Découvrir nos solutions" "Discover our solutions" "اكتشف حلولنا")" <<< "$section" \
+        && pass "accueil : lien « Découvrir nos solutions » ($lang)" || fail "accueil : lien vers la page Solutions ($lang)"
+    expect "accueil : trois cartes, dont deux confidentielles ($lang)" "3|2" \
+        "$(grep -c '<article class="card solution">' <<< "$section")|$(grep -c 'class="badge-confidential"' <<< "$section")"
+
+    page=$(curl -s "$BASE_URL/solutions.php?lang=$lang")
+    grep -q '<!-- TEXTES A VALIDER PAR MARWAN -->' <<< "$page" && pass "page Solutions : textes marqués à valider ($lang)" || fail "page Solutions : commentaire de validation absent ($lang)"
+    grep -q "<h1 id=\"page-title\">$(by_lang "$lang" "Des outils conçus pour les entreprises" "Tools built for businesses" "أدوات مصممة للمؤسسات")</h1>" <<< "$page" \
+        && pass "page Solutions : titre ($lang)" || fail "page Solutions : titre ($lang)"
+    expect "page Solutions : 3 principes, 5 modules d'Inteek ($lang)" "3|5" \
+        "$(sed -n '/aria-labelledby="approach-title"/,/<\/section>/p' <<< "$page" | grep -c '<li class="card">')|$(sed -n '/class="inteek-modules"/,/<\/ul>/p' <<< "$page" | grep -c '<li>')"
+    others=$(sed -n '/aria-labelledby="others-title"/,/<\/section>/p' <<< "$page")
+    expect "page Solutions : OnePay et Plateforme IA confidentiels, sur rendez-vous ($lang)" "2|2" \
+        "$(grep -c 'class="badge-confidential"' <<< "$others")|$(grep -c "<p>$(by_lang "$lang" "Présentation sur rendez-vous." "Presentation by appointment." "العرض بموعد مسبق.")</p>" <<< "$others")"
+    expect "page Solutions : « Demander une présentation » vers le formulaire, univers Solutions ($lang)" 2 \
+        "$(grep -c "href=\"contact.php?lang=$lang&amp;universe=solutions\">$(by_lang "$lang" "Demander une présentation" "Request a presentation" "اطلب عرضًا تقديميًا")" <<< "$page")"
+    # Ni prix ni chiffres de clients : aucun montant ni symbole monétaire sur la page.
+    if sed -n '/<main/,/<\/main>/p' <<< "$page" | grep -qiE '[0-9] ?(€|\$|FDJ|USD|EUR)|€|prix|price|clients'; then fail "page Solutions : prix ou clients cités ($lang)"; else pass "page Solutions : ni prix ni clients ($lang)"; fi
+done
+grep -q '<option value="solutions" selected>' <<< "$(curl -s "$BASE_URL/contact.php?lang=fr&universe=solutions")" && pass "formulaire : univers Solutions présélectionné" || fail "formulaire : univers Solutions non présélectionné"
+
+echo "2 decies. Date de mise à jour des pages légales"
+for page in mentions-legales.php confidentialite.php cookies.php; do
+    for lang in fr en ar; do
+        date=$(by_lang "$lang" "Dernière mise à jour : 27 octobre 2026" "Last updated: 27 October 2026" "آخر تحديث: 27 أكتوبر 2026")
+        grep -q "<p class=\"legal-updated\">$date</p>" <<< "$(curl -s "$BASE_URL/$page?lang=$lang")" && pass "$page ($lang) : mise à jour du 27/10/2026" || fail "$page ($lang) : date de mise à jour"
+    done
 done
 
 echo "3. Formulaire de contact"

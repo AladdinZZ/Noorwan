@@ -3,13 +3,10 @@
 declare(strict_types=1);
 
 require __DIR__ . '/../app/bootstrap.php';
-require ROOT_DIR . '/app/books.php';
 
 // Accueil, conforme à la maquette v1 validée le 21/10/2026 (docs/maquette/).
 current_page('index');
 $meta = ['title' => raw('meta.home_title'), 'description' => raw('meta.home_description')];
-
-$lockIcon = '<svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true" focusable="false"><rect x="2" y="5.5" width="8" height="5.5" rx="1.2" fill="none" stroke="currentColor" stroke-width="1.2"/><path d="M4 5.5V4a2 2 0 0 1 4 0v1.5" fill="none" stroke="currentColor" stroke-width="1.2"/></svg>';
 
 require ROOT_DIR . '/app/layout/header.php';
 ?>
@@ -87,22 +84,16 @@ require ROOT_DIR . '/app/layout/header.php';
 
 <section id="solutions" class="section section-gray tone-solutions" aria-labelledby="solutions-title">
     <div class="wrap">
-        <p class="tag"><?= t('home.sol_eyebrow') ?></p>
-        <h2 id="solutions-title" class="h2 section-title"><?= t('home.sol_h') ?></h2>
+        <!-- A VALIDER PAR MARWAN : introduction de la section (home.sol_text). -->
+        <div class="sol-head">
+            <p class="tag"><?= t('home.sol_eyebrow') ?></p>
+            <h2 id="solutions-title" class="h2"><?= t('home.sol_h') ?></h2>
+            <p class="muted"><?= t('home.sol_text') ?></p>
+            <a class="btn btn-text" href="<?= e(url('solutions')) ?>"><?= t('home.sol_btn') ?> <span aria-hidden="true"><?= t('common.arrow') ?></span></a>
+        </div>
         <div class="cards cards-solutions">
 <?php foreach (tl('home.solutions') as $solution): ?>
-            <article class="card solution">
-                <div class="solution-top">
-                    <span class="solution-cat"><?= e($solution['cat']) ?></span>
-<?php if ($solution['confidential']): ?>
-                    <span class="badge-confidential"><?= $lockIcon ?><?= t('home.confidential') ?></span>
-<?php endif; ?>
-                </div>
-                <h3><?= e($solution['name']) ?></h3>
-<?php if ($solution['text'] !== ''): ?>
-                <p><?= e($solution['text']) ?></p>
-<?php endif; ?>
-            </article>
+<?php require ROOT_DIR . '/app/layout/solution-card.php'; ?>
 <?php endforeach; ?>
         </div>
     </div>
@@ -119,22 +110,20 @@ require ROOT_DIR . '/app/layout/header.php';
                 <a class="btn btn-text" href="<?= e(url('edition')) ?>"><?= t('home.ed_btn_catalogue') ?> <span aria-hidden="true"><?= t('common.arrow') ?></span></a>
             </div>
         </div>
-        <ul class="shelf">
-<?php foreach (books() as $id => $book): ?>
-            <li>
-<?php if ($book['cover'] !== null): ?>
-                <img class="cover" src="assets/images/covers/<?= e($book['cover']) ?>" alt="<?= t('books.cover_alt', [':title' => book_title($book)]) ?>" width="<?= $book['cover_size'][0] ?>" height="<?= $book['cover_size'][1] ?>" loading="lazy" decoding="async">
-<?php else: ?>
-                <div class="cover-soon">
-                    <span class="cover-soon-label"><?= t('books.soon') ?></span>
-                    <span class="cover-soon-title" aria-hidden="true"><bdi><?= e(book_title($book)) ?></bdi></span>
-                </div>
-<?php endif; ?>
-                <span class="shelf-title"><bdi><?= e(book_title($book)) ?></bdi></span>
-                <span class="shelf-sub"><?= t('books.items.' . $id . '.sub') ?></span>
-            </li>
+        <!-- A VALIDER PAR MARWAN : les quatre étapes, mêmes textes que la page Édition (lang/*.php, edition.service_*). -->
+        <div class="edition-steps">
+            <h3><?= t('edition.service_title') ?></h3>
+            <p class="muted"><?= t('edition.service_lead') ?></p>
+            <ol class="cards cards-steps-compact">
+<?php foreach (tl('edition.service_steps') as $i => $step): ?>
+                <li class="card">
+                    <span class="card-num">0<?= $i + 1 ?></span>
+                    <h4><?= e($step['title']) ?></h4>
+                    <p><?= e($step['text']) ?></p>
+                </li>
 <?php endforeach; ?>
-        </ul>
+            </ol>
+        </div>
     </div>
 </section>
 
