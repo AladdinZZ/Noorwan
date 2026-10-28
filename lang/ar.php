@@ -137,10 +137,10 @@ return [
                 'lead' => 'مقالة فلسفية في التملك والوجود.',
                 'summary' => 'يسائل هذا الكتاب علاقتنا بالتملك، ويذكّر بأن التوازن لا يتحقق إلا حين يبقى «الامتلاك» في خدمة «الكينونة»، وفقًا للأخلاق التي علّمها الأنبياء.',
             ],
-            // A VALIDER PAR MARWAN, à relire par un arabophone : annonce de la collection Zahra (titre en français).
-            // Zahra reste en latin, isolé comme {méta}Physique : l'orthographe arabe (زهرة ou زهراء) est à confirmer.
+            // A VALIDER PAR MARWAN, à relire par un arabophone : annonce de la collection Ikra.M (titre en français).
+            // Ikra.M reste en latin dans les trois langues, isolé comme {méta}Physique.
             'belles-manieres' => [
-                'sub' => "سلسلة \u{2066}Zahra\u{2069} · الجزء الأول",
+                'sub' => "سلسلة \u{2066}Ikra.M\u{2069} · الجزء الأول",
                 'lead' => 'كتاب تلوين للأطفال من 6 إلى 8 سنوات.',
                 'summary' => '15 درسًا أخلاقيًا حول اللطف والاحترام والامتنان، مع دليل للوالدين و3 مستويات من الصعوبة.',
             ],

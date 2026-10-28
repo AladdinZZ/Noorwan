@@ -9,7 +9,7 @@
 | Accueil | **En ligne.** v1 validée le 21/10/2026 (maquette `docs/maquette/maquette-accueil-v1.dc.html`), modifiée par le lot v1.1 du 27/10/2026 : introduction Solutions et section Édition **à valider**. Une v2 est prévue plus tard. |
 | Consulting | Section de l'accueil (5 expertises), pas de page propre. |
 | Solutions | **En ligne, textes à valider** (lot v1.1, 27/10/2026) : `solutions.php`. Reserva, Immobilier, Shopping et page Développeurs hors site. |
-| Édition | **En ligne.** Prestation (4 étapes **à valider**) et catalogue ; annonce Zahra **à valider** (27/10/2026). |
+| Édition | **En ligne.** Prestation (4 étapes **à valider**) et catalogue ; annonce Ikra.M **à valider** (27/10/2026). |
 | À propos | À rédiger (hors menu). |
 | Contact | En ligne. |
 | Mentions légales, Confidentialité, Cookies | En ligne, **à faire relire par un juriste**. Mentions légales en cours de mise à jour (encadré). |
@@ -142,7 +142,7 @@ Ordre : haut de page · trois univers · approche · Consulting · Solutions · 
   - {méta}Physique : Harmonie (tome 1), Lumière (tome 2), Vibration (tome 3, « À paraître · En cours de rédaction »).
   - Chemins de l'Âme : Le Mal, Le Bien, Être pour Avoir (disponibles aussi en anglais : Evil, Good, Being vs Having).
   - Bouton « Acheter sur Amazon » par livre paru ; liens vers la recherche Amazon « noorwan » tant que les ASIN manquent.
-- « Prochainement » (après les collections) : *Les belles manières du petit musulman*, Collection Zahra · Volume 1, étiquette « À paraître », sans bouton « Acheter ». Titre en français dans les trois langues ; « Zahra » reste en latin en arabe. Textes **à valider** : « Un livre de coloriage pour les enfants de 6 à 8 ans. » ; « 15 morales autour de la bienveillance, du respect et de la gratitude, un guide pour les parents et 3 niveaux de difficulté. »
+- « Prochainement » (après les collections) : *Les belles manières du petit musulman*, Collection Ikra.M · Volume 1, étiquette « À paraître », sans bouton « Acheter ». Titre en français dans les trois langues ; « Ikra.M » reste en latin dans les trois langues. Textes **à valider** : « Un livre de coloriage pour les enfants de 6 à 8 ans. » ; « 15 morales autour de la bienveillance, du respect et de la gratitude, un guide pour les parents et 3 niveaux de difficulté. »
 
 ### Contact et pages légales
 
