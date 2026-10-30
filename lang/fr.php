@@ -26,6 +26,7 @@ return [
         'solutions' => 'Solutions',
         'edition' => 'Édition',
         'contact' => 'Contact',
+        'account' => 'Connexion',
         'skip' => 'Aller au contenu',
         'home_label' => 'Noorwan, accueil',
         'main_label' => 'Navigation principale',
@@ -174,6 +175,7 @@ return [
     // Page Solutions : TEXTES A VALIDER PAR MARWAN. Le titre et l'introduction sont ceux de l'accueil (home.sol_h, home.sol_text).
     'solutions' => [
         'tag' => 'Noorwan Solutions',
+        'account_text' => 'Un seul compte pour tous les services Noorwan.',
         'btn_demo' => 'Demander une présentation',
         'approach_title' => 'Notre façon de faire',
         'principles' => [

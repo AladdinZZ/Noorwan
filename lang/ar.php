@@ -31,6 +31,7 @@ return [
         'solutions' => 'الحلول',
         'edition' => 'النشر',
         'contact' => 'اتصل بنا',
+        'account' => 'الدخول',
         // À relire.
         'skip' => 'الانتقال إلى المحتوى',
         'home_label' => 'نوروان، الصفحة الرئيسية',
@@ -186,6 +187,8 @@ return [
     // Le titre et l'introduction sont ceux de l'accueil (home.sol_h, home.sol_text).
     'solutions' => [
         'tag' => 'نوروان للحلول',
+        // À relire.
+        'account_text' => 'حساب واحد لجميع خدمات نوروان.',
         'btn_demo' => 'اطلب عرضًا تقديميًا',
         'approach_title' => 'طريقتنا في العمل',
         'principles' => [

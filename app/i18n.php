@@ -139,3 +139,11 @@ function absolute_url(string $page, string $lang): string
 {
     return rtrim((string) env('APP_URL', ''), '/') . '/' . PAGES[$page] . '?lang=' . $lang;
 }
+
+/**
+ * Lien vers le Compte Noorwan dans la langue courante, ou null tant que le lien est désactivé.
+ */
+function account_url(): ?string
+{
+    return COMPTE_LINK_ENABLED ? COMPTE_URL . '/?' . http_build_query(['lang' => lang()]) : null;
+}
