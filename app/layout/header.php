@@ -12,6 +12,10 @@ $navItems = [
     ['label' => 'nav.edition', 'href' => url('index', 'edition')],
     ['label' => 'nav.contact', 'href' => url('index', 'contact')],
 ];
+// « Connexion » ferme le menu, en style secondaire, quand le Compte Noorwan est en service.
+if (account_url() !== null) {
+    $navItems[] = ['label' => 'nav.account', 'href' => account_url(), 'class' => 'nav-account'];
+}
 
 $asset = static fn (string $path): string => $path . '?v=' . (string) @filemtime(ROOT_DIR . '/public/' . $path);
 ?>
@@ -41,7 +45,7 @@ $asset = static fn (string $path): string => $path . '?v=' . (string) @filemtime
         <a class="logo" href="<?= e(url('index')) ?>" aria-label="<?= t('nav.home_label') ?>" dir="ltr">noorwan<span class="logo-dot">.</span></a>
         <nav class="nav-desktop" aria-label="<?= t('nav.main_label') ?>">
 <?php foreach ($navItems as $item): ?>
-            <a href="<?= e($item['href']) ?>"><?= t($item['label']) ?></a>
+            <a href="<?= e($item['href']) ?>"<?= isset($item['class']) ? ' class="' . e($item['class']) . '"' : '' ?>><?= t($item['label']) ?></a>
 <?php endforeach; ?>
         </nav>
         <div class="header-tools">
@@ -61,7 +65,7 @@ $asset = static fn (string $path): string => $path . '?v=' . (string) @filemtime
     </div>
     <nav id="nav-mobile" class="nav-mobile wrap" aria-label="<?= t('nav.mobile_label') ?>">
 <?php foreach ($navItems as $item): ?>
-        <a href="<?= e($item['href']) ?>"><?= t($item['label']) ?></a>
+        <a href="<?= e($item['href']) ?>"<?= isset($item['class']) ? ' class="' . e($item['class']) . '"' : '' ?>><?= t($item['label']) ?></a>
 <?php endforeach; ?>
     </nav>
 </header>

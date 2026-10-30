@@ -22,6 +22,9 @@ require ROOT_DIR . '/app/layout/header.php';
         <p class="tag"><?= t('solutions.tag') ?></p>
         <h1 id="page-title"><?= t('home.sol_h') ?></h1>
         <p class="page-lead"><?= t('home.sol_text') ?></p>
+<?php if (account_url() !== null): ?>
+        <p class="page-account"><?= t('solutions.account_text') ?> <a href="<?= e(account_url()) ?>"><?= t('nav.account') ?> <span aria-hidden="true"><?= t('common.arrow') ?></span></a></p>
+<?php endif; ?>
         <div class="actions">
             <a class="btn btn-dark" href="<?= e($contactSolutions) ?>"><?= t('solutions.btn_demo') ?> <span aria-hidden="true"><?= t('common.arrow') ?></span></a>
         </div>

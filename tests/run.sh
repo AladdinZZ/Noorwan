@@ -211,6 +211,55 @@ for page in mentions-legales.php confidentialite.php cookies.php; do
     done
 done
 
+echo "2 undecies. Lien « Connexion » vers le Compte Noorwan"
+# Rendu hors serveur, constantes fixées avant l'amorçage : les deux états se testent sans toucher au .env.
+# render PAGE LANGUE ACTIVÉ [ADRESSE]
+render() {
+    "$PHP" -r '[, $page, $lang, $enabled, $url] = $argv + [4 => ""];
+        define("COMPTE_LINK_ENABLED", $enabled === "true");
+        if ($url !== "") { define("COMPTE_URL", $url); }
+        $_GET["lang"] = $lang;
+        require "public/" . $page;' "$@" 2>&1
+}
+COMPTE_DEFAULT="https://compte.noorwan.com"
+for lang in fr en ar; do
+    for page in index.php solutions.php edition.php; do
+        html=$(render "$page" "$lang" false)
+        expect "désactivé : aucun lien vers le Compte, $page ($lang)" 0 "$(grep -cE 'compte\.noorwan\.com|nav-account|page-account' <<< "$html")"
+    done
+
+    label=$(by_lang "$lang" "Connexion" "Sign in" "الدخول")
+    href="$COMPTE_DEFAULT/?lang=$lang"
+    link="<a href=\"$href\" class=\"nav-account\">$label</a>"
+    html=$(render solutions.php "$lang" true)
+    expect "activé : dernier élément du menu, « $label » ($lang)" "$link" \
+        "$(sed -n '/<nav class="nav-desktop"/,/<\/nav>/p' <<< "$html" | grep -o '<a [^>]*>[^<]*</a>' | tail -n 1)"
+    expect "activé : dernier élément du menu mobile ($lang)" "$link" \
+        "$(sed -n '/<nav id="nav-mobile"/,/<\/nav>/p' <<< "$html" | grep -o '<a [^>]*>[^<]*</a>' | tail -n 1)"
+    expect "activé : pied de page ($lang)" "$link" \
+        "$(sed -n '/<nav class="footer-nav"/,/<\/nav>/p' <<< "$html" | grep -o '<a [^>]*>[^<]*</a>' | tail -n 1)"
+    phrase=$(by_lang "$lang" "Un seul compte pour tous les services Noorwan." "One account for all Noorwan services." "حساب واحد لجميع خدمات نوروان.")
+    account=$(sed -n '/<section class="page-hero/,/<\/section>/p' <<< "$html" | grep 'class="page-account"')
+    grep -qF "<p class=\"page-account\">$phrase <a href=\"$href\">$label " <<< "$account" \
+        && pass "activé : page Solutions, phrase et lien sous l'introduction ($lang)" || fail "activé : phrase du Compte sur la page Solutions ($lang) : $account"
+    expect "activé : 4 liens sur la page Solutions, tous dans la langue ($lang)" "4|4" \
+        "$(grep -c 'compte\.noorwan\.com' <<< "$html")|$(grep -c "href=\"$href\"" <<< "$html")"
+    if grep -q $'—' <<< "$html"; then fail "activé : tiret cadratin dans la page ($lang)"; else pass "activé : aucun tiret cadratin ($lang)"; fi
+    html=$(render index.php "$lang" true)
+    expect "activé : accueil, menu, menu mobile et pied de page, sans phrase ($lang)" "3|0" \
+        "$(grep -c "href=\"$href\" class=\"nav-account\"" <<< "$html")|$(grep -c 'page-account' <<< "$html")"
+done
+expect "adresse du Compte modifiable sans toucher aux vues" 4 \
+    "$(render solutions.php en true https://compte.example.invalid | grep -c 'href="https://compte.example.invalid/?lang=en"')"
+# Site servi : l'état suit COMPTE_LINK_ENABLED (masqué par défaut).
+served_links=$(curl -s "$BASE_URL/solutions.php?lang=fr" | grep -c 'nav-account\|page-account')
+if [[ "$(config COMPTE_LINK_ENABLED false)" == "true" ]]; then
+    expect "site servi : lien affiché (COMPTE_LINK_ENABLED=true)" 4 "$served_links"
+else
+    expect "site servi : lien masqué (COMPTE_LINK_ENABLED désactivé)" 0 "$served_links"
+fi
+grep -q '^COMPTE_LINK_ENABLED=false$' .env.example && pass ".env.example : lien désactivé par défaut" || fail ".env.example : COMPTE_LINK_ENABLED=false absent"
+
 echo "3. Formulaire de contact"
 rm -f storage/ratelimit/contact-*.log
 sql "DELETE FROM contact_requests WHERE email = '$TEST_EMAIL'"

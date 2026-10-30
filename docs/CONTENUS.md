@@ -14,7 +14,7 @@
 | Contact | En ligne. |
 | Mentions légales, Confidentialité, Cookies | En ligne, **à faire relire par un juriste**. Mentions légales en cours de mise à jour (encadré). |
 
-L'état réel du site est décrit dans « État du site au 27/10/2026 », en fin de document. Les sections intermédiaires sont l'historique des décisions.
+L'état réel du site est décrit dans « État du site au 27/10/2026 » (complété le 30/10/2026 par le lien « Connexion »), en fin de document. Les sections intermédiaires sont l'historique des décisions.
 
 ## Cadrage acté le 21/10/2026
 
@@ -100,8 +100,9 @@ Textes français tels qu'en ligne, sources dans `lang/fr.php` (EN dans `lang/en.
 ### Commun
 
 - Menu : Consulting (accueil), Solutions (`solutions.php`), Édition (accueil), Contact (accueil). « À propos » hors menu.
+- Lien « Connexion » (EN « Sign in », AR « الدخول ») vers le Compte Noorwan, `https://compte.noorwan.com/?lang=` suivi de la langue courante (Conv-004, 30/10/2026) : dernier élément du menu, en style secondaire, et dans le pied de page. **Masqué** tant que `COMPTE_LINK_ENABLED` vaut `false` (valeur par défaut) ; Marwan le passe à `true` sur le VPS après la mise en ligne du Compte. Adresse réglable par `COMPTE_URL` dans `.env`.
 - Choix de la langue : un bouton « FR / EN / AR » qui ouvre la liste Français, English, العربية.
-- Pied de page : « Des idées pour des solutions concrètes. », liens légaux (Mentions légales, Confidentialité, Cookies).
+- Pied de page : « Des idées pour des solutions concrètes. », menu (avec « Connexion » quand le lien est activé), liens légaux (Mentions légales, Confidentialité, Cookies).
 - Bandeau de contact en bas de chaque page : « Un projet en tête ? » ; « Conseil, démonstration d'une solution ou publication d'un livre : échangeons sur vos objectifs. » ; bouton « Parlons de votre projet » (« Demander une présentation » sur la page Solutions).
 
 ### Accueil
@@ -123,6 +124,7 @@ Ordre : haut de page · trois univers · approche · Consulting · Solutions · 
 ### Page Solutions (`solutions.php`) : textes à valider
 
 - En-tête : étiquette « Noorwan Solutions », titre et introduction de la section Solutions de l'accueil, bouton [Demander une présentation] (formulaire, univers Solutions présélectionné).
+- Sous l'introduction, quand le lien « Connexion » est activé : « Un seul compte pour tous les services Noorwan. » suivi du lien « Connexion » (EN « One account for all Noorwan services. », AR « حساب واحد لجميع خدمات نوروان. », à relire par un arabophone).
 - « Notre façon de faire » :
   - Pensés pour le téléphone d'abord : « Chaque écran est conçu pour le téléphone, puis adapté à l'ordinateur. »
   - Trois langues, dont l'arabe : « Français, anglais et arabe, avec un affichage de droite à gauche pour l'arabe. »

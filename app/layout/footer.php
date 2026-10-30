@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-// Pied de page commun : logo, navigation reprise de l'en-tête ($navItems), liens légaux.
+// Pied de page commun : logo, navigation reprise de l'en-tête ($navItems, « Connexion » compris), liens légaux.
 ?>
 </main>
 <footer class="site-footer">
@@ -14,7 +14,7 @@ declare(strict_types=1);
             </div>
             <nav class="footer-nav" aria-label="<?= t('nav.footer_label') ?>">
 <?php foreach ($navItems as $item): ?>
-                <a href="<?= e($item['href']) ?>"><?= t($item['label']) ?></a>
+                <a href="<?= e($item['href']) ?>"<?= isset($item['class']) ? ' class="' . e($item['class']) . '"' : '' ?>><?= t($item['label']) ?></a>
 <?php endforeach; ?>
             </nav>
         </div>

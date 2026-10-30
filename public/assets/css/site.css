@@ -419,6 +419,17 @@ main:focus {
     color: var(--text-3);
 }
 
+/* « Connexion » : dernier élément du menu, en retrait (gris, séparé par un filet). */
+.nav-desktop .nav-account {
+    padding-inline-start: 28px;
+    border-inline-start: 1px solid var(--line);
+    color: var(--text-3);
+}
+
+.nav-desktop .nav-account:hover {
+    color: var(--ink);
+}
+
 .header-tools {
     display: flex;
     align-items: center;
@@ -571,6 +582,13 @@ main:focus {
     font-size: 20px;
     font-weight: 600;
     letter-spacing: var(--ls-h);
+}
+
+.nav-mobile .nav-account {
+    color: var(--text-3);
+    font-size: 16px;
+    font-weight: 400;
+    letter-spacing: normal;
 }
 
 @media (min-width: 881px) {
@@ -1164,6 +1182,22 @@ main:focus {
     margin-block-start: 22px;
     color: var(--text-2);
     font-size: clamp(17px, 1.6vw, 20px);
+}
+
+.page-account {
+    margin-block-start: 14px;
+    color: var(--text-3);
+    font-size: 15px;
+}
+
+.page-account a {
+    color: var(--ink);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.page-account a:hover {
+    text-decoration: underline;
 }
 
 .page-hero .actions {
