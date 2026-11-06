@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 require __DIR__ . '/../app/bootstrap.php';
 
-// Page Contact : formulaire réel, enregistré en base. Aucun e-mail envoyé en v1.
+// Page Contact, maquette A épurée (M-56) : formulaire réel, enregistré en base, sur un panneau blanc.
+// Aucun e-mail envoyé.
 current_page('contact');
 $meta = ['title' => raw('meta.contact_title'), 'description' => raw('meta.contact_description')];
 
@@ -60,13 +61,14 @@ require ROOT_DIR . '/app/layout/header.php';
 ?>
 <section class="page-hero" aria-labelledby="page-title">
     <div class="wrap">
-        <p class="eyebrow"><?= t('contact.tag') ?></p>
-        <h1 id="page-title"><?= t('contact.title') ?></h1>
-        <p class="page-lead"><?= t('contact.lead') ?></p>
+        <p class="eyebrow eyebrow-muted"><?= t('contact.tag') ?></p>
+        <h1 id="page-title" class="h1 h1-page"><?= t('contact.title') ?></h1>
+        <p class="lead"><?= t('contact.lead') ?></p>
+        <p class="cta-mail"><a href="mailto:<?= e(CONTACT_EMAIL) ?>" dir="ltr"><?= e(CONTACT_EMAIL) ?></a></p>
     </div>
 </section>
 
-<section class="section contact-section">
+<section class="section section-mist contact-section">
     <div class="wrap contact-wrap">
 <?php if ($sent): ?>
         <div class="alert alert-success" role="status" tabindex="-1" data-autofocus>
