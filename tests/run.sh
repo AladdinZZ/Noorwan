@@ -179,30 +179,29 @@ for lang in fr en ar; do
 done
 expect "couverture_belles_manieres.webp servie" 200 "$(curl -s -o /dev/null -w '%{http_code}' "$BASE_URL/assets/images/covers/couverture_belles_manieres.webp")"
 
-echo "2 nonies. Solutions : accueil et page"
+echo "2 nonies. Solutions : produits sur l'accueil et sur la page"
 grep -q '/solutions.php?lang=fr</loc>' <<< "$sitemap" && pass "page Solutions dans le plan du site" || fail "page Solutions absente du plan du site"
 for lang in fr en ar; do
     home=$(curl -s "$BASE_URL/?lang=$lang")
     nav=$(sed -n '/<nav class="nav-desktop"/,/<\/nav>/p' <<< "$home")
     grep -q "href=\"solutions.php?lang=$lang\">$(by_lang "$lang" "Solutions" "Solutions" "الحلول")<" <<< "$nav" && pass "menu : Solutions mène à solutions.php ($lang)" || fail "menu : lien Solutions ($lang)"
-    section=$(sed -n '/<section id="solutions"/,/<\/section>/p' <<< "$home")
-    intro=$(by_lang "$lang" "Des logiciels pensés pour les entreprises" "Software designed for businesses" "برمجيات مصممة للمؤسسات")
-    grep -q "<p class=\"muted\">$intro" <<< "$section" && pass "accueil : introduction Solutions ($lang)" || fail "accueil : introduction Solutions absente ($lang)"
-    grep -q "class=\"btn btn-text\" href=\"solutions.php?lang=$lang\">$(by_lang "$lang" "Découvrir nos solutions" "Discover our solutions" "اكتشف حلولنا")" <<< "$section" \
-        && pass "accueil : lien « Découvrir nos solutions » ($lang)" || fail "accueil : lien vers la page Solutions ($lang)"
-    expect "accueil : trois cartes, dont deux confidentielles ($lang)" "3|2" \
-        "$(grep -c '<article class="card solution">' <<< "$section")|$(grep -c 'class="badge-confidential"' <<< "$section")"
+    for page in "" solutions.php; do
+        html=$(curl -s "$BASE_URL/$page?lang=$lang")
+        expect "produits Reserva, Inteek, Noor, Édition, un seul confidentiel (${page:-index}, $lang)" "reserva|inteek|noor|edition|1" \
+            "$(grep -oE '<article id="product-[a-z]+"' <<< "$html" | sed -E 's/.*product-([a-z]+)"/\1/' | paste -sd '|' -)|$(grep -c 'class="badge-confidential"' <<< "$html")"
+        grep -q 'id="product-noor"' <<< "$html" && sed -n '/id="product-noor"/,/<\/article>/p' <<< "$html" | grep -q 'badge-confidential' \
+            && pass "Noor marqué « Confidentiel » (${page:-index}, $lang)" || fail "Noor sans mention Confidentiel (${page:-index}, $lang)"
+        expect "Immobilier et Shopping « bientôt » (${page:-index}, $lang)" 2 "$(sed -n '/<div class="soon-row">/,/<\/ul>/p' <<< "$html" | grep -c '<li>')"
+    done
 
     page=$(curl -s "$BASE_URL/solutions.php?lang=$lang")
     grep -q '<!-- TEXTES A VALIDER PAR MARWAN -->' <<< "$page" && pass "page Solutions : textes marqués à valider ($lang)" || fail "page Solutions : commentaire de validation absent ($lang)"
-    grep -q "<h1 id=\"page-title\">$(by_lang "$lang" "Des outils conçus pour les entreprises" "Tools built for businesses" "أدوات مصممة للمؤسسات")</h1>" <<< "$page" \
+    grep -q "<h1 id=\"page-title\" class=\"h1 h1-page\">$(by_lang "$lang" "Des outils conçus pour les entreprises" "Tools built for businesses" "أدوات مصممة للمؤسسات")</h1>" <<< "$page" \
         && pass "page Solutions : titre ($lang)" || fail "page Solutions : titre ($lang)"
     expect "page Solutions : 3 principes, 5 modules d'Inteek ($lang)" "3|5" \
-        "$(sed -n '/aria-labelledby="approach-title"/,/<\/section>/p' <<< "$page" | grep -c '<li class="card">')|$(sed -n '/class="inteek-modules"/,/<\/ul>/p' <<< "$page" | grep -c '<li>')"
-    others=$(sed -n '/aria-labelledby="others-title"/,/<\/section>/p' <<< "$page")
-    expect "page Solutions : OnePay et Plateforme IA confidentiels, sur rendez-vous ($lang)" "2|2" \
-        "$(grep -c 'class="badge-confidential"' <<< "$others")|$(grep -c "<p>$(by_lang "$lang" "Présentation sur rendez-vous." "Presentation by appointment." "العرض بموعد مسبق.")</p>" <<< "$others")"
-    expect "page Solutions : « Demander une présentation » vers le formulaire, univers Solutions ($lang)" 2 \
+        "$(sed -n '/<ol class="principles">/,/<\/ol>/p' <<< "$page" | grep -c '<li>')|$(sed -n '/<ul class="modules">/,/<\/ul>/p' <<< "$page" | grep -c '<li>')"
+    grep -q "href=\"#inteek\"" <<< "$page" && pass "page Solutions : carte Inteek mène à sa présentation ($lang)" || fail "page Solutions : lien vers #inteek ($lang)"
+    expect "page Solutions : « Demander une présentation » vers le formulaire, univers Solutions ($lang)" 5 \
         "$(grep -c "href=\"contact.php?lang=$lang&amp;universe=solutions\">$(by_lang "$lang" "Demander une présentation" "Request a presentation" "اطلب عرضًا تقديميًا")" <<< "$page")"
     # Ni prix ni chiffres de clients : aucun montant ni symbole monétaire sur la page.
     if sed -n '/<main/,/<\/main>/p' <<< "$page" | grep -qiE '[0-9] ?(€|\$|FDJ|USD|EUR)|€|prix|price|clients'; then fail "page Solutions : prix ou clients cités ($lang)"; else pass "page Solutions : ni prix ni clients ($lang)"; fi

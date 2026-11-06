@@ -190,7 +190,6 @@ return [
         'inteek_text' => 'Vous commencez par les modules qui comptent pour vous et ajoutez les autres quand le besoin se présente.',
         'modules_title' => 'Les modules',
         'modules' => ['Recrutement et base de CV', 'Enquêtes auprès des équipes', 'Congés', 'Pointage', 'Dossiers du personnel'],
-        'others_title' => 'Autres solutions',
         'on_request' => 'Présentation sur rendez-vous.',
     ],
     'contact' => [

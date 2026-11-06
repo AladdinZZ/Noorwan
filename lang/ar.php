@@ -205,7 +205,6 @@ return [
         'inteek_text' => 'ابدأ بالوحدات التي تهمك، وأضف غيرها عند الحاجة.',
         'modules_title' => 'الوحدات',
         'modules' => ['التوظيف وقاعدة السير الذاتية', 'استطلاعات آراء الفرق', 'الإجازات', 'تسجيل الحضور', 'ملفات الموظفين'],
-        'others_title' => 'حلول أخرى',
         'on_request' => 'العرض بموعد مسبق.',
     ],
     // Formulaire de contact : traduction à relire par un arabophone.

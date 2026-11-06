@@ -190,7 +190,6 @@ return [
         'inteek_text' => 'Start with the modules that matter to you and add the others when the need arises.',
         'modules_title' => 'Modules',
         'modules' => ['Recruitment and CV database', 'Team surveys', 'Leave', 'Time tracking', 'Personnel files'],
-        'others_title' => 'Other solutions',
         'on_request' => 'Presentation by appointment.',
     ],
     'contact' => [
