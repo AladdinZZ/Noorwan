@@ -10,6 +10,9 @@ const STORAGE_DIR = ROOT_DIR . '/storage';
 // Version des textes de consentement du formulaire : à changer dès que leur libellé change.
 const CONSENT_TEXT_VERSION = '2026-10-21';
 
+// Adresse de contact publique du groupe, affichée sous le bandeau « Un projet en tête ? ».
+const CONTACT_EMAIL = 'contact@noorwan.com';
+
 /**
  * Lit le fichier .env une fois (clé=valeur, lignes # ignorées) et renvoie la valeur demandée.
  */

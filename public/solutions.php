@@ -10,8 +10,8 @@ current_page('solutions');
 $meta = ['title' => raw('meta.solutions_title'), 'description' => raw('meta.solutions_description')];
 
 $contactSolutions = url('contact', '', ['universe' => 'solutions']);
-$solutions = tl('home.solutions');
-$inteek = array_column($solutions, null, 'name')['Inteek'];
+$solutions = tl('home.products');
+$inteek = $solutions['inteek'];
 $confidential = array_filter($solutions, static fn (array $solution): bool => $solution['confidential']);
 
 require ROOT_DIR . '/app/layout/header.php';

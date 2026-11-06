@@ -36,7 +36,7 @@
     });
 
     // Passage en largeur bureau : le menu mobile se referme.
-    var desktop = window.matchMedia('(min-width: 881px)');
+    var desktop = window.matchMedia('(min-width: 834px)');
     var onChange = function (event) {
         if (event.matches) {
             setOpen(false);

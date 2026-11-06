@@ -44,7 +44,8 @@ sql() {
 sql_site() {
     MYSQL_PWD="$DB_PASS" "$MYSQL" -h"$DB_HOST" -P"$DB_PORT" -u"$DB_USER" -N -B "$DB_NAME" -e "$1" 2>/dev/null
 }
-token() { curl -s "$BASE_URL/contact.php?lang=fr" | grep -o 'name="token" value="[^"]*"' | sed -e 's/.*value="//' -e 's/"$//'; }
+# Jeton du formulaire de contact (la page peut aussi contenir celui du bandeau de consentement).
+token() { curl -s "$BASE_URL/contact.php?lang=fr" | sed -n '/<form class="contact-form"/,/<\/form>/p' | grep -o 'name="token" value="[^"]*"' | head -n 1 | sed -e 's/.*value="//' -e 's/"$//'; }
 # Textes attendus par langue (bash 3.2 de macOS : pas de tableau associatif). by_lang LANGUE FR EN AR
 by_lang() { case "$1" in fr) echo "$2" ;; en) echo "$3" ;; ar) echo "$4" ;; esac; }
 
@@ -133,28 +134,33 @@ for lang in fr en ar; do
     expect "langue courante marquée ($lang)" "$lang" "$(grep -oE 'lang="[a-z]+" hreflang="[a-z]+" aria-current="true"' <<< "$header" | sed -E 's/lang="([a-z]+)".*/\1/')"
 done
 
-echo "2 sexies. Haut de page de l'accueil (rien de retiré en le réduisant)"
+echo "2 sexies. Accueil, maquette A : haut de page et trois univers"
 for lang in fr en ar; do
-    hero=$(curl -s "$BASE_URL/?lang=$lang" | sed -n '/<section id="top" class="hero"/,/<\/section>/p')
-    expect "haut de page : titre, accroche, 2 boutons, devise ($lang)" "1|1|2|1" \
-        "$(grep -c '<h1 id="hero-title">' <<< "$hero")|$(grep -c 'class="hero-lead"' <<< "$hero")|$(grep -c 'class="btn ' <<< "$hero")|$(grep -c 'class="hero-motto"' <<< "$hero")"
+    home=$(curl -s "$BASE_URL/?lang=$lang")
+    hero=$(sed -n '/<section id="top" class="screen hero"/,/<\/section>/p' <<< "$home")
+    expect "haut de page : titre en deux temps, accroche, 2 liens, visuel ($lang)" "1|1|1|2|1" \
+        "$(grep -c '<h1 id="hero-title" class="h1">' <<< "$hero")|$(grep -c 'class="h1-soft"' <<< "$hero")|$(grep -c 'class="lead"' <<< "$hero")|$(grep -c 'class="more"' <<< "$hero")|$(grep -c 'class="hero-visual"' <<< "$hero")"
+    motto=$(by_lang "$lang" "Une vision claire." "A clear vision." "رؤية واضحة.")
+    grep -qF "class=\"h1\">$motto <span" <<< "$hero" && pass "haut de page : « $motto » ($lang)" || fail "haut de page : devise ($lang)"
+    expect "trois univers numérotés, un écran chacun ($lang)" "01|02|03" \
+        "$(grep -o '<p class="num" aria-hidden="true">0[0-9]</p>' <<< "$home" | sed -E 's/.*>(0[0-9])<.*/\1/' | paste -sd '|' -)"
+    expect "cinq expertises du Consulting ($lang)" 5 "$(sed -n '/<ul class="expertises">/,/<\/ul>/p' <<< "$home" | grep -c '<li>')"
+    expect "approche : quatre étapes ($lang)" 4 "$(sed -n '/<ol class="steps">/,/<\/ol>/p' <<< "$home" | grep -c '<li>')"
+    grep -q 'id="contact" class="screen screen-mist cta"' <<< "$home" && pass "bandeau contact en bas de l'accueil ($lang)" || fail "bandeau contact ($lang)"
 done
 
-echo "2 septies. Accueil : section Édition"
+echo "2 septies. Accueil : Édition et textes à fournir"
 for lang in fr en ar; do
-    tag=$(by_lang "$lang" "Édition" "Publishing" "النشر")
-    section=$(curl -s "$BASE_URL/?lang=$lang" | sed -n '/<section id="edition"/,/<\/section>/p')
-    grep -q "<p class=\"tag\">$tag</p>" <<< "$section" && pass "petit titre « $tag » ($lang)" || fail "petit titre de la section Édition ($lang)"
-    if grep -q 'class="cover' <<< "$section"; then fail "couvertures encore sur l'accueil ($lang)"; else pass "plus de couvertures sur l'accueil ($lang)"; fi
-    expect "quatre étapes de la prestation ($lang)" 4 "$(grep -c '<li class="card">' <<< "$section")"
-    # Mêmes chaînes que la page Édition : le titre du bloc et la première étape s'y retrouvent à l'identique.
-    edition=$(curl -s "$BASE_URL/edition.php?lang=$lang")
-    for marker in "$(grep -o '<h3>[^<]*</h3>' <<< "$section" | head -n 1 | sed -e 's/<h3>//' -e 's/<\/h3>//')" \
-                  "$(grep -o '<h4>[^<]*</h4>' <<< "$section" | head -n 1 | sed -e 's/<h4>//' -e 's/<\/h4>//')"; do
-        [[ -n "$marker" ]] && grep -qF "$marker" <<< "$edition" && pass "texte repris de la page Édition : $marker ($lang)" || fail "texte absent de la page Édition : « $marker » ($lang)"
-    done
-    grep -q "href=\"edition.php?lang=$lang\"" <<< "$section" && pass "lien vers le catalogue ($lang)" || fail "lien vers le catalogue absent ($lang)"
-    expect "bouton « Publier votre livre » ($lang)" 1 "$(grep -c 'class="btn btn-dark"' <<< "$section")"
+    home=$(curl -s "$BASE_URL/?lang=$lang")
+    section=$(sed -n '/<section id="edition" class="screen tone-edition"/,/<\/section>/p' <<< "$home")
+    tag=$(by_lang "$lang" "Noorwan Édition" "Noorwan Publishing" "نوروان للنشر")
+    grep -q "<p class=\"eyebrow\">$tag</p>" <<< "$section" && pass "petit titre « $tag » ($lang)" || fail "petit titre de la section Édition ($lang)"
+    expect "trilogie : deux couvertures et un tome à paraître ($lang)" "2|1" \
+        "$(grep -c '<img class="cover"' <<< "$section")|$(grep -c 'class="cover-soon"' <<< "$section")"
+    grep -q "href=\"edition.php?lang=$lang#catalogue\"" <<< "$section" && pass "lien vers le catalogue ($lang)" || fail "lien vers le catalogue absent ($lang)"
+    grep -q "href=\"contact.php?lang=$lang&amp;universe=edition\"" <<< "$section" && pass "« Publier votre livre » vers le formulaire ($lang)" || fail "lien Publier votre livre ($lang)"
+    # Textes manquants : visibles, surlignés, jamais inventés.
+    expect "accueil : textes à fournir surlignés (phrase d'auteur, Pourquoi Noorwan) ($lang)" 2 "$(grep -c '<mark class="todo">\[À FOURNIR : ' <<< "$home")"
 done
 
 echo "2 octies. Page Édition : livre à paraître"
@@ -212,12 +218,15 @@ for page in mentions-legales.php confidentialite.php cookies.php; do
 done
 
 echo "2 undecies. Lien « Connexion » vers le Compte Noorwan"
-# Rendu hors serveur, constantes fixées avant l'amorçage : les deux états se testent sans toucher au .env.
-# render PAGE LANGUE ACTIVÉ [ADRESSE]
+# Rendu hors serveur, constantes fixées avant l'amorçage : les états se testent sans toucher au .env.
+# render PAGE LANGUE ACTIVÉ [ADRESSE] [GTM_ID] [CHOIX]
+# Écosystème sans adresse : les pages rendues ne dépendent pas des réglages du .env local.
 render() {
-    "$PHP" -r '[, $page, $lang, $enabled, $url] = $argv + [4 => ""];
+    ECOSYSTEM_ACCOUNT_URL= ECOSYSTEM_RESERVA_URL= ECOSYSTEM_INTEEK_URL= "$PHP" -r '[, $page, $lang, $enabled, $url, $gtm, $consent] = $argv + [4 => "", 5 => "", 6 => ""];
         define("COMPTE_LINK_ENABLED", $enabled === "true");
         if ($url !== "") { define("COMPTE_URL", $url); }
+        define("GTM_ID", $gtm);
+        if ($consent !== "") { $_COOKIE["nw_consent"] = $consent; }
         $_GET["lang"] = $lang;
         require "public/" . $page;' "$@" 2>&1
 }
@@ -225,19 +234,18 @@ COMPTE_DEFAULT="https://compte.noorwan.com"
 for lang in fr en ar; do
     for page in index.php solutions.php edition.php; do
         html=$(render "$page" "$lang" false)
-        expect "désactivé : aucun lien vers le Compte, $page ($lang)" 0 "$(grep -cE 'compte\.noorwan\.com|nav-account|page-account' <<< "$html")"
+        expect "désactivé : aucun lien vers le Compte, $page ($lang)" 0 "$(grep -cE 'compte\.noorwan\.com|nav-account|btn-account|page-account' <<< "$html")"
     done
 
     label=$(by_lang "$lang" "Connexion" "Sign in" "الدخول")
     href="$COMPTE_DEFAULT/?lang=$lang"
-    link="<a href=\"$href\" class=\"nav-account\">$label</a>"
     html=$(render solutions.php "$lang" true)
-    expect "activé : dernier élément du menu, « $label » ($lang)" "$link" \
-        "$(sed -n '/<nav class="nav-desktop"/,/<\/nav>/p' <<< "$html" | grep -o '<a [^>]*>[^<]*</a>' | tail -n 1)"
-    expect "activé : dernier élément du menu mobile ($lang)" "$link" \
+    expect "activé : pastille « $label » dans la barre ($lang)" "<a class=\"btn-account\" href=\"$href\">$label</a>" \
+        "$(sed -n '/<div class="header-tools">/,/<details/p' <<< "$html" | grep -o '<a [^>]*>[^<]*</a>')"
+    expect "activé : dernier élément du menu mobile ($lang)" "<a href=\"$href\" class=\"nav-account\">$label</a>" \
         "$(sed -n '/<nav id="nav-mobile"/,/<\/nav>/p' <<< "$html" | grep -o '<a [^>]*>[^<]*</a>' | tail -n 1)"
-    expect "activé : pied de page ($lang)" "$link" \
-        "$(sed -n '/<nav class="footer-nav"/,/<\/nav>/p' <<< "$html" | grep -o '<a [^>]*>[^<]*</a>' | tail -n 1)"
+    expect "activé : colonne Noorwan du pied de page ($lang)" "<a href=\"$href\" class=\"nav-account\">$label</a>" \
+        "$(sed -n '/<nav class="footer-cols"/,/<\/nav>/p' <<< "$html" | grep -o '<a [^>]*>[^<]*</a>' | tail -n 1)"
     phrase=$(by_lang "$lang" "Un seul compte pour tous les services Noorwan." "One account for all Noorwan services." "حساب واحد لجميع خدمات نوروان.")
     account=$(sed -n '/<section class="page-hero/,/<\/section>/p' <<< "$html" | grep 'class="page-account"')
     grep -qF "<p class=\"page-account\">$phrase <a href=\"$href\">$label " <<< "$account" \
@@ -246,19 +254,29 @@ for lang in fr en ar; do
         "$(grep -c 'compte\.noorwan\.com' <<< "$html")|$(grep -c "href=\"$href\"" <<< "$html")"
     if grep -q $'—' <<< "$html"; then fail "activé : tiret cadratin dans la page ($lang)"; else pass "activé : aucun tiret cadratin ($lang)"; fi
     html=$(render index.php "$lang" true)
-    expect "activé : accueil, menu, menu mobile et pied de page, sans phrase ($lang)" "3|0" \
-        "$(grep -c "href=\"$href\" class=\"nav-account\"" <<< "$html")|$(grep -c 'page-account' <<< "$html")"
+    expect "activé : accueil, barre, menu mobile et pied de page, sans phrase ($lang)" "3|0" \
+        "$(grep -c "href=\"$href\"" <<< "$html")|$(grep -c 'page-account' <<< "$html")"
 done
 expect "adresse du Compte modifiable sans toucher aux vues" 4 \
     "$(render solutions.php en true https://compte.example.invalid | grep -c 'href="https://compte.example.invalid/?lang=en"')"
 # Site servi : l'état suit COMPTE_LINK_ENABLED (masqué par défaut).
-served_links=$(curl -s "$BASE_URL/solutions.php?lang=fr" | grep -c 'nav-account\|page-account')
+served_links=$(curl -s "$BASE_URL/solutions.php?lang=fr" | grep -c 'nav-account\|btn-account\|page-account')
 if [[ "$(config COMPTE_LINK_ENABLED false)" == "true" ]]; then
     expect "site servi : lien affiché (COMPTE_LINK_ENABLED=true)" 4 "$served_links"
 else
     expect "site servi : lien masqué (COMPTE_LINK_ENABLED désactivé)" 0 "$served_links"
 fi
 grep -q '^COMPTE_LINK_ENABLED=false$' .env.example && pass ".env.example : lien désactivé par défaut" || fail ".env.example : COMPTE_LINK_ENABLED=false absent"
+
+echo "2 sexdecies. OnePay absent de toutes les pages"
+for page in "" solutions.php edition.php contact.php mentions-legales.php confidentialite.php cookies.php; do
+    for lang in fr en ar; do
+        if curl -s "$BASE_URL/$page?lang=$lang" | grep -qi 'onepay'; then fail "OnePay présent : /${page:-index} ($lang)"; else pass "OnePay absent : /${page:-index} ($lang)"; fi
+    done
+done
+for lang in fr en ar; do
+    if render index.php "$lang" true "" "$GTM_TEST" granted | grep -qi 'onepay'; then fail "OnePay présent, tout activé ($lang)"; else pass "OnePay absent, tout activé ($lang)"; fi
+done
 
 echo "3. Formulaire de contact"
 rm -f storage/ratelimit/contact-*.log
@@ -375,7 +393,7 @@ else
     pass "aucun tiret cadratin"
 fi
 # CLAUDE.md énonce la règle « jamais djiboutien » : il est exclu de cette recherche.
-for word in djiboutien PromptEspace "Labo Tech" CEREBRO Reserva googleapis gstatic; do
+for word in djiboutien PromptEspace "Labo Tech" CEREBRO OnePay googleapis gstatic; do
     if grep -rni "$word" app bin lang public database >/dev/null 2>&1; then
         fail "« $word » présent :"; grep -rni "$word" app bin lang public database
     else

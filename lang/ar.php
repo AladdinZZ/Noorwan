@@ -46,6 +46,11 @@ return [
         'copy' => '© :year Noorwan',
         'arrow' => '←',
         'arrow_up' => '↖',
+        'list_sep' => '، ',
+        'colon' => ': ',
+        // À relire.
+        'learn_more' => 'اعرف المزيد',
+        'brand' => 'نوروان',
     ],
     'legal_nav' => [
         'mentions' => 'الإشعارات القانونية',
@@ -53,20 +58,20 @@ return [
         'cookies' => 'ملفات تعريف الارتباط',
     ],
     'home' => [
-        'eyebrow' => 'نوروان · رؤية وإبداع',
-        'title' => 'أفكار من أجل حلول ملموسة',
         'lead' => 'استشارات، وحلول رقمية، ونشر: ثلاثة مجالات متكاملة لتحويل الأفكار إلى إنجازات مفيدة.',
         'btn_explore' => 'اكتشف خبراتنا',
         'btn_talk' => 'لنتحدث عن مشروعك',
         'motto' => 'رؤية واضحة. خطوات ملموسة.',
-        'univ_eyebrow' => 'مجالاتنا',
-        'univ_h' => 'ثلاثة مجالات، ومعيار واحد',
         'univers' => [
             'consulting' => ['title' => 'الاستشارات', 'text' => 'توضيح موقعك، وترتيب أولوياتك، وقيادة مشاريعك الرقمية: الاستراتيجية، والتسويق الرقمي، والتجارة الإلكترونية، والتدريب.'],
             'solutions' => ['title' => 'الحلول', 'text' => 'برمجيات للمؤسسات: الموارد البشرية، والدفع عبر الهاتف، والذكاء الاصطناعي. للهاتف أولًا، بثلاث لغات.'],
             'edition' => ['title' => 'النشر', 'text' => 'نرافق المؤلفين حتى نشر كتبهم على أمازون، وننشر سلاسلنا الخاصة.'],
         ],
-        'app_eyebrow' => 'منهجنا',
+        // Textes à fournir par Marwan (laissés en français, surlignés).
+        'author_line' => '[À FOURNIR : phrase d\'auteur sur la trilogie {méta}Physique]',
+        // À relire.
+        'why_eyebrow' => 'لماذا نوروان',
+        'why_text' => '[À FOURNIR : texte « Pourquoi Noorwan » (chiffres clés à confirmer)]',
         'app_h' => 'من الفكرة إلى الفعل',
         'steps' => [
             ['title' => 'فهم الحاجة', 'text' => 'الإصغاء قبل الاقتراح.'],
@@ -74,8 +79,6 @@ return [
             ['title' => 'تصميم الحل', 'text' => 'تقديم أداة مفيدة.'],
             ['title' => 'التعلم والتطور', 'text' => 'القياس والتعديل ونقل المعرفة.'],
         ],
-        'cons_eyebrow' => 'الاستشارات',
-        'cons_h' => 'توجيه واضح لمشاريعك',
         'cons_lead' => 'استشارات استراتيجية ومرافقة رقمية بمنهج عملي، تستند إلى عشرين عامًا من الخبرة في المجال الرقمي والتسويق والتجارة الإلكترونية.',
         'expertises' => [
             ['title' => 'الاستراتيجية وهيكلة المشاريع', 'text' => 'توضيح الهدف والنموذج والأولويات، ثم التقدم بخطوات واقعية.'],
@@ -86,20 +89,22 @@ return [
         ],
         'cons_app_h' => 'التوضيح قبل التسريع.',
         'cons_app' => 'خطوة مفيدة منجزة خير من خطة كبيرة على الورق.',
-        'sol_eyebrow' => 'الحلول',
         'sol_h' => 'أدوات مصممة للمؤسسات',
         // A VALIDER PAR MARWAN, à relire par un arabophone : introduction de la section Solutions.
         'sol_text' => 'برمجيات مصممة للمؤسسات، للهاتف أولًا ومتاحة بثلاث لغات. بعضها في الخدمة، وبعضها الآخر قيد الإعداد.',
         'sol_btn' => 'اكتشف حلولنا',
-        'solutions' => [
-            ['cat' => 'الموارد البشرية', 'name' => 'Inteek', 'text' => 'من التوظيف إلى إدارة الفرق، موارد بشرية مبسطة.', 'confidential' => false],
-            ['cat' => 'الدفع', 'name' => 'OnePay', 'text' => '', 'confidential' => true],
-            ['cat' => 'الذكاء الاصطناعي', 'name' => 'منصة الذكاء الاصطناعي', 'text' => '', 'confidential' => true],
+        'products_label' => 'حلولنا',
+        // À relire par un arabophone : Reserva, « Bientôt », Immobilier, Shopping.
+        'products' => [
+            'reserva' => ['cat' => 'الحجز', 'name' => 'Reserva', 'text' => 'حجز المواعيد والحجوزات للمتاجر والخدمات.', 'confidential' => false],
+            'inteek' => ['cat' => 'الموارد البشرية', 'name' => 'Inteek', 'text' => 'من التوظيف إلى إدارة الفرق، موارد بشرية مبسطة.', 'confidential' => false],
+            'noor' => ['cat' => 'الذكاء الاصطناعي', 'name' => 'Noor', 'text' => '', 'confidential' => true],
+            'edition' => ['cat' => 'النشر', 'name' => 'نوروان للنشر', 'text' => 'نرافق المؤلفين حتى نشر كتبهم على أمازون، وننشر سلاسلنا الخاصة.', 'confidential' => false],
         ],
+        'soon_label' => 'قريبًا',
+        'soon' => ['العقارات', 'التسوق'],
         'confidential' => 'سري',
-        'ed_eyebrow' => 'النشر',
         'ed_h' => 'أفكار للقراءة والاكتشاف والنقل',
-        'ed_text' => 'ترافق نوروان للنشر المؤلفين في كل مرحلة حتى نشر كتبهم على أمازون، وسلسلتانا ' . $metaphysique . ' ودروب الروح خير دليل على ذلك.',
         'ed_btn' => 'انشر كتابك',
         'ed_btn_catalogue' => 'تصفح الإصدارات',
         'cta_h' => 'لديك مشروع؟',
