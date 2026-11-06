@@ -213,8 +213,8 @@ grep -q '<option value="solutions" selected>' <<< "$(curl -s "$BASE_URL/contact.
 echo "2 decies. Date de mise à jour des pages légales"
 for page in mentions-legales.php confidentialite.php cookies.php; do
     for lang in fr en ar; do
-        date=$(by_lang "$lang" "Dernière mise à jour : 27 octobre 2026" "Last updated: 27 October 2026" "آخر تحديث: 27 أكتوبر 2026")
-        grep -q "<p class=\"legal-updated\">$date</p>" <<< "$(curl -s "$BASE_URL/$page?lang=$lang")" && pass "$page ($lang) : mise à jour du 27/10/2026" || fail "$page ($lang) : date de mise à jour"
+        date=$(by_lang "$lang" "Dernière mise à jour : 6 novembre 2026" "Last updated: 6 November 2026" "آخر تحديث: 6 نوفمبر 2026")
+        grep -q "<p class=\"legal-updated\">$date</p>" <<< "$(curl -s "$BASE_URL/$page?lang=$lang")" && pass "$page ($lang) : mise à jour du 6/11/2026" || fail "$page ($lang) : date de mise à jour"
     done
 done
 
