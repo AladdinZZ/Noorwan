@@ -64,7 +64,7 @@ return [
         'motto' => 'Une vision claire. Des étapes concrètes.',
         'univers' => [
             'consulting' => ['title' => 'Consulting', 'text' => 'Clarifier votre positionnement, structurer vos priorités et piloter vos projets numériques : stratégie, marketing digital, eCommerce, formation.'],
-            'solutions' => ['title' => 'Solutions', 'text' => 'Des logiciels pour les entreprises : ressources humaines, paiement mobile et intelligence artificielle. Mobiles d\'abord, en trois langues.'],
+            'solutions' => ['title' => 'Solutions', 'text' => 'Des logiciels pour les entreprises : réservation en ligne, ressources humaines et intelligence artificielle. Mobiles d\'abord, en trois langues.'],
             'edition' => ['title' => 'Édition', 'text' => 'Nous accompagnons les auteurs jusqu\'à la publication de leur livre sur Amazon, et nous publions nos propres collections.'],
         ],
         // Textes à fournir par Marwan : restent visibles, surlignés, tant qu'ils ne sont pas remplacés.

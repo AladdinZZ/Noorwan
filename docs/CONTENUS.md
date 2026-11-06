@@ -45,7 +45,7 @@ Boutons : [Découvrir nos univers] [Parlons de votre projet]
 ### Trois univers
 
 - **01 Consulting** : 20 ans de digital, de marketing et d'eCommerce au service de vos projets. Stratégie, présence en ligne, formation.
-- **02 Solutions** : des logiciels pensés pour Djibouti. Réservation, ressources humaines, paiement mobile, intelligence artificielle. Mobiles d'abord, en français, en anglais et en arabe.
+- **02 Solutions** : des logiciels pensés pour Djibouti. Réservation, ressources humaines, intelligence artificielle. Mobiles d'abord, en français, en anglais et en arabe.
 - **03 Édition** : nous accompagnons les auteurs jusqu'à la publication de leur livre sur Amazon, et nous publions nos propres collections.
 
 ### Nos solutions
@@ -112,7 +112,7 @@ Ordre : haut de page · trois univers · approche · Consulting · Solutions · 
 - **Haut de page** (moins haut depuis le lot v1.1, titre sur une ligne à 1440 px) : « Noorwan · Vision & création » ; « Des idées pour des solutions concrètes » ; « Conseil, solutions numériques et édition : trois univers complémentaires pour transformer les idées en réalisations utiles. » ; boutons [Découvrir nos expertises] [Parlons de votre projet] ; « Une vision claire. Des étapes concrètes. »
 - **Nos univers**, « Trois univers, une même exigence » :
   - 01 Consulting : « Clarifier votre positionnement, structurer vos priorités et piloter vos projets numériques : stratégie, marketing digital, eCommerce, formation. »
-  - 02 Solutions : « Des logiciels pour les entreprises : ressources humaines, paiement mobile et intelligence artificielle. Mobiles d'abord, en trois langues. »
+  - 02 Solutions : « Des logiciels pour les entreprises : réservation en ligne, ressources humaines et intelligence artificielle. Mobiles d'abord, en trois langues. »
   - 03 Édition : « Nous accompagnons les auteurs jusqu'à la publication de leur livre sur Amazon, et nous publions nos propres collections. »
 - **Notre approche**, « De l'idée à l'action » : Comprendre le besoin (Écouter avant de proposer.) · Structurer la réponse (Prioriser ce qui compte.) · Concevoir la solution (Livrer un outil utile.) · Apprendre et évoluer (Mesurer, ajuster, transmettre.).
 - **Consulting**, « Donner une direction claire à vos projets » : « Un conseil stratégique et un accompagnement numérique, avec une approche pragmatique, fondés sur vingt ans de digital, de marketing et d'eCommerce. » Cinq expertises : Stratégie et structuration de projet ; Marketing digital et présence en ligne ; E-commerce et parcours client ; Développement web et outils numériques ; Formation. « Clarifier avant d'accélérer. Une étape utile livrée vaut mieux qu'un grand plan sur le papier. »

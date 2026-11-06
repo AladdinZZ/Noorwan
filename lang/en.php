@@ -64,7 +64,7 @@ return [
         'motto' => 'A clear vision. Concrete steps.',
         'univers' => [
             'consulting' => ['title' => 'Consulting', 'text' => 'Clarify your positioning, structure your priorities and steer your digital projects: strategy, digital marketing, eCommerce, training.'],
-            'solutions' => ['title' => 'Solutions', 'text' => 'Business software: human resources, mobile payment and artificial intelligence. Mobile first, in three languages.'],
+            'solutions' => ['title' => 'Solutions', 'text' => 'Business software: online booking, human resources and artificial intelligence. Mobile first, in three languages.'],
             'edition' => ['title' => 'Publishing', 'text' => 'We guide authors all the way to publishing their book on Amazon, and we publish our own collections.'],
         ],
         // Textes à fournir par Marwan (laissés en français, surlignés).
