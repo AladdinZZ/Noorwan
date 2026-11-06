@@ -176,6 +176,8 @@ for lang in fr en ar; do
     expect "étiquette « À paraître », sans bouton « Acheter » ($lang)" "1|0" \
         "$(grep -c "<p class=\"book-flag\">$(by_lang "$lang" "À paraître" "Forthcoming" "سيصدر قريبًا")</p>" <<< "$book")|$(grep -c 'book-buy' <<< "$book")"
     expect "boutons « Acheter » des livres parus ($lang)" 5 "$(grep -c 'class="btn btn-dark book-buy"' <<< "$html")"
+    expect "quatre étapes de la prestation ($lang)" 4 "$(sed -n '/<ol class="steps">/,/<\/ol>/p' <<< "$html" | grep -c '<li>')"
+    expect "textes à fournir surlignés (ASIN, phrase d'auteur) ($lang)" 2 "$(grep -c '<mark class="todo">\[À FOURNIR : ' <<< "$html")"
 done
 expect "couverture_belles_manieres.webp servie" 200 "$(curl -s -o /dev/null -w '%{http_code}' "$BASE_URL/assets/images/covers/couverture_belles_manieres.webp")"
 

@@ -1370,3 +1370,145 @@ main:focus {
         grid-template-columns: repeat(3, minmax(0, 1fr));
     }
 }
+
+/* ---------- Page Édition ---------- */
+
+.catalogue-head {
+    max-width: 760px;
+    margin: 0 auto 48px;
+    text-align: center;
+}
+
+.catalogue-todo {
+    margin-block-start: 16px;
+    font-size: 16px;
+}
+
+.collection {
+    padding-block-start: 32px;
+    border-block-start: 1px solid var(--line-2);
+}
+
+.collection + .collection {
+    margin-block-start: clamp(48px, 7vw, 80px);
+}
+
+.collection-head {
+    max-width: 760px;
+    margin-block-end: 28px;
+}
+
+.collection-head h3 {
+    color: var(--ed-text);
+    font-size: clamp(26px, 5vw, 36px);
+    font-weight: 650;
+    line-height: 1.15;
+    letter-spacing: -0.03em;
+}
+
+:root[lang="ar"] .collection-head h3 {
+    letter-spacing: 0;
+}
+
+.collection-text {
+    margin-block-start: 12px;
+    color: var(--text);
+    font-size: 16px;
+}
+
+.books {
+    display: grid;
+    gap: 16px;
+}
+
+.book {
+    display: grid;
+    grid-template-columns: 1fr;
+    align-items: start;
+    gap: 18px;
+    padding: 24px;
+    border-radius: 20px;
+    background: var(--mist);
+}
+
+.book .cover,
+.book .cover-soon {
+    width: 46%;
+}
+
+.book-body {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    min-width: 0;
+}
+
+.book h4 {
+    font-size: 24px;
+    font-weight: 650;
+    line-height: 1.15;
+    letter-spacing: -0.03em;
+}
+
+:root[lang="ar"] .book h4 {
+    letter-spacing: 0;
+}
+
+.book-sub {
+    margin-block-start: -4px;
+    color: var(--muted);
+    font-size: 14px;
+}
+
+.book-flag {
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: var(--ed-tint);
+    color: var(--ed-text);
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.book-lead {
+    margin-block-start: 6px;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+.book-summary {
+    color: var(--text);
+    font-size: 15px;
+}
+
+.book-status {
+    margin-block-start: 6px;
+    color: var(--ed-text);
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.book-buy {
+    margin-block-start: 10px;
+    min-height: 44px;
+    padding-inline: 18px;
+    font-size: 14px;
+}
+
+@media (min-width: 520px) {
+    .book {
+        grid-template-columns: minmax(96px, 30%) 1fr;
+    }
+
+    .book .cover,
+    .book .cover-soon {
+        width: 100%;
+    }
+}
+
+@media (min-width: 900px) {
+    .books {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}

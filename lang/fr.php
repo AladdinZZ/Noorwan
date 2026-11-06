@@ -173,6 +173,8 @@ return [
         'buy_label' => 'Acheter :title sur Amazon',
         'writing' => 'En cours de rédaction',
         'also_in_english' => 'Disponible aussi en anglais',
+        // Texte à fournir par Marwan (laissé en français, surligné).
+        'asin_todo' => '[À FOURNIR : ASIN des cinq livres parus, pour des liens Amazon directs]',
         'upcoming' => 'Prochainement',
     ],
     // Page Solutions : TEXTES A VALIDER PAR MARWAN. Le titre et l'introduction sont ceux de l'accueil (home.sol_h, home.sol_text).

@@ -186,6 +186,8 @@ return [
         'writing' => 'قيد الكتابة',
         'also_in_english' => 'متوفر أيضًا بالإنجليزية',
         // À relire.
+        // Texte à fournir par Marwan (laissé en français, surligné).
+        'asin_todo' => '[À FOURNIR : ASIN des cinq livres parus, pour des liens Amazon directs]',
         'upcoming' => 'قريبًا',
     ],
     // Page Solutions : TEXTES A VALIDER PAR MARWAN, traduction à relire par un arabophone.
