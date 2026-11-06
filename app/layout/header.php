@@ -34,6 +34,26 @@ $asset = static fn (string $path): string => $path . '?v=' . (string) @filemtime
 <link rel="preload" href="assets/fonts/IBMPlexSansArabic-Regular.woff2" as="font" type="font/woff2" crossorigin>
 <?php endif; ?>
 <link rel="stylesheet" href="<?= e($asset('assets/css/site.css')) ?>">
+<?php if (GTM_ID !== ''): ?>
+<script nonce="<?= e(csp_nonce()) ?>" id="gtm-bootstrap" data-gtm-id="<?= e(GTM_ID) ?>">
+window.dataLayer = window.dataLayer || [];
+function gtag() { window.dataLayer.push(arguments); }
+gtag('consent', 'default', { ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied', analytics_storage: 'denied' });
+</script>
+<?php if (consent_state() === 'granted'): ?>
+<script nonce="<?= e(csp_nonce()) ?>">
+gtag('consent', 'update', { analytics_storage: 'granted' });
+(function (w, d, s, l, i) {
+    w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+    var f = d.getElementsByTagName(s)[0], j = d.createElement(s);
+    j.async = true;
+    j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i;
+    j.setAttribute('nonce', d.getElementById('gtm-bootstrap').nonce);
+    f.parentNode.insertBefore(j, f);
+})(window, document, 'script', 'dataLayer', '<?= e(GTM_ID) ?>');
+</script>
+<?php endif; ?>
+<?php endif; ?>
 <script src="<?= e($asset('assets/js/site.js')) ?>" defer></script>
 </head>
 <body>

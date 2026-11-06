@@ -269,6 +269,64 @@ else
 fi
 grep -q '^COMPTE_LINK_ENABLED=false$' .env.example && pass ".env.example : lien désactivé par défaut" || fail ".env.example : COMPTE_LINK_ENABLED=false absent"
 
+echo "2 duodecies. Consentement et Tag Manager (M-59)"
+GTM_TEST="GTM-TEST000"
+for lang in fr en ar; do
+    for page in index.php contact.php cookies.php; do
+        html=$(render "$page" "$lang" false "" "")
+        expect "GTM_ID vide : ni Google, ni bandeau, ni « Gérer les cookies », $page ($lang)" 0 \
+            "$(grep -cE 'googletagmanager|gtm-bootstrap|id="consent"|data-consent-open|consent-manage' <<< "$html")"
+    done
+    html=$(render index.php "$lang" false "" "$GTM_TEST")
+    expect "sans accord : aucun script Tag Manager ($lang)" 0 "$(grep -c 'googletagmanager' <<< "$html")"
+    grep -q "<script nonce=\"[A-Za-z0-9+/=]\{24\}\" id=\"gtm-bootstrap\" data-gtm-id=\"$GTM_TEST\">" <<< "$html" && pass "sans accord : amorçage avec nonce ($lang)" || fail "sans accord : amorçage absent ($lang)"
+    grep -q "gtag('consent', 'default', { ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied', analytics_storage: 'denied' });" <<< "$html" \
+        && pass "sans accord : mode consentement « default » à « denied » ($lang)" || fail "sans accord : consentement par défaut ($lang)"
+    banner=$(sed -n '/<section id="consent"/,/<\/section>/p' <<< "$html")
+    title=$(by_lang "$lang" "Mesure d&apos;audience" "Audience measurement" "قياس عدد الزوار")
+    grep -qF "$title" <<< "$banner" && pass "bandeau ouvert, « $title » ($lang)" || fail "bandeau absent ($lang)"
+    if head -n 1 <<< "$banner" | grep -q ' hidden'; then fail "bandeau masqué avant tout choix ($lang)"; else pass "bandeau visible avant tout choix ($lang)"; fi
+    expect "bandeau : Refuser et Accepter, même style ($lang)" "denied|granted" \
+        "$(grep -oE 'class="btn btn-consent" type="submit" name="choice" value="[a-z]+"' <<< "$banner" | sed -E 's/.*value="([a-z]+)"/\1/' | paste -sd '|' -)"
+    grep -q "data-consent-open>$(by_lang "$lang" "Gérer les cookies" "Manage cookies" "إدارة ملفات تعريف الارتباط")<" <<< "$html" && pass "« Gérer les cookies » dans le pied de page ($lang)" || fail "« Gérer les cookies » absent ($lang)"
+
+    html=$(render index.php "$lang" false "" "$GTM_TEST" granted)
+    grep -q "j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i;" <<< "$html" && grep -q "'dataLayer', '$GTM_TEST');" <<< "$html" \
+        && pass "après accord : script Tag Manager présent ($lang)" || fail "après accord : script Tag Manager absent ($lang)"
+    grep -q "gtag('consent', 'update', { analytics_storage: 'granted' });" <<< "$html" && pass "après accord : « update » à « granted » ($lang)" || fail "après accord : mise à jour du consentement ($lang)"
+    expect "après accord : tout script en ligne porte le nonce, un seul nonce ($lang)" "0|1" \
+        "$(grep -E '<script( |>)' <<< "$html" | grep -v ' src=' | grep -vc 'nonce=')|$(grep -oE 'nonce="[^"]+"' <<< "$html" | sort -u | wc -l | tr -d ' ')"
+    grep -q '<section id="consent" class="consent" aria-labelledby="consent-title" hidden data-state="granted">' <<< "$html" && pass "après accord : bandeau fermé ($lang)" || fail "après accord : bandeau encore ouvert ($lang)"
+    html=$(render index.php "$lang" false "" "$GTM_TEST" denied)
+    expect "après refus : aucun script Tag Manager, bandeau fermé ($lang)" "0|1" \
+        "$(grep -c 'googletagmanager' <<< "$html")|$(grep -c 'hidden data-state="denied"' <<< "$html")"
+    html=$(render cookies.php "$lang" false "" "$GTM_TEST" denied)
+    grep -q '<section id="consent-manage"' <<< "$html" && grep -qF "$(by_lang "$lang" "mesure d&apos;audience refusée" "audience measurement declined" "رفض قياس عدد الزوار")" <<< "$html" \
+        && pass "page Cookies : « Gérer vos choix » et état actuel ($lang)" || fail "page Cookies : gestion des choix ($lang)"
+done
+expect "identifiant mal formé ignoré" 0 "$(GTM_ID='GTM-x"><script>' "$PHP" -r '$_GET["lang"]="fr"; require "public/index.php";' 2>&1 | grep -c 'gtm-bootstrap')"
+grep -q '^GTM_ID=$' .env.example && pass ".env.example : GTM_ID vide par défaut" || fail ".env.example : GTM_ID absent ou rempli"
+
+echo "2 quaterdecies. Enregistrement du choix (consent.php)"
+consent_token() { "$PHP" -r 'require "app/bootstrap.php"; echo Csrf::token("consent");' 2>/dev/null; }
+expect "GET refusé" 405 "$(curl -s -o /dev/null -w '%{http_code}' "$BASE_URL/consent.php")"
+expect "jeton absent refusé" 400 "$(curl -s -o /dev/null -w '%{http_code}' -X POST -d 'choice=granted' "$BASE_URL/consent.php")"
+expect "choix inconnu refusé" 400 "$(curl -s -o /dev/null -w '%{http_code}' -X POST --data-urlencode "token=$(consent_token)" -d 'choice=peut-etre' "$BASE_URL/consent.php")"
+response=$(curl -s -D - -o /dev/null -X POST --data-urlencode "token=$(consent_token)" -d 'choice=granted' --data-urlencode 'back=edition.php?lang=ar' "$BASE_URL/consent.php?lang=ar")
+grep -q '^HTTP/[0-9.]* 303' <<< "$response" && pass "accord : redirection 303" || fail "accord : $(head -n 1 <<< "$response")"
+grep -qi '^Location: edition.php?lang=ar' <<< "$response" && pass "accord : retour à la page d'origine" || fail "accord : mauvais retour"
+cookie=$(grep -i '^Set-Cookie: nw_consent=' <<< "$response")
+grep -q 'nw_consent=granted' <<< "$cookie" && grep -q 'Max-Age=15724800' <<< "$cookie" && grep -qi 'HttpOnly' <<< "$cookie" && grep -qi 'SameSite=Lax' <<< "$cookie" && grep -q 'path=/' <<< "$cookie" \
+    && pass "accord : cookie nw_consent, six mois, HttpOnly, SameSite=Lax" || fail "accord : cookie $cookie"
+expect "un seul cookie posé" 1 "$(grep -ci '^Set-Cookie:' <<< "$response")"
+response=$(curl -s -D - -o /dev/null -X POST --data-urlencode "token=$(consent_token)" -d 'choice=granted' --data-urlencode 'back=https://exemple.invalid/' "$BASE_URL/consent.php")
+grep -qi '^Location: ./?lang=fr' <<< "$response" && pass "retour vers un site externe refusé" || fail "retour externe : $(grep -i '^Location' <<< "$response")"
+response=$(curl -s -D - -o /dev/null -X POST -H 'Accept: application/json' -H 'Cookie: _ga=GA1.1.1; _ga_ABC123=GS1.1' --data-urlencode "token=$(consent_token)" -d 'choice=denied' "$BASE_URL/consent.php")
+grep -q '^HTTP/[0-9.]* 204' <<< "$response" && pass "refus en arrière-plan : réponse 204" || fail "refus en arrière-plan : $(head -n 1 <<< "$response")"
+grep -q 'nw_consent=denied' <<< "$response" && pass "refus : cookie nw_consent=denied" || fail "refus : cookie absent"
+expect "refus : cookies Google Analytics effacés" 2 "$(grep -ciE '^Set-Cookie: _ga(_ABC123)?=deleted' <<< "$response")"
+expect "jeton signé : choix forgé refusé" 400 "$(curl -s -o /dev/null -w '%{http_code}' -X POST -d 'token=1.2.3&choice=granted' "$BASE_URL/consent.php")"
+
 echo "2 sexdecies. OnePay absent de toutes les pages"
 for page in "" solutions.php edition.php contact.php mentions-legales.php confidentialite.php cookies.php; do
     for lang in fr en ar; do

@@ -3,9 +3,9 @@
 declare(strict_types=1);
 
 /**
- * Jeton anti-falsification du formulaire, signé et daté, sans session ni cookie.
+ * Jeton anti-falsification des formulaires (contact, consentement), signé et daté.
  *
- * Le site ne pose aucun cookie : le jeton prouve que le formulaire a été servi par ce site
+ * Sans session ni cookie : le jeton prouve que le formulaire a été servi par ce site
  * il y a moins de MAX_AGE secondes. Il est complété par la vérification de l'en-tête Origin.
  */
 final class Csrf

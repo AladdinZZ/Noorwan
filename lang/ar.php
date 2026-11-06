@@ -256,6 +256,20 @@ return [
             'server' => 'حال خطأ تقني دون الإرسال. حاول مجددًا بعد بضع دقائق.',
         ],
     ],
+    // Bandeau de consentement à la mesure d'audience (M-59). A VALIDER PAR MARWAN, à relire par un arabophone.
+    'consent' => [
+        'title' => 'قياس عدد الزوار',
+        // Nom latin isolé (LRI ... PDI) : les parenthèses restent à leur place en RTL.
+        'text' => "بموافقتك، نقيس زيارات الموقع إحصائيًا (\u{2066}Google Analytics\u{2069})، دون أي إعلانات. يُحفظ اختيارك ستة أشهر.",
+        'more' => 'اعرف المزيد',
+        'accept' => 'أوافق',
+        'refuse' => 'أرفض',
+        'manage' => 'إدارة ملفات تعريف الارتباط',
+        'manage_title' => 'إدارة اختياراتك',
+        'state_granted' => 'اختيارك الحالي: قبول قياس عدد الزوار.',
+        'state_denied' => 'اختيارك الحالي: رفض قياس عدد الزوار.',
+        'state_none' => 'لم تحدد اختيارك بعد: لا يجري أي قياس لعدد الزوار.',
+    ],
     // Pages légales : A FAIRE RELIRE PAR UN JURISTE, traduction à relire par un arabophone.
     'legal' => [
         'eyebrow' => 'معلومات قانونية',

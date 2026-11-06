@@ -14,7 +14,8 @@ const CONSENT_TEXT_VERSION = '2026-10-21';
 const CONTACT_EMAIL = 'contact@noorwan.com';
 
 /**
- * Lit le fichier .env une fois (clé=valeur, lignes # ignorées) et renvoie la valeur demandée.
+ * Lit le fichier .env une fois (clé=valeur, lignes # ignorées) et renvoie la valeur demandée,
+ * sauf si l'environnement la définit déjà.
  */
 function env(string $key, ?string $default = null): ?string
 {
@@ -35,7 +36,11 @@ function env(string $key, ?string $default = null): ?string
         }
     }
 
-    $value = $values[$key] ?? getenv($key);
+    // Une variable d'environnement définie l'emporte sur .env (utile aux tests et à la ligne de commande).
+    $value = getenv($key);
+    if ($value === false) {
+        $value = $values[$key] ?? null;
+    }
 
     return ($value === false || $value === null || $value === '') ? $default : $value;
 }
@@ -88,7 +93,39 @@ ini_set('log_errors', '1');
 mb_internal_encoding('UTF-8');
 date_default_timezone_set('UTC');
 
-// En-têtes de sécurité. Aucun script ni style en ligne : la CSP les interdit.
+// Mesure d'audience par Google Tag Manager (M-59), chargée seulement après accord (cookie nw_consent).
+// GTM_ID vide ou mal formé : rien n'est chargé et la CSP reste fermée à Google (développement, tests).
+if (!defined('GTM_ID')) {
+    $gtmId = (string) env('GTM_ID', '');
+    define('GTM_ID', preg_match('/^GTM-[A-Z0-9]{4,12}$/', $gtmId) === 1 ? $gtmId : '');
+    unset($gtmId);
+}
+
+// Choix de mesure d'audience : seul cookie du site, gardé six mois (182 jours), posé par public/consent.php.
+const CONSENT_COOKIE = 'nw_consent';
+const CONSENT_MAX_AGE = 182 * 86400;
+
+/**
+ * Choix enregistré (« granted » ou « denied »), ou null tant que la personne n'a pas répondu.
+ */
+function consent_state(): ?string
+{
+    $value = $_COOKIE[CONSENT_COOKIE] ?? null;
+
+    return in_array($value, ['granted', 'denied'], true) ? $value : null;
+}
+
+/**
+ * Nonce de la requête, seule autorisation des scripts en ligne d'amorçage de Tag Manager (pas d'« unsafe-inline »).
+ */
+function csp_nonce(): string
+{
+    static $nonce = null;
+
+    return $nonce ??= base64_encode(random_bytes(18));
+}
+
+// En-têtes de sécurité. Aucun style en ligne ; seuls les scripts d'amorçage de Tag Manager, avec le nonce.
 if (!headers_sent()) {
     header('Content-Type: text/html; charset=utf-8');
     header('X-Content-Type-Options: nosniff');

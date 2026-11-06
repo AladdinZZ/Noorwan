@@ -1707,3 +1707,84 @@ main:focus {
         border-radius: var(--radius-card);
     }
 }
+
+/* ---------- Bandeau de consentement (M-59) ---------- */
+
+/* Fixé en bas de l'écran, sans masquer la page : la personne peut lire le site avant de choisir. */
+.consent {
+    position: fixed;
+    inset-inline: 0;
+    inset-block-end: 0;
+    z-index: 80;
+    padding: 12px;
+}
+
+.consent[hidden] {
+    display: none;
+}
+
+.consent-inner {
+    display: grid;
+    gap: 14px;
+    max-width: 1040px;
+    margin-inline: auto;
+    padding: 18px 20px;
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.96);
+    -webkit-backdrop-filter: saturate(180%) blur(18px);
+    backdrop-filter: saturate(180%) blur(18px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.16);
+}
+
+.consent-title {
+    font-size: 16px;
+    font-weight: 650;
+}
+
+.consent-text {
+    margin-block-start: 4px;
+    color: var(--text);
+    font-size: 14px;
+    line-height: 1.45;
+}
+
+/* « Refuser » et « Accepter » : même taille, même style, aucun choix mis en avant. */
+.consent-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.btn-consent {
+    min-height: 44px;
+    background: var(--ink);
+    color: var(--paper);
+    font-size: 15px;
+}
+
+.btn-consent:hover {
+    background: #000;
+}
+
+.consent-manage .consent-actions {
+    max-width: 360px;
+    margin-block-start: 16px;
+}
+
+@media (min-width: 760px) {
+    .consent-inner {
+        grid-template-columns: 1fr auto;
+        align-items: center;
+        gap: 24px;
+        padding: 20px 24px;
+    }
+
+    .consent-actions {
+        grid-template-columns: auto auto;
+    }
+
+    .btn-consent {
+        min-width: 132px;
+    }
+}

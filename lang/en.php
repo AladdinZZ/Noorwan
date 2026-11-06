@@ -240,6 +240,19 @@ return [
             'server' => 'A technical error prevented sending. Please try again in a few minutes.',
         ],
     ],
+    // Bandeau de consentement à la mesure d'audience (M-59). A VALIDER PAR MARWAN.
+    'consent' => [
+        'title' => 'Audience measurement',
+        'text' => 'With your consent, we measure visits to the site statistically (Google Analytics), with no advertising. Your choice is kept for six months.',
+        'more' => 'Learn more',
+        'accept' => 'Accept',
+        'refuse' => 'Decline',
+        'manage' => 'Manage cookies',
+        'manage_title' => 'Manage your choices',
+        'state_granted' => 'Your current choice: audience measurement accepted.',
+        'state_denied' => 'Your current choice: audience measurement declined.',
+        'state_none' => 'You have not made a choice yet: no audience measurement takes place.',
+    ],
     // Pages légales : A FAIRE RELIRE PAR UN JURISTE.
     'legal' => [
         'eyebrow' => 'Legal information',

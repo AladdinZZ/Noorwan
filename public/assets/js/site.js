@@ -88,3 +88,79 @@
         alert.focus();
     }
 })();
+
+// Consentement à la mesure d'audience (M-59). Sans JavaScript, les boutons envoient le formulaire à consent.php
+// et la page revient avec le choix enregistré. Ici : envoi en arrière-plan, puis chargement de Tag Manager
+// sur « Accepter » ; « Refuser » après un accord recharge la page pour retirer Tag Manager.
+(function () {
+    'use strict';
+
+    var banner = document.getElementById('consent');
+    var bootstrap = document.getElementById('gtm-bootstrap');
+    if (!banner || !bootstrap) {
+        return;
+    }
+
+    function loadTagManager() {
+        if (document.querySelector('script[src^="https://www.googletagmanager.com/gtm.js"]')) {
+            return;
+        }
+        window.dataLayer.push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+        var script = document.createElement('script');
+        script.async = true;
+        script.src = 'https://www.googletagmanager.com/gtm.js?id=' + encodeURIComponent(bootstrap.getAttribute('data-gtm-id'));
+        script.setAttribute('nonce', bootstrap.nonce);
+        document.head.appendChild(script);
+    }
+
+    function close() {
+        banner.hidden = true;
+    }
+
+    document.addEventListener('submit', function (event) {
+        var form = event.target;
+        if (!form.classList || !form.classList.contains('consent-actions') || !window.fetch || !window.FormData) {
+            return;
+        }
+        event.preventDefault();
+        var data = new FormData(form);
+        var choice = event.submitter ? event.submitter.value : 'denied';
+        data.set('choice', choice);
+
+        fetch(form.action, { method: 'POST', body: data, headers: { Accept: 'application/json' }, credentials: 'same-origin' })
+            .then(function (response) {
+                if (!response.ok) {
+                    throw new Error('consent');
+                }
+                var previous = banner.getAttribute('data-state');
+                banner.setAttribute('data-state', choice);
+                // Page Cookies (état affiché) ou retrait d'un accord : la page se recharge sans Tag Manager.
+                if (form.closest('#consent-manage') || (choice === 'denied' && previous === 'granted')) {
+                    window.location.reload();
+                    return;
+                }
+                if (choice === 'granted') {
+                    window.gtag('consent', 'update', { analytics_storage: 'granted' });
+                    loadTagManager();
+                }
+                close();
+            })
+            .catch(function () {
+                form.submit();
+            });
+    });
+
+    // « Gérer les cookies » rouvre le bandeau au lieu de quitter la page.
+    document.addEventListener('click', function (event) {
+        var link = event.target.closest('[data-consent-open]');
+        if (!link) {
+            return;
+        }
+        event.preventDefault();
+        banner.hidden = false;
+        var first = banner.querySelector('button');
+        if (first) {
+            first.focus();
+        }
+    });
+})();
