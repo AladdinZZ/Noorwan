@@ -307,6 +307,19 @@ done
 expect "identifiant mal formé ignoré" 0 "$(GTM_ID='GTM-x"><script>' "$PHP" -r '$_GET["lang"]="fr"; require "public/index.php";' 2>&1 | grep -c 'gtm-bootstrap')"
 grep -q '^GTM_ID=$' .env.example && pass ".env.example : GTM_ID vide par défaut" || fail ".env.example : GTM_ID absent ou rempli"
 
+echo "2 terdecies. CSP"
+csp_served=$(curl -sI "$BASE_URL/?lang=fr" | grep -i '^Content-Security-Policy:')
+if grep -q 'unsafe-inline' <<< "$csp_served"; then fail "CSP servie : unsafe-inline"; else pass "CSP servie : sans unsafe-inline"; fi
+if [[ -z "$(config GTM_ID)" ]]; then
+    if grep -qiE 'google|nonce-' <<< "$csp_served"; then fail "CSP servie sans GTM_ID : ouverte à Google"; else pass "CSP servie sans GTM_ID : fermée à Google"; fi
+fi
+csp_gtm=$(GTM_ID="$GTM_TEST" "$PHP" -r 'require "app/bootstrap.php"; echo content_security_policy();' 2>&1)
+for part in "script-src 'self' 'nonce-" "https://www.googletagmanager.com" "img-src 'self' data: https://www.googletagmanager.com https://*.google-analytics.com" \
+            "connect-src 'self' https://www.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com" "style-src 'self';"; do
+    grep -qF "$part" <<< "$csp_gtm" && pass "CSP avec GTM_ID : $part" || fail "CSP avec GTM_ID : « $part » absent ($csp_gtm)"
+done
+if grep -q 'unsafe-inline\|unsafe-eval' <<< "$csp_gtm"; then fail "CSP avec GTM_ID : unsafe-inline ou unsafe-eval"; else pass "CSP avec GTM_ID : ni unsafe-inline ni unsafe-eval"; fi
+
 echo "2 quaterdecies. Enregistrement du choix (consent.php)"
 consent_token() { "$PHP" -r 'require "app/bootstrap.php"; echo Csrf::token("consent");' 2>/dev/null; }
 expect "GET refusé" 405 "$(curl -s -o /dev/null -w '%{http_code}' "$BASE_URL/consent.php")"

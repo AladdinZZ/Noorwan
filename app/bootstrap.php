@@ -125,18 +125,33 @@ function csp_nonce(): string
     return $nonce ??= base64_encode(random_bytes(18));
 }
 
-// En-têtes de sécurité. Aucun style en ligne ; seuls les scripts d'amorçage de Tag Manager, avec le nonce.
+/**
+ * Politique de sécurité du contenu. Aucun style en ligne ; aucun script en ligne sans le nonce.
+ * Avec Tag Manager, elle s'ouvre seulement à ses domaines et à ceux de Google Analytics.
+ */
+function content_security_policy(): string
+{
+    $script = "'self'";
+    $img = "'self' data:";
+    $connect = "'self'";
+    if (GTM_ID !== '') {
+        $script .= " 'nonce-" . csp_nonce() . "' https://www.googletagmanager.com";
+        $img .= ' https://www.googletagmanager.com https://*.google-analytics.com';
+        $connect .= ' https://www.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com';
+    }
+
+    return "default-src 'self'; img-src " . $img . '; script-src ' . $script . "; style-src 'self'; font-src 'self'; "
+        . 'connect-src ' . $connect . "; form-action 'self'; frame-ancestors 'none'; base-uri 'self'; object-src 'none'";
+}
+
+// En-têtes de sécurité.
 if (!headers_sent()) {
     header('Content-Type: text/html; charset=utf-8');
     header('X-Content-Type-Options: nosniff');
     header('X-Frame-Options: DENY');
     header('Referrer-Policy: strict-origin-when-cross-origin');
     header('Permissions-Policy: camera=(), microphone=(), geolocation=(), interest-cohort=()');
-    header(
-        "Content-Security-Policy: default-src 'self'; img-src 'self' data:; script-src 'self'; "
-        . "style-src 'self'; font-src 'self'; "
-        . "form-action 'self'; frame-ancestors 'none'; base-uri 'self'; object-src 'none'"
-    );
+    header('Content-Security-Policy: ' . content_security_policy());
     if (!is_indexable()) {
         header('X-Robots-Tag: noindex, nofollow');
     }
