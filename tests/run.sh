@@ -340,6 +340,17 @@ grep -q 'nw_consent=denied' <<< "$response" && pass "refus : cookie nw_consent=d
 expect "refus : cookies Google Analytics effacés" 2 "$(grep -ciE '^Set-Cookie: _ga(_ABC123)?=deleted' <<< "$response")"
 expect "jeton signé : choix forgé refusé" 400 "$(curl -s -o /dev/null -w '%{http_code}' -X POST -d 'token=1.2.3&choice=granted' "$BASE_URL/consent.php")"
 
+echo "2 quindecies. Écosystème Noorwan (D63)"
+eco() { env ECOSYSTEM_ACCOUNT_URL= ECOSYSTEM_RESERVA_URL= ECOSYSTEM_INTEEK_URL= "$@" "$PHP" -r '$_GET["lang"] = "fr"; require "public/index.php";' 2>&1 | sed -n '/<nav class="ecosystem"/,/<\/nav>/p'; }
+expect "aucune adresse : bloc masqué" 0 "$(eco ECOSYSTEM_ACCOUNT_URL= | grep -c 'ecosystem')"
+block=$(eco ECOSYSTEM_ACCOUNT_URL=https://compte.example.invalid ECOSYSTEM_RESERVA_URL=https://reserva.example.invalid ECOSYSTEM_INTEEK_URL=)
+grep -q 'Écosystème Noorwan' <<< "$block" && pass "titre « Écosystème Noorwan »" || fail "titre de l'écosystème"
+grep -q '<li><span aria-current="page">Noorwan</span></li>' <<< "$block" && pass "site courant nommé sans lien" || fail "site courant"
+expect "Compte Noorwan et Reserva liés, Inteek sans adresse masqué" "https://compte.example.invalid|https://reserva.example.invalid|0" \
+    "$(grep -oE 'href="[^"]+"' <<< "$block" | sed -E 's/href="([^"]+)"/\1/' | paste -sd '|' -)|$(grep -c 'Inteek' <<< "$block")"
+expect "adresse non https ignorée" 0 "$(eco 'ECOSYSTEM_ACCOUNT_URL=javascript:alert(1)' | grep -c 'ecosystem')"
+if grep -qi 'onepay' <<< "$(eco ECOSYSTEM_ACCOUNT_URL=https://a.invalid ECOSYSTEM_RESERVA_URL=https://b.invalid ECOSYSTEM_INTEEK_URL=https://c.invalid)"; then fail "OnePay dans l'écosystème"; else pass "OnePay absent de l'écosystème"; fi
+
 echo "2 sexdecies. OnePay absent de toutes les pages"
 for page in "" solutions.php edition.php contact.php mentions-legales.php confidentialite.php cookies.php; do
     for lang in fr en ar; do

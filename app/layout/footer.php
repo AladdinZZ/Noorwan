@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-// Pied de page commun : quatre colonnes (Consulting, Solutions, Édition, Noorwan), puis ligne légale.
+// Pied de page commun : quatre colonnes (Consulting, Solutions, Édition, Noorwan), Écosystème Noorwan, ligne légale.
 // « Connexion » rejoint la colonne Noorwan quand le Compte Noorwan est en service ($accountUrl, de l'en-tête).
 $footerColumns = [
     'nav.consulting' => [
@@ -40,6 +40,7 @@ if ($accountUrl !== null) {
             </div>
 <?php endforeach; ?>
         </nav>
+<?php require ROOT_DIR . '/app/layout/ecosystem.php'; ?>
         <div class="footer-bottom">
             <p class="footer-line"><span><?= t('common.foot_line') ?></span> <span dir="ltr"><?= t('common.copy', [':year' => date('Y')]) ?></span></p>
             <div class="footer-legal">

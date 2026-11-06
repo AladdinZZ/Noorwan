@@ -45,6 +45,13 @@ return [
         'learn_more' => 'Learn more',
         'brand' => 'Noorwan',
     ],
+    // Écosystème Noorwan (D63), mêmes libellés que sur Inteek.
+    'ecosystem' => [
+        'title' => 'Noorwan ecosystem',
+        'account' => 'Noorwan Account',
+        'reserva' => 'Reserva',
+        'inteek' => 'Inteek',
+    ],
     'legal_nav' => [
         'mentions' => 'Legal notice',
         'privacy' => 'Privacy',

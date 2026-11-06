@@ -1069,6 +1069,40 @@ main:focus {
     color: var(--ink);
 }
 
+/* Écosystème Noorwan : liens vers les autres sites du groupe, site courant sans lien. */
+.ecosystem {
+    padding-block: 16px;
+    border-block-end: 1px solid var(--line-2);
+}
+
+.ecosystem ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 18px;
+}
+
+.ecosystem a,
+.ecosystem span {
+    display: inline-flex;
+    align-items: center;
+    min-height: 32px;
+}
+
+.ecosystem a {
+    color: var(--muted);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.ecosystem a:hover {
+    color: var(--ink);
+}
+
+.ecosystem span {
+    color: var(--ink);
+    font-weight: 600;
+}
+
 .footer-bottom {
     display: grid;
     gap: 10px;
