@@ -19,7 +19,7 @@ return [
         'privacy_title' => 'Privacy | Noorwan',
         'privacy_description' => 'How Noorwan processes the data sent through the contact form.',
         'cookies_title' => 'Cookies | Noorwan',
-        'cookies_description' => 'The noorwan.com website sets no cookies and does not measure its audience.',
+        'cookies_description' => 'Cookies on noorwan.com: audience measurement only with your consent, choice kept for six months.',
     ],
     'nav' => [
         'consulting' => 'Consulting',
@@ -40,6 +40,17 @@ return [
         'copy' => '© :year Noorwan',
         'arrow' => '→',
         'arrow_up' => '↗',
+        'list_sep' => ', ',
+        'colon' => ': ',
+        'learn_more' => 'Learn more',
+        'brand' => 'Noorwan',
+    ],
+    // Écosystème Noorwan (D63), mêmes libellés que sur Inteek.
+    'ecosystem' => [
+        'title' => 'Noorwan ecosystem',
+        'account' => 'Noorwan Account',
+        'reserva' => 'Reserva',
+        'inteek' => 'Inteek',
     ],
     'legal_nav' => [
         'mentions' => 'Legal notice',
@@ -47,20 +58,19 @@ return [
         'cookies' => 'Cookies',
     ],
     'home' => [
-        'eyebrow' => 'Noorwan · Vision & creation',
-        'title' => 'Ideas for concrete solutions',
         'lead' => 'Consulting, digital solutions and publishing: three complementary fields that turn ideas into useful results.',
         'btn_explore' => 'Explore our expertise',
         'btn_talk' => 'Let\'s talk about your project',
         'motto' => 'A clear vision. Concrete steps.',
-        'univ_eyebrow' => 'Our fields',
-        'univ_h' => 'Three fields, one standard',
         'univers' => [
             'consulting' => ['title' => 'Consulting', 'text' => 'Clarify your positioning, structure your priorities and steer your digital projects: strategy, digital marketing, eCommerce, training.'],
-            'solutions' => ['title' => 'Solutions', 'text' => 'Business software: human resources, mobile payment and artificial intelligence. Mobile first, in three languages.'],
+            'solutions' => ['title' => 'Solutions', 'text' => 'Business software: online booking, human resources and artificial intelligence. Mobile first, in three languages.'],
             'edition' => ['title' => 'Publishing', 'text' => 'We guide authors all the way to publishing their book on Amazon, and we publish our own collections.'],
         ],
-        'app_eyebrow' => 'Our approach',
+        // Textes à fournir par Marwan (laissés en français, surlignés).
+        'author_line' => '[À FOURNIR : phrase d\'auteur sur la trilogie {méta}Physique]',
+        'why_eyebrow' => 'Why Noorwan',
+        'why_text' => '[À FOURNIR : texte « Pourquoi Noorwan » (chiffres clés à confirmer)]',
         'app_h' => 'From idea to action',
         'steps' => [
             ['title' => 'Understand the need', 'text' => 'Listen before proposing.'],
@@ -68,8 +78,6 @@ return [
             ['title' => 'Design the solution', 'text' => 'Deliver a useful tool.'],
             ['title' => 'Learn and evolve', 'text' => 'Measure, adjust, pass on.'],
         ],
-        'cons_eyebrow' => 'Consulting',
-        'cons_h' => 'Giving your projects a clear direction',
         'cons_lead' => 'Strategic advice and digital support with a pragmatic approach, built on twenty years of digital, marketing and eCommerce experience.',
         'expertises' => [
             ['title' => 'Strategy and project structuring', 'text' => 'Clarify the goal, the model and the priorities, then move in realistic steps.'],
@@ -80,20 +88,22 @@ return [
         ],
         'cons_app_h' => 'Clarify before you accelerate.',
         'cons_app' => 'One useful step delivered beats a grand plan on paper.',
-        'sol_eyebrow' => 'Solutions',
         'sol_h' => 'Tools built for businesses',
         // A VALIDER PAR MARWAN : Solutions section introduction (also used at the top of the Solutions page).
         'sol_text' => 'Software designed for businesses, built for the phone first and available in three languages. Some are in service, others in preparation.',
         'sol_btn' => 'Discover our solutions',
-        'solutions' => [
-            ['cat' => 'Human resources', 'name' => 'Inteek', 'text' => 'From hiring to team management, HR made simple.', 'confidential' => false],
-            ['cat' => 'Payment', 'name' => 'OnePay', 'text' => '', 'confidential' => true],
-            ['cat' => 'Artificial intelligence', 'name' => 'AI platform', 'text' => '', 'confidential' => true],
+        'products_label' => 'Our solutions',
+        // À relire : textes de Reserva, « Coming soon » et « Real estate » traduits du français.
+        'products' => [
+            'reserva' => ['cat' => 'Booking', 'name' => 'Reserva', 'text' => 'Appointment and reservation booking for shops and services.', 'confidential' => false],
+            'inteek' => ['cat' => 'Human resources', 'name' => 'Inteek', 'text' => 'From hiring to team management, HR made simple.', 'confidential' => false],
+            'noor' => ['cat' => 'Artificial intelligence', 'name' => 'Noor', 'text' => '', 'confidential' => true],
+            'edition' => ['cat' => 'Publishing', 'name' => 'Noorwan Publishing', 'text' => 'We guide authors all the way to publishing their book on Amazon, and we publish our own collections.', 'confidential' => false],
         ],
+        'soon_label' => 'Coming soon',
+        'soon' => ['Real estate', 'Shopping'],
         'confidential' => 'Confidential',
-        'ed_eyebrow' => 'Publishing',
         'ed_h' => 'Ideas to read, discover and pass on',
-        'ed_text' => 'Noorwan Publishing guides authors through every step, all the way to publishing their book on Amazon. Our own collections, {méta}Physique and Chemins de l\'Âme, are the proof.',
         'ed_btn' => 'Publish your book',
         'ed_btn_catalogue' => 'See the catalogue',
         'cta_h' => 'Have a project in mind?',
@@ -170,6 +180,8 @@ return [
         'buy_label' => 'Buy :title on Amazon',
         'writing' => 'Writing in progress',
         'also_in_english' => 'Also available in English',
+        // Texte à fournir par Marwan (laissé en français, surligné).
+        'asin_todo' => '[À FOURNIR : ASIN des cinq livres parus, pour des liens Amazon directs]',
         'upcoming' => 'Coming soon',
     ],
     // Solutions page: TEXTES A VALIDER PAR MARWAN. Title and introduction come from the home page (home.sol_h, home.sol_text).
@@ -187,7 +199,6 @@ return [
         'inteek_text' => 'Start with the modules that matter to you and add the others when the need arises.',
         'modules_title' => 'Modules',
         'modules' => ['Recruitment and CV database', 'Team surveys', 'Leave', 'Time tracking', 'Personnel files'],
-        'others_title' => 'Other solutions',
         'on_request' => 'Presentation by appointment.',
     ],
     'contact' => [
@@ -236,10 +247,23 @@ return [
             'server' => 'A technical error prevented sending. Please try again in a few minutes.',
         ],
     ],
+    // Bandeau de consentement à la mesure d'audience (M-59). A VALIDER PAR MARWAN.
+    'consent' => [
+        'title' => 'Audience measurement',
+        'text' => 'With your consent, we measure visits to the site statistically (Google Analytics), with no advertising. Your choice is kept for six months.',
+        'more' => 'Learn more',
+        'accept' => 'Accept',
+        'refuse' => 'Decline',
+        'manage' => 'Manage cookies',
+        'manage_title' => 'Manage your choices',
+        'state_granted' => 'Your current choice: audience measurement accepted.',
+        'state_denied' => 'Your current choice: audience measurement declined.',
+        'state_none' => 'You have not made a choice yet: no audience measurement takes place.',
+    ],
     // Pages légales : A FAIRE RELIRE PAR UN JURISTE.
     'legal' => [
         'eyebrow' => 'Legal information',
-        'updated' => 'Last updated: 27 October 2026',
+        'updated' => 'Last updated: 6 November 2026',
         'mentions' => [
             'title' => 'Legal notice',
             'intro' => 'Information about the publisher and the host of the noorwan.com website.',
@@ -268,7 +292,7 @@ return [
                 [
                     'title' => 'Personal data and cookies',
                     'body' => [
-                        'The processing of data sent through the contact form is described on the Privacy page. The website sets no cookies: see the Cookies page.',
+                        'The processing of data sent through the contact form is described on the Privacy page. Audience measurement, which requires your consent, is described on the Cookies page.',
                     ],
                 ],
             ],
@@ -287,7 +311,7 @@ return [
                 [
                     'title' => 'Data collected',
                     'body' => [
-                        'The website only collects data when you send the contact form:',
+                        'The website collects data in two cases only. When you send the contact form:',
                         [
                             'list' => [
                                 'your name and email address;',
@@ -298,7 +322,8 @@ return [
                                 'an encrypted, irreversible fingerprint of your IP address, computed with a secret key. The IP address itself is never stored.',
                             ],
                         ],
-                        'No other data is collected: no cookies, no audience measurement, no profiling. Pages, images and fonts are served by the website itself: your visit sends no data to any third-party service.',
+                        'When you accept audience measurement: Google Analytics records, statistically, the pages viewed, the length of the visit, the type of device and browser, the approximate country and the referring page. Google Analytics 4 does not store your IP address.',
+                        'Without your consent, none of this data is collected and no Google script is loaded. No profiling, no advertising. Pages, images and fonts are served by the website itself.',
                     ],
                 ],
                 [
@@ -309,6 +334,7 @@ return [
                                 'To answer your request. Legal basis: steps taken at your request before entering into a contract, or Noorwan\'s legitimate interest in answering the messages it receives.',
                                 'To send you offers from Noorwan, only if you ticked the matching box. Legal basis: your consent.',
                                 'To send you offers from Noorwan\'s partners, only if you ticked the matching box. Legal basis: your consent. No data is passed on to any partner to date. The list of partners will be published here before any data is passed on.',
+                                'To measure visits to the website in order to improve it, only if you accept. Legal basis: your consent.',
                                 'To protect the form against abuse (sending limit, IP address fingerprint). Legal basis: Noorwan\'s legitimate interest in the security of the website.',
                             ],
                         ],
@@ -318,6 +344,7 @@ return [
                     'title' => 'Who receives your data',
                     'body' => [
                         'Your data is only available to the Noorwan teams in charge of your request. It is stored on an IONOS server and may be transferred to Noorwan\'s internal customer relationship tool. It is never sold or rented.',
+                        'Audience measurement data is processed by Google Ireland Limited (Google Analytics), as Noorwan\'s processor. It may be transferred to the United States under the EU-US Data Privacy Framework.',
                     ],
                 ],
                 [
@@ -328,6 +355,8 @@ return [
                                 'Contact requests and related data: 3 years after the last request you sent through this form, then deleted.',
                                 'Consent to receive offers: until you withdraw it, and at most 3 years after the last request you sent through this form.',
                                 'Sending limit data (IP address fingerprint): 2 hours at most.',
+                                'Your audience measurement choice (nw_consent cookie): six months, after which you are asked again.',
+                                'Google Analytics cookies: 13 months at most; audience measurement data in Google Analytics: 14 months at most.',
                             ],
                         ],
                     ],
@@ -336,6 +365,7 @@ return [
                     'title' => 'Withdrawing your consent',
                     'body' => [
                         'You can withdraw your consent to receive offers from Noorwan or its partners at any time: write to us through the form on the Contact page (subject "Other") or at contact@noorwan.com. Every offer sent by email will also contain an unsubscribe link. Withdrawal applies to the future and does not affect past mailings.',
+                        'Your consent to audience measurement is as easy to withdraw as to give: "Manage cookies" link at the bottom of every page, or the Cookies page.',
                     ],
                 ],
                 [
@@ -361,18 +391,25 @@ return [
         ],
         'cookies' => [
             'title' => 'Cookies',
-            'intro' => 'The noorwan.com website sets no cookies and does not measure its audience.',
+            'intro' => 'The noorwan.com website measures its audience only with your consent. Your choice is kept for six months in a cookie, nw_consent.',
             'sections' => [
                 [
-                    'title' => 'No cookies',
+                    'title' => 'The cookie that keeps your choice',
                     'body' => [
-                        'The website sets no cookies on your device, and no equivalent tracker (local storage, invisible pixel, browser fingerprinting).',
+                        'When you click "Accept" or "Decline", the website sets the nw_consent cookie, which keeps your answer for six months. Its only purpose is not to ask you again on every page. After six months, you are asked again.',
                     ],
                 ],
                 [
-                    'title' => 'No audience measurement or advertising',
+                    'title' => 'Audience measurement, only with your consent',
                     'body' => [
-                        'The website uses no audience measurement, advertising or social media sharing tools. That is why no banner asks for your consent.',
+                        'If you accept, the website loads Google Tag Manager and Google Analytics, which set the _ga cookie and a _ga_ cookie followed by an identifier (13 months at most) to count visits statistically. They are used neither for advertising nor for profiling.',
+                        'If you decline, or as long as you have not answered, no Google script is loaded and none of these cookies is set.',
+                    ],
+                ],
+                [
+                    'title' => 'Changing your mind',
+                    'body' => [
+                        'The "Manage cookies" link at the bottom of every page reopens the banner; the buttons in the "Manage your choices" section below do the same. Declining after accepting deletes the Google Analytics cookies.',
                     ],
                 ],
                 [
@@ -391,12 +428,6 @@ return [
                     'title' => 'Third-party websites',
                     'body' => [
                         'When you follow a link to Amazon or another website, that website\'s cookie policy applies.',
-                    ],
-                ],
-                [
-                    'title' => 'Changes',
-                    'body' => [
-                        'If the website were ever to use cookies that require your consent, this page would be updated and your consent would be asked for beforehand.',
                     ],
                 ],
             ],

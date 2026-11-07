@@ -95,6 +95,14 @@ function t(string $key, array $vars = []): string
 }
 
 /**
+ * Texte encore à fournir par Marwan (« [À FOURNIR : …] ») : surligné pour rester visible tant qu'il n'est pas remplacé.
+ */
+function todo(string $key): string
+{
+    return '<mark class="todo">' . t($key) . '</mark>';
+}
+
+/**
  * Liste traduite, non échappée : chaque valeur affichée passe par e().
  */
 function tl(string $key): array

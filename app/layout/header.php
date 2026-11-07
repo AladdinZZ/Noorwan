@@ -2,20 +2,18 @@
 
 declare(strict_types=1);
 
-// En-tête commun : <head>, bandeau avec logo, navigation, choix de langue et menu mobile.
+// En-tête commun : <head>, barre fine avec logo, navigation, « Connexion », choix de langue et menu mobile.
 // Attend $meta = ['title' => ..., 'description' => ...] (chaînes brutes, échappées ici).
 
-// « À propos » viendra avec sa propre page : il n'est pas dans le menu en v1.
+// « À propos » viendra avec sa propre page : il n'est pas dans le menu.
 $navItems = [
     ['label' => 'nav.consulting', 'href' => url('index', 'consulting')],
     ['label' => 'nav.solutions', 'href' => url('solutions')],
-    ['label' => 'nav.edition', 'href' => url('index', 'edition')],
-    ['label' => 'nav.contact', 'href' => url('index', 'contact')],
+    ['label' => 'nav.edition', 'href' => url('edition')],
+    ['label' => 'nav.contact', 'href' => url('contact')],
 ];
-// « Connexion » ferme le menu, en style secondaire, quand le Compte Noorwan est en service.
-if (account_url() !== null) {
-    $navItems[] = ['label' => 'nav.account', 'href' => account_url(), 'class' => 'nav-account'];
-}
+// « Connexion » : bouton en pastille dans la barre, dernier lien du menu mobile, quand le Compte Noorwan est en service.
+$accountUrl = account_url();
 
 $asset = static fn (string $path): string => $path . '?v=' . (string) @filemtime(ROOT_DIR . '/public/' . $path);
 ?>
@@ -36,6 +34,26 @@ $asset = static fn (string $path): string => $path . '?v=' . (string) @filemtime
 <link rel="preload" href="assets/fonts/IBMPlexSansArabic-Regular.woff2" as="font" type="font/woff2" crossorigin>
 <?php endif; ?>
 <link rel="stylesheet" href="<?= e($asset('assets/css/site.css')) ?>">
+<?php if (GTM_ID !== ''): ?>
+<script nonce="<?= e(csp_nonce()) ?>" id="gtm-bootstrap" data-gtm-id="<?= e(GTM_ID) ?>">
+window.dataLayer = window.dataLayer || [];
+function gtag() { window.dataLayer.push(arguments); }
+gtag('consent', 'default', { ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied', analytics_storage: 'denied' });
+</script>
+<?php if (consent_state() === 'granted'): ?>
+<script nonce="<?= e(csp_nonce()) ?>">
+gtag('consent', 'update', { analytics_storage: 'granted' });
+(function (w, d, s, l, i) {
+    w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+    var f = d.getElementsByTagName(s)[0], j = d.createElement(s);
+    j.async = true;
+    j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i;
+    j.setAttribute('nonce', d.getElementById('gtm-bootstrap').nonce);
+    f.parentNode.insertBefore(j, f);
+})(window, document, 'script', 'dataLayer', '<?= e(GTM_ID) ?>');
+</script>
+<?php endif; ?>
+<?php endif; ?>
 <script src="<?= e($asset('assets/js/site.js')) ?>" defer></script>
 </head>
 <body>
@@ -45,10 +63,13 @@ $asset = static fn (string $path): string => $path . '?v=' . (string) @filemtime
         <a class="logo" href="<?= e(url('index')) ?>" aria-label="<?= t('nav.home_label') ?>" dir="ltr">noorwan<span class="logo-dot">.</span></a>
         <nav class="nav-desktop" aria-label="<?= t('nav.main_label') ?>">
 <?php foreach ($navItems as $item): ?>
-            <a href="<?= e($item['href']) ?>"<?= isset($item['class']) ? ' class="' . e($item['class']) . '"' : '' ?>><?= t($item['label']) ?></a>
+            <a href="<?= e($item['href']) ?>"><?= t($item['label']) ?></a>
 <?php endforeach; ?>
         </nav>
         <div class="header-tools">
+<?php if ($accountUrl !== null): ?>
+            <a class="btn-account" href="<?= e($accountUrl) ?>"><?= t('nav.account') ?></a>
+<?php endif; ?>
             <details class="lang-menu">
                 <summary><span class="visually-hidden"><?= t('nav.lang_label') ?>, <?= e(LANGS[lang()]['name']) ?></span><span aria-hidden="true"><?= e(LANGS[lang()]['label']) ?></span><svg class="lang-chevron" width="10" height="10" viewBox="0 0 10 10" aria-hidden="true" focusable="false"><path d="M2 3.5l3 3 3-3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
                 <ul class="lang-list" aria-label="<?= t('nav.lang_label') ?>">
@@ -59,14 +80,17 @@ $asset = static fn (string $path): string => $path . '?v=' . (string) @filemtime
             </details>
             <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="nav-mobile" hidden>
                 <span class="visually-hidden"><?= t('nav.menu') ?></span>
-                <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><g stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><line class="menu-line-1" x1="3" y1="6.5" x2="17" y2="6.5"/><line class="menu-line-2" x1="3" y1="13.5" x2="17" y2="13.5"/></g></svg>
+                <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><g stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><line class="menu-line-1" x1="3" y1="6.5" x2="17" y2="6.5"/><line class="menu-line-2" x1="3" y1="13.5" x2="17" y2="13.5"/></g></svg>
             </button>
         </div>
     </div>
-    <nav id="nav-mobile" class="nav-mobile wrap" aria-label="<?= t('nav.mobile_label') ?>">
+    <nav id="nav-mobile" class="nav-mobile" aria-label="<?= t('nav.mobile_label') ?>">
 <?php foreach ($navItems as $item): ?>
-        <a href="<?= e($item['href']) ?>"<?= isset($item['class']) ? ' class="' . e($item['class']) . '"' : '' ?>><?= t($item['label']) ?></a>
+        <a href="<?= e($item['href']) ?>"><?= t($item['label']) ?></a>
 <?php endforeach; ?>
+<?php if ($accountUrl !== null): ?>
+        <a href="<?= e($accountUrl) ?>" class="nav-account"><?= t('nav.account') ?></a>
+<?php endif; ?>
     </nav>
 </header>
 <main id="main" tabindex="-1">

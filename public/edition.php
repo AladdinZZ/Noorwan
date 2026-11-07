@@ -5,7 +5,8 @@ declare(strict_types=1);
 require __DIR__ . '/../app/bootstrap.php';
 require ROOT_DIR . '/app/books.php';
 
-// Page Édition : la prestation d'accompagnement des auteurs, puis le catalogue (deux collections et « Prochainement »).
+// Page Édition, maquette A épurée (M-56) : la prestation d'accompagnement des auteurs, puis le catalogue
+// (deux collections et « Prochainement »).
 current_page('edition');
 $meta = ['title' => raw('meta.edition_title'), 'description' => raw('meta.edition_description')];
 
@@ -26,49 +27,47 @@ require ROOT_DIR . '/app/layout/header.php';
 ?>
 <section class="page-hero tone-edition" aria-labelledby="page-title">
     <div class="wrap">
-        <p class="tag"><?= t('edition.tag') ?></p>
-        <h1 id="page-title"><?= t('edition.title') ?></h1>
-        <p class="page-lead"><?= t('edition.lead') ?></p>
-        <div class="actions">
+        <p class="eyebrow"><?= t('edition.tag') ?></p>
+        <h1 id="page-title" class="h1 h1-page"><?= t('edition.title') ?></h1>
+        <p class="lead"><?= t('edition.lead') ?></p>
+        <p class="links">
             <a class="btn btn-dark" href="<?= e($contactEdition) ?>"><?= t('edition.btn_publish') ?> <span aria-hidden="true"><?= t('common.arrow') ?></span></a>
-            <a class="btn btn-text" href="#catalogue"><?= t('edition.btn_catalogue') ?></a>
-        </div>
+            <a class="more" href="#catalogue"><?= t('edition.btn_catalogue') ?></a>
+        </p>
     </div>
 </section>
 
 <!-- A VALIDER PAR MARWAN : les quatre étapes de la prestation (textes dans lang/*.php, edition.service_*). -->
-<section class="section tone-edition" aria-labelledby="service-title">
+<section class="screen screen-dark tone-edition" aria-labelledby="service-title">
     <div class="wrap">
-        <div class="split-head">
-            <div>
-                <p class="eyebrow"><?= t('edition.service_eyebrow') ?></p>
-                <h2 id="service-title" class="h2"><?= t('edition.service_title') ?></h2>
-            </div>
-            <p><?= t('edition.service_lead') ?></p>
-        </div>
-        <ol class="cards cards-steps">
+        <p class="eyebrow eyebrow-gold"><?= t('edition.service_eyebrow') ?></p>
+        <h2 id="service-title" class="h2 h2-section"><?= t('edition.service_title') ?></h2>
+        <p class="lead"><?= t('edition.service_lead') ?></p>
+        <ol class="steps">
 <?php foreach (tl('edition.service_steps') as $i => $step): ?>
-            <li class="card">
-                <span class="card-num">0<?= $i + 1 ?></span>
-                <h3><?= e($step['title']) ?></h3>
-                <p><?= e($step['text']) ?></p>
-            </li>
+            <li><span class="step-num">0<?= $i + 1 ?></span> <strong><?= e($step['title']) ?></strong> <span><?= e($step['text']) ?></span></li>
 <?php endforeach; ?>
         </ol>
     </div>
 </section>
 
-<section id="catalogue" class="section section-gray tone-edition" aria-labelledby="catalogue-title">
+<section id="catalogue" class="section tone-edition" aria-labelledby="catalogue-title">
     <div class="wrap">
-        <p class="eyebrow"><?= t('edition.catalogue_eyebrow') ?></p>
-        <h2 id="catalogue-title" class="h2 section-title"><?= t('edition.catalogue_title') ?></h2>
+        <div class="catalogue-head">
+            <p class="eyebrow"><?= t('edition.catalogue_eyebrow') ?></p>
+            <h2 id="catalogue-title" class="h2 h2-section"><?= t('edition.catalogue_title') ?></h2>
+            <p class="catalogue-todo"><?= todo('edition.asin_todo') ?></p>
+        </div>
 <?php foreach ($rubrics as $rubricId => $rubric): ?>
 <?php if ($rubric['books'] === []) { continue; } ?>
         <section class="collection" aria-labelledby="collection-<?= e($rubricId) ?>">
             <div class="collection-head">
                 <h3 id="collection-<?= e($rubricId) ?>"><?= e($rubric['name']) ?></h3>
 <?php if ($rubric['text'] !== ''): ?>
-                <p class="muted"><?= e($rubric['text']) ?></p>
+                <p class="collection-text"><?= e($rubric['text']) ?></p>
+<?php endif; ?>
+<?php if ($rubricId === 'metaphysique'): ?>
+                <p class="collection-text"><?= todo('home.author_line') ?></p>
 <?php endif; ?>
             </div>
             <div class="books">

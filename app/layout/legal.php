@@ -16,14 +16,14 @@ $legalText = static fn (string $text): string => preg_replace(
 ?>
 <section class="page-hero" aria-labelledby="page-title">
     <div class="wrap">
-        <p class="eyebrow"><?= t('legal.eyebrow') ?></p>
-        <h1 id="page-title"><?= t('legal.' . $legalKey . '.title') ?></h1>
-        <p class="page-lead"><?= $legalText(raw('legal.' . $legalKey . '.intro')) ?></p>
+        <p class="eyebrow eyebrow-muted"><?= t('legal.eyebrow') ?></p>
+        <h1 id="page-title" class="h1 h1-legal"><?= t('legal.' . $legalKey . '.title') ?></h1>
+        <p class="lead"><?= $legalText(raw('legal.' . $legalKey . '.intro')) ?></p>
         <p class="legal-updated"><?= t('legal.updated') ?></p>
     </div>
 </section>
 
-<section class="section">
+<section class="section section-legal">
     <div class="wrap">
     <div class="legal">
 <?php $notice = tl('legal.' . $legalKey . '.notice'); ?>

@@ -6,15 +6,15 @@
 
 | Page | État |
 |---|---|
-| Accueil | **En ligne.** v1 validée le 21/10/2026 (maquette `docs/maquette/maquette-accueil-v1.dc.html`), modifiée par le lot v1.1 du 27/10/2026 : introduction Solutions et section Édition **à valider**. Une v2 est prévue plus tard. |
+| Accueil | **v2 (maquette A épurée, M-56), branche `feat/site-v2`, à relire par Marwan avant fusion.** v1 en ligne jusqu'à la fusion. Voir « État du site au 6/11/2026 (v2) ». |
 | Consulting | Section de l'accueil (5 expertises), pas de page propre. |
 | Solutions | **En ligne, textes à valider** (lot v1.1, 27/10/2026) : `solutions.php`. Reserva, Immobilier, Shopping et page Développeurs hors site. |
 | Édition | **En ligne.** Prestation (4 étapes **à valider**) et catalogue ; annonce Ikra.M **à valider** (27/10/2026). |
 | À propos | À rédiger (hors menu). |
 | Contact | En ligne. |
-| Mentions légales, Confidentialité, Cookies | En ligne, **à faire relire par un juriste**. Mentions légales en cours de mise à jour (encadré). |
+| Mentions légales, Confidentialité, Cookies | En ligne, **à faire relire par un juriste**. Mentions légales en cours de mise à jour (encadré). Confidentialité et Cookies réécrites en v2 pour la mesure d'audience avec accord (M-59), **à valider**. |
 
-L'état réel du site est décrit dans « État du site au 27/10/2026 » (complété le 30/10/2026 par le lien « Connexion »), en fin de document. Les sections intermédiaires sont l'historique des décisions.
+L'état de la v2 est décrit dans « État du site au 6/11/2026 (v2) », en fin de document ; l'état en ligne avant sa fusion, dans « État du site au 27/10/2026 » (complété le 30/10/2026 par le lien « Connexion »), en fin de document. Les sections intermédiaires sont l'historique des décisions.
 
 ## Cadrage acté le 21/10/2026
 
@@ -45,7 +45,7 @@ Boutons : [Découvrir nos univers] [Parlons de votre projet]
 ### Trois univers
 
 - **01 Consulting** : 20 ans de digital, de marketing et d'eCommerce au service de vos projets. Stratégie, présence en ligne, formation.
-- **02 Solutions** : des logiciels pensés pour Djibouti. Réservation, ressources humaines, paiement mobile, intelligence artificielle. Mobiles d'abord, en français, en anglais et en arabe.
+- **02 Solutions** : des logiciels pensés pour Djibouti. Réservation, ressources humaines, intelligence artificielle. Mobiles d'abord, en français, en anglais et en arabe.
 - **03 Édition** : nous accompagnons les auteurs jusqu'à la publication de leur livre sur Amazon, et nous publions nos propres collections.
 
 ### Nos solutions
@@ -112,7 +112,7 @@ Ordre : haut de page · trois univers · approche · Consulting · Solutions · 
 - **Haut de page** (moins haut depuis le lot v1.1, titre sur une ligne à 1440 px) : « Noorwan · Vision & création » ; « Des idées pour des solutions concrètes » ; « Conseil, solutions numériques et édition : trois univers complémentaires pour transformer les idées en réalisations utiles. » ; boutons [Découvrir nos expertises] [Parlons de votre projet] ; « Une vision claire. Des étapes concrètes. »
 - **Nos univers**, « Trois univers, une même exigence » :
   - 01 Consulting : « Clarifier votre positionnement, structurer vos priorités et piloter vos projets numériques : stratégie, marketing digital, eCommerce, formation. »
-  - 02 Solutions : « Des logiciels pour les entreprises : ressources humaines, paiement mobile et intelligence artificielle. Mobiles d'abord, en trois langues. »
+  - 02 Solutions : « Des logiciels pour les entreprises : réservation en ligne, ressources humaines et intelligence artificielle. Mobiles d'abord, en trois langues. »
   - 03 Édition : « Nous accompagnons les auteurs jusqu'à la publication de leur livre sur Amazon, et nous publions nos propres collections. »
 - **Notre approche**, « De l'idée à l'action » : Comprendre le besoin (Écouter avant de proposer.) · Structurer la réponse (Prioriser ce qui compte.) · Concevoir la solution (Livrer un outil utile.) · Apprendre et évoluer (Mesurer, ajuster, transmettre.).
 - **Consulting**, « Donner une direction claire à vos projets » : « Un conseil stratégique et un accompagnement numérique, avec une approche pragmatique, fondés sur vingt ans de digital, de marketing et d'eCommerce. » Cinq expertises : Stratégie et structuration de projet ; Marketing digital et présence en ligne ; E-commerce et parcours client ; Développement web et outils numériques ; Formation. « Clarifier avant d'accélérer. Une étape utile livrée vaut mieux qu'un grand plan sur le papier. »
@@ -150,3 +150,33 @@ Ordre : haut de page · trois univers · approche · Consulting · Solutions · 
 
 - Contact : « Parlons de votre projet », un formulaire (nom, e-mail, téléphone facultatif, univers Consulting / Solutions / Édition / Autre, message), deux accords facultatifs non cochés (offres de Noorwan, offres de partenaires).
 - Pages légales datées du 27 octobre 2026, à faire relire par un juriste. Confidentialité : demandes conservées 3 ans après la dernière demande envoyée par le formulaire ; données de limitation des envois 2 heures au plus. Cookies : aucun cookie, aucune mesure d'audience.
+
+## État du site au 6/11/2026 (v2, branche `feat/site-v2`, à relire avant fusion)
+
+Direction visuelle : maquette A épurée (M-56), validée par Marwan le 6/11/2026. Les textes ci-dessous reprennent ceux de l'état du 27/10/2026 ; seuls les éléments nouveaux sont listés. Textes nouveaux **à valider** ; arabe à relire par un arabophone.
+
+### Commun
+
+- Menu : Consulting (accueil), Solutions, Édition (page Édition), Contact (page Contact). « Connexion » devient une pastille noire dans la barre (et le dernier lien du menu mobile, et la colonne Noorwan du pied de page), toujours masquée tant que `COMPTE_LINK_ENABLED` vaut `false`.
+- Pied de page en quatre colonnes : Consulting (Découvrir nos expertises, Parlons de votre projet), Solutions (Découvrir nos solutions, Demander une présentation), Édition (Voir le catalogue, Publier votre livre), Noorwan (Contact, Connexion). Puis « Écosystème Noorwan » (D63 : Noorwan, Compte Noorwan, Reserva, Inteek ; entrée sans adresse masquée), puis « Des idées pour des solutions concrètes. », « © année Noorwan », liens légaux et « Gérer les cookies ».
+- Bandeau « Un projet en tête ? » : même texte, bouton bleu, adresse contact@noorwan.com dessous.
+- Bandeau de consentement (M-59), seulement si `GTM_ID` est réglé : « Mesure d'audience » ; « Avec votre accord, nous mesurons la fréquentation du site de façon statistique (Google Analytics), sans publicité. Votre choix est gardé six mois. » ; « En savoir plus » ; [Refuser] [Accepter], de même poids.
+
+### Accueil
+
+Ordre : haut de page · Consulting (01) · Solutions (02) · Édition (03) · produits · {méta}Physique · Pourquoi Noorwan · contact.
+
+- Haut de page : petit titre « Consulting, Solutions, Édition » ; titre « Une vision claire. » puis, en gris, « Des étapes concrètes. » ; accroche « Conseil, solutions numériques et édition : trois univers complémentaires pour transformer les idées en réalisations utiles. » ; liens « Découvrir nos expertises › » et « Parlons de votre projet › » ; image sombre avec « noorwan. ».
+- 01 Consulting : « Clarifier avant d'accélérer. », introduction du Consulting, les cinq expertises, « Une étape utile livrée vaut mieux qu'un grand plan sur le papier. », lien « Parlons de votre projet ».
+- 02 Solutions : « Des outils conçus pour les entreprises », texte de l'univers Solutions, « Découvrir nos solutions ».
+- 03 Édition : « Des idées à lire, découvrir et transmettre », texte de l'univers Édition, « En savoir plus ».
+- Produits (brief M-56) : Reserva (Réservation, « La prise de rendez-vous et de réservations pour les commerces et services. », texte du brouillon du 21/10), Inteek (Ressources humaines), Noor (Intelligence artificielle, « Confidentiel », « Présentation sur rendez-vous. »), Noorwan Édition (texte de l'univers). Ligne « Bientôt : Immobilier, Shopping ». OnePay n'apparaît nulle part.
+- {méta}Physique : couvertures d'Harmonie et Lumière, Vibration « À paraître », « Chemins de l'Âme : Le Mal, Le Bien, Être pour Avoir », liens catalogue et « Publier votre livre ». **[À FOURNIR : phrase d'auteur]**.
+- Pourquoi Noorwan : « De l'idée à l'action », **[À FOURNIR : texte « Pourquoi Noorwan » (chiffres clés à confirmer)]**, puis les quatre étapes de l'approche.
+
+### Pages
+
+- Solutions : en-tête, « Notre façon de faire » (trois principes), mêmes produits que l'accueil, Inteek en détail (modules). « Autres solutions » disparaît.
+- Édition : en-tête, prestation en quatre étapes sur fond sombre, catalogue. **[À FOURNIR : ASIN des cinq livres parus]** sous le titre du catalogue ; **[À FOURNIR : phrase d'auteur]** sous la présentation de {méta}Physique.
+- Contact : même formulaire sur un panneau blanc ; adresse contact@noorwan.com sous l'introduction.
+- Confidentialité et Cookies (datées du 6 novembre 2026) : mesure d'audience par Google Analytics seulement avec accord ; cookie `nw_consent` six mois ; cookies `_ga` 13 mois au plus ; données dans Google Analytics 14 mois au plus ; Google Ireland Limited comme sous-traitant, transfert possible aux États-Unis (Data Privacy Framework) ; retrait par « Gérer les cookies » ; section « Gérer vos choix » sur la page Cookies. Mentions légales : la phrase « aucun cookie » renvoie désormais à la page Cookies.
