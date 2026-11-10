@@ -6,7 +6,7 @@
 
 | Page | État |
 |---|---|
-| Accueil | **v2 (maquette A épurée, M-56), branche `feat/site-v2`, à relire par Marwan avant fusion.** v1 en ligne jusqu'à la fusion. Voir « État du site au 6/11/2026 (v2) ». |
+| Accueil | **v2 en ligne. v3 (textes fournis, Reserva confidentiel, illustrations) sur la branche `feat/v3-textes-visuels`, à relire par Marwan avant fusion.** Voir « État du site au 10/11/2026 (v3) ». |
 | Consulting | Section de l'accueil (5 expertises), pas de page propre. |
 | Solutions | **En ligne, textes à valider** (lot v1.1, 27/10/2026) : `solutions.php`. Reserva, Immobilier, Shopping et page Développeurs hors site. |
 | Édition | **En ligne.** Prestation (4 étapes **à valider**) et catalogue ; annonce Ikra.M **à valider** (27/10/2026). |
@@ -180,3 +180,39 @@ Ordre : haut de page · Consulting (01) · Solutions (02) · Édition (03) · pr
 - Édition : en-tête, prestation en quatre étapes sur fond sombre, catalogue. **[À FOURNIR : ASIN des cinq livres parus]** sous le titre du catalogue ; **[À FOURNIR : phrase d'auteur]** sous la présentation de {méta}Physique.
 - Contact : même formulaire sur un panneau blanc ; adresse contact@noorwan.com sous l'introduction.
 - Confidentialité et Cookies (datées du 6 novembre 2026) : mesure d'audience par Google Analytics seulement avec accord ; cookie `nw_consent` six mois ; cookies `_ga` 13 mois au plus ; données dans Google Analytics 14 mois au plus ; Google Ireland Limited comme sous-traitant, transfert possible aux États-Unis (Data Privacy Framework) ; retrait par « Gérer les cookies » ; section « Gérer vos choix » sur la page Cookies. Mentions légales : la phrase « aucun cookie » renvoie désormais à la page Cookies.
+
+## État du site au 10/11/2026 (v3, branche `feat/v3-textes-visuels`, à relire avant fusion)
+
+Brief v3 de Maestro du 7/11/2026. Textes nouveaux **à valider** par Marwan ; arabe à relire par un arabophone. Seuls les changements par rapport à la v2 sont listés.
+
+### Reserva confidentiel (décision de Marwan, 7/11)
+
+- Carte Reserva (accueil et page Solutions) : catégorie « Réservation », pastille « Confidentiel », « Présentation sur rendez-vous. », comme Noor. Plus aucune description de Reserva sur le site (contrôlé par `tests/run.sh`).
+
+### Phrase d'auteur de {méta}Physique (accueil et catalogue)
+
+Tirée des présentations publiques d'Harmonie et de Lumière (science et spiritualité, origine du monde, conscience humaine, raison, foi et mystère) ; rien n'est ajouté sur le contenu.
+
+- FR : « Une trilogie entre science et spiritualité : de l'origine du monde à la conscience humaine, elle cherche le fil qui relie la raison, la foi et le mystère. »
+- EN : « A trilogy between science and spirituality: from the origin of the world to human consciousness, it seeks the thread that links reason, faith and mystery. »
+- AR : « ثلاثية بين العلم والروحانية: من أصل العالم إلى الوعي الإنساني، تبحث عن الخيط الذي يجمع العقل والإيمان والسر. »
+
+### Pourquoi Noorwan (accueil, au-dessus des quatre étapes)
+
+Aucun chiffre.
+
+- Accroche : « Un groupe qui relie le conseil, le logiciel et l'édition avec une même méthode : partir du besoin réel et livrer ce qui sert. »
+- Né à Djibouti, ouvert sur le monde : « Noorwan est né à Djibouti et se construit avec une vocation internationale. »
+- Trois univers qui se répondent : « Conseil, logiciel et édition se nourrissent : ce que nous apprenons dans un univers sert les deux autres. »
+- Des outils pensés pour l'Afrique : « Nos solutions sont conçues pour le téléphone d'abord, en français, en anglais et en arabe. »
+
+EN et AR dans `lang/en.php` et `lang/ar.php`.
+
+### Liens Amazon
+
+- Harmonie : ASIN `B0F91W6361` (fiche amazon.fr « Harmonie: Science et spiritualité : Aux frontières de la matière et de la conscience », auteur Noorwan), lien direct.
+- Lumière, Le Mal, Le Bien, Être pour Avoir : **[À FOURNIR : ASIN]**, boutons vers la recherche « noorwan » en attendant. Des ASIN relevés sur un catalogue tiers (ThriftBooks) sont listés dans le retour à Maestro, non vérifiés sur Amazon ; aucune trace de « Le Bien » trouvée.
+
+### Illustrations des produits
+
+Une illustration SVG par carte dans `public/assets/img/` (moins de 3 ko chacune, sans texte ni logo) : Inteek, fiche candidat et carte d'entretien sur un téléphone ; Noorwan Édition, livre ouvert ; Reserva et Noor, compositions abstraites (plans superposés, source de lumière). Inteek et le livre sont en miroir en arabe. Pas de carte OnePay.
