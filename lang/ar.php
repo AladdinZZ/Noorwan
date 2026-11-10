@@ -74,11 +74,16 @@ return [
             'solutions' => ['title' => 'الحلول', 'text' => 'برمجيات للمؤسسات: الحجز عبر الإنترنت، والموارد البشرية، والذكاء الاصطناعي. للهاتف أولًا، بثلاث لغات.'],
             'edition' => ['title' => 'النشر', 'text' => 'نرافق المؤلفين حتى نشر كتبهم على أمازون، وننشر سلاسلنا الخاصة.'],
         ],
-        // Textes à fournir par Marwan (laissés en français, surlignés).
-        'author_line' => '[À FOURNIR : phrase d\'auteur sur la trilogie {méta}Physique]',
+        // A VALIDER PAR MARWAN, à relire par un arabophone : phrase d'auteur et « Pourquoi Noorwan » (v3).
+        'author_line' => 'ثلاثية بين العلم والروحانية: من أصل العالم إلى الوعي الإنساني، تبحث عن الخيط الذي يجمع العقل والإيمان والسر.',
         // À relire.
         'why_eyebrow' => 'لماذا نوروان',
-        'why_text' => '[À FOURNIR : texte « Pourquoi Noorwan » (chiffres clés à confirmer)]',
+        'why_text' => 'مجموعة تجمع الاستشارات والبرمجيات والنشر بمنهج واحد: الانطلاق من الحاجة الحقيقية وتقديم ما ينفع.',
+        'why_points' => [
+            ['title' => 'نشأت في جيبوتي، منفتحة على العالم', 'text' => 'نشأت نوروان في جيبوتي وتنمو برؤية دولية.'],
+            ['title' => 'ثلاثة مجالات يكمل بعضها بعضًا', 'text' => 'تتغذى الاستشارات والبرمجيات والنشر بعضها من بعض: ما نتعلمه في مجال يخدم المجالين الآخرين.'],
+            ['title' => 'أدوات مصممة لأفريقيا', 'text' => 'حلولنا مصممة للهاتف أولًا، بالفرنسية والإنجليزية والعربية.'],
+        ],
         'app_h' => 'من الفكرة إلى الفعل',
         'steps' => [
             ['title' => 'فهم الحاجة', 'text' => 'الإصغاء قبل الاقتراح.'],
@@ -103,7 +108,7 @@ return [
         'products_label' => 'حلولنا',
         // À relire par un arabophone : Reserva, « Bientôt », Immobilier, Shopping.
         'products' => [
-            'reserva' => ['cat' => 'الحجز', 'name' => 'Reserva', 'text' => 'حجز المواعيد والحجوزات للمتاجر والخدمات.', 'confidential' => false],
+            'reserva' => ['cat' => 'الحجز', 'name' => 'Reserva', 'text' => '', 'confidential' => true],
             'inteek' => ['cat' => 'الموارد البشرية', 'name' => 'Inteek', 'text' => 'من التوظيف إلى إدارة الفرق، موارد بشرية مبسطة.', 'confidential' => false],
             'noor' => ['cat' => 'الذكاء الاصطناعي', 'name' => 'Noor', 'text' => '', 'confidential' => true],
             'edition' => ['cat' => 'النشر', 'name' => 'نوروان للنشر', 'text' => 'نرافق المؤلفين حتى نشر كتبهم على أمازون، وننشر سلاسلنا الخاصة.', 'confidential' => false],
@@ -194,7 +199,7 @@ return [
         'also_in_english' => 'متوفر أيضًا بالإنجليزية',
         // À relire.
         // Texte à fournir par Marwan (laissé en français, surligné).
-        'asin_todo' => '[À FOURNIR : ASIN des cinq livres parus, pour des liens Amazon directs]',
+        'asin_todo' => '[À FOURNIR : ASIN de Lumière, Le Mal, Le Bien et Être pour Avoir, pour des liens Amazon directs]',
         'upcoming' => 'قريبًا',
     ],
     // Page Solutions : TEXTES A VALIDER PAR MARWAN, traduction à relire par un arabophone.

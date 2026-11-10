@@ -160,7 +160,10 @@ for lang in fr en ar; do
     grep -q "href=\"edition.php?lang=$lang#catalogue\"" <<< "$section" && pass "lien vers le catalogue ($lang)" || fail "lien vers le catalogue absent ($lang)"
     grep -q "href=\"contact.php?lang=$lang&amp;universe=edition\"" <<< "$section" && pass "« Publier votre livre » vers le formulaire ($lang)" || fail "lien Publier votre livre ($lang)"
     # Textes manquants : visibles, surlignés, jamais inventés.
-    expect "accueil : textes à fournir surlignés (phrase d'auteur, Pourquoi Noorwan) ($lang)" 2 "$(grep -c '<mark class="todo">\[À FOURNIR : ' <<< "$home")"
+    expect "accueil : plus aucun texte à fournir ($lang)" 0 "$(grep -c '<mark class="todo">' <<< "$home")"
+    why=$(sed -n '/aria-labelledby="why-title"/,/<\/section>/p' <<< "$home")
+    expect "Pourquoi Noorwan : texte et trois points forts, sans chiffre ($lang)" "1|3|0" \
+        "$(grep -c '<p class="lead">' <<< "$why")|$(sed -n '/<ul class="why-points">/,/<\/ul>/p' <<< "$why" | grep -c '<li>')|$(sed -n '/<ul class="why-points">/,/<\/ul>/p' <<< "$why" | grep -cE '[0-9]')"
 done
 
 echo "2 octies. Page Édition : livre à paraître"
@@ -177,7 +180,8 @@ for lang in fr en ar; do
         "$(grep -c "<p class=\"book-flag\">$(by_lang "$lang" "À paraître" "Forthcoming" "سيصدر قريبًا")</p>" <<< "$book")|$(grep -c 'book-buy' <<< "$book")"
     expect "boutons « Acheter » des livres parus ($lang)" 5 "$(grep -c 'class="btn btn-dark book-buy"' <<< "$html")"
     expect "quatre étapes de la prestation ($lang)" 4 "$(sed -n '/<ol class="steps">/,/<\/ol>/p' <<< "$html" | grep -c '<li>')"
-    expect "textes à fournir surlignés (ASIN, phrase d'auteur) ($lang)" 2 "$(grep -c '<mark class="todo">\[À FOURNIR : ' <<< "$html")"
+    grep -q 'href="https://www.amazon.fr/dp/B0F91W6361"' <<< "$html" && pass "Harmonie : lien direct vers sa fiche Amazon ($lang)" || fail "Harmonie : lien Amazon direct absent ($lang)"
+    expect "texte à fournir surligné (ASIN seulement) ($lang)" 1 "$(grep -c '<mark class="todo">\[À FOURNIR : ' <<< "$html")"
 done
 expect "couverture_belles_manieres.webp servie" 200 "$(curl -s -o /dev/null -w '%{http_code}' "$BASE_URL/assets/images/covers/couverture_belles_manieres.webp")"
 
@@ -189,10 +193,12 @@ for lang in fr en ar; do
     grep -q "href=\"solutions.php?lang=$lang\">$(by_lang "$lang" "Solutions" "Solutions" "الحلول")<" <<< "$nav" && pass "menu : Solutions mène à solutions.php ($lang)" || fail "menu : lien Solutions ($lang)"
     for page in "" solutions.php; do
         html=$(curl -s "$BASE_URL/$page?lang=$lang")
-        expect "produits Reserva, Inteek, Noor, Édition, un seul confidentiel (${page:-index}, $lang)" "reserva|inteek|noor|edition|1" \
+        expect "produits Reserva, Inteek, Noor, Édition, deux confidentiels (${page:-index}, $lang)" "reserva|inteek|noor|edition|2" \
             "$(grep -oE '<article id="product-[a-z]+"' <<< "$html" | sed -E 's/.*product-([a-z]+)"/\1/' | paste -sd '|' -)|$(grep -c 'class="badge-confidential"' <<< "$html")"
         grep -q 'id="product-noor"' <<< "$html" && sed -n '/id="product-noor"/,/<\/article>/p' <<< "$html" | grep -q 'badge-confidential' \
             && pass "Noor marqué « Confidentiel » (${page:-index}, $lang)" || fail "Noor sans mention Confidentiel (${page:-index}, $lang)"
+        sed -n '/id="product-reserva"/,/<\/article>/p' <<< "$html" | grep -q 'badge-confidential' \
+            && pass "Reserva marqué « Confidentiel » (${page:-index}, $lang)" || fail "Reserva sans mention Confidentiel (${page:-index}, $lang)"
         expect "Immobilier et Shopping « bientôt » (${page:-index}, $lang)" 2 "$(sed -n '/<div class="soon-row">/,/<\/ul>/p' <<< "$html" | grep -c '<li>')"
     done
 
@@ -467,6 +473,29 @@ else
 fi
 expect "purge : seul le fichier de plus d'une heure est supprimé" "-|récent" "$(rl_state)"
 rm -f "$RL_OLD" "$RL_RECENT"
+
+echo "2 nonies ter. Illustrations des produits (SVG)"
+for id in reserva inteek noor edition; do
+    file="public/assets/img/$id.svg"
+    expect "$id.svg servi" 200 "$(curl -s -o /dev/null -w '%{http_code}' "$BASE_URL/assets/img/$id.svg")"
+    size=$(wc -c < "$file" | tr -d ' ')
+    [[ $size -lt 15360 ]] && pass "$id.svg léger ($size octets)" || fail "$id.svg trop lourd ($size octets)"
+    expect "$id.svg sans texte ni image externe ni script" 0 "$(grep -ciE '<text|<image|href=|<script' "$file")"
+done
+for lang in fr en ar; do
+    for page in "" solutions.php; do
+        html=$(curl -s "$BASE_URL/$page?lang=$lang")
+        expect "une illustration décorative par produit (${page:-index}, $lang)" 4 "$(grep -cE '<div class="glyph"><img src="assets/img/(reserva|inteek|noor|edition)\.svg" alt=""' <<< "$html")"
+    done
+done
+
+echo "2 nonies bis. Reserva confidentiel : aucune description sur le site"
+for page in "" solutions.php edition.php contact.php; do
+    for lang in fr en ar; do
+        if curl -s "$BASE_URL/$page?lang=$lang" | grep -qE 'prise de rendez-vous|reservation booking|حجز المواعيد'; then fail "description de Reserva présente : /${page:-index} ($lang)"; else pass "aucune description de Reserva : /${page:-index} ($lang)"; fi
+    done
+done
+if grep -rnE 'prise de rendez-vous|reservation booking|حجز المواعيد' lang >/dev/null; then fail "description de Reserva dans lang/"; else pass "aucune description de Reserva dans lang/"; fi
 
 echo "4. Textes interdits"
 files=(app bin lang public database CLAUDE.md)

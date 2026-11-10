@@ -67,7 +67,7 @@ require ROOT_DIR . '/app/layout/header.php';
                 <p class="collection-text"><?= e($rubric['text']) ?></p>
 <?php endif; ?>
 <?php if ($rubricId === 'metaphysique'): ?>
-                <p class="collection-text"><?= todo('home.author_line') ?></p>
+                <p class="collection-text"><?= t('home.author_line') ?></p>
 <?php endif; ?>
             </div>
             <div class="books">

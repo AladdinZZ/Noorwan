@@ -67,10 +67,15 @@ return [
             'solutions' => ['title' => 'Solutions', 'text' => 'Business software: online booking, human resources and artificial intelligence. Mobile first, in three languages.'],
             'edition' => ['title' => 'Publishing', 'text' => 'We guide authors all the way to publishing their book on Amazon, and we publish our own collections.'],
         ],
-        // Textes à fournir par Marwan (laissés en français, surlignés).
-        'author_line' => '[À FOURNIR : phrase d\'auteur sur la trilogie {méta}Physique]',
+        // A VALIDER PAR MARWAN : phrase d'auteur (d'après les présentations d'Harmonie et de Lumière) et « Pourquoi Noorwan » (v3).
+        'author_line' => 'A trilogy between science and spirituality: from the origin of the world to human consciousness, it seeks the thread that links reason, faith and mystery.',
         'why_eyebrow' => 'Why Noorwan',
-        'why_text' => '[À FOURNIR : texte « Pourquoi Noorwan » (chiffres clés à confirmer)]',
+        'why_text' => 'A group that brings together consulting, software and publishing with one method: start from the real need and deliver what helps.',
+        'why_points' => [
+            ['title' => 'Born in Djibouti, open to the world', 'text' => 'Noorwan was born in Djibouti and is growing with an international outlook.'],
+            ['title' => 'Three areas that support each other', 'text' => 'Consulting, software and publishing feed each other: what we learn in one area serves the other two.'],
+            ['title' => 'Tools designed for Africa', 'text' => 'Our solutions are built for the phone first, in French, English and Arabic.'],
+        ],
         'app_h' => 'From idea to action',
         'steps' => [
             ['title' => 'Understand the need', 'text' => 'Listen before proposing.'],
@@ -95,7 +100,7 @@ return [
         'products_label' => 'Our solutions',
         // À relire : textes de Reserva, « Coming soon » et « Real estate » traduits du français.
         'products' => [
-            'reserva' => ['cat' => 'Booking', 'name' => 'Reserva', 'text' => 'Appointment and reservation booking for shops and services.', 'confidential' => false],
+            'reserva' => ['cat' => 'Booking', 'name' => 'Reserva', 'text' => '', 'confidential' => true],
             'inteek' => ['cat' => 'Human resources', 'name' => 'Inteek', 'text' => 'From hiring to team management, HR made simple.', 'confidential' => false],
             'noor' => ['cat' => 'Artificial intelligence', 'name' => 'Noor', 'text' => '', 'confidential' => true],
             'edition' => ['cat' => 'Publishing', 'name' => 'Noorwan Publishing', 'text' => 'We guide authors all the way to publishing their book on Amazon, and we publish our own collections.', 'confidential' => false],
@@ -181,7 +186,7 @@ return [
         'writing' => 'Writing in progress',
         'also_in_english' => 'Also available in English',
         // Texte à fournir par Marwan (laissé en français, surligné).
-        'asin_todo' => '[À FOURNIR : ASIN des cinq livres parus, pour des liens Amazon directs]',
+        'asin_todo' => '[À FOURNIR : ASIN de Lumière, Le Mal, Le Bien et Être pour Avoir, pour des liens Amazon directs]',
         'upcoming' => 'Coming soon',
     ],
     // Solutions page: TEXTES A VALIDER PAR MARWAN. Title and introduction come from the home page (home.sol_h, home.sol_text).
