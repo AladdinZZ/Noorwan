@@ -68,12 +68,12 @@ return [
             'edition' => ['title' => 'Édition', 'text' => 'Nous accompagnons les auteurs jusqu\'à la publication de leur livre sur Amazon, et nous publions nos propres collections.'],
         ],
         // A VALIDER PAR MARWAN : phrase d'auteur (d'après les présentations d'Harmonie et de Lumière) et « Pourquoi Noorwan » (v3).
-        'author_line' => 'Une trilogie entre science et spiritualité : de l\'origine du monde à la conscience humaine, elle cherche le fil qui relie la raison, la foi et le mystère.',
+        'author_line' => 'Une trilogie entre science et spiritualité : de l\'origine du monde à la conscience humaine, elle cherche le fil qui relie la raison, la foi et le mystère.',
         'why_eyebrow' => 'Pourquoi Noorwan',
-        'why_text' => 'Un groupe qui relie le conseil, le logiciel et l\'édition avec une même méthode : partir du besoin réel et livrer ce qui sert.',
+        'why_text' => 'Un groupe qui relie le conseil, le logiciel et l\'édition avec une même méthode : partir du besoin réel et livrer ce qui sert.',
         'why_points' => [
             ['title' => 'Né à Djibouti, ouvert sur le monde', 'text' => 'Noorwan est né à Djibouti et se construit avec une vocation internationale.'],
-            ['title' => 'Trois univers qui se répondent', 'text' => 'Conseil, logiciel et édition se nourrissent : ce que nous apprenons dans un univers sert les deux autres.'],
+            ['title' => 'Trois univers qui se répondent', 'text' => 'Conseil, logiciel et édition se nourrissent : ce que nous apprenons dans un univers sert les deux autres.'],
             ['title' => 'Des outils pensés pour l\'Afrique', 'text' => 'Nos solutions sont conçues pour le téléphone d\'abord, en français, en anglais et en arabe.'],
         ],
         'app_h' => 'De l\'idée à l\'action',
