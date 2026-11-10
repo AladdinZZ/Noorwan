@@ -103,7 +103,7 @@ return [
         'products_label' => 'حلولنا',
         // À relire par un arabophone : Reserva, « Bientôt », Immobilier, Shopping.
         'products' => [
-            'reserva' => ['cat' => 'الحجز', 'name' => 'Reserva', 'text' => 'حجز المواعيد والحجوزات للمتاجر والخدمات.', 'confidential' => false],
+            'reserva' => ['cat' => 'الحجز', 'name' => 'Reserva', 'text' => '', 'confidential' => true],
             'inteek' => ['cat' => 'الموارد البشرية', 'name' => 'Inteek', 'text' => 'من التوظيف إلى إدارة الفرق، موارد بشرية مبسطة.', 'confidential' => false],
             'noor' => ['cat' => 'الذكاء الاصطناعي', 'name' => 'Noor', 'text' => '', 'confidential' => true],
             'edition' => ['cat' => 'النشر', 'name' => 'نوروان للنشر', 'text' => 'نرافق المؤلفين حتى نشر كتبهم على أمازون، وننشر سلاسلنا الخاصة.', 'confidential' => false],

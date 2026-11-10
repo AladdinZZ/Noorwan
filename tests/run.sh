@@ -189,10 +189,12 @@ for lang in fr en ar; do
     grep -q "href=\"solutions.php?lang=$lang\">$(by_lang "$lang" "Solutions" "Solutions" "الحلول")<" <<< "$nav" && pass "menu : Solutions mène à solutions.php ($lang)" || fail "menu : lien Solutions ($lang)"
     for page in "" solutions.php; do
         html=$(curl -s "$BASE_URL/$page?lang=$lang")
-        expect "produits Reserva, Inteek, Noor, Édition, un seul confidentiel (${page:-index}, $lang)" "reserva|inteek|noor|edition|1" \
+        expect "produits Reserva, Inteek, Noor, Édition, deux confidentiels (${page:-index}, $lang)" "reserva|inteek|noor|edition|2" \
             "$(grep -oE '<article id="product-[a-z]+"' <<< "$html" | sed -E 's/.*product-([a-z]+)"/\1/' | paste -sd '|' -)|$(grep -c 'class="badge-confidential"' <<< "$html")"
         grep -q 'id="product-noor"' <<< "$html" && sed -n '/id="product-noor"/,/<\/article>/p' <<< "$html" | grep -q 'badge-confidential' \
             && pass "Noor marqué « Confidentiel » (${page:-index}, $lang)" || fail "Noor sans mention Confidentiel (${page:-index}, $lang)"
+        sed -n '/id="product-reserva"/,/<\/article>/p' <<< "$html" | grep -q 'badge-confidential' \
+            && pass "Reserva marqué « Confidentiel » (${page:-index}, $lang)" || fail "Reserva sans mention Confidentiel (${page:-index}, $lang)"
         expect "Immobilier et Shopping « bientôt » (${page:-index}, $lang)" 2 "$(sed -n '/<div class="soon-row">/,/<\/ul>/p' <<< "$html" | grep -c '<li>')"
     done
 
@@ -467,6 +469,14 @@ else
 fi
 expect "purge : seul le fichier de plus d'une heure est supprimé" "-|récent" "$(rl_state)"
 rm -f "$RL_OLD" "$RL_RECENT"
+
+echo "2 nonies bis. Reserva confidentiel : aucune description sur le site"
+for page in "" solutions.php edition.php contact.php; do
+    for lang in fr en ar; do
+        if curl -s "$BASE_URL/$page?lang=$lang" | grep -qE 'prise de rendez-vous|reservation booking|حجز المواعيد'; then fail "description de Reserva présente : /${page:-index} ($lang)"; else pass "aucune description de Reserva : /${page:-index} ($lang)"; fi
+    done
+done
+if grep -rnE 'prise de rendez-vous|reservation booking|حجز المواعيد' lang >/dev/null; then fail "description de Reserva dans lang/"; else pass "aucune description de Reserva dans lang/"; fi
 
 echo "4. Textes interdits"
 files=(app bin lang public database CLAUDE.md)
