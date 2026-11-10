@@ -160,7 +160,10 @@ for lang in fr en ar; do
     grep -q "href=\"edition.php?lang=$lang#catalogue\"" <<< "$section" && pass "lien vers le catalogue ($lang)" || fail "lien vers le catalogue absent ($lang)"
     grep -q "href=\"contact.php?lang=$lang&amp;universe=edition\"" <<< "$section" && pass "« Publier votre livre » vers le formulaire ($lang)" || fail "lien Publier votre livre ($lang)"
     # Textes manquants : visibles, surlignés, jamais inventés.
-    expect "accueil : textes à fournir surlignés (phrase d'auteur, Pourquoi Noorwan) ($lang)" 2 "$(grep -c '<mark class="todo">\[À FOURNIR : ' <<< "$home")"
+    expect "accueil : plus aucun texte à fournir ($lang)" 0 "$(grep -c '<mark class="todo">' <<< "$home")"
+    why=$(sed -n '/aria-labelledby="why-title"/,/<\/section>/p' <<< "$home")
+    expect "Pourquoi Noorwan : texte et trois points forts, sans chiffre ($lang)" "1|3|0" \
+        "$(grep -c '<p class="lead">' <<< "$why")|$(sed -n '/<ul class="why-points">/,/<\/ul>/p' <<< "$why" | grep -c '<li>')|$(sed -n '/<ul class="why-points">/,/<\/ul>/p' <<< "$why" | grep -cE '[0-9]')"
 done
 
 echo "2 octies. Page Édition : livre à paraître"
@@ -177,7 +180,7 @@ for lang in fr en ar; do
         "$(grep -c "<p class=\"book-flag\">$(by_lang "$lang" "À paraître" "Forthcoming" "سيصدر قريبًا")</p>" <<< "$book")|$(grep -c 'book-buy' <<< "$book")"
     expect "boutons « Acheter » des livres parus ($lang)" 5 "$(grep -c 'class="btn btn-dark book-buy"' <<< "$html")"
     expect "quatre étapes de la prestation ($lang)" 4 "$(sed -n '/<ol class="steps">/,/<\/ol>/p' <<< "$html" | grep -c '<li>')"
-    expect "textes à fournir surlignés (ASIN, phrase d'auteur) ($lang)" 2 "$(grep -c '<mark class="todo">\[À FOURNIR : ' <<< "$html")"
+    expect "texte à fournir surligné (ASIN seulement) ($lang)" 1 "$(grep -c '<mark class="todo">\[À FOURNIR : ' <<< "$html")"
 done
 expect "couverture_belles_manieres.webp servie" 200 "$(curl -s -o /dev/null -w '%{http_code}' "$BASE_URL/assets/images/covers/couverture_belles_manieres.webp")"
 

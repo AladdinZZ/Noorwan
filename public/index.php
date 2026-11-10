@@ -80,7 +80,7 @@ require ROOT_DIR . '/app/layout/header.php';
     <div class="wrap">
         <p class="eyebrow"><?= t('edition.tag') ?></p>
         <h2 id="edition-title" class="h2"><?= t('edition.collections.metaphysique.name') ?></h2>
-        <p class="lead"><?= todo('home.author_line') ?></p>
+        <p class="lead"><?= t('home.author_line') ?></p>
         <ul class="shelf">
 <?php foreach ($trilogy as $id => $book): ?>
             <li>
@@ -104,7 +104,12 @@ require ROOT_DIR . '/app/layout/header.php';
     <div class="wrap">
         <p class="eyebrow eyebrow-gold"><?= t('home.why_eyebrow') ?></p>
         <h2 id="why-title" class="h2"><?= t('home.app_h') ?></h2>
-        <p class="lead"><?= todo('home.why_text') ?></p>
+        <p class="lead"><?= t('home.why_text') ?></p>
+        <ul class="why-points">
+<?php foreach (tl('home.why_points') as $point): ?>
+            <li><strong><?= e($point['title']) ?></strong> <span><?= e($point['text']) ?></span></li>
+<?php endforeach; ?>
+        </ul>
         <ol class="steps">
 <?php foreach (tl('home.steps') as $i => $step): ?>
             <li><span class="step-num">0<?= $i + 1 ?></span> <strong><?= e($step['title']) ?></strong> <span><?= e($step['text']) ?></span></li>
