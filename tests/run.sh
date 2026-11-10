@@ -474,6 +474,21 @@ fi
 expect "purge : seul le fichier de plus d'une heure est supprimé" "-|récent" "$(rl_state)"
 rm -f "$RL_OLD" "$RL_RECENT"
 
+echo "2 nonies ter. Illustrations des produits (SVG)"
+for id in reserva inteek noor edition; do
+    file="public/assets/img/$id.svg"
+    expect "$id.svg servi" 200 "$(curl -s -o /dev/null -w '%{http_code}' "$BASE_URL/assets/img/$id.svg")"
+    size=$(wc -c < "$file" | tr -d ' ')
+    [[ $size -lt 15360 ]] && pass "$id.svg léger ($size octets)" || fail "$id.svg trop lourd ($size octets)"
+    expect "$id.svg sans texte ni image externe ni script" 0 "$(grep -ciE '<text|<image|href=|<script' "$file")"
+done
+for lang in fr en ar; do
+    for page in "" solutions.php; do
+        html=$(curl -s "$BASE_URL/$page?lang=$lang")
+        expect "une illustration décorative par produit (${page:-index}, $lang)" 4 "$(grep -cE '<div class="glyph"><img src="assets/img/(reserva|inteek|noor|edition)\.svg" alt=""' <<< "$html")"
+    done
+done
+
 echo "2 nonies bis. Reserva confidentiel : aucune description sur le site"
 for page in "" solutions.php edition.php contact.php; do
     for lang in fr en ar; do

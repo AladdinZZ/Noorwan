@@ -871,30 +871,27 @@ main:focus {
     font-weight: 600;
 }
 
-/* Visuel abstrait de chaque produit, collé au bas de la carte. */
+/* Illustration de chaque produit (assets/img), collée au bas de la carte. */
 .glyph {
+    display: flex;
     flex: 1;
-    width: 80%;
-    max-width: 360px;
-    min-height: 150px;
+    align-items: flex-end;
+    justify-content: center;
+    width: 90%;
+    max-width: 380px;
     margin-block-start: 36px;
-    border-radius: 20px 20px 0 0;
 }
 
-.glyph-reserva .glyph {
-    background: linear-gradient(180deg, #DFE6EF, #C3CFDF);
+.glyph img {
+    display: block;
+    width: 100%;
+    height: auto;
 }
 
-.glyph-inteek .glyph {
-    background: repeating-linear-gradient(180deg, #E7ECF3 0 22px, #D6DFEA 22px 44px);
-}
-
-.glyph-noor .glyph {
-    background: conic-gradient(from 200deg at 50% 70%, #3D5A80, #7C93B2, #1D1D1F, #3D5A80);
-}
-
-.glyph-edition .glyph {
-    background: linear-gradient(90deg, transparent 30%, var(--ed-text) 30% 48%, transparent 48% 52%, var(--ed) 52% 70%, transparent 70%), linear-gradient(180deg, #2A1E21, #17121A);
+/* L'interface d'Inteek et le livre se lisent dans le sens de la page : miroir en arabe. */
+[dir="rtl"] .glyph-inteek .glyph img,
+[dir="rtl"] .glyph-edition .glyph img {
+    transform: scaleX(-1);
 }
 
 .soon-row {
