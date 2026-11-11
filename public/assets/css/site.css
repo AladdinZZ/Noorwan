@@ -615,35 +615,41 @@ main:focus {
     outline-color: var(--link-dark);
 }
 
-/* Haut de page de l'accueil : la promesse, puis l'image sombre du groupe, arrondie en haut. */
+/* Haut de page de l'accueil : la promesse, puis l'illustration (une lampe éclaire les trois univers), arrondie en haut. */
 .hero {
     padding-block: 96px 0;
     overflow: hidden;
 }
 
 .hero-visual {
-    position: relative;
-    display: grid;
-    place-items: end center;
-    width: min(100% - 2 * var(--gutter), 880px);
-    margin: 56px auto 0;
-    padding-block-end: 14%;
-    aspect-ratio: 16 / 10;
+    width: min(100% - 2 * var(--gutter), 1040px);
+    margin: 48px auto 0;
+    aspect-ratio: 16 / 11;
     border-radius: 28px 28px 0 0;
-    background: #05070D url("../images/hero.webp") center / cover no-repeat;
+    background: var(--mist);
     overflow: hidden;
 }
 
-.hero-visual span {
-    color: rgba(255, 255, 255, 0.94);
-    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif;
-    font-size: clamp(40px, 11vw, 104px);
-    font-weight: 700;
-    letter-spacing: -0.05em;
-    line-height: 1;
+/* Illustrations dessinées (assets/img) : décoratives, recadrées sans déformation. */
+.illus {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
-/* Univers : grand numéro fin, petit titre teinté, forme abstraite en bas d'écran. */
+/* La scène se lit dans le sens de la page : miroir en arabe. */
+[dir="rtl"] .illus {
+    transform: scaleX(-1);
+}
+
+@media (min-width: 768px) {
+    .hero-visual {
+        aspect-ratio: 16 / 10;
+    }
+}
+
+/* Univers : grand numéro fin, petit titre teinté, illustration dessinée en bas d'écran. */
 .universe {
     padding-block-end: 0;
     overflow: hidden;
@@ -676,83 +682,11 @@ main:focus {
 }
 
 .shape {
-    position: relative;
     width: min(100% - 2 * var(--gutter), 760px);
     margin: 48px auto 0;
     aspect-ratio: 2 / 1;
     border-radius: 24px 24px 0 0;
     overflow: hidden;
-}
-
-.tone-consulting .shape {
-    background: linear-gradient(160deg, #EFE7D6, #D9C9A3);
-}
-
-.tone-consulting .shape::before,
-.tone-consulting .shape::after {
-    content: "";
-    position: absolute;
-    inset-block-start: 22%;
-    width: 44%;
-    aspect-ratio: 1;
-    border-radius: 50%;
-}
-
-.tone-consulting .shape::before {
-    inset-inline-start: 28%;
-    border: 1.5px solid rgba(111, 91, 46, 0.45);
-}
-
-.tone-consulting .shape::after {
-    inset-inline-start: 40%;
-    background: rgba(168, 145, 95, 0.35);
-}
-
-.tone-solutions .shape {
-    background: linear-gradient(180deg, #1B2433, #0B0E14);
-}
-
-.tone-solutions .shape::before {
-    content: "";
-    position: absolute;
-    inset: 20% 18% 0;
-    border: 1px solid rgba(157, 178, 207, 0.35);
-    border-radius: 18px 18px 0 0;
-    background: linear-gradient(180deg, rgba(124, 147, 178, 0.55), rgba(124, 147, 178, 0.08));
-}
-
-.tone-solutions .shape::after {
-    content: "";
-    position: absolute;
-    inset: 30% 28% 0;
-    border-radius: 12px 12px 0 0;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.02));
-}
-
-.tone-edition .shape {
-    background: linear-gradient(160deg, #F3E7E9, #E2C4C9);
-}
-
-.tone-edition .shape::before,
-.tone-edition .shape::after {
-    content: "";
-    position: absolute;
-    inset-block-end: 0;
-    width: 22%;
-    height: 72%;
-    border-radius: 4px 4px 0 0;
-}
-
-.tone-edition .shape::before {
-    inset-inline-start: 30%;
-    background: var(--ed-text);
-    transform: rotate(-6deg);
-    transform-origin: bottom;
-}
-
-.tone-edition .shape::after {
-    inset-inline-start: 48%;
-    background: var(--ed);
 }
 
 /* Les cinq expertises du Consulting, en liste sobre sous l'introduction. */
@@ -975,7 +909,7 @@ main:focus {
     font-size: 14px;
 }
 
-/* ---------- Pourquoi Noorwan : les quatre étapes ---------- */
+/* ---------- Étapes sur fond sombre (prestation de la page Édition) ---------- */
 
 .steps {
     display: grid;
@@ -1012,7 +946,54 @@ main:focus {
     font-size: 15px;
 }
 
-/* Trois points forts de « Pourquoi Noorwan », au-dessus des étapes de l'approche. */
+/* ---------- De l'idée à l'action : trois étapes illustrées ---------- */
+
+.method-steps {
+    display: grid;
+    gap: 40px;
+    max-width: 1080px;
+    margin: 56px auto 0;
+    text-align: start;
+}
+
+.method-steps li {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 12px;
+    align-content: start;
+}
+
+.step-visual {
+    grid-column: 1 / -1;
+    margin-block-end: 20px;
+    aspect-ratio: 16 / 11;
+    border-radius: 20px;
+    background: var(--mist);
+    overflow: hidden;
+}
+
+.method-num {
+    grid-row: span 2;
+    color: var(--muted);
+    font-size: 20px;
+    font-weight: 300;
+    line-height: 1.25;
+}
+
+.method-steps strong {
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+}
+
+.step-text {
+    margin-block-start: 6px;
+    color: var(--text);
+    font-size: 16px;
+}
+
+/* Trois points forts de « Pourquoi Noorwan ». */
 .why-points {
     display: grid;
     gap: 28px;
@@ -1048,6 +1029,12 @@ main:focus {
 }
 
 /* ---------- Bandeau « Un projet en tête ? » ---------- */
+
+.cta-visual {
+    width: min(100%, 300px);
+    margin: 0 auto 28px;
+    aspect-ratio: 9 / 5;
+}
 
 .links-cta {
     margin-block-start: 36px;
@@ -1321,6 +1308,11 @@ main:focus {
 
     .steps strong {
         font-size: 18px;
+    }
+
+    .method-steps {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 32px;
     }
 
     .footer-bottom {

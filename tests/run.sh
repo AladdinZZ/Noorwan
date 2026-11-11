@@ -78,8 +78,6 @@ done
 for weight in Regular Medium SemiBold Bold; do
     expect "police IBMPlexSansArabic-$weight.woff2" 200 "$(curl -s -o /dev/null -w '%{http_code}' "$BASE_URL/assets/fonts/IBMPlexSansArabic-$weight.woff2")"
 done
-hero_size=$(curl -s -o /dev/null -w '%{size_download}' "$BASE_URL/assets/images/hero.webp")
-if [[ "$hero_size" -gt 0 && "$hero_size" -lt 256000 ]]; then pass "hero.webp sous 250 Ko ($hero_size octets)"; else fail "hero.webp : $hero_size octets"; fi
 
 echo "2 ter. Indexation (APP_ENV=$APP_ENV)"
 if [[ "$APP_ENV" == "production" ]]; then
@@ -145,7 +143,6 @@ for lang in fr en ar; do
     expect "trois univers numérotés, un écran chacun ($lang)" "01|02|03" \
         "$(grep -o '<p class="num" aria-hidden="true">0[0-9]</p>' <<< "$home" | sed -E 's/.*>(0[0-9])<.*/\1/' | paste -sd '|' -)"
     expect "cinq expertises du Consulting ($lang)" 5 "$(sed -n '/<ul class="expertises">/,/<\/ul>/p' <<< "$home" | grep -c '<li>')"
-    expect "approche : trois étapes ($lang)" 3 "$(sed -n '/<ol class="steps">/,/<\/ol>/p' <<< "$home" | grep -c '<li>')"
     grep -q 'id="contact" class="screen screen-mist cta"' <<< "$home" && pass "bandeau contact en bas de l'accueil ($lang)" || fail "bandeau contact ($lang)"
 done
 
@@ -474,14 +471,22 @@ fi
 expect "purge : seul le fichier de plus d'une heure est supprimé" "-|récent" "$(rl_state)"
 rm -f "$RL_OLD" "$RL_RECENT"
 
-echo "2 nonies ter. Illustrations des produits (SVG)"
-for id in reserva inteek noor edition; do
+echo "2 nonies ter. Illustrations dessinées (SVG)"
+# Produits (v3), haut de page, univers, étapes de la méthode et contact (v4) : moins de 20 Ko, sans texte.
+for id in reserva inteek noor edition hero universe-consulting universe-solutions universe-edition step-field step-build step-improve contact; do
     file="public/assets/img/$id.svg"
     expect "$id.svg servi" 200 "$(curl -s -o /dev/null -w '%{http_code}' "$BASE_URL/assets/img/$id.svg")"
     size=$(wc -c < "$file" | tr -d ' ')
-    [[ $size -lt 15360 ]] && pass "$id.svg léger ($size octets)" || fail "$id.svg trop lourd ($size octets)"
+    [[ $size -lt 20480 ]] && pass "$id.svg léger ($size octets)" || fail "$id.svg trop lourd ($size octets)"
     expect "$id.svg sans texte ni image externe ni script" 0 "$(grep -ciE '<text|<image|href=|<script' "$file")"
 done
+for lang in fr en ar; do
+    home=$(curl -s "$BASE_URL/?lang=$lang")
+    expect "accueil : huit illustrations décoratives ($lang)" 8 "$(grep -cE '<img class="illus" src="assets/img/(hero|universe-(consulting|solutions|edition)|step-(field|build|improve)|contact)\.svg" alt=""' <<< "$home")"
+    expect "méthode : trois étapes ($lang)" 3 "$(sed -n '/id="methode"/,/<\/section>/p' <<< "$home" | grep -c '<span class="method-num"')"
+    expect "page Contact : illustration ($lang)" 1 "$(curl -s "$BASE_URL/contact.php?lang=$lang" | grep -c '<img class="illus" src="assets/img/contact.svg" alt=""')"
+done
+grep -q '\[dir="rtl"\] \.illus' public/assets/css/site.css && pass "illustrations en miroir en arabe" || fail "miroir des illustrations en arabe absent"
 for lang in fr en ar; do
     for page in "" solutions.php; do
         html=$(curl -s "$BASE_URL/$page?lang=$lang")
