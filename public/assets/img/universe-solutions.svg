@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 380" fill="none">
+  <!-- Solutions : un ordinateur portable et un téléphone, la même interface sur les deux écrans. Aucun texte. -->
+  <defs>
+    <linearGradient id="night" x1="0" y1="0" x2="0" y2="380" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#1B2433"/><stop offset="1" stop-color="#0B0E14"/>
+    </linearGradient>
+  </defs>
+  <rect width="760" height="380" fill="url(#night)"/>
+  <rect x="150" y="70" width="400" height="260" rx="16" fill="#0B0E14" stroke="#7C93B2" stroke-width="3"/>
+  <rect x="166" y="86" width="368" height="228" rx="8" fill="#E9EEF5"/>
+  <rect x="166" y="86" width="84" height="228" fill="#3D5A80"/>
+  <path d="M184 112h48M184 136h36M184 160h42M184 184h30" stroke="#9DB2CF" stroke-width="7" stroke-linecap="round"/>
+  <rect x="268" y="106" width="248" height="16" rx="8" fill="#fff"/>
+  <rect x="268" y="140" width="116" height="74" rx="10" fill="#fff"/>
+  <rect x="400" y="140" width="116" height="74" rx="10" fill="#fff"/>
+  <circle cx="300" cy="172" r="16" fill="#7C93B2"/>
+  <path d="M326 166h40M326 182h26" stroke="#9DB2CF" stroke-width="6" stroke-linecap="round"/>
+  <path d="M418 196l22-18 20 10 38-30" stroke="#3D5A80" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="268" y="230" width="248" height="16" rx="8" fill="#fff"/>
+  <rect x="268" y="258" width="180" height="16" rx="8" fill="#fff"/>
+  <path d="M110 330h480l-24 30H134z" fill="#7C93B2"/>
+  <path d="M310 330h80" stroke="#3D5A80" stroke-width="5" stroke-linecap="round"/>
+  <rect x="520" y="146" width="122" height="234" rx="22" fill="#0B0E14" stroke="#9DB2CF" stroke-width="3"/>
+  <rect x="530" y="156" width="102" height="224" rx="14" fill="#fff"/>
+  <rect x="563" y="164" width="36" height="8" rx="4" fill="#0B0E14"/>
+  <rect x="544" y="186" width="74" height="40" rx="8" fill="#E9EEF5"/>
+  <circle cx="562" cy="206" r="10" fill="#7C93B2"/>
+  <path d="M580 200h26M580 212h16" stroke="#3D5A80" stroke-width="5" stroke-linecap="round"/>
+  <path d="M544 244h74M544 262h50" stroke="#D2D2D7" stroke-width="8" stroke-linecap="round"/>
+  <rect x="544" y="282" width="34" height="34" rx="8" fill="#E9EEF5"/>
+  <rect x="584" y="282" width="34" height="34" rx="8" fill="#3D5A80"/>
+  <rect x="544" y="336" width="74" height="26" rx="7" fill="#1D1D1F"/>
+</svg>

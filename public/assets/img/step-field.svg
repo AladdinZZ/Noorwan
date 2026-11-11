@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 220" fill="none">
+  <!-- Étape 1, partir du terrain : une boutique de quartier et une bulle de parole (on écoute le besoin). Aucun texte. -->
+  <path d="M20 200h280" stroke="#D2D2D7" stroke-width="3" stroke-linecap="round"/>
+  <rect x="48" y="96" width="150" height="104" fill="#fff" stroke="#D2D2D7" stroke-width="2"/>
+  <path d="M40 70h166l-8 32H48z" fill="#A8915F"/>
+  <path d="M70 70l-4 32M102 70l-2 32M134 70v32M166 70l2 32" stroke="#F3EEE3" stroke-width="12"/>
+  <path d="M40 70h166" stroke="#6F5B2E" stroke-width="5" stroke-linecap="round"/>
+  <rect x="64" y="122" width="62" height="44" rx="4" fill="#E9EEF5"/>
+  <path d="M95 122v44" stroke="#fff" stroke-width="3"/>
+  <rect x="144" y="122" width="38" height="78" rx="2" fill="#1D1D1F"/>
+  <circle cx="174" cy="164" r="3.5" fill="#F5D58A"/>
+  <path d="M212 40h78a12 12 0 0 1 12 12v38a12 12 0 0 1-12 12h-46l-22 18 4-18h-14a12 12 0 0 1-12-12V52a12 12 0 0 1 12-12z" fill="#fff" stroke="#D2D2D7" stroke-width="2" stroke-linejoin="round"/>
+  <g fill="#3D5A80"><circle cx="232" cy="72" r="6"/><circle cx="252" cy="72" r="6"/><circle cx="272" cy="72" r="6"/></g>
+</svg>

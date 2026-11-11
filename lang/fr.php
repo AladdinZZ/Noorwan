@@ -7,7 +7,7 @@ declare(strict_types=1);
 return [
     'meta' => [
         'home_title' => 'Noorwan : conseil, solutions et édition',
-        'home_description' => 'Conseil, solutions numériques et édition : trois univers complémentaires pour transformer les idées en réalisations utiles.',
+        'home_description' => 'Nous conseillons les entreprises, nous concevons leurs logiciels et nous publions des livres. Toujours de la même façon : partir d\'un besoin réel, livrer vite, améliorer ensuite.',
         'edition_title' => 'Édition | Noorwan',
         'edition_description' => 'Noorwan Édition accompagne les auteurs jusqu\'à la publication sur Amazon et publie ses collections {méta}Physique et Chemins de l\'Âme.',
         'solutions_title' => 'Solutions | Noorwan',
@@ -58,44 +58,50 @@ return [
         'cookies' => 'Cookies',
     ],
     'home' => [
-        'lead' => 'Conseil, solutions numériques et édition : trois univers complémentaires pour transformer les idées en réalisations utiles.',
+        'lead' => 'Nous conseillons les entreprises, nous concevons leurs logiciels et nous publions des livres. Toujours de la même façon : partir d\'un besoin réel, livrer vite, améliorer ensuite.',
         'btn_explore' => 'Découvrir nos expertises',
         'btn_talk' => 'Parlons de votre projet',
         'motto' => 'Une vision claire. Des étapes concrètes.',
         'univers' => [
-            'consulting' => ['title' => 'Consulting', 'text' => 'Clarifier votre positionnement, structurer vos priorités et piloter vos projets numériques : stratégie, marketing digital, eCommerce, formation.'],
-            'solutions' => ['title' => 'Solutions', 'text' => 'Des logiciels pour les entreprises : réservation en ligne, ressources humaines et intelligence artificielle. Mobiles d\'abord, en trois langues.'],
-            'edition' => ['title' => 'Édition', 'text' => 'Nous accompagnons les auteurs jusqu\'à la publication de leur livre sur Amazon, et nous publions nos propres collections.'],
+            'consulting' => ['title' => 'Consulting', 'text' => 'Clarifier votre positionnement, choisir vos priorités et mener vos projets numériques jusqu\'au résultat : stratégie, marketing digital, eCommerce, formation.'],
+            'solutions' => ['title' => 'Solutions', 'text' => 'Des logiciels pour les tâches qui reviennent chaque jour : réservation, ressources humaines, intelligence artificielle. Sur téléphone d\'abord, en trois langues.'],
+            'edition' => ['title' => 'Édition', 'text' => 'De la relecture du manuscrit à la mise en ligne sur Amazon, nous accompagnons les auteurs. Et nous publions nos propres collections.'],
         ],
-        // Textes à fournir par Marwan : restent visibles, surlignés, tant qu'ils ne sont pas remplacés.
-        'author_line' => '[À FOURNIR : phrase d\'auteur sur la trilogie {méta}Physique]',
+        // A VALIDER PAR MARWAN : phrase d'auteur (d'après les présentations d'Harmonie et de Lumière) et « Pourquoi Noorwan » (v3).
+        'author_line' => 'Une trilogie entre science et spiritualité : de l\'origine du monde à la conscience humaine, elle cherche le fil qui relie la raison, la foi et le mystère.',
+        'why_h' => 'Trois métiers, une même exigence',
         'why_eyebrow' => 'Pourquoi Noorwan',
-        'why_text' => '[À FOURNIR : texte « Pourquoi Noorwan » (chiffres clés à confirmer)]',
-        'app_h' => 'De l\'idée à l\'action',
-        'steps' => [
-            ['title' => 'Comprendre le besoin', 'text' => 'Écouter avant de proposer.'],
-            ['title' => 'Structurer la réponse', 'text' => 'Prioriser ce qui compte.'],
-            ['title' => 'Concevoir la solution', 'text' => 'Livrer un outil utile.'],
-            ['title' => 'Apprendre et évoluer', 'text' => 'Mesurer, ajuster, transmettre.'],
+        'why_text' => 'Un groupe qui relie le conseil, le logiciel et l\'édition avec une même méthode : partir du besoin réel et livrer ce qui sert.',
+        'why_points' => [
+            ['title' => 'Né à Djibouti, ouvert sur le monde', 'text' => 'Noorwan est né à Djibouti et se construit avec une vocation internationale.'],
+            ['title' => 'Trois univers qui se répondent', 'text' => 'Conseil, logiciel et édition se nourrissent : ce que nous apprenons dans un univers sert les deux autres.'],
+            ['title' => 'Des outils pensés pour l\'Afrique', 'text' => 'Nos solutions sont conçues pour le téléphone d\'abord, en français, en anglais et en arabe.'],
         ],
-        'cons_lead' => 'Un conseil stratégique et un accompagnement numérique, avec une approche pragmatique, fondés sur vingt ans de digital, de marketing et d\'eCommerce.',
+        'app_h' => 'De l\'idée à l\'action',
+        'app_lead' => 'C\'est notre méthode pour un conseil, un logiciel ou un livre.',
+        'steps' => [
+            ['title' => 'Partir du terrain', 'text' => 'Nous regardons d\'abord comment vous travaillez aujourd\'hui et ce qui vous fait perdre du temps. Le besoin réel passe avant l\'idée.'],
+            ['title' => 'Construire vite', 'text' => 'Une première version simple, mise rapidement entre les mains des personnes qui s\'en serviront. On apprend plus en l\'utilisant qu\'en la décrivant.'],
+            ['title' => 'Faire tourner, puis améliorer', 'text' => 'Une fois en service, nous écoutons les retours, corrigeons et ajoutons ce qui manque, une étape après l\'autre.'],
+        ],
+        'cons_lead' => 'Vingt ans de digital, de marketing et d\'eCommerce au service d\'une question simple : quelle est la prochaine étape utile pour votre projet ?',
         'expertises' => [
-            ['title' => 'Stratégie et structuration de projet', 'text' => 'Clarifier l\'objectif, le modèle et les priorités, puis avancer par étapes réalistes.'],
-            ['title' => 'Marketing digital et présence en ligne', 'text' => 'Positionnement, contenus, réseaux sociaux et campagnes.'],
-            ['title' => 'E-commerce et parcours client', 'text' => 'Une boutique et un parcours d\'achat qui convertissent.'],
-            ['title' => 'Développement web et outils numériques', 'text' => 'Sites, applications et outils sur mesure, faits pour durer.'],
-            ['title' => 'Formation', 'text' => 'Former vos équipes au digital et aux outils, sur site ou à distance.'],
+            ['title' => 'Stratégie et structuration de projet', 'text' => 'Fixer l\'objectif, choisir les priorités et découper le projet en étapes tenables.'],
+            ['title' => 'Marketing digital et présence en ligne', 'text' => 'Un positionnement clair, des contenus réguliers, des campagnes suivies.'],
+            ['title' => 'E-commerce et parcours client', 'text' => 'Une boutique en ligne simple à utiliser, du choix du produit au paiement.'],
+            ['title' => 'Développement web et outils numériques', 'text' => 'Sites, applications et outils internes, construits pour être entretenus.'],
+            ['title' => 'Formation', 'text' => 'Des séances pratiques pour que vos équipes se servent elles-mêmes des outils, sur site ou à distance.'],
         ],
         'cons_app_h' => 'Clarifier avant d\'accélérer.',
         'cons_app' => 'Une étape utile livrée vaut mieux qu\'un grand plan sur le papier.',
-        'sol_h' => 'Des outils conçus pour les entreprises',
+        'sol_h' => 'Des logiciels pour le travail de chaque jour',
         // A VALIDER PAR MARWAN : introduction de la section Solutions (reprise en tête de la page Solutions).
-        'sol_text' => 'Des logiciels pensés pour les entreprises, conçus pour le téléphone d\'abord et disponibles en trois langues. Certains sont en service, d\'autres en préparation.',
+        'sol_text' => 'Des logiciels pensés pour le téléphone d\'abord, en français, en anglais et en arabe. Certains sont en service, d\'autres en préparation.',
         'sol_btn' => 'Découvrir nos solutions',
         'products_label' => 'Nos solutions',
         // Grille des produits (maquette A, M-56). Liste fermée : aucun autre produit confidentiel n'y entre.
         'products' => [
-            'reserva' => ['cat' => 'Réservation', 'name' => 'Reserva', 'text' => 'La prise de rendez-vous et de réservations pour les commerces et services.', 'confidential' => false],
+            'reserva' => ['cat' => 'Réservation', 'name' => 'Reserva', 'text' => '', 'confidential' => true],
             'inteek' => ['cat' => 'Ressources humaines', 'name' => 'Inteek', 'text' => 'Du recrutement à la gestion des équipes, les RH simplifiées.', 'confidential' => false],
             'noor' => ['cat' => 'Intelligence artificielle', 'name' => 'Noor', 'text' => '', 'confidential' => true],
             'edition' => ['cat' => 'Édition', 'name' => 'Noorwan Édition', 'text' => 'Nous accompagnons les auteurs jusqu\'à la publication de leur livre sur Amazon, et nous publions nos propres collections.', 'confidential' => false],
@@ -103,11 +109,11 @@ return [
         'soon_label' => 'Bientôt',
         'soon' => ['Immobilier', 'Shopping'],
         'confidential' => 'Confidentiel',
-        'ed_h' => 'Des idées à lire, découvrir et transmettre',
+        'ed_h' => 'Des livres, du manuscrit à Amazon',
         'ed_btn' => 'Publier votre livre',
         'ed_btn_catalogue' => 'Voir le catalogue',
         'cta_h' => 'Un projet en tête ?',
-        'cta_text' => 'Conseil, démonstration d\'une solution ou publication d\'un livre : échangeons sur vos objectifs.',
+        'cta_text' => 'Un conseil, une démonstration ou un livre à publier : dites-nous où vous en êtes, nous vous répondons.',
         'cta_btn' => 'Parlons de votre projet',
     ],
     'books' => [
@@ -157,7 +163,7 @@ return [
         // A VALIDER PAR MARWAN : contenu des quatre étapes de la prestation.
         'service_eyebrow' => 'La prestation',
         'service_title' => 'Quatre étapes jusqu\'à la publication',
-        'service_lead' => 'Un accompagnement adapté à votre projet, que vous ayez un manuscrit achevé ou un texte encore en chantier.',
+        'service_lead' => 'Votre manuscrit est terminé ou encore en chantier : nous reprenons là où vous en êtes.',
         'service_steps' => [
             ['title' => 'Manuscrit', 'text' => 'Relecture de votre texte, conseils de structure et corrections, pour un manuscrit prêt à publier.'],
             ['title' => 'Mise en forme', 'text' => 'Mise en page de l\'intérieur du livre, en version imprimée et en version numérique.'],
@@ -181,7 +187,7 @@ return [
         'writing' => 'En cours de rédaction',
         'also_in_english' => 'Disponible aussi en anglais',
         // Texte à fournir par Marwan (laissé en français, surligné).
-        'asin_todo' => '[À FOURNIR : ASIN des cinq livres parus, pour des liens Amazon directs]',
+        'asin_todo' => '[À FOURNIR : ASIN de Lumière, Le Mal, Le Bien et Être pour Avoir, pour des liens Amazon directs]',
         'upcoming' => 'Prochainement',
     ],
     // Page Solutions : TEXTES A VALIDER PAR MARWAN. Le titre et l'introduction sont ceux de l'accueil (home.sol_h, home.sol_text).

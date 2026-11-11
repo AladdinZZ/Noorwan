@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 // Bandeau « Un projet en tête ? » qui mène au formulaire. $ctaId : ancre de la section (facultative),
 // $ctaParams : paramètres du lien (univers présélectionné), $ctaButton : clé du libellé du bouton (facultatifs).
+// Illustration dessinée (assets/img/contact.svg), décorative, aussi en tête de la page Contact.
 ?>
 <section<?= isset($ctaId) ? ' id="' . e($ctaId) . '"' : '' ?> class="screen screen-mist cta" aria-labelledby="cta-title">
     <div class="wrap">
+        <div class="cta-visual"><img class="illus" src="assets/img/contact.svg" alt="" width="360" height="200" loading="lazy" decoding="async"></div>
         <h2 id="cta-title" class="h2"><?= t('home.cta_h') ?></h2>
         <p class="lead"><?= t('home.cta_text') ?></p>
         <div class="links links-cta">
