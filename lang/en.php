@@ -7,7 +7,7 @@ declare(strict_types=1);
 return [
     'meta' => [
         'home_title' => 'Noorwan: consulting, solutions and publishing',
-        'home_description' => 'Consulting, digital solutions and publishing: three complementary fields that turn ideas into useful results.',
+        'home_description' => 'We advise businesses, build their software and publish books. Always the same way: start from a real need, deliver fast, improve afterwards.',
         'edition_title' => 'Publishing | Noorwan',
         'edition_description' => 'Noorwan Publishing guides authors all the way to publication on Amazon and publishes its {méta}Physique and Chemins de l\'Âme collections.',
         'solutions_title' => 'Solutions | Noorwan',
@@ -58,17 +58,18 @@ return [
         'cookies' => 'Cookies',
     ],
     'home' => [
-        'lead' => 'Consulting, digital solutions and publishing: three complementary fields that turn ideas into useful results.',
+        'lead' => 'We advise businesses, build their software and publish books. Always the same way: start from a real need, deliver fast, improve afterwards.',
         'btn_explore' => 'Explore our expertise',
         'btn_talk' => 'Let\'s talk about your project',
         'motto' => 'A clear vision. Concrete steps.',
         'univers' => [
-            'consulting' => ['title' => 'Consulting', 'text' => 'Clarify your positioning, structure your priorities and steer your digital projects: strategy, digital marketing, eCommerce, training.'],
-            'solutions' => ['title' => 'Solutions', 'text' => 'Business software: online booking, human resources and artificial intelligence. Mobile first, in three languages.'],
-            'edition' => ['title' => 'Publishing', 'text' => 'We guide authors all the way to publishing their book on Amazon, and we publish our own collections.'],
+            'consulting' => ['title' => 'Consulting', 'text' => 'Clarify your positioning, choose your priorities and see your digital projects through to results: strategy, digital marketing, eCommerce, training.'],
+            'solutions' => ['title' => 'Solutions', 'text' => 'Software for the tasks that come back every day: booking, human resources, artificial intelligence. Phone first, in three languages.'],
+            'edition' => ['title' => 'Publishing', 'text' => 'From proofreading the manuscript to going live on Amazon, we guide authors. And we publish our own collections.'],
         ],
         // A VALIDER PAR MARWAN : phrase d'auteur (d'après les présentations d'Harmonie et de Lumière) et « Pourquoi Noorwan » (v3).
         'author_line' => 'A trilogy between science and spirituality: from the origin of the world to human consciousness, it seeks the thread that links reason, faith and mystery.',
+        'why_h' => 'Three trades, one standard',
         'why_eyebrow' => 'Why Noorwan',
         'why_text' => 'A group that brings together consulting, software and publishing with one method: start from the real need and deliver what helps.',
         'why_points' => [
@@ -77,25 +78,25 @@ return [
             ['title' => 'Tools designed for Africa', 'text' => 'Our solutions are built for the phone first, in French, English and Arabic.'],
         ],
         'app_h' => 'From idea to action',
+        'app_lead' => 'This is our method, for advice, software or a book.',
         'steps' => [
-            ['title' => 'Understand the need', 'text' => 'Listen before proposing.'],
-            ['title' => 'Structure the answer', 'text' => 'Prioritise what matters.'],
-            ['title' => 'Design the solution', 'text' => 'Deliver a useful tool.'],
-            ['title' => 'Learn and evolve', 'text' => 'Measure, adjust, pass on.'],
+            ['title' => 'Start from the field', 'text' => 'We first look at how you work today and what wastes your time. The real need comes before the idea.'],
+            ['title' => 'Build fast', 'text' => 'A simple first version, put quickly in the hands of the people who will use it. You learn more by using it than by describing it.'],
+            ['title' => 'Run it, then improve', 'text' => 'Once in service, we listen to feedback, fix and add what is missing, one step at a time.'],
         ],
-        'cons_lead' => 'Strategic advice and digital support with a pragmatic approach, built on twenty years of digital, marketing and eCommerce experience.',
+        'cons_lead' => 'Twenty years of digital, marketing and eCommerce, focused on one simple question: what is the next useful step for your project?',
         'expertises' => [
-            ['title' => 'Strategy and project structuring', 'text' => 'Clarify the goal, the model and the priorities, then move in realistic steps.'],
-            ['title' => 'Digital marketing and online presence', 'text' => 'Positioning, content, social media and campaigns.'],
-            ['title' => 'eCommerce and customer journey', 'text' => 'A store and a buying journey that convert.'],
-            ['title' => 'Web development and digital tools', 'text' => 'Websites, apps and custom tools, built to last.'],
-            ['title' => 'Training', 'text' => 'Train your teams in digital and tools, on site or remotely.'],
+            ['title' => 'Strategy and project structuring', 'text' => 'Set the goal, choose the priorities and split the project into manageable steps.'],
+            ['title' => 'Digital marketing and online presence', 'text' => 'Clear positioning, regular content, campaigns that are followed up.'],
+            ['title' => 'eCommerce and customer journey', 'text' => 'An online store that is easy to use, from choosing a product to paying.'],
+            ['title' => 'Web development and digital tools', 'text' => 'Websites, apps and internal tools, built to be maintained.'],
+            ['title' => 'Training', 'text' => 'Hands-on sessions so your teams can use the tools themselves, on site or remotely.'],
         ],
         'cons_app_h' => 'Clarify before you accelerate.',
         'cons_app' => 'One useful step delivered beats a grand plan on paper.',
-        'sol_h' => 'Tools built for businesses',
+        'sol_h' => 'Software for everyday work',
         // A VALIDER PAR MARWAN : Solutions section introduction (also used at the top of the Solutions page).
-        'sol_text' => 'Software designed for businesses, built for the phone first and available in three languages. Some are in service, others in preparation.',
+        'sol_text' => 'Software designed for the phone first, in French, English and Arabic. Some are in service, others in preparation.',
         'sol_btn' => 'Discover our solutions',
         'products_label' => 'Our solutions',
         // À relire : textes de Reserva, « Coming soon » et « Real estate » traduits du français.
@@ -108,11 +109,11 @@ return [
         'soon_label' => 'Coming soon',
         'soon' => ['Real estate', 'Shopping'],
         'confidential' => 'Confidential',
-        'ed_h' => 'Ideas to read, discover and pass on',
+        'ed_h' => 'Books, from manuscript to Amazon',
         'ed_btn' => 'Publish your book',
         'ed_btn_catalogue' => 'See the catalogue',
         'cta_h' => 'Have a project in mind?',
-        'cta_text' => 'Consulting, a product demo or publishing a book: let\'s talk about your goals.',
+        'cta_text' => 'Advice, a demo or a book to publish: tell us where you stand and we will get back to you.',
         'cta_btn' => 'Let\'s talk about your project',
     ],
     'books' => [
@@ -162,7 +163,7 @@ return [
         // A VALIDER PAR MARWAN : contenu des quatre étapes de la prestation.
         'service_eyebrow' => 'Our service',
         'service_title' => 'Four steps to publication',
-        'service_lead' => 'Support tailored to your project, whether your manuscript is finished or still a work in progress.',
+        'service_lead' => 'Whether your manuscript is finished or still in progress, we pick up where you are.',
         'service_steps' => [
             ['title' => 'Manuscript', 'text' => 'Proofreading, advice on structure and corrections, for a manuscript ready to publish.'],
             ['title' => 'Layout', 'text' => 'Interior layout of the book, in print and digital editions.'],

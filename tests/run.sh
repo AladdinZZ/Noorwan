@@ -145,7 +145,7 @@ for lang in fr en ar; do
     expect "trois univers numérotés, un écran chacun ($lang)" "01|02|03" \
         "$(grep -o '<p class="num" aria-hidden="true">0[0-9]</p>' <<< "$home" | sed -E 's/.*>(0[0-9])<.*/\1/' | paste -sd '|' -)"
     expect "cinq expertises du Consulting ($lang)" 5 "$(sed -n '/<ul class="expertises">/,/<\/ul>/p' <<< "$home" | grep -c '<li>')"
-    expect "approche : quatre étapes ($lang)" 4 "$(sed -n '/<ol class="steps">/,/<\/ol>/p' <<< "$home" | grep -c '<li>')"
+    expect "approche : trois étapes ($lang)" 3 "$(sed -n '/<ol class="steps">/,/<\/ol>/p' <<< "$home" | grep -c '<li>')"
     grep -q 'id="contact" class="screen screen-mist cta"' <<< "$home" && pass "bandeau contact en bas de l'accueil ($lang)" || fail "bandeau contact ($lang)"
 done
 
@@ -204,7 +204,7 @@ for lang in fr en ar; do
 
     page=$(curl -s "$BASE_URL/solutions.php?lang=$lang")
     grep -q '<!-- TEXTES A VALIDER PAR MARWAN -->' <<< "$page" && pass "page Solutions : textes marqués à valider ($lang)" || fail "page Solutions : commentaire de validation absent ($lang)"
-    grep -q "<h1 id=\"page-title\" class=\"h1 h1-page\">$(by_lang "$lang" "Des outils conçus pour les entreprises" "Tools built for businesses" "أدوات مصممة للمؤسسات")</h1>" <<< "$page" \
+    grep -q "<h1 id=\"page-title\" class=\"h1 h1-page\">$(by_lang "$lang" "Des logiciels pour le travail de chaque jour" "Software for everyday work" "برمجيات للعمل اليومي")</h1>" <<< "$page" \
         && pass "page Solutions : titre ($lang)" || fail "page Solutions : titre ($lang)"
     expect "page Solutions : 3 principes, 5 modules d'Inteek ($lang)" "3|5" \
         "$(sed -n '/<ol class="principles">/,/<\/ol>/p' <<< "$page" | grep -c '<li>')|$(sed -n '/<ul class="modules">/,/<\/ul>/p' <<< "$page" | grep -c '<li>')"
