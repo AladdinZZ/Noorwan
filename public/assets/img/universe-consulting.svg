@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 380" fill="none">
+  <!-- Consulting : une carte déroulée sur la table, un itinéraire en étapes, une boussole et un crayon. Aucun texte. -->
+  <rect width="760" height="380" fill="#EFE7D6"/>
+  <path d="M0 330h760v50H0z" fill="#D9C9A3"/>
+  <rect x="150" y="96" width="460" height="240" rx="6" fill="#fff"/>
+  <rect x="128" y="88" width="34" height="256" rx="17" fill="#F3EEE3" stroke="#A8915F" stroke-width="3"/>
+  <rect x="598" y="88" width="34" height="256" rx="17" fill="#F3EEE3" stroke="#A8915F" stroke-width="3"/>
+  <path d="M190 280c40-10 70-50 120-56s70 30 116 16 56-80 104-96" stroke="#A8915F" stroke-width="5" stroke-linecap="round" stroke-dasharray="2 14"/>
+  <path d="m180 268 20 20m0-20-20 20" stroke="#6F5B2E" stroke-width="6" stroke-linecap="round"/>
+  <circle cx="310" cy="224" r="12" fill="#D9C9A3" stroke="#6F5B2E" stroke-width="4"/>
+  <circle cx="426" cy="240" r="12" fill="#D9C9A3" stroke="#6F5B2E" stroke-width="4"/>
+  <path d="M532 146v-58" stroke="#1D1D1F" stroke-width="5" stroke-linecap="round"/>
+  <path d="M534 90h40l-10 12 10 12h-40z" fill="#6F5B2E"/>
+  <path d="M200 140h70M200 160h44M460 300h90M480 318h50" stroke="#EFE7D6" stroke-width="6" stroke-linecap="round"/>
+  <circle cx="640" cy="270" r="52" fill="#1D1D1F"/>
+  <circle cx="640" cy="270" r="40" fill="#fff"/>
+  <path d="m640 238 10 32-10 32-10-32z" fill="#A8915F"/>
+  <path d="m640 238 10 32h-20z" fill="#6F5B2E"/>
+  <circle cx="640" cy="270" r="4" fill="#1D1D1F"/>
+  <g transform="translate(10 -24) rotate(-28 300 330)">
+    <rect x="200" y="320" width="190" height="18" rx="4" fill="#A8915F"/>
+    <rect x="370" y="320" width="22" height="18" rx="3" fill="#6F5B2E"/>
+    <path d="M200 320 172 329 200 338z" fill="#F3EEE3"/>
+    <path d="m172 329 9-3v6z" fill="#1D1D1F"/>
+  </g>
+</svg>

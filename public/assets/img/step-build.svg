@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 220" fill="none">
+  <!-- Étape 2, construire vite : un écran assemblé bloc par bloc, le dernier bloc arrive à sa place. Aucun texte. -->
+  <path d="M20 200h280" stroke="#D2D2D7" stroke-width="3" stroke-linecap="round"/>
+  <rect x="98" y="18" width="124" height="184" rx="22" fill="#1D1D1F"/>
+  <rect x="106" y="26" width="108" height="168" rx="16" fill="#fff"/>
+  <rect x="142" y="32" width="36" height="8" rx="4" fill="#1D1D1F"/>
+  <rect x="116" y="52" width="88" height="34" rx="7" fill="#7C93B2"/>
+  <rect x="116" y="96" width="40" height="40" rx="7" fill="#E9EEF5"/>
+  <rect x="164" y="96" width="40" height="40" rx="7" stroke="#3D5A80" stroke-width="2.5" stroke-dasharray="5 6"/>
+  <rect x="116" y="148" width="88" height="30" rx="7" fill="#1D1D1F"/>
+  <rect x="236" y="54" width="40" height="40" rx="7" fill="#3D5A80" transform="rotate(12 256 74)"/>
+  <path d="M226 94c-14 6-20 8-28 12" stroke="#3D5A80" stroke-width="3" stroke-linecap="round" stroke-dasharray="2 8"/>
+  <g transform="rotate(38 60 120)">
+    <rect x="22" y="112" width="96" height="14" rx="3" fill="#F5D58A"/>
+    <rect x="22" y="112" width="16" height="14" rx="3" fill="#A8915F"/>
+    <path d="M118 112l20 7-20 7z" fill="#F3EEE3"/>
+    <path d="m131 116.5 7 2.5-7 2.5z" fill="#1D1D1F"/>
+  </g>
+</svg>

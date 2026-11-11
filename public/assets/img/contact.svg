@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 200" fill="none">
+  <!-- Contact : une enveloppe ouverte, la lettre sort, une bulle de réponse. Aucun texte. -->
+  <rect x="78" y="34" width="154" height="120" rx="6" fill="#fff" stroke="#D2D2D7" stroke-width="2"/>
+  <path d="M98 60h90M98 80h112M98 100h72" stroke="#D2D2D7" stroke-width="7" stroke-linecap="round"/>
+  <path d="M50 96h210v94H50z" fill="#9DB2CF"/>
+  <path d="M50 190l105-60 105 60z" fill="#E9EEF5"/>
+  <path d="M50 96l105 60 105-60" fill="#7C93B2"/>
+  <path d="M262 20h64a12 12 0 0 1 12 12v30a12 12 0 0 1-12 12h-12l4 18-22-18h-34a12 12 0 0 1-12-12V32a12 12 0 0 1 12-12z" fill="#0071E3"/>
+  <g fill="#fff"><circle cx="276" cy="47" r="5"/><circle cx="294" cy="47" r="5"/><circle cx="312" cy="47" r="5"/></g>
+</svg>
