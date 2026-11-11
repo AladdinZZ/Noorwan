@@ -6,7 +6,7 @@
 
 | Page | État |
 |---|---|
-| Accueil | **v2 en ligne. v3 (textes fournis, Reserva confidentiel, illustrations) sur la branche `feat/v3-textes-visuels`, à relire par Marwan avant fusion.** Voir « État du site au 10/11/2026 (v3) ». |
+| Accueil | **v2 en ligne. v3 (textes fournis, Reserva confidentiel, illustrations) sur la branche `feat/v3-textes-visuels` ; v4 (textes resserrés, méthode en trois étapes, illustrations dessinées) sur `feat/v4-textes-visuels`, à relire par Marwan avant fusion.** Voir « État du site au 11/11/2026 (v4) ». |
 | Consulting | Section de l'accueil (5 expertises), pas de page propre. |
 | Solutions | **En ligne, textes à valider** (lot v1.1, 27/10/2026) : `solutions.php`. Reserva, Immobilier, Shopping et page Développeurs hors site. |
 | Édition | **En ligne.** Prestation (4 étapes **à valider**) et catalogue ; annonce Ikra.M **à valider** (27/10/2026). |
@@ -216,3 +216,42 @@ EN et AR dans `lang/en.php` et `lang/ar.php`.
 ### Illustrations des produits
 
 Une illustration SVG par carte dans `public/assets/img/` (moins de 3 ko chacune, sans texte ni logo) : Inteek, fiche candidat et carte d'entretien sur un téléphone ; Noorwan Édition, livre ouvert ; Reserva et Noor, compositions abstraites (plans superposés, source de lumière). Inteek et le livre sont en miroir en arabe. Pas de carte OnePay.
+
+## État du site au 11/11/2026 (v4, branche `feat/v4-textes-visuels`, à relire avant fusion)
+
+Brief v4 de Maestro du 11/11/2026. Seuls les changements par rapport à la v3 sont listés. Tous les textes ci-dessous sont **à valider** par Marwan ; arabe et anglais à relire. Aucun chiffre ajouté ; « vingt ans » était déjà en ligne.
+
+### Accueil
+
+Ordre : haut de page · Consulting (01) · Solutions (02) · Édition (03) · **De l'idée à l'action** (nouvelle section) · produits · {méta}Physique · Pourquoi Noorwan · contact.
+
+- Haut de page (devise inchangée). Accroche, aussi description de la page pour les moteurs : « Nous conseillons les entreprises, nous concevons leurs logiciels et nous publions des livres. Toujours de la même façon : partir d'un besoin réel, livrer vite, améliorer ensuite. »
+- Consulting, texte de l'univers : « Clarifier votre positionnement, choisir vos priorités et mener vos projets numériques jusqu'au résultat : stratégie, marketing digital, eCommerce, formation. »
+- Consulting, introduction : « Vingt ans de digital, de marketing et d'eCommerce au service d'une question simple : quelle est la prochaine étape utile pour votre projet ? »
+- Les cinq expertises (titres inchangés) :
+  - Stratégie et structuration de projet : « Fixer l'objectif, choisir les priorités et découper le projet en étapes tenables. »
+  - Marketing digital et présence en ligne : « Un positionnement clair, des contenus réguliers, des campagnes suivies. »
+  - E-commerce et parcours client : « Une boutique en ligne simple à utiliser, du choix du produit au paiement. » (remplace « qui convertissent », promesse sans preuve)
+  - Développement web et outils numériques : « Sites, applications et outils internes, construits pour être entretenus. »
+  - Formation : « Des séances pratiques pour que vos équipes se servent elles-mêmes des outils, sur site ou à distance. »
+- Solutions : titre « Des logiciels pour le travail de chaque jour » (aussi titre de la page Solutions) ; texte de l'univers « Des logiciels pour les tâches qui reviennent chaque jour : réservation, ressources humaines, intelligence artificielle. Sur téléphone d'abord, en trois langues. » ; introduction de la page Solutions « Des logiciels pensés pour le téléphone d'abord, en français, en anglais et en arabe. Certains sont en service, d'autres en préparation. »
+- Édition : titre « Des livres, du manuscrit à Amazon » ; texte « De la relecture du manuscrit à la mise en ligne sur Amazon, nous accompagnons les auteurs. Et nous publions nos propres collections. »
+- **De l'idée à l'action** (remplace les quatre étapes de la v1, sur fond clair, une illustration par étape) : « C'est notre méthode pour un conseil, un logiciel ou un livre. »
+  1. Partir du terrain : « Nous regardons d'abord comment vous travaillez aujourd'hui et ce qui vous fait perdre du temps. Le besoin réel passe avant l'idée. »
+  2. Construire vite : « Une première version simple, mise rapidement entre les mains des personnes qui s'en serviront. On apprend plus en l'utilisant qu'en la décrivant. »
+  3. Faire tourner, puis améliorer : « Une fois en service, nous écoutons les retours, corrigeons et ajoutons ce qui manque, une étape après l'autre. »
+- Pourquoi Noorwan : nouveau titre « Trois métiers, une même exigence » (le titre « De l'idée à l'action » passe à la méthode) ; accroche et trois points inchangés.
+- Bandeau de contact (toutes les pages) : « Un conseil, une démonstration ou un livre à publier : dites-nous où vous en êtes, nous vous répondons. »
+
+### Page Édition
+
+- Introduction de la prestation : « Votre manuscrit est terminé ou encore en chantier : nous reprenons là où vous en êtes. »
+
+### Illustrations (`public/assets/img/`)
+
+Même trait que les illustrations de produits de la v3 : formes pleines, coins arrondis, palette de chaque univers, sans texte ni logo, moins de 4 ko chacune, en miroir en arabe.
+
+- `hero.svg` : une lampe de bureau éclaire trois objets posés sur une table, un plan de route sur un chevalet (Consulting), un téléphone (Solutions), des livres (Édition). Remplace l'image sombre `hero.webp`, supprimée.
+- `universe-consulting.svg` (carte déroulée, itinéraire en étapes, boussole, crayon), `universe-solutions.svg` (portable et téléphone, même interface, sur fond nuit), `universe-edition.svg` (feuilles du manuscrit et stylo, livre imprimé et liseuse).
+- `step-field.svg` (boutique et bulle de parole), `step-build.svg` (écran assemblé bloc par bloc), `step-improve.svg` (téléphone en service dans une boucle de retours).
+- `contact.svg` : enveloppe ouverte et bulle de réponse, dans le bandeau de contact et en tête de la page Contact.
