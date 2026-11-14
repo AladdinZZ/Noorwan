@@ -230,8 +230,8 @@ return [
         'data_text' => 'Votre compte ne sert qu\'à vous faire entrer. Vous voyez ce que chaque site reçoit, et vous pouvez tout arrêter.',
         'data_points' => [
             ['title' => 'Ce que les sites reçoivent', 'text' => 'Un site du groupe reçoit votre nom. Votre numéro, seulement si vous l\'acceptez.'],
-            ['title' => 'Vous gardez la main', 'text' => 'Vos informations, vos appareils connectés et les services que vous utilisez se consultent dans « Mon compte ».'],
-            ['title' => 'Supprimer votre compte', 'text' => 'Depuis « Mon compte », quand vous le souhaitez. Vous avez 30 jours pour changer d\'avis ; ensuite, vos données personnelles sont effacées.'],
+            ['title' => 'Vous gardez la main', 'text' => 'Vos informations, vos appareils connectés et les services que vous utilisez se consultent dans « Mon compte ».'],
+            ['title' => 'Supprimer votre compte', 'text' => 'Depuis « Mon compte », quand vous le souhaitez. Vous avez 30 jours pour changer d\'avis ; ensuite, vos données personnelles sont effacées.'],
         ],
         'partner_tag' => 'Bientôt',
         'partner_h' => 'Pour les entreprises partenaires',
