@@ -11,6 +11,7 @@
 | Solutions | **En ligne, textes à valider** (lot v1.1, 27/10/2026) : `solutions.php`. Reserva, Immobilier, Shopping et page Développeurs hors site. |
 | Édition | **En ligne.** Prestation (4 étapes **à valider**) et catalogue ; annonce Ikra.M **à valider** (27/10/2026). |
 | À propos | À rédiger (hors menu). |
+| Noorwan Connect | **Nouvelle page (v5, branche `feat/v5-noorwan-connect`)** à l'adresse `/connect`, dans le menu et le pied de page. Textes **proposés par Maestro, à valider** par Marwan. Voir « État du site au 14/11/2026 (v5) ». |
 | Contact | En ligne. |
 | Mentions légales, Confidentialité, Cookies | En ligne, **à faire relire par un juriste**. Mentions légales en cours de mise à jour (encadré). Confidentialité et Cookies réécrites en v2 pour la mesure d'audience avec accord (M-59), **à valider**. |
 
@@ -255,3 +256,36 @@ Même trait que les illustrations de produits de la v3 : formes pleines, coins a
 - `universe-consulting.svg` (carte déroulée, itinéraire en étapes, boussole, crayon), `universe-solutions.svg` (portable et téléphone, même interface, sur fond nuit), `universe-edition.svg` (feuilles du manuscrit et stylo, livre imprimé et liseuse).
 - `step-field.svg` (boutique et bulle de parole), `step-build.svg` (écran assemblé bloc par bloc), `step-improve.svg` (téléphone en service dans une boucle de retours).
 - `contact.svg` : enveloppe ouverte et bulle de réponse, dans le bandeau de contact et en tête de la page Contact.
+
+## État du site au 14/11/2026 (v5, branche `feat/v5-noorwan-connect`, à relire avant fusion)
+
+Brief v5 de Maestro du 14/11/2026, d'après la maquette « parcours » de Noorwan Connect. Branche partie de la v4 (pas encore fusionnée). Tous les textes ci-dessous sont **proposés par Maestro, à valider** par Marwan ; anglais et arabe dans `lang/en.php` et `lang/ar.php`, arabe à relire par un arabophone. Aucun produit nommé sur la page (Reserva reste confidentiel), aucun numéro ni nom de personne réels, aucune date pour les partenaires.
+
+### Commun
+
+- Menu : Consulting, Solutions, Édition, **Noorwan Connect**, Contact. Pied de page, colonne Noorwan : Noorwan Connect, Contact, Mon compte.
+- « Connexion » devient **« Mon compte »** (My account, حسابي) : pastille de l'en-tête de toutes les pages, dernier lien du menu mobile, colonne Noorwan du pied de page, phrase de la page Solutions. Mène à l'accueil du Compte Noorwan ; masqué tant que `COMPTE_LINK_ENABLED` ne vaut pas `true` (ou si `COMPTE_URL` est vide).
+
+### Page Noorwan Connect (`/connect`)
+
+- Haut de page : « Noorwan Connect » ; titre « Un seul compte pour tous les services Noorwan » ; « Un compte par personne, avec votre numéro de téléphone. Il vous ouvre les sites du groupe, pour vous comme pour votre entreprise. » ; bouton « Créer mon compte » ; « Déjà un compte ? Mon compte » ; illustration.
+- Pour les particuliers : « Entrez partout avec le même compte » ; « Prendre un rendez-vous, suivre une demande : sur chaque site du groupe, « Continuer avec Noorwan Connect » vous fait entrer sans créer de nouveau compte. »
+  1. Un geste pour entrer : « Déjà connecté sur votre téléphone ? Vous entrez dans un autre site du groupe sans ressaisir de code. »
+  2. Vos informations à un seul endroit : « Votre nom, votre numéro et votre langue se changent une fois, dans votre compte, pour tous les sites. »
+  3. Un numéro, un compte : « Le même numéro ne peut pas ouvrir deux comptes : votre compte reste le vôtre. »
+- Pour les professionnels : « Gérez votre entreprise avec la même entrée » ; « Vous représentez une entreprise, une association ou une administration ? Ajoutez un compte professionnel à votre compte. Un particulier n'en a pas besoin. »
+  1. Le compte professionnel : « Il porte votre entreprise et vos droits dans chaque service : propriétaire ou administrateur. »
+  2. Les établissements : « Chaque lieu de votre entreprise a sa place : une boutique, une agence, un cabinet. »
+  3. L'équipe : « Invitez vos collaborateurs par leur numéro. Chacun entre avec son propre compte et le rôle que vous lui donnez. »
+  - Encadré : « En entrant dans un service, vous choisissez à quel titre : pour vous, ou pour l'une de vos entreprises. »
+- Sans mot de passe (fond noir) : « Votre numéro suffit » ; « Pas de mot de passe à retenir. Vous recevez un code sur votre téléphone, vous le saisissez, et vous êtes entré. »
+  1. Votre numéro : « Choisissez votre pays, puis saisissez votre numéro de téléphone. »
+  2. Le code : « Saisissez le code reçu par SMS. Il ne sert qu'une fois. »
+  3. C'est fait : « Sur un appareil de confiance, votre session reste ouverte : la fois suivante, un geste suffit. »
+- Vos données : « Vos données restent à vous » ; « Votre compte ne sert qu'à vous faire entrer. Vous voyez ce que chaque site reçoit, et vous pouvez tout arrêter. »
+  1. Ce que les sites reçoivent : « Un site du groupe reçoit votre nom. Votre numéro, seulement si vous l'acceptez. »
+  2. Vous gardez la main : « Vos informations, vos appareils connectés et les services que vous utilisez se consultent dans « Mon compte ». »
+  3. Supprimer votre compte : « Depuis « Mon compte », quand vous le souhaitez. Vous avez 30 jours pour changer d'avis ; ensuite, vos données personnelles sont effacées. » (délai de 30 jours du Compte Noorwan, Conv-017 du Compte)
+- Pour les entreprises partenaires, pastille « Bientôt » (sans date) : « Une entreprise hors du groupe pourra proposer « Se connecter avec Noorwan » sur son site. Ses clients entreront avec leur numéro, sans nouveau compte, et autoriseront une seule fois ce site à connaître leur nom. » ; lien « Être tenu informé » vers le formulaire (univers Solutions).
+- Bandeau final (seulement quand le Compte est en service) : « Créez votre Compte Noorwan » ; « Votre numéro de téléphone suffit. » ; « Créer mon compte ».
+- Six illustrations dessinées (`public/assets/img/connect-*.svg`, moins de 3 ko, sans texte), sans miroir en arabe : le compte relié aux services et à une place de partenaire en pointillés, un agenda sur téléphone, une entreprise et ses établissements avec son équipe, le code en six cases et une clé, un bouclier avec deux réglages et un calendrier, le site d'un partenaire avec un bouton marqué du point bleu.
