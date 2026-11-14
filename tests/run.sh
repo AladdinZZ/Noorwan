@@ -221,14 +221,14 @@ for page in mentions-legales.php confidentialite.php cookies.php; do
     done
 done
 
-echo "2 undecies. Lien « Connexion » vers le Compte Noorwan"
+echo "2 undecies. Lien « Mon compte » vers le Compte Noorwan"
 # Rendu hors serveur, constantes fixées avant l'amorçage : les états se testent sans toucher au .env.
-# render PAGE LANGUE ACTIVÉ [ADRESSE] [GTM_ID] [CHOIX]
+# render PAGE LANGUE ACTIVÉ [ADRESSE, « - » pour une adresse vide] [GTM_ID] [CHOIX]
 # Écosystème sans adresse : les pages rendues ne dépendent pas des réglages du .env local.
 render() {
     ECOSYSTEM_ACCOUNT_URL= ECOSYSTEM_RESERVA_URL= ECOSYSTEM_INTEEK_URL= "$PHP" -r '[, $page, $lang, $enabled, $url, $gtm, $consent] = $argv + [4 => "", 5 => "", 6 => ""];
         define("COMPTE_LINK_ENABLED", $enabled === "true");
-        if ($url !== "") { define("COMPTE_URL", $url); }
+        if ($url === "-") { define("COMPTE_URL", ""); } elseif ($url !== "") { define("COMPTE_URL", $url); }
         define("GTM_ID", $gtm);
         if ($consent !== "") { $_COOKIE["nw_consent"] = $consent; }
         $_GET["lang"] = $lang;
@@ -241,7 +241,7 @@ for lang in fr en ar; do
         expect "désactivé : aucun lien vers le Compte, $page ($lang)" 0 "$(grep -cE 'compte\.noorwan\.com|nav-account|btn-account|page-account|connect-create|connect-already' <<< "$html")"
     done
 
-    label=$(by_lang "$lang" "Connexion" "Sign in" "الدخول")
+    label=$(by_lang "$lang" "Mon compte" "My account" "حسابي")
     href="$COMPTE_DEFAULT/?lang=$lang"
     html=$(render solutions.php "$lang" true)
     expect "activé : pastille « $label » dans la barre ($lang)" "<a class=\"btn-account\" href=\"$href\">$label</a>" \
@@ -270,6 +270,7 @@ if [[ "$(config COMPTE_LINK_ENABLED false)" == "true" ]]; then
 else
     expect "site servi : lien masqué (COMPTE_LINK_ENABLED désactivé)" 0 "$served_links"
 fi
+expect "adresse du Compte vide : aucun lien" 0 "$(render connect.php fr true - | grep -cE 'nav-account|btn-account|connect-create')"
 grep -q '^COMPTE_LINK_ENABLED=false$' .env.example && pass ".env.example : lien désactivé par défaut" || fail ".env.example : COMPTE_LINK_ENABLED=false absent"
 
 echo "2 duodecies. Consentement et Tag Manager (M-59)"

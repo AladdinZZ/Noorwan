@@ -34,7 +34,7 @@ return [
         'edition' => 'النشر',
         'contact' => 'اتصل بنا',
         'connect' => 'Noorwan Connect',
-        'account' => 'الدخول',
+        'account' => 'حسابي',
         // À relire.
         'skip' => 'الانتقال إلى المحتوى',
         'home_label' => 'نوروان، الصفحة الرئيسية',

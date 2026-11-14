@@ -77,7 +77,7 @@ function e(string|int|float|null $value): string
     return htmlspecialchars((string) $value, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML5, 'UTF-8');
 }
 
-// Compte Noorwan (compte.noorwan.com) : adresse et affichage du lien « Connexion ».
+// Compte Noorwan (compte.noorwan.com) : adresse et affichage des liens « Mon compte » et « Créer mon compte ».
 // Le lien reste masqué tant que COMPTE_LINK_ENABLED ne vaut pas « true » dans .env.
 // Un script peut définir ces constantes avant l'amorçage (tests/run.sh, pour les deux états).
 if (!defined('COMPTE_URL')) {

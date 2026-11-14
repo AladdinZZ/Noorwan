@@ -408,7 +408,7 @@ main:focus {
     gap: 4px;
 }
 
-/* « Connexion » : pastille noire, comme la maquette. */
+/* « Mon compte » : pastille noire, comme la maquette. */
 .btn-account {
     display: inline-flex;
     align-items: center;

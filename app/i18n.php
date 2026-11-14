@@ -150,9 +150,10 @@ function absolute_url(string $page, string $lang): string
 }
 
 /**
- * Lien vers le Compte Noorwan dans la langue courante, ou null tant que le lien est désactivé.
+ * Lien vers l'accueil du Compte Noorwan dans la langue courante (« Mon compte », « Créer mon compte »),
+ * ou null tant que le lien est désactivé ou que l'adresse est vide.
  */
 function account_url(): ?string
 {
-    return COMPTE_LINK_ENABLED ? COMPTE_URL . '/?' . http_build_query(['lang' => lang()]) : null;
+    return COMPTE_LINK_ENABLED && COMPTE_URL !== '' ? COMPTE_URL . '/?' . http_build_query(['lang' => lang()]) : null;
 }

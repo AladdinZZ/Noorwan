@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-// En-tête commun : <head>, barre fine avec logo, navigation, « Connexion », choix de langue et menu mobile.
+// En-tête commun : <head>, barre fine avec logo, navigation, « Mon compte », choix de langue et menu mobile.
 // Attend $meta = ['title' => ..., 'description' => ...] (chaînes brutes, échappées ici).
 
 // « À propos » viendra avec sa propre page : il n'est pas dans le menu.
@@ -13,7 +13,7 @@ $navItems = [
     ['label' => 'nav.connect', 'href' => url('connect')],
     ['label' => 'nav.contact', 'href' => url('contact')],
 ];
-// « Connexion » : bouton en pastille dans la barre, dernier lien du menu mobile, quand le Compte Noorwan est en service.
+// « Mon compte » : bouton en pastille dans la barre, dernier lien du menu mobile, quand le Compte Noorwan est en service.
 $accountUrl = account_url();
 
 $asset = static fn (string $path): string => $path . '?v=' . (string) @filemtime(ROOT_DIR . '/public/' . $path);

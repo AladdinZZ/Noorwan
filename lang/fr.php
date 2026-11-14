@@ -29,7 +29,7 @@ return [
         'edition' => 'Édition',
         'contact' => 'Contact',
         'connect' => 'Noorwan Connect',
-        'account' => 'Connexion',
+        'account' => 'Mon compte',
         'skip' => 'Aller au contenu',
         'home_label' => 'Noorwan, accueil',
         'main_label' => 'Navigation principale',
