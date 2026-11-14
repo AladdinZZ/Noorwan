@@ -13,11 +13,12 @@ const LANGS = [
 ];
 const DEFAULT_LANG = 'fr';
 
-// Pages publiques : identifiant => fichier dans public/.
+// Pages publiques : identifiant => adresse dans public/ (« connect » est réécrite vers connect.php, .htaccess et tests/router.php).
 const PAGES = [
     'index' => '',
     'solutions' => 'solutions.php',
     'edition' => 'edition.php',
+    'connect' => 'connect',
     'contact' => 'contact.php',
     'mentions-legales' => 'mentions-legales.php',
     'confidentialite' => 'confidentialite.php',

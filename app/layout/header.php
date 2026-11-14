@@ -10,6 +10,7 @@ $navItems = [
     ['label' => 'nav.consulting', 'href' => url('index', 'consulting')],
     ['label' => 'nav.solutions', 'href' => url('solutions')],
     ['label' => 'nav.edition', 'href' => url('edition')],
+    ['label' => 'nav.connect', 'href' => url('connect')],
     ['label' => 'nav.contact', 'href' => url('contact')],
 ];
 // « Connexion » : bouton en pastille dans la barre, dernier lien du menu mobile, quand le Compte Noorwan est en service.

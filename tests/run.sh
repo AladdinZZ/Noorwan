@@ -56,7 +56,7 @@ done < <(find app bin lang public -name '*.php')
 [[ $failures -eq 0 ]] && pass "php -l sur tous les fichiers"
 
 echo "2. Pages (code 200 attendu) sur $BASE_URL"
-for page in "" solutions.php edition.php contact.php mentions-legales.php confidentialite.php cookies.php; do
+for page in "" solutions.php edition.php connect contact.php mentions-legales.php confidentialite.php cookies.php; do
     for lang in fr en ar; do
         code=$(curl -s -o /dev/null -w '%{http_code}' "$BASE_URL/$page?lang=$lang")
         expect "/${page:-index} lang=$lang" 200 "$code"
@@ -96,8 +96,8 @@ expect "robots.txt en texte" "text/plain; charset=utf-8" "$(curl -s -o /dev/null
 robots_prod=$("$PHP" -r 'require "app/bootstrap.php"; require "app/seo.php"; echo robots_txt(true);' 2>&1)
 if [[ "$robots_prod" == $'User-agent: *\nAllow: /\n\nSitemap: '*'/sitemap.xml' ]]; then pass "robots.txt de production"; else fail "robots.txt de production : $robots_prod"; fi
 sitemap=$(curl -s "$BASE_URL/sitemap.xml")
-expect "sitemap.xml : 7 pages x 3 langues" 21 "$(grep -c '<loc>' <<< "$sitemap")"
-expect "sitemap.xml : 4 versions par adresse (fr, en, ar, x-default)" 84 "$(grep -c 'hreflang=' <<< "$sitemap")"
+expect "sitemap.xml : 8 pages x 3 langues" 24 "$(grep -c '<loc>' <<< "$sitemap")"
+expect "sitemap.xml : 4 versions par adresse (fr, en, ar, x-default)" 96 "$(grep -c 'hreflang=' <<< "$sitemap")"
 if command -v xmllint >/dev/null; then
     xmllint --noout - <<< "$sitemap" 2>/dev/null && pass "sitemap.xml bien formé" || fail "sitemap.xml mal formé"
 fi
@@ -236,9 +236,9 @@ render() {
 }
 COMPTE_DEFAULT="https://compte.noorwan.com"
 for lang in fr en ar; do
-    for page in index.php solutions.php edition.php; do
+    for page in index.php solutions.php edition.php connect.php; do
         html=$(render "$page" "$lang" false)
-        expect "désactivé : aucun lien vers le Compte, $page ($lang)" 0 "$(grep -cE 'compte\.noorwan\.com|nav-account|btn-account|page-account' <<< "$html")"
+        expect "désactivé : aucun lien vers le Compte, $page ($lang)" 0 "$(grep -cE 'compte\.noorwan\.com|nav-account|btn-account|page-account|connect-create|connect-already' <<< "$html")"
     done
 
     label=$(by_lang "$lang" "Connexion" "Sign in" "الدخول")
@@ -355,14 +355,49 @@ expect "adresse non https ignorée" 0 "$(eco 'ECOSYSTEM_ACCOUNT_URL=javascript:a
 if grep -qi 'onepay' <<< "$(eco ECOSYSTEM_ACCOUNT_URL=https://a.invalid ECOSYSTEM_RESERVA_URL=https://b.invalid ECOSYSTEM_INTEEK_URL=https://c.invalid)"; then fail "OnePay dans l'écosystème"; else pass "OnePay absent de l'écosystème"; fi
 
 echo "2 sexdecies. OnePay absent de toutes les pages"
-for page in "" solutions.php edition.php contact.php mentions-legales.php confidentialite.php cookies.php; do
+for page in "" solutions.php edition.php connect contact.php mentions-legales.php confidentialite.php cookies.php; do
     for lang in fr en ar; do
         if curl -s "$BASE_URL/$page?lang=$lang" | grep -qi 'onepay'; then fail "OnePay présent : /${page:-index} ($lang)"; else pass "OnePay absent : /${page:-index} ($lang)"; fi
     done
 done
 for lang in fr en ar; do
-    if render index.php "$lang" true "" "$GTM_TEST" granted | grep -qi 'onepay'; then fail "OnePay présent, tout activé ($lang)"; else pass "OnePay absent, tout activé ($lang)"; fi
+    if render index.php "$lang" true "" "$GTM_TEST" granted | grep -qi 'onepay' || render connect.php "$lang" true | grep -qi 'onepay'; then fail "OnePay présent, tout activé ($lang)"; else pass "OnePay absent, tout activé ($lang)"; fi
 done
+
+echo "2 septdecies. Page Noorwan Connect (/connect)"
+grep -q '/connect?lang=fr</loc>' <<< "$sitemap" && pass "page Noorwan Connect dans le plan du site" || fail "page Noorwan Connect absente du plan du site"
+expect "connect.php reste servi" 200 "$(curl -s -o /dev/null -w '%{http_code}' "$BASE_URL/connect.php?lang=fr")"
+grep -q '^    RewriteRule ^connect$ connect.php \[L\]$' public/.htaccess && pass ".htaccess : /connect réécrite vers connect.php" || fail ".htaccess : réécriture de /connect absente"
+for lang in fr en ar; do
+    html=$(curl -s "$BASE_URL/connect?lang=$lang")
+    nav=$(sed -n '/<nav class="nav-desktop"/,/<\/nav>/p' <<< "$html")
+    grep -q "href=\"connect?lang=$lang\">Noorwan Connect<" <<< "$nav" && pass "menu : Noorwan Connect ($lang)" || fail "menu : lien Noorwan Connect ($lang)"
+    grep -q "<link rel=\"canonical\" href=\"[^\"]*/connect?lang=$lang\">" <<< "$html" && pass "adresse canonique /connect ($lang)" || fail "adresse canonique ($lang)"
+    title=$(by_lang "$lang" "Un seul compte pour tous les services Noorwan" "One account for all Noorwan services" "حساب واحد لجميع خدمات نوروان")
+    grep -qF "<h1 id=\"page-title\" class=\"h1 h1-page\">$title</h1>" <<< "$html" && pass "titre ($lang)" || fail "titre de la page Noorwan Connect ($lang)"
+    expect "sections particuliers, professionnels, sans mot de passe, données, partenaires ($lang)" "particuliers|professionnels|sans-mot-de-passe|donnees|partenaires" \
+        "$(grep -oE '<section id="[a-z-]+" class="screen[^"]*connect-section' <<< "$html" | sed -E 's/<section id="([a-z-]+)".*/\1/' | paste -sd '|' -)"
+    expect "trois points par section, quatre sections ($lang)" 12 "$(grep -c '<span class="connect-num" aria-hidden="true">0' <<< "$html")"
+    expect "six illustrations décoratives ($lang)" 6 "$(grep -cE '<img class="illus" src="assets/img/connect-(hero|personal|pro|code|data|partner)\.svg" alt=""' <<< "$html")"
+    soon=$(by_lang "$lang" "Bientôt" "Coming soon" "قريبًا")
+    grep -q "<p class=\"badge-soon\">$soon</p>" <<< "$html" && pass "partenaires : « $soon » ($lang)" || fail "partenaires : pastille « $soon » ($lang)"
+    if sed -n '/id="partenaires"/,/<\/section>/p' <<< "$html" | grep -qE '20[0-9]{2}|janvier|trimestre|quarter|month|mois'; then fail "partenaires : date promise ($lang)"; else pass "partenaires : aucune date ($lang)"; fi
+    grep -q "href=\"contact.php?lang=$lang&amp;universe=solutions\">" <<< "$(sed -n '/id="partenaires"/,/<\/section>/p' <<< "$html")" && pass "partenaires : lien vers le formulaire ($lang)" || fail "partenaires : lien vers le formulaire ($lang)"
+    if sed -n '/<main/,/<\/main>/p' <<< "$html" | grep -qiE 'reserva|onepay|\+253|[0-9]{2} [0-9]{2} [0-9]{2}'; then fail "aucun produit confidentiel ni numéro réel ($lang)"; else pass "aucun produit confidentiel ni numéro réel ($lang)"; fi
+
+    create=$(by_lang "$lang" "Créer mon compte" "Create my account" "إنشاء حسابي")
+    href="$COMPTE_DEFAULT/?lang=$lang"
+    html=$(render connect.php "$lang" true)
+    expect "activé : « $create » en haut et en bas, vers le Compte ($lang)" 2 "$(grep -c "<a class=\"btn btn-blue connect-create\" href=\"$href\">$create " <<< "$html")"
+    grep -q "class=\"connect-already\">.*<a href=\"$href\">" <<< "$html" && pass "activé : « Déjà un compte ? » ($lang)" || fail "activé : lien « Déjà un compte » ($lang)"
+    grep -q 'id="creer"' <<< "$html" && pass "activé : bandeau final ($lang)" || fail "activé : bandeau final absent ($lang)"
+    html=$(render connect.php "$lang" false)
+    expect "désactivé : ni bouton ni bandeau final, page complète ($lang)" "0|0|5" \
+        "$(grep -c 'connect-create' <<< "$html")|$(grep -c 'id="creer"' <<< "$html")|$(grep -c 'connect-section' <<< "$html")"
+    footer=$(sed -n '/<nav class="footer-cols"/,/<\/nav>/p' <<< "$html")
+    grep -q "href=\"connect?lang=$lang\">Noorwan Connect<" <<< "$footer" && pass "pied de page : Noorwan Connect ($lang)" || fail "pied de page : lien Noorwan Connect ($lang)"
+done
+grep -q '\[dir="rtl"\] \.connect-visual \.illus' public/assets/css/site.css && pass "illustrations de Noorwan Connect sans miroir (coches)" || fail "règle sans miroir des illustrations de Noorwan Connect"
 
 echo "3. Formulaire de contact"
 rm -f storage/ratelimit/contact-*.log
@@ -473,7 +508,7 @@ rm -f "$RL_OLD" "$RL_RECENT"
 
 echo "2 nonies ter. Illustrations dessinées (SVG)"
 # Produits (v3), haut de page, univers, étapes de la méthode et contact (v4) : moins de 20 Ko, sans texte.
-for id in reserva inteek noor edition hero universe-consulting universe-solutions universe-edition step-field step-build step-improve contact; do
+for id in reserva inteek noor edition hero universe-consulting universe-solutions universe-edition step-field step-build step-improve contact connect-hero connect-personal connect-pro connect-code connect-data connect-partner; do
     file="public/assets/img/$id.svg"
     expect "$id.svg servi" 200 "$(curl -s -o /dev/null -w '%{http_code}' "$BASE_URL/assets/img/$id.svg")"
     size=$(wc -c < "$file" | tr -d ' ')
@@ -495,7 +530,7 @@ for lang in fr en ar; do
 done
 
 echo "2 nonies bis. Reserva confidentiel : aucune description sur le site"
-for page in "" solutions.php edition.php contact.php; do
+for page in "" solutions.php edition.php connect contact.php; do
     for lang in fr en ar; do
         if curl -s "$BASE_URL/$page?lang=$lang" | grep -qE 'prise de rendez-vous|reservation booking|حجز المواعيد'; then fail "description de Reserva présente : /${page:-index} ($lang)"; else pass "aucune description de Reserva : /${page:-index} ($lang)"; fi
     done
