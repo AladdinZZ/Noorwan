@@ -5,11 +5,11 @@ declare(strict_types=1);
 // Catalogue Noorwan Édition. Les titres publiés en français s'affichent en FR et en AR.
 // title_en : titre de l'édition anglaise, repris du site actuel (version anglaise) ; null si le livre n'existe qu'en français.
 // asin : identifiant Amazon de la fiche du livre, relevé sur amazon.fr. Ne jamais en inventer un.
-// Tant qu'il est vide, le bouton « Acheter » mène à la recherche Amazon utilisée par le site actuel.
+// Tant qu'il est vide, le bouton « Acheter » mène à la page auteur de Noorwan sur amazon.fr (tous les livres).
 // status : « published » (en vente, bouton « Acheter »), « writing » (à paraître, affiché dans sa collection),
 // « upcoming » (à paraître, affiché dans la rubrique « Prochainement » après les collections, sans bouton « Acheter »).
 
-const AMAZON_SEARCH_URL = 'https://www.amazon.fr/s?k=noorwan';
+const AMAZON_AUTHOR_URL = 'https://www.amazon.fr/stores/author/B0F8PRLLRF';
 const AMAZON_PRODUCT_URL = 'https://www.amazon.fr/dp/';
 
 function collections(): array
@@ -118,5 +118,5 @@ function book_title(array $book): string
 
 function amazon_url(array $book): string
 {
-    return $book['asin'] !== '' ? AMAZON_PRODUCT_URL . rawurlencode($book['asin']) : AMAZON_SEARCH_URL;
+    return $book['asin'] !== '' ? AMAZON_PRODUCT_URL . rawurlencode($book['asin']) : AMAZON_AUTHOR_URL;
 }

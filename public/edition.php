@@ -56,7 +56,6 @@ require ROOT_DIR . '/app/layout/header.php';
         <div class="catalogue-head">
             <p class="eyebrow"><?= t('edition.catalogue_eyebrow') ?></p>
             <h2 id="catalogue-title" class="h2 h2-section"><?= t('edition.catalogue_title') ?></h2>
-            <p class="catalogue-todo"><?= todo('edition.asin_todo') ?></p>
         </div>
 <?php foreach ($rubrics as $rubricId => $rubric): ?>
 <?php if ($rubric['books'] === []) { continue; } ?>

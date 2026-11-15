@@ -190,7 +190,6 @@ return [
         'writing' => 'Writing in progress',
         'also_in_english' => 'Also available in English',
         // Texte à fournir par Marwan (laissé en français, surligné).
-        'asin_todo' => '[À FOURNIR : ASIN de Lumière, Le Mal, Le Bien et Être pour Avoir, pour des liens Amazon directs]',
         'upcoming' => 'Coming soon',
     ],
     // Noorwan Connect page (v5): TEXTS PROPOSED BY MAESTRO, TO BE APPROVED BY MARWAN. No date promised for partners.
