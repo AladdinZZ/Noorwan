@@ -256,7 +256,7 @@ for lang in fr en ar; do
         "$(sed -n '/<nav class="footer-cols"/,/<\/nav>/p' <<< "$html" | grep -oE 'href="[^"]+"' | tail -n 2 | sed -E 's/href="([^"]+)"/\1/' | paste -sd '|' -)"
     phrase=$(by_lang "$lang" "Un seul compte pour tous les services Noorwan." "One account for all Noorwan services." "حساب واحد لجميع خدمات نوروان.")
     nbsp=$'\xc2\xa0'
-    link=$(by_lang "$lang" "Découvrir Noorwan${nbsp}Connect" "Discover Noorwan${nbsp}Connect" "اكتشف "$'\xe2\x81\xa6'"Noorwan${nbsp}Connect"$'\xe2\x81\xa9')
+    link=$(by_lang "$lang" "Découvrir Noorwan${nbsp}Connect" "Discover Noorwan${nbsp}Connect" "اكتشف${nbsp}"$'\xe2\x81\xa6'"Noorwan${nbsp}Connect"$'\xe2\x81\xa9')
     for state in true false; do
         hero=$(sed -n '/<section class="page-hero/,/<\/section>/p' <<< "$(render solutions.php "$lang" "$state")" | grep 'class="page-connect"')
         grep -qF "<p class=\"page-connect\">$phrase <a href=\"connect?lang=$lang\">$link " <<< "$hero" \
