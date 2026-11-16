@@ -11,7 +11,7 @@
 | Solutions | **En ligne, textes à valider** (lot v1.1, 27/10/2026) : `solutions.php`. Reserva, Immobilier, Shopping et page Développeurs hors site. |
 | Édition | **En ligne.** Prestation (4 étapes **à valider**) et catalogue ; annonce Ikra.M **à valider** (27/10/2026). |
 | À propos | À rédiger (hors menu). |
-| Noorwan Connect | **Nouvelle page (v5, branche `feat/v5-noorwan-connect`)** à l'adresse `/connect`, dans le menu et le pied de page. Textes **proposés par Maestro, à valider** par Marwan. Voir « État du site au 14/11/2026 (v5) ». |
+| Noorwan Connect | **Nouvelle page (v5, branche `feat/v5-noorwan-connect`)** à l'adresse `/connect`, dans le menu et le pied de page. Textes **proposés par Maestro, à valider** par Marwan. Voir « État du site au 14/11/2026 (v5) », complété par « État du site au 16/11/2026 (v5 bis) » : le site n'a plus de « Mon compte », seule cette page mène au Compte Noorwan. |
 | Contact | En ligne. |
 | Mentions légales, Confidentialité, Cookies | En ligne, **à faire relire par un juriste**. Mentions légales en cours de mise à jour (encadré). Confidentialité et Cookies réécrites en v2 pour la mesure d'audience avec accord (M-59), **à valider**. |
 
@@ -257,13 +257,37 @@ Même trait que les illustrations de produits de la v3 : formes pleines, coins a
 - `step-field.svg` (boutique et bulle de parole), `step-build.svg` (écran assemblé bloc par bloc), `step-improve.svg` (téléphone en service dans une boucle de retours).
 - `contact.svg` : enveloppe ouverte et bulle de réponse, dans le bandeau de contact et en tête de la page Contact.
 
+## État du site au 16/11/2026 (v5 bis, même branche `feat/v5-noorwan-connect`, à relire avant fusion)
+
+Brief v5 bis de Maestro du 16/11/2026, d'après Marwan : le site institutionnel ne gère pas de compte. Noorwan Connect est le moyen d'entrer dans l'écosystème ; il est présenté sur sa page `/connect`, et c'est depuis cette page seulement qu'on crée son compte ou qu'on y entre. Cette section remplace, pour ce qui suit, celle du 14/11/2026.
+
+### Commun
+
+- **Plus de « Mon compte »** : ni pastille dans l'en-tête, ni lien dans le menu mobile, ni lien dans le pied de page, que le Compte soit en service ou non. Menu : Consulting, Solutions, Édition, Noorwan Connect, Contact. Pied de page, colonne Noorwan : Noorwan Connect, Contact.
+- La clé `nav.account` (Mon compte, My account, حسابي) est retirée des trois langues, ainsi que les styles de la pastille.
+- Le bloc « Écosystème Noorwan » (D63) n'est pas touché : il peut nommer le Compte Noorwan si `ECOSYSTEM_ACCOUNT_URL` est renseignée (vide par défaut).
+
+### Page Solutions
+
+- Sous l'introduction, toujours affichée : « Un seul compte pour tous les services Noorwan. **Découvrir Noorwan Connect** → », lien vers `/connect` (EN : « One account for all Noorwan services. Discover Noorwan Connect » ; AR : « حساب واحد لجميع خدمات نوروان. اكتشف Noorwan Connect »). Plus de lien vers le Compte.
+
+### Page Noorwan Connect (`/connect`)
+
+- Haut de page : bouton « Créer mon compte » puis lien « **J'ai déjà un compte** » (I already have an account, لديّ حساب بالفعل), qui remplace « Déjà un compte ? Mon compte ». Les deux mènent à l'accueil du Compte Noorwan et restent masqués, avec le bandeau final, tant que `COMPTE_LINK_ENABLED` ne vaut pas `true`.
+- Vos données, points 2 et 3 : « Vos informations, vos appareils connectés et les services que vous utilisez se consultent dans **votre compte Noorwan Connect**. » ; « Depuis **votre compte Noorwan Connect**, quand vous le souhaitez. Vous avez 30 jours pour changer d'avis ; ensuite, vos données personnelles sont effacées. » (EN : « your Noorwan Connect account » ; AR : « حسابك على Noorwan Connect »).
+- Inchangé, à trancher par Marwan : le bandeau final garde « Créez votre Compte Noorwan ».
+
+### Page Édition (rappel du 15/11/2026)
+
+- Les livres sans identifiant Amazon mènent à la page auteur de Noorwan sur amazon.fr (choix de Marwan du 15/11/2026) ; plus aucun texte à fournir sur la page Édition (le « [À FOURNIR : ASIN] » a disparu). Harmonie garde son lien direct.
+
 ## État du site au 14/11/2026 (v5, branche `feat/v5-noorwan-connect`, à relire avant fusion)
 
 Brief v5 de Maestro du 14/11/2026, d'après la maquette « parcours » de Noorwan Connect. Branche partie de la v4 (pas encore fusionnée). Tous les textes ci-dessous sont **proposés par Maestro, à valider** par Marwan ; anglais et arabe dans `lang/en.php` et `lang/ar.php`, arabe à relire par un arabophone. Aucun produit nommé sur la page (Reserva reste confidentiel), aucun numéro ni nom de personne réels, aucune date pour les partenaires.
 
 ### Commun
 
-- Menu : Consulting, Solutions, Édition, **Noorwan Connect**, Contact. Pied de page, colonne Noorwan : Noorwan Connect, Contact, Mon compte.
+- Menu : Consulting, Solutions, Édition, **Noorwan Connect**, Contact. Pied de page, colonne Noorwan : Noorwan Connect, Contact, Mon compte (retiré le 16/11/2026, v5 bis).
 - « Connexion » devient **« Mon compte »** (My account, حسابي) : pastille de l'en-tête de toutes les pages, dernier lien du menu mobile, colonne Noorwan du pied de page, phrase de la page Solutions. Mène à l'accueil du Compte Noorwan ; masqué tant que `COMPTE_LINK_ENABLED` ne vaut pas `true` (ou si `COMPTE_URL` est vide).
 
 ### Page Noorwan Connect (`/connect`)
