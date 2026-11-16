@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 260" fill="none">
+  <!-- Inteek : fiche candidat sur un téléphone, carte d'entretien posée à côté. Aucun texte lisible. -->
+  <rect x="196" y="78" width="148" height="112" rx="14" fill="#fff" stroke="#E5E5EA"/>
+  <rect x="212" y="94" width="34" height="34" rx="8" fill="#E9EEF5"/>
+  <rect x="219" y="104" width="20" height="3" rx="1.5" fill="#7C93B2"/>
+  <rect x="219" y="112" width="12" height="3" rx="1.5" fill="#9DB2CF"/>
+  <rect x="256" y="98" width="70" height="7" rx="3.5" fill="#1D1D1F"/>
+  <rect x="256" y="113" width="46" height="6" rx="3" fill="#D2D2D7"/>
+  <g fill="#3D5A80"><circle cx="218" cy="152" r="5"/><circle cx="234" cy="152" r="5"/><circle cx="250" cy="152" r="5"/><circle cx="266" cy="152" r="5"/></g>
+  <circle cx="282" cy="152" r="4.5" stroke="#9DB2CF" stroke-width="1.5"/>
+  <rect x="212" y="170" width="62" height="6" rx="3" fill="#E5E5EA"/>
+  <rect x="64" y="20" width="150" height="270" rx="30" fill="#1D1D1F"/>
+  <rect x="71" y="27" width="136" height="256" rx="24" fill="#fff"/>
+  <rect x="117" y="35" width="44" height="10" rx="5" fill="#1D1D1F"/>
+  <circle cx="139" cy="86" r="22" fill="#E9EEF5"/>
+  <circle cx="139" cy="80" r="8" fill="#7C93B2"/>
+  <path d="M124 100c3-8 9-11 15-11s12 3 15 11" fill="#7C93B2"/>
+  <rect x="104" y="118" width="70" height="8" rx="4" fill="#1D1D1F"/>
+  <rect x="118" y="132" width="42" height="6" rx="3" fill="#D2D2D7"/>
+  <rect x="87" y="152" width="34" height="14" rx="7" fill="#E9EEF5"/>
+  <rect x="125" y="152" width="28" height="14" rx="7" fill="#E9EEF5"/>
+  <rect x="157" y="152" width="34" height="14" rx="7" fill="#3D5A80"/>
+  <rect x="87" y="180" width="104" height="1" fill="#E5E5EA"/>
+  <rect x="87" y="194" width="16" height="16" rx="4" fill="#3D5A80"/>
+  <rect x="111" y="196" width="58" height="5" rx="2.5" fill="#515154"/>
+  <rect x="111" y="205" width="36" height="4" rx="2" fill="#D2D2D7"/>
+  <rect x="87" y="222" width="16" height="16" rx="4" fill="#E9EEF5"/>
+  <rect x="111" y="224" width="50" height="5" rx="2.5" fill="#515154"/>
+  <rect x="111" y="233" width="30" height="4" rx="2" fill="#D2D2D7"/>
+  <rect x="87" y="252" width="104" height="22" rx="6" fill="#1D1D1F"/>
+</svg>

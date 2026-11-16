@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 // Catalogue Noorwan Édition. Les titres publiés en français s'affichent en FR et en AR.
 // title_en : titre de l'édition anglaise, repris du site actuel (version anglaise) ; null si le livre n'existe qu'en français.
-// asin : identifiant Amazon de la fiche du livre, à fournir par Marwan. Ne jamais en inventer un.
+// asin : identifiant Amazon de la fiche du livre, relevé sur amazon.fr. Ne jamais en inventer un.
 // Tant qu'il est vide, le bouton « Acheter » mène à la recherche Amazon utilisée par le site actuel.
 // status : « published » (en vente, bouton « Acheter »), « writing » (à paraître, affiché dans sa collection),
 // « upcoming » (à paraître, affiché dans la rubrique « Prochainement » après les collections, sans bouton « Acheter »).
@@ -26,7 +26,8 @@ function books(): array
             'collection' => 'metaphysique',
             'cover' => 'couverture_harmonie.jpg',
             'cover_size' => [1000, 1430],
-            'asin' => '',
+            // Fiche amazon.fr « Harmonie: Science et spiritualité » (auteur Noorwan), relevée le 10/11/2026.
+            'asin' => 'B0F91W6361',
             'status' => 'published',
             'also_in_english' => false,
         ],

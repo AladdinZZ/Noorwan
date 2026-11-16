@@ -12,6 +12,7 @@ $productLinks = [
     'edition' => ['label' => 'common.learn_more', 'href' => url('edition')],
 ];
 // Ton de chaque carte : clair pour les produits en service, sombre pour les autres (comme la maquette A).
+// Illustration de chaque carte : assets/img/<produit>.svg, décorative (alt vide), abstraite pour les produits confidentiels.
 $productTones = ['reserva' => 'light', 'inteek' => 'light', 'noor' => 'dark', 'edition' => 'dark'];
 ?>
 <div class="products">
@@ -26,7 +27,7 @@ $productTones = ['reserva' => 'light', 'inteek' => 'light', 'noor' => 'dark', 'e
         <p class="product-text"><?= e($product['text']) ?></p>
 <?php endif; ?>
         <p class="links"><a class="more" href="<?= e($productLinks[$productId]['href']) ?>"><?= t($productLinks[$productId]['label']) ?></a></p>
-        <div class="glyph" aria-hidden="true"></div>
+        <div class="glyph"><img src="assets/img/<?= e($productId) ?>.svg" alt="" width="360" height="260" loading="lazy" decoding="async"></div>
     </article>
 <?php endforeach; ?>
 </div>
