@@ -7,7 +7,8 @@ require __DIR__ . '/../app/bootstrap.php';
 // Page Noorwan Connect (v5) : le compte unique du groupe expliqué aux particuliers et aux professionnels,
 // d'après la maquette « parcours » de Maestro (14/11/2026), en version site. Servie à l'adresse /connect.
 // Illustrations dessinées (assets/img/connect-*.svg), aucune capture réelle de compte.
-// « Créer mon compte » et « Mon compte » mènent à l'accueil du Compte Noorwan et disparaissent tant qu'il n'est pas en service (account_url()).
+// Seule page du site qui mène au Compte Noorwan : « Créer mon compte » et « J'ai déjà un compte » y conduisent
+// et disparaissent tant qu'il n'est pas en service (account_url()).
 // Partenaires : « bientôt », sans date.
 current_page('connect');
 $meta = ['title' => raw('meta.connect_title'), 'description' => raw('meta.connect_description')];
@@ -52,7 +53,7 @@ require ROOT_DIR . '/app/layout/header.php';
         <p class="lead"><?= t('connect.lead') ?></p>
 <?php if ($accountUrl !== null): ?>
         <p class="links"><a class="btn btn-blue connect-create" href="<?= e($accountUrl) ?>"><?= t('connect.btn_create') ?> <span aria-hidden="true"><?= t('common.arrow') ?></span></a></p>
-        <p class="connect-already"><?= t('connect.already') ?> <a href="<?= e($accountUrl) ?>"><?= t('nav.account') ?></a></p>
+        <p class="connect-already"><a href="<?= e($accountUrl) ?>"><?= t('connect.already') ?></a></p>
 <?php endif; ?>
     </div>
     <div class="hero-visual connect-hero-visual"><img class="illus" src="assets/img/connect-hero.svg" alt="" width="640" height="400" decoding="async"></div>

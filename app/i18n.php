@@ -150,7 +150,7 @@ function absolute_url(string $page, string $lang): string
 }
 
 /**
- * Lien vers l'accueil du Compte Noorwan dans la langue courante (« Mon compte », « Créer mon compte »),
+ * Lien vers l'accueil du Compte Noorwan dans la langue courante (« Créer mon compte », « J'ai déjà un compte », page Noorwan Connect seulement),
  * ou null tant que le lien est désactivé ou que l'adresse est vide.
  */
 function account_url(): ?string
