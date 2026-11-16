@@ -178,7 +178,8 @@ for lang in fr en ar; do
     expect "boutons « Acheter » des livres parus ($lang)" 5 "$(grep -c 'class="btn btn-dark book-buy"' <<< "$html")"
     expect "quatre étapes de la prestation ($lang)" 4 "$(sed -n '/<ol class="steps">/,/<\/ol>/p' <<< "$html" | grep -c '<li>')"
     grep -q 'href="https://www.amazon.fr/dp/B0F91W6361"' <<< "$html" && pass "Harmonie : lien direct vers sa fiche Amazon ($lang)" || fail "Harmonie : lien Amazon direct absent ($lang)"
-    expect "texte à fournir surligné (ASIN seulement) ($lang)" 1 "$(grep -c '<mark class="todo">\[À FOURNIR : ' <<< "$html")"
+    # Depuis le 15/11, un livre sans identifiant Amazon mène à la page auteur : plus rien à fournir sur la page.
+    expect "aucun texte à fournir surligné ($lang)" 0 "$(grep -c '<mark class="todo">' <<< "$html")"
 done
 expect "couverture_belles_manieres.webp servie" 200 "$(curl -s -o /dev/null -w '%{http_code}' "$BASE_URL/assets/images/covers/couverture_belles_manieres.webp")"
 
@@ -221,7 +222,7 @@ for page in mentions-legales.php confidentialite.php cookies.php; do
     done
 done
 
-echo "2 undecies. Lien « Mon compte » vers le Compte Noorwan"
+echo "2 undecies. Aucun lien vers le Compte Noorwan hors de /connect (v5 bis)"
 # Rendu hors serveur, constantes fixées avant l'amorçage : les états se testent sans toucher au .env.
 # render PAGE LANGUE ACTIVÉ [ADRESSE, « - » pour une adresse vide] [GTM_ID] [CHOIX]
 # Écosystème sans adresse : les pages rendues ne dépendent pas des réglages du .env local.
@@ -238,38 +239,36 @@ COMPTE_DEFAULT="https://compte.noorwan.com"
 for lang in fr en ar; do
     for page in index.php solutions.php edition.php connect.php; do
         html=$(render "$page" "$lang" false)
-        expect "désactivé : aucun lien vers le Compte, $page ($lang)" 0 "$(grep -cE 'compte\.noorwan\.com|nav-account|btn-account|page-account|connect-create|connect-already' <<< "$html")"
+        expect "désactivé : aucun lien vers le Compte, $page ($lang)" 0 "$(grep -cE 'compte\.noorwan\.com|nav-account|btn-account|connect-create|connect-already' <<< "$html")"
     done
+    for page in index.php solutions.php edition.php contact.php cookies.php; do
+        html=$(render "$page" "$lang" true)
+        expect "activé : aucun lien vers le Compte, $page ($lang)" 0 "$(grep -cE 'compte\.noorwan\.com|nav-account|btn-account' <<< "$html")"
+    done
+    if grep -qE "'account' =>" <<< "$(sed -n "/'nav' => \[/,/\],/p" "lang/$lang.php")"; then fail "clé nav.account encore présente ($lang)"; else pass "clé nav.account retirée ($lang)"; fi
 
-    label=$(by_lang "$lang" "Mon compte" "My account" "حسابي")
-    href="$COMPTE_DEFAULT/?lang=$lang"
     html=$(render solutions.php "$lang" true)
-    expect "activé : pastille « $label » dans la barre ($lang)" "<a class=\"btn-account\" href=\"$href\">$label</a>" \
-        "$(sed -n '/<div class="header-tools">/,/<details/p' <<< "$html" | grep -o '<a [^>]*>[^<]*</a>')"
-    expect "activé : dernier élément du menu mobile ($lang)" "<a href=\"$href\" class=\"nav-account\">$label</a>" \
-        "$(sed -n '/<nav id="nav-mobile"/,/<\/nav>/p' <<< "$html" | grep -o '<a [^>]*>[^<]*</a>' | tail -n 1)"
-    expect "activé : colonne Noorwan du pied de page ($lang)" "<a href=\"$href\" class=\"nav-account\">$label</a>" \
-        "$(sed -n '/<nav class="footer-cols"/,/<\/nav>/p' <<< "$html" | grep -o '<a [^>]*>[^<]*</a>' | tail -n 1)"
+    expect "en-tête : plus de pastille, seulement le choix de langue ($lang)" 0 \
+        "$(sed -n '/<div class="header-tools">/,/<details/p' <<< "$html" | grep -c '<a ')"
+    expect "menu mobile : Noorwan Connect avant Contact, sans « Mon compte » ($lang)" "connect?lang=$lang|contact.php?lang=$lang" \
+        "$(sed -n '/<nav id="nav-mobile"/,/<\/nav>/p' <<< "$html" | grep -oE 'href="[^"]+"' | tail -n 2 | sed -E 's/href="([^"]+)"/\1/' | paste -sd '|' -)"
+    expect "pied de page : colonne Noorwan, Noorwan Connect puis Contact ($lang)" "connect?lang=$lang|contact.php?lang=$lang" \
+        "$(sed -n '/<nav class="footer-cols"/,/<\/nav>/p' <<< "$html" | grep -oE 'href="[^"]+"' | tail -n 2 | sed -E 's/href="([^"]+)"/\1/' | paste -sd '|' -)"
     phrase=$(by_lang "$lang" "Un seul compte pour tous les services Noorwan." "One account for all Noorwan services." "حساب واحد لجميع خدمات نوروان.")
-    account=$(sed -n '/<section class="page-hero/,/<\/section>/p' <<< "$html" | grep 'class="page-account"')
-    grep -qF "<p class=\"page-account\">$phrase <a href=\"$href\">$label " <<< "$account" \
-        && pass "activé : page Solutions, phrase et lien sous l'introduction ($lang)" || fail "activé : phrase du Compte sur la page Solutions ($lang) : $account"
-    expect "activé : 4 liens sur la page Solutions, tous dans la langue ($lang)" "4|4" \
-        "$(grep -c 'compte\.noorwan\.com' <<< "$html")|$(grep -c "href=\"$href\"" <<< "$html")"
+    nbsp=$'\xc2\xa0'
+    link=$(by_lang "$lang" "Découvrir Noorwan${nbsp}Connect" "Discover Noorwan${nbsp}Connect" "اكتشف "$'\xe2\x81\xa6'"Noorwan${nbsp}Connect"$'\xe2\x81\xa9')
+    for state in true false; do
+        hero=$(sed -n '/<section class="page-hero/,/<\/section>/p' <<< "$(render solutions.php "$lang" "$state")" | grep 'class="page-connect"')
+        grep -qF "<p class=\"page-connect\">$phrase <a href=\"connect?lang=$lang\">$link " <<< "$hero" \
+            && pass "page Solutions : phrase vers /connect, lien du Compte $state ($lang)" || fail "page Solutions : phrase vers /connect ($lang, $state) : $hero"
+    done
     if grep -q $'—' <<< "$html"; then fail "activé : tiret cadratin dans la page ($lang)"; else pass "activé : aucun tiret cadratin ($lang)"; fi
-    html=$(render index.php "$lang" true)
-    expect "activé : accueil, barre, menu mobile et pied de page, sans phrase ($lang)" "3|0" \
-        "$(grep -c "href=\"$href\"" <<< "$html")|$(grep -c 'page-account' <<< "$html")"
 done
-expect "adresse du Compte modifiable sans toucher aux vues" 4 \
-    "$(render solutions.php en true https://compte.example.invalid | grep -c 'href="https://compte.example.invalid/?lang=en"')"
-# Site servi : l'état suit COMPTE_LINK_ENABLED (masqué par défaut).
-served_links=$(curl -s "$BASE_URL/solutions.php?lang=fr" | grep -c 'nav-account\|btn-account\|page-account')
-if [[ "$(config COMPTE_LINK_ENABLED false)" == "true" ]]; then
-    expect "site servi : lien affiché (COMPTE_LINK_ENABLED=true)" 4 "$served_links"
-else
-    expect "site servi : lien masqué (COMPTE_LINK_ENABLED désactivé)" 0 "$served_links"
-fi
+expect "adresse du Compte modifiable sans toucher aux vues (trois liens de /connect)" 3 \
+    "$(render connect.php en true https://compte.example.invalid | grep -c 'href="https://compte.example.invalid/?lang=en"')"
+# Site servi : quel que soit COMPTE_LINK_ENABLED, aucun lien vers le Compte hors de /connect.
+expect "site servi : aucun lien vers le Compte sur la page Solutions" 0 \
+    "$(curl -s "$BASE_URL/solutions.php?lang=fr" | grep -cE 'compte\.noorwan\.com|nav-account|btn-account')"
 expect "adresse du Compte vide : aucun lien" 0 "$(render connect.php fr true - | grep -cE 'nav-account|btn-account|connect-create')"
 grep -q '^COMPTE_LINK_ENABLED=false$' .env.example && pass ".env.example : lien désactivé par défaut" || fail ".env.example : COMPTE_LINK_ENABLED=false absent"
 
@@ -390,7 +389,12 @@ for lang in fr en ar; do
     href="$COMPTE_DEFAULT/?lang=$lang"
     html=$(render connect.php "$lang" true)
     expect "activé : « $create » en haut et en bas, vers le Compte ($lang)" 2 "$(grep -c "<a class=\"btn btn-blue connect-create\" href=\"$href\">$create " <<< "$html")"
-    grep -q "class=\"connect-already\">.*<a href=\"$href\">" <<< "$html" && pass "activé : « Déjà un compte ? » ($lang)" || fail "activé : lien « Déjà un compte » ($lang)"
+    already=$(by_lang "$lang" "J&apos;ai déjà un compte" "I already have an account" "لديّ حساب بالفعل")
+    grep -qF "<p class=\"connect-already\"><a href=\"$href\">$already</a></p>" <<< "$html" && pass "activé : « $already » vers le Compte ($lang)" || fail "activé : lien « $already » ($lang)"
+    nbsp=$'\xc2\xa0'
+    dest=$(by_lang "$lang" "votre compte Noorwan${nbsp}Connect" "your Noorwan${nbsp}Connect account" "حسابك على")
+    expect "textes : « $dest » deux fois, plus de « Mon compte » ($lang)" "2|0" \
+        "$(sed -n '/id="donnees"/,/<\/section>/p' <<< "$html" | grep -o "$dest" | wc -l | tr -d ' ')|$(grep -cE 'Mon compte|My account|«حسابي»' <<< "$html")"
     grep -q 'id="creer"' <<< "$html" && pass "activé : bandeau final ($lang)" || fail "activé : bandeau final absent ($lang)"
     html=$(render connect.php "$lang" false)
     expect "désactivé : ni bouton ni bandeau final, page complète ($lang)" "0|0|5" \
