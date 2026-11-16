@@ -1323,7 +1323,7 @@ main:focus {
     font-size: clamp(30px, 6.5vw, 52px);
 }
 
-.page-account {
+.page-connect {
     margin-block-start: 18px;
     color: var(--muted);
     font-size: 15px;

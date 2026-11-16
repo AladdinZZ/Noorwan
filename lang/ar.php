@@ -257,7 +257,8 @@ return [
     'solutions' => [
         'tag' => 'نوروان للحلول',
         // À relire.
-        'account_text' => 'حساب واحد لجميع خدمات نوروان.',
+        'connect_text' => 'حساب واحد لجميع خدمات نوروان.',
+        'connect_link' => "اكتشف \u{2066}Noorwan\u{00A0}Connect\u{2069}",
         'btn_demo' => 'اطلب عرضًا تقديميًا',
         'approach_title' => 'طريقتنا في العمل',
         'principles' => [

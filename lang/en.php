@@ -242,7 +242,8 @@ return [
     // Solutions page: TEXTES A VALIDER PAR MARWAN. Title and introduction come from the home page (home.sol_h, home.sol_text).
     'solutions' => [
         'tag' => 'Noorwan Solutions',
-        'account_text' => 'One account for all Noorwan services.',
+        'connect_text' => 'One account for all Noorwan services.',
+        'connect_link' => 'Discover Noorwan Connect',
         'btn_demo' => 'Request a presentation',
         'approach_title' => 'How we work',
         'principles' => [
