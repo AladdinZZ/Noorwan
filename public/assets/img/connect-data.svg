@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 220" fill="none">
+  <!-- Vos données : un bouclier garde la fiche de la personne ; deux réglages, l'un ouvert, l'autre fermé ; un calendrier de trente jours pour changer d'avis. Aucun texte. -->
+  <path d="M20 200h280" stroke="#D2D2D7" stroke-width="3" stroke-linecap="round"/>
+  <path d="M160 22l66 24v52c0 46-30 78-66 94-36-16-66-48-66-94V46z" fill="#E9EEF5"/>
+  <path d="M160 36l52 19v43c0 36-23 62-52 75-29-13-52-39-52-75V55z" fill="#7C93B2"/>
+  <rect x="128" y="74" width="64" height="70" rx="10" fill="#fff"/>
+  <circle cx="160" cy="96" r="11" fill="#F5D58A"/>
+  <path d="M144 122a16 13 0 0 1 32 0z" fill="#A8915F"/>
+  <rect x="140" y="130" width="40" height="6" rx="3" fill="#D2D2D7"/>
+  <rect x="24" y="66" width="56" height="28" rx="14" fill="#0071E3"/>
+  <circle cx="66" cy="80" r="10" fill="#fff"/>
+  <rect x="24" y="110" width="56" height="28" rx="14" fill="#E5E5EA"/>
+  <circle cx="38" cy="124" r="10" fill="#fff"/>
+  <rect x="240" y="96" width="60" height="60" rx="10" fill="#fff" stroke="#D2D2D7" stroke-width="2"/>
+  <path d="M240 106a10 10 0 0 1 10-10h40a10 10 0 0 1 10 10v8h-60z" fill="#B07A84"/>
+  <g fill="#F5E9EB">
+    <rect x="248" y="122" width="9" height="8" rx="2"/><rect x="261" y="122" width="9" height="8" rx="2"/><rect x="274" y="122" width="9" height="8" rx="2"/><rect x="287" y="122" width="9" height="8" rx="2"/>
+    <rect x="248" y="135" width="9" height="8" rx="2"/><rect x="261" y="135" width="9" height="8" rx="2"/><rect x="274" y="135" width="9" height="8" rx="2"/>
+  </g>
+  <rect x="287" y="135" width="9" height="8" rx="2" fill="#7D2E3B"/>
+  <path d="M284 176a14 14 0 1 1-5-10.7" stroke="#B07A84" stroke-width="3" stroke-linecap="round"/>
+  <path d="m281 160-1 6.5-6.5-.5" stroke="#B07A84" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

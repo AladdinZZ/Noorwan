@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 // Pied de page commun : quatre colonnes (Consulting, Solutions, Édition, Noorwan), Écosystème Noorwan, ligne légale.
-// « Connexion » rejoint la colonne Noorwan quand le Compte Noorwan est en service ($accountUrl, de l'en-tête).
+// Noorwan Connect est dans la colonne Noorwan ; aucun lien vers le Compte Noorwan hors de la page Noorwan Connect.
 $footerColumns = [
     'nav.consulting' => [
         ['label' => 'home.btn_explore', 'href' => url('index', 'consulting')],
@@ -18,12 +18,10 @@ $footerColumns = [
         ['label' => 'home.ed_btn', 'href' => url('contact', '', ['universe' => 'edition'])],
     ],
     'common.brand' => [
+        ['label' => 'nav.connect', 'href' => url('connect')],
         ['label' => 'nav.contact', 'href' => url('contact')],
     ],
 ];
-if ($accountUrl !== null) {
-    $footerColumns['common.brand'][] = ['label' => 'nav.account', 'href' => $accountUrl, 'class' => 'nav-account'];
-}
 ?>
 </main>
 <footer class="site-footer">
@@ -34,7 +32,7 @@ if ($accountUrl !== null) {
                 <p class="footer-h"><?= t($heading) ?></p>
                 <ul>
 <?php foreach ($links as $link): ?>
-                    <li><a href="<?= e($link['href']) ?>"<?= isset($link['class']) ? ' class="' . e($link['class']) . '"' : '' ?>><?= t($link['label']) ?></a></li>
+                    <li><a href="<?= e($link['href']) ?>"><?= t($link['label']) ?></a></li>
 <?php endforeach; ?>
                 </ul>
             </div>

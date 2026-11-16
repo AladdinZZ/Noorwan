@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 $path = (string) parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH);
 
-$rewrites = ['/robots.txt' => 'robots.php', '/sitemap.xml' => 'sitemap.php'];
+$rewrites = ['/robots.txt' => 'robots.php', '/sitemap.xml' => 'sitemap.php', '/connect' => 'connect.php'];
 if (isset($rewrites[$path])) {
     require __DIR__ . '/../public/' . $rewrites[$path];
 

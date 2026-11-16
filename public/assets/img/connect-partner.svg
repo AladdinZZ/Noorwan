@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 220" fill="none">
+  <!-- Entreprises partenaires (bientôt) : le site d'une autre entreprise, avec un bouton sombre marqué du point bleu de Noorwan ; la place reste en pointillés. Aucun texte. -->
+  <path d="M20 200h280" stroke="#D2D2D7" stroke-width="3" stroke-linecap="round"/>
+  <rect x="34" y="26" width="252" height="164" rx="14" fill="#fff" stroke="#D2D2D7" stroke-width="2"/>
+  <path d="M34 40a14 14 0 0 1 14-14h224a14 14 0 0 1 14 14v8H34z" fill="#EDEDF0"/>
+  <g fill="#D2D2D7"><circle cx="50" cy="37" r="4"/><circle cx="63" cy="37" r="4"/><circle cx="76" cy="37" r="4"/></g>
+  <rect x="96" y="32" width="120" height="10" rx="5" fill="#fff"/>
+  <rect x="54" y="64" width="72" height="72" rx="10" fill="#F3EEE3"/>
+  <path d="M74 104h32M90 88v32" stroke="#A8915F" stroke-width="8" stroke-linecap="round"/>
+  <rect x="142" y="66" width="110" height="10" rx="5" fill="#1D1D1F"/>
+  <rect x="142" y="84" width="82" height="8" rx="4" fill="#D2D2D7"/>
+  <rect x="142" y="98" width="96" height="8" rx="4" fill="#D2D2D7"/>
+  <rect x="136" y="122" width="126" height="44" rx="12" stroke="#B9B9C0" stroke-width="2.5" stroke-dasharray="7 7"/>
+  <rect x="146" y="130" width="106" height="28" rx="14" fill="#1D1D1F"/>
+  <circle cx="164" cy="144" r="6" fill="#0071E3"/>
+  <rect x="178" y="140" width="60" height="8" rx="4" fill="#F5F5F7"/>
+</svg>

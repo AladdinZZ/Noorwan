@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-// En-tête commun : <head>, barre fine avec logo, navigation, « Connexion », choix de langue et menu mobile.
+// En-tête commun : <head>, barre fine avec logo, navigation, choix de langue et menu mobile.
 // Attend $meta = ['title' => ..., 'description' => ...] (chaînes brutes, échappées ici).
 
 // « À propos » viendra avec sa propre page : il n'est pas dans le menu.
@@ -10,10 +10,10 @@ $navItems = [
     ['label' => 'nav.consulting', 'href' => url('index', 'consulting')],
     ['label' => 'nav.solutions', 'href' => url('solutions')],
     ['label' => 'nav.edition', 'href' => url('edition')],
+    ['label' => 'nav.connect', 'href' => url('connect')],
     ['label' => 'nav.contact', 'href' => url('contact')],
 ];
-// « Connexion » : bouton en pastille dans la barre, dernier lien du menu mobile, quand le Compte Noorwan est en service.
-$accountUrl = account_url();
+// Le site ne gère aucun compte : on entre dans l'écosystème depuis la page Noorwan Connect (v5 bis).
 
 $asset = static fn (string $path): string => $path . '?v=' . (string) @filemtime(ROOT_DIR . '/public/' . $path);
 ?>
@@ -67,9 +67,6 @@ gtag('consent', 'update', { analytics_storage: 'granted' });
 <?php endforeach; ?>
         </nav>
         <div class="header-tools">
-<?php if ($accountUrl !== null): ?>
-            <a class="btn-account" href="<?= e($accountUrl) ?>"><?= t('nav.account') ?></a>
-<?php endif; ?>
             <details class="lang-menu">
                 <summary><span class="visually-hidden"><?= t('nav.lang_label') ?>, <?= e(LANGS[lang()]['name']) ?></span><span aria-hidden="true"><?= e(LANGS[lang()]['label']) ?></span><svg class="lang-chevron" width="10" height="10" viewBox="0 0 10 10" aria-hidden="true" focusable="false"><path d="M2 3.5l3 3 3-3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
                 <ul class="lang-list" aria-label="<?= t('nav.lang_label') ?>">
@@ -88,9 +85,6 @@ gtag('consent', 'update', { analytics_storage: 'granted' });
 <?php foreach ($navItems as $item): ?>
         <a href="<?= e($item['href']) ?>"><?= t($item['label']) ?></a>
 <?php endforeach; ?>
-<?php if ($accountUrl !== null): ?>
-        <a href="<?= e($accountUrl) ?>" class="nav-account"><?= t('nav.account') ?></a>
-<?php endif; ?>
     </nav>
 </header>
 <main id="main" tabindex="-1">

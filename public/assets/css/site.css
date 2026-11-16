@@ -408,27 +408,6 @@ main:focus {
     gap: 4px;
 }
 
-/* « Connexion » : pastille noire, comme la maquette. */
-.btn-account {
-    display: inline-flex;
-    align-items: center;
-    min-height: 30px;
-    margin-inline-end: 4px;
-    padding: 4px 14px;
-    border-radius: 999px;
-    background: var(--ink);
-    color: var(--paper);
-    font-size: 13px;
-    font-weight: 500;
-    white-space: nowrap;
-}
-
-.btn-account:hover {
-    background: #000;
-    color: var(--paper);
-    text-decoration: none;
-}
-
 /* Menu des langues : <details> natif, utilisable sans JavaScript ; site.js ajoute Échap et le clic extérieur. */
 .lang-menu {
     position: relative;
@@ -578,12 +557,6 @@ main:focus {
 
 .nav-mobile a:hover {
     text-decoration: none;
-}
-
-.nav-mobile .nav-account {
-    color: var(--muted);
-    font-size: 17px;
-    font-weight: 500;
 }
 
 /* ---------- Écrans : un message par écran, centré ---------- */
@@ -1350,7 +1323,7 @@ main:focus {
     font-size: clamp(30px, 6.5vw, 52px);
 }
 
-.page-account {
+.page-connect {
     margin-block-start: 18px;
     color: var(--muted);
     font-size: 15px;
@@ -1429,6 +1402,150 @@ main:focus {
     }
 }
 
+/* ---------- Page Noorwan Connect ---------- */
+
+/* Haut de page : comme l'accueil, l'illustration ferme l'écran, arrondie en haut. */
+.connect-hero {
+    padding-block-end: 0;
+    overflow: hidden;
+}
+
+.eyebrow.eyebrow-connect,
+.connect-section .eyebrow {
+    color: var(--sol-text);
+}
+
+.screen-dark.connect-section .eyebrow {
+    color: var(--gold);
+}
+
+.connect-already {
+    margin-block-start: 14px;
+    color: var(--muted);
+    font-size: 15px;
+}
+
+.connect-hero-visual {
+    aspect-ratio: 16 / 10;
+}
+
+/* Les scènes de Noorwan Connect n'ont pas de sens de lecture et portent des coches : pas de miroir en arabe. */
+[dir="rtl"] .connect-hero-visual .illus,
+[dir="rtl"] .connect-visual .illus {
+    transform: none;
+}
+
+/* Illustration d'une section : un cadre arrondi, blanc sur fond gris, gris sur fond blanc, noir sur fond noir. */
+.connect-visual {
+    width: min(100%, 520px);
+    margin: 40px auto 0;
+    aspect-ratio: 16 / 11;
+    border-radius: 20px;
+    background: var(--mist);
+    overflow: hidden;
+}
+
+.screen-mist .connect-visual {
+    background: var(--paper);
+}
+
+.screen-dark .connect-visual {
+    background: var(--night-2);
+}
+
+/* Trois points par section, numérotés, en colonnes sur grand écran. */
+.connect-points {
+    display: grid;
+    gap: 28px;
+    max-width: 720px;
+    margin: 48px auto 0;
+    text-align: start;
+}
+
+.connect-points li {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 12px;
+    align-content: start;
+}
+
+.connect-num {
+    grid-row: span 2;
+    min-width: 1.4em;
+    font-variant-numeric: tabular-nums;
+    color: var(--sol);
+    font-size: 20px;
+    font-weight: 300;
+    line-height: 1.25;
+}
+
+.connect-points strong {
+    font-size: 19px;
+    font-weight: 600;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+}
+
+:root[lang="ar"] .connect-points strong {
+    letter-spacing: 0;
+}
+
+.connect-point-text {
+    margin-block-start: 6px;
+    color: var(--text);
+    font-size: 16px;
+}
+
+.screen-dark .connect-num {
+    color: var(--gold);
+}
+
+.screen-dark .connect-points strong {
+    color: var(--night-text);
+}
+
+.screen-dark .connect-point-text {
+    color: var(--night-muted);
+}
+
+.connect-note {
+    max-width: 720px;
+    margin: 36px auto 0;
+    padding: 16px 20px;
+    border-radius: 14px;
+    background: var(--paper);
+    color: var(--text);
+    font-size: 16px;
+}
+
+/* « Bientôt » : même pastille que les produits à venir, sans date. */
+.badge-soon {
+    display: inline-block;
+    margin-block-end: 14px;
+    padding: 4px 14px;
+    border: 1px dashed var(--line-2);
+    border-radius: 999px;
+    color: var(--sol-text);
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.connect-final {
+    border-block-start: 1px solid var(--line);
+}
+
+@media (min-width: 834px) {
+    .connect-points {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 32px;
+        max-width: 1000px;
+    }
+
+    .connect-visual {
+        margin-block-start: 56px;
+    }
+}
+
 /* ---------- Page Édition ---------- */
 
 .catalogue-head {
@@ -1437,10 +1554,6 @@ main:focus {
     text-align: center;
 }
 
-.catalogue-todo {
-    margin-block-start: 16px;
-    font-size: 16px;
-}
 
 .collection {
     padding-block-start: 32px;

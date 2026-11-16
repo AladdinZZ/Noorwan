@@ -20,9 +20,7 @@ require ROOT_DIR . '/app/layout/header.php';
         <p class="eyebrow eyebrow-sol"><?= t('solutions.tag') ?></p>
         <h1 id="page-title" class="h1 h1-page"><?= t('home.sol_h') ?></h1>
         <p class="lead"><?= t('home.sol_text') ?></p>
-<?php if (account_url() !== null): ?>
-        <p class="page-account"><?= t('solutions.account_text') ?> <a href="<?= e(account_url()) ?>"><?= t('nav.account') ?> <span aria-hidden="true"><?= t('common.arrow') ?></span></a></p>
-<?php endif; ?>
+        <p class="page-connect"><?= t('solutions.connect_text') ?> <a href="<?= e(url('connect')) ?>"><?= t('solutions.connect_link') ?> <span aria-hidden="true"><?= t('common.arrow') ?></span></a></p>
         <p class="links"><a class="btn btn-dark" href="<?= e($contactSolutions) ?>"><?= t('solutions.btn_demo') ?> <span aria-hidden="true"><?= t('common.arrow') ?></span></a></p>
     </div>
 </section>

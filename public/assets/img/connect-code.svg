@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 220" fill="none">
+  <!-- Sans mot de passe : un message arrive, le code s'inscrit en six cases sur le téléphone, la porte s'ouvre. Dessiné pour le fond noir. Aucun texte. -->
+  <path d="M20 200h280" stroke="#2A2A2C" stroke-width="3" stroke-linecap="round"/>
+  <rect x="98" y="18" width="124" height="184" rx="22" fill="#2A2A2C"/>
+  <rect x="106" y="26" width="108" height="168" rx="16" fill="#F5F5F7"/>
+  <rect x="142" y="32" width="36" height="8" rx="4" fill="#2A2A2C"/>
+  <rect x="122" y="58" width="76" height="10" rx="5" fill="#1D1D1F"/>
+  <g fill="#fff" stroke="#D2D2D7" stroke-width="1.5">
+    <rect x="115" y="86" width="13" height="20" rx="4"/><rect x="131" y="86" width="13" height="20" rx="4"/><rect x="147" y="86" width="13" height="20" rx="4"/>
+    <rect x="163" y="86" width="13" height="20" rx="4"/><rect x="179" y="86" width="13" height="20" rx="4"/>
+  </g>
+  <rect x="195" y="86" width="13" height="20" rx="4" fill="#fff" stroke="#0071E3" stroke-width="2"/>
+  <g fill="#1D1D1F"><circle cx="121.5" cy="96" r="3"/><circle cx="137.5" cy="96" r="3"/><circle cx="153.5" cy="96" r="3"/><circle cx="169.5" cy="96" r="3"/><circle cx="185.5" cy="96" r="3"/></g>
+  <circle cx="160" cy="146" r="22" fill="#F5D58A"/>
+  <path d="m150 146 7 7 13-13" stroke="#1D1D1F" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M238 34h56a12 12 0 0 1 12 12v24a12 12 0 0 1-12 12h-36l-18 14 4-14h-6a12 12 0 0 1-12-12V46a12 12 0 0 1 12-12z" fill="#0071E3"/>
+  <g fill="#fff"><circle cx="248" cy="58" r="4"/><circle cx="262" cy="58" r="4"/><circle cx="276" cy="58" r="4"/><circle cx="290" cy="58" r="4"/></g>
+  <path d="M232 92c-6 8-14 12-22 14" stroke="#2997FF" stroke-width="3" stroke-linecap="round" stroke-dasharray="2 8"/>
+  <g transform="rotate(-35 50 120)">
+    <circle cx="34" cy="120" r="15" stroke="#F5D58A" stroke-width="6"/>
+    <rect x="47" y="117" width="46" height="7" rx="3" fill="#F5D58A"/>
+    <rect x="78" y="117" width="7" height="15" rx="2" fill="#F5D58A"/>
+    <rect x="88" y="117" width="5" height="11" rx="2" fill="#F5D58A"/>
+  </g>
+</svg>

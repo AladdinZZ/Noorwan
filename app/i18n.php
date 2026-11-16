@@ -13,11 +13,12 @@ const LANGS = [
 ];
 const DEFAULT_LANG = 'fr';
 
-// Pages publiques : identifiant => fichier dans public/.
+// Pages publiques : identifiant => adresse dans public/ (« connect » est réécrite vers connect.php, .htaccess et tests/router.php).
 const PAGES = [
     'index' => '',
     'solutions' => 'solutions.php',
     'edition' => 'edition.php',
+    'connect' => 'connect',
     'contact' => 'contact.php',
     'mentions-legales' => 'mentions-legales.php',
     'confidentialite' => 'confidentialite.php',
@@ -149,9 +150,10 @@ function absolute_url(string $page, string $lang): string
 }
 
 /**
- * Lien vers le Compte Noorwan dans la langue courante, ou null tant que le lien est désactivé.
+ * Lien vers l'accueil du Compte Noorwan dans la langue courante (« Créer mon compte », « J'ai déjà un compte », page Noorwan Connect seulement),
+ * ou null tant que le lien est désactivé ou que l'adresse est vide.
  */
 function account_url(): ?string
 {
-    return COMPTE_LINK_ENABLED ? COMPTE_URL . '/?' . http_build_query(['lang' => lang()]) : null;
+    return COMPTE_LINK_ENABLED && COMPTE_URL !== '' ? COMPTE_URL . '/?' . http_build_query(['lang' => lang()]) : null;
 }
