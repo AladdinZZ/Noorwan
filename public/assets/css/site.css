@@ -408,27 +408,6 @@ main:focus {
     gap: 4px;
 }
 
-/* « Mon compte » : pastille noire, comme la maquette. */
-.btn-account {
-    display: inline-flex;
-    align-items: center;
-    min-height: 30px;
-    margin-inline-end: 4px;
-    padding: 4px 14px;
-    border-radius: 999px;
-    background: var(--ink);
-    color: var(--paper);
-    font-size: 13px;
-    font-weight: 500;
-    white-space: nowrap;
-}
-
-.btn-account:hover {
-    background: #000;
-    color: var(--paper);
-    text-decoration: none;
-}
-
 /* Menu des langues : <details> natif, utilisable sans JavaScript ; site.js ajoute Échap et le clic extérieur. */
 .lang-menu {
     position: relative;
@@ -578,12 +557,6 @@ main:focus {
 
 .nav-mobile a:hover {
     text-decoration: none;
-}
-
-.nav-mobile .nav-account {
-    color: var(--muted);
-    font-size: 17px;
-    font-weight: 500;
 }
 
 /* ---------- Écrans : un message par écran, centré ---------- */
