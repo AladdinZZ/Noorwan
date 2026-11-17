@@ -107,7 +107,6 @@ return [
             'reserva' => ['cat' => 'Booking', 'name' => 'Reserva', 'text' => '', 'confidential' => true],
             'inteek' => ['cat' => 'Human resources', 'name' => 'Inteek', 'text' => 'From hiring to team management, HR made simple.', 'confidential' => false],
             'noor' => ['cat' => 'Artificial intelligence', 'name' => 'Noor', 'text' => '', 'confidential' => true],
-            'edition' => ['cat' => 'Publishing', 'name' => 'Noorwan Publishing', 'text' => 'We guide authors all the way to publishing their book on Amazon, and we publish our own collections.', 'confidential' => false],
         ],
         'soon_label' => 'Coming soon',
         'soon' => ['Real estate', 'Shopping'],

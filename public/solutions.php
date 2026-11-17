@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 require __DIR__ . '/../app/bootstrap.php';
 
-// Page Solutions, maquette A épurée (M-56) : en-tête, notre façon de faire, produits, Inteek en détail.
+// Page Solutions, maquette A épurée (M-56) : en-tête, notre façon de faire, Inteek en détail, puis les autres produits.
+// v6 : Inteek n'apparaît qu'une fois (plus de carte dans la grille) ; Noorwan Édition quitte la grille, l'Édition étant présentée dans Consulting.
 // Le titre et l'introduction reprennent ceux de la section Solutions de l'accueil. Aucun produit confidentiel hors liste (vérifié par tests/run.sh).
 current_page('solutions');
 $meta = ['title' => raw('meta.solutions_title'), 'description' => raw('meta.solutions_description')];
@@ -40,11 +41,7 @@ require ROOT_DIR . '/app/layout/header.php';
     </div>
 </section>
 
-<section class="products-section tone-solutions" aria-label="<?= t('home.products_label') ?>">
-<?php require ROOT_DIR . '/app/layout/products.php'; ?>
-</section>
-
-<section id="inteek" class="screen screen-mist tone-solutions" aria-labelledby="inteek-title">
+<section id="inteek" class="screen universe tone-solutions" aria-labelledby="inteek-title">
     <div class="wrap">
         <p class="eyebrow eyebrow-sol"><?= e($inteek['cat']) ?></p>
         <h2 id="inteek-title" class="h2"><?= e($inteek['name']) ?></h2>
@@ -56,7 +53,12 @@ require ROOT_DIR . '/app/layout/header.php';
             <li><?= e($module) ?></li>
 <?php endforeach; ?>
         </ul>
+        <div class="inteek-visual"><img src="assets/img/inteek.svg" alt="" width="360" height="260" loading="lazy" decoding="async"></div>
     </div>
+</section>
+
+<section class="products-section tone-solutions" aria-label="<?= t('home.products_label') ?>">
+<?php require ROOT_DIR . '/app/layout/products.php'; ?>
 </section>
 
 <?php

@@ -805,12 +805,6 @@ main:focus {
     height: auto;
 }
 
-/* L'interface d'Inteek et le livre se lisent dans le sens de la page : miroir en arabe. */
-[dir="rtl"] .glyph-inteek .glyph img,
-[dir="rtl"] .glyph-edition .glyph img {
-    transform: scaleX(-1);
-}
-
 .soon-row {
     display: flex;
     flex-wrap: wrap;
@@ -1373,6 +1367,16 @@ main:focus {
     margin: 8px auto 0;
     color: var(--text);
     font-size: 16px;
+}
+
+/* Illustration d'Inteek, reprise de son ancienne carte : posée en bas de l'écran (.universe), en miroir en arabe comme elle. */
+.inteek-visual {
+    max-width: 360px;
+    margin: 40px auto 0;
+}
+
+[dir="rtl"] .inteek-visual img {
+    transform: scaleX(-1);
 }
 
 .inteek-text {

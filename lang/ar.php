@@ -115,7 +115,6 @@ return [
             'reserva' => ['cat' => 'الحجز', 'name' => 'Reserva', 'text' => '', 'confidential' => true],
             'inteek' => ['cat' => 'الموارد البشرية', 'name' => 'Inteek', 'text' => 'من التوظيف إلى إدارة الفرق، موارد بشرية مبسطة.', 'confidential' => false],
             'noor' => ['cat' => 'الذكاء الاصطناعي', 'name' => 'Noor', 'text' => '', 'confidential' => true],
-            'edition' => ['cat' => 'النشر', 'name' => 'نوروان للنشر', 'text' => 'نرافق المؤلفين حتى نشر كتبهم على أمازون، وننشر سلاسلنا الخاصة.', 'confidential' => false],
         ],
         'soon_label' => 'قريبًا',
         'soon' => ['العقارات', 'التسوق'],

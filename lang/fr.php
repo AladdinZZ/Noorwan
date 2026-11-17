@@ -107,7 +107,6 @@ return [
             'reserva' => ['cat' => 'Réservation', 'name' => 'Reserva', 'text' => '', 'confidential' => true],
             'inteek' => ['cat' => 'Ressources humaines', 'name' => 'Inteek', 'text' => 'Du recrutement à la gestion des équipes, les RH simplifiées.', 'confidential' => false],
             'noor' => ['cat' => 'Intelligence artificielle', 'name' => 'Noor', 'text' => '', 'confidential' => true],
-            'edition' => ['cat' => 'Édition', 'name' => 'Noorwan Édition', 'text' => 'Nous accompagnons les auteurs jusqu\'à la publication de leur livre sur Amazon, et nous publions nos propres collections.', 'confidential' => false],
         ],
         'soon_label' => 'Bientôt',
         'soon' => ['Immobilier', 'Shopping'],
