@@ -5,11 +5,11 @@ declare(strict_types=1);
 // En-tête commun : <head>, barre fine avec logo, navigation, choix de langue et menu mobile.
 // Attend $meta = ['title' => ..., 'description' => ...] (chaînes brutes, échappées ici).
 
-// « À propos » viendra avec sa propre page : il n'est pas dans le menu.
+// Une page par onglet (v6). « À propos » viendra avec sa propre page : il n'est pas dans le menu.
+// L'Édition n'est plus un onglet : elle est présentée dans la page Consulting ; sa page reste dans le pied de page et le plan du site.
 $navItems = [
-    ['label' => 'nav.consulting', 'href' => url('index', 'consulting')],
+    ['label' => 'nav.consulting', 'href' => url('consulting')],
     ['label' => 'nav.solutions', 'href' => url('solutions')],
-    ['label' => 'nav.edition', 'href' => url('edition')],
     ['label' => 'nav.connect', 'href' => url('connect')],
     ['label' => 'nav.contact', 'href' => url('contact')],
 ];

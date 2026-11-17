@@ -43,11 +43,15 @@
 
 :root {
     --ink: #1D1D1F;
+    /* Fond de page blanc cassé (v6, « trop blanc ») ; --paper reste blanc pour les panneaux posés dessus
+       (formulaire, menu des langues, pastilles) et le texte sur fond sombre. Contraste AA vérifié :
+       --muted 5,2:1 sur --page et 4,9:1 sur --mist, --link 5,1:1 et 4,8:1. */
+    --page: #F6F5F1;
     --paper: #FFFFFF;
-    --mist: #F5F5F7;
+    --mist: #EEEDE8;
     --mist-2: #EDEDF0;
     --text: #515154;
-    --muted: #6E6E73;
+    --muted: #66666B;
     --line: #E5E5EA;
     --line-2: #D2D2D7;
     --blue: #0071E3;
@@ -122,7 +126,7 @@ html {
 
 body {
     margin: 0;
-    background: var(--paper);
+    background: var(--page);
     color: var(--ink);
     font-family: var(--font);
     font-size: 17px;
@@ -350,14 +354,14 @@ main:focus {
     inset-block-start: 0;
     z-index: 50;
     border-block-end: 1px solid rgba(0, 0, 0, 0.08);
-    background: rgba(255, 255, 255, 0.82);
+    background: rgba(246, 245, 241, 0.82);
     -webkit-backdrop-filter: saturate(180%) blur(18px);
     backdrop-filter: saturate(180%) blur(18px);
 }
 
 /* Menu ouvert : fond opaque pour que la page ne transparaisse pas sous les liens. */
 .site-header:has(.menu-toggle[aria-expanded="true"]) {
-    background: var(--paper);
+    background: var(--page);
 }
 
 .header-bar {
@@ -654,6 +658,16 @@ main:focus {
     color: var(--ed-text);
 }
 
+/* Noorwan Connect (résumé de l'accueil, v6) : bleu du lien, illustration sans miroir comme sur sa page. */
+.tone-connect .eyebrow,
+.tone-connect .num {
+    color: var(--link);
+}
+
+[dir="rtl"] .tone-connect .illus {
+    transform: none;
+}
+
 .shape {
     width: min(100% - 2 * var(--gutter), 760px);
     margin: 48px auto 0;
@@ -793,12 +807,6 @@ main:focus {
     display: block;
     width: 100%;
     height: auto;
-}
-
-/* L'interface d'Inteek et le livre se lisent dans le sens de la page : miroir en arabe. */
-[dir="rtl"] .glyph-inteek .glyph img,
-[dir="rtl"] .glyph-edition .glyph img {
-    transform: scaleX(-1);
 }
 
 .soon-row {
@@ -1365,6 +1373,16 @@ main:focus {
     font-size: 16px;
 }
 
+/* Illustration d'Inteek, reprise de son ancienne carte : posée en bas de l'écran (.universe), en miroir en arabe comme elle. */
+.inteek-visual {
+    max-width: 360px;
+    margin: 40px auto 0;
+}
+
+[dir="rtl"] .inteek-visual img {
+    transform: scaleX(-1);
+}
+
 .inteek-text {
     max-width: 640px;
     margin: 16px auto 0;
@@ -1400,6 +1418,25 @@ main:focus {
     .principles {
         grid-template-columns: repeat(3, minmax(0, 1fr));
     }
+}
+
+/* ---------- Page Consulting (v6) ---------- */
+
+/* Haut de page : comme l'accueil, l'illustration du Consulting ferme l'écran, arrondie en haut. */
+.consulting-hero {
+    padding-block-end: 0;
+    overflow: hidden;
+}
+
+.accomp-writing {
+    max-width: 640px;
+    margin: 20px auto 0;
+    font-size: 16px;
+}
+
+.tone-edition .shelf-caption {
+    max-width: 640px;
+    margin-inline: auto;
 }
 
 /* ---------- Page Noorwan Connect ---------- */

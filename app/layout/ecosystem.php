@@ -5,9 +5,9 @@ declare(strict_types=1);
 // Écosystème Noorwan (D63), même bloc que sur Inteek : liens vers les autres sites du groupe.
 // Adresses lues dans .env (ECOSYSTEM_*_URL) ; une entrée sans adresse est masquée ; le site courant
 // (noorwan.com) est nommé sans lien. Jamais de projet confidentiel dans cette liste.
+// Le Compte Noorwan n'y figure plus (v6) ; on le rajoutera plus tard.
 $ecosystemSites = [
     'noorwan' => ['label' => 'common.brand', 'url' => null],
-    'account' => ['label' => 'ecosystem.account', 'url' => env('ECOSYSTEM_ACCOUNT_URL', '')],
     'reserva' => ['label' => 'ecosystem.reserva', 'url' => env('ECOSYSTEM_RESERVA_URL', '')],
     'inteek' => ['label' => 'ecosystem.inteek', 'url' => env('ECOSYSTEM_INTEEK_URL', '')],
 ];

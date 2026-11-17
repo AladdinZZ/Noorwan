@@ -1,3 +1,20 @@
+// Anciennes ancres de l'accueil (#consulting, #edition...) : l'élément visé porte data-hash-redirect,
+// l'adresse de la page qui a pris sa place (v6). Sans JavaScript, l'ancre reste sur l'accueil.
+(function () {
+    'use strict';
+
+    function follow() {
+        var id = window.location.hash.slice(1);
+        var target = id ? document.getElementById(decodeURIComponent(id)) : null;
+        if (target && target.hasAttribute('data-hash-redirect')) {
+            window.location.replace(target.getAttribute('data-hash-redirect'));
+        }
+    }
+
+    follow();
+    window.addEventListener('hashchange', follow);
+})();
+
 // Menu mobile. Sans JavaScript, le bouton reste masqué et la navigation mobile s'affiche telle quelle.
 (function () {
     'use strict';

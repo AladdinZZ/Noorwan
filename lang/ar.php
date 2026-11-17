@@ -25,6 +25,7 @@ return [
         'privacy_description' => 'كيف تعالج نوروان البيانات المرسلة عبر نموذج الاتصال.',
         'cookies_title' => 'ملفات تعريف الارتباط | Noorwan',
         'cookies_description' => 'ملفات تعريف الارتباط في noorwan.com: قياس عدد الزوار بموافقتك فقط، ويُحفظ اختيارك ستة أشهر.',
+        'consulting_title' => 'الاستشارات | Noorwan',
         'connect_title' => 'Noorwan Connect | Noorwan',
         'connect_description' => 'Noorwan Connect: حساب واحد برقم هاتفك لجميع مواقع مجموعة نوروان، لك ولمؤسستك.',
     ],
@@ -57,7 +58,6 @@ return [
     // Écosystème Noorwan (D63), mêmes libellés que sur Inteek.
     'ecosystem' => [
         'title' => 'منظومة Noorwan',
-        'account' => 'حساب Noorwan',
         'reserva' => 'Reserva',
         'inteek' => 'Inteek',
     ],
@@ -111,10 +111,9 @@ return [
         'products_label' => 'حلولنا',
         // À relire par un arabophone : Reserva, « Bientôt », Immobilier, Shopping.
         'products' => [
-            'reserva' => ['cat' => 'الحجز', 'name' => 'Reserva', 'text' => '', 'confidential' => true],
+            'reserva' => ['cat' => 'eBusiness', 'name' => 'Reserva', 'text' => '', 'confidential' => true],
             'inteek' => ['cat' => 'الموارد البشرية', 'name' => 'Inteek', 'text' => 'من التوظيف إلى إدارة الفرق، موارد بشرية مبسطة.', 'confidential' => false],
             'noor' => ['cat' => 'الذكاء الاصطناعي', 'name' => 'Noor', 'text' => '', 'confidential' => true],
-            'edition' => ['cat' => 'النشر', 'name' => 'نوروان للنشر', 'text' => 'نرافق المؤلفين حتى نشر كتبهم على أمازون، وننشر سلاسلنا الخاصة.', 'confidential' => false],
         ],
         'soon_label' => 'قريبًا',
         'soon' => ['العقارات', 'التسوق'],
@@ -248,8 +247,16 @@ return [
         'partner_h' => 'للمؤسسات الشريكة',
         'partner_text' => "ستتمكن مؤسسة من خارج المجموعة من اقتراح «تسجيل الدخول عبر \u{2066}Noorwan\u{2069}» على موقعها. سيدخل عملاؤها بأرقامهم دون حساب جديد، ويأذنون لهذا الموقع مرة واحدة بمعرفة أسمائهم.",
         'partner_btn' => 'أبقوني على اطلاع',
-        'final_h' => 'أنشئ حساب Noorwan',
+        'final_h' => 'أنشئ حسابك على Noorwan Connect',
         'final_text' => 'رقم هاتفك يكفي.',
+    ],
+    // Page Consulting (v6) : TEXTES A VALIDER PAR MARWAN, arabe à relire. Titre, introduction et expertises : ceux de l'accueil (home.cons_*).
+    'consulting' => [
+        'tag' => 'نوروان للاستشارات',
+        'expertises_title' => 'خبراتنا',
+        'accomp_tag' => 'المرافقة والنشر',
+        // Texte à fournir par Marwan (laissé en français dans les trois langues, surligné).
+        'writing' => '[À FOURNIR : accompagnement à l\'écriture, ce que comprend la prestation]',
     ],
     // Page Solutions : TEXTES A VALIDER PAR MARWAN, traduction à relire par un arabophone.
     // Le titre et l'introduction sont ceux de l'accueil (home.sol_h, home.sol_text).

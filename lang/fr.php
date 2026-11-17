@@ -20,6 +20,7 @@ return [
         'privacy_description' => 'Comment Noorwan traite les données transmises par le formulaire de contact.',
         'cookies_title' => 'Cookies | Noorwan',
         'cookies_description' => 'Cookies de noorwan.com : mesure d\'audience seulement avec votre accord, choix gardé six mois.',
+        'consulting_title' => 'Consulting | Noorwan',
         'connect_title' => 'Noorwan Connect | Noorwan',
         'connect_description' => 'Noorwan Connect : un seul compte, avec votre numéro de téléphone, pour tous les sites du groupe Noorwan, pour vous comme pour votre entreprise.',
     ],
@@ -50,7 +51,6 @@ return [
     // Écosystème Noorwan (D63), mêmes libellés que sur Inteek.
     'ecosystem' => [
         'title' => 'Écosystème Noorwan',
-        'account' => 'Compte Noorwan',
         'reserva' => 'Reserva',
         'inteek' => 'Inteek',
     ],
@@ -103,10 +103,9 @@ return [
         'products_label' => 'Nos solutions',
         // Grille des produits (maquette A, M-56). Liste fermée : aucun autre produit confidentiel n'y entre.
         'products' => [
-            'reserva' => ['cat' => 'Réservation', 'name' => 'Reserva', 'text' => '', 'confidential' => true],
+            'reserva' => ['cat' => 'eBusiness', 'name' => 'Reserva', 'text' => '', 'confidential' => true],
             'inteek' => ['cat' => 'Ressources humaines', 'name' => 'Inteek', 'text' => 'Du recrutement à la gestion des équipes, les RH simplifiées.', 'confidential' => false],
             'noor' => ['cat' => 'Intelligence artificielle', 'name' => 'Noor', 'text' => '', 'confidential' => true],
-            'edition' => ['cat' => 'Édition', 'name' => 'Noorwan Édition', 'text' => 'Nous accompagnons les auteurs jusqu\'à la publication de leur livre sur Amazon, et nous publions nos propres collections.', 'confidential' => false],
         ],
         'soon_label' => 'Bientôt',
         'soon' => ['Immobilier', 'Shopping'],
@@ -235,8 +234,16 @@ return [
         'partner_h' => 'Pour les entreprises partenaires',
         'partner_text' => 'Une entreprise hors du groupe pourra proposer « Se connecter avec Noorwan » sur son site. Ses clients entreront avec leur numéro, sans nouveau compte, et autoriseront une seule fois ce site à connaître leur nom.',
         'partner_btn' => 'Être tenu informé',
-        'final_h' => 'Créez votre Compte Noorwan',
+        'final_h' => 'Créez votre compte Noorwan Connect',
         'final_text' => 'Votre numéro de téléphone suffit.',
+    ],
+    // Page Consulting (v6) : TEXTES A VALIDER PAR MARWAN. Le titre, l'introduction et les expertises sont ceux de l'accueil (home.cons_*).
+    'consulting' => [
+        'tag' => 'Noorwan Consulting',
+        'expertises_title' => 'Nos expertises',
+        'accomp_tag' => 'Accompagnement et édition',
+        // Texte à fournir par Marwan (laissé en français dans les trois langues, surligné).
+        'writing' => '[À FOURNIR : accompagnement à l\'écriture, ce que comprend la prestation]',
     ],
     // Page Solutions : TEXTES A VALIDER PAR MARWAN. Le titre et l'introduction sont ceux de l'accueil (home.sol_h, home.sol_text).
     'solutions' => [

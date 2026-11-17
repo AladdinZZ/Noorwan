@@ -6,8 +6,8 @@
       <stop offset="1" stop-color="#F5D58A" stop-opacity=".12"/>
     </linearGradient>
   </defs>
-  <rect x="200" y="210" width="1240" height="775" fill="#F5F5F7"/>
-  <path d="M0 720h1600v280H0z" fill="#EDEDF0"/>
+  <rect x="200" y="210" width="1240" height="775" fill="#EEEDE8"/>
+  <path d="M0 720h1600v280H0z" fill="#E4E3DD"/>
   <path d="M0 720h1600" stroke="#D2D2D7" stroke-width="3"/>
   <path d="M654 452 730 430 1390 724 590 724z" fill="url(#beam)"/>
   <g transform="translate(50 0)">

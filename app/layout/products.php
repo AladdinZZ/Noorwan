@@ -2,21 +2,21 @@
 
 declare(strict_types=1);
 
-// Grille des produits de Solutions (accueil et page Solutions) : un écran par produit, puis la ligne « Bientôt ».
+// Grille des produits de la page Solutions : un écran par produit, puis la ligne « Bientôt ».
 // Chaînes : home.products (catégorie, nom, texte, confidentiel) et home.soon. Aucun produit confidentiel hors liste (vérifié par tests/run.sh).
+// v6 : Inteek n'y figure pas (sa présentation détaillée est sur la même page) ; Noorwan Édition non plus,
+// l'Édition étant présentée dans la page Consulting (« Accompagnement et édition »).
 // Lien de chaque carte : sa présentation détaillée quand elle existe, sinon le formulaire (univers Solutions).
 $productLinks = [
     'reserva' => ['label' => 'solutions.btn_demo', 'href' => url('contact', '', ['universe' => 'solutions'])],
-    'inteek' => ['label' => 'common.learn_more', 'href' => url('solutions', 'inteek')],
     'noor' => ['label' => 'solutions.btn_demo', 'href' => url('contact', '', ['universe' => 'solutions'])],
-    'edition' => ['label' => 'common.learn_more', 'href' => url('edition')],
 ];
 // Ton de chaque carte : clair pour les produits en service, sombre pour les autres (comme la maquette A).
 // Illustration de chaque carte : assets/img/<produit>.svg, décorative (alt vide), abstraite pour les produits confidentiels.
-$productTones = ['reserva' => 'light', 'inteek' => 'light', 'noor' => 'dark', 'edition' => 'dark'];
+$productTones = ['reserva' => 'light', 'noor' => 'dark'];
 ?>
 <div class="products">
-<?php foreach (tl('home.products') as $productId => $product): ?>
+<?php foreach (array_intersect_key(tl('home.products'), $productLinks) as $productId => $product): ?>
     <article id="product-<?= e($productId) ?>" class="product product-<?= e($productTones[$productId]) ?> glyph-<?= e($productId) ?>" aria-labelledby="product-<?= e($productId) ?>-name">
         <p class="product-cat"><?= e($product['cat']) ?></p>
         <h3 id="product-<?= e($productId) ?>-name"><?= e($product['name']) ?></h3>
