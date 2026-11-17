@@ -23,7 +23,6 @@ require ROOT_DIR . '/app/layout/header.php';
 ?>
 <section id="top" class="screen hero" aria-labelledby="hero-title">
     <div class="wrap">
-        <p class="eyebrow eyebrow-muted"><?= e(implode(raw('common.list_sep'), array_column($universes, 'title'))) ?></p>
         <h1 id="hero-title" class="h1"><?= e($mottoFirst) ?><?php if ($mottoSecond !== ''): ?> <span class="h1-soft"><?= e($mottoSecond) ?></span><?php endif; ?></h1>
         <p class="lead"><?= t('home.lead') ?></p>
         <p class="links">
