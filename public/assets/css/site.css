@@ -43,11 +43,15 @@
 
 :root {
     --ink: #1D1D1F;
+    /* Fond de page blanc cassé (v6, « trop blanc ») ; --paper reste blanc pour les panneaux posés dessus
+       (formulaire, menu des langues, pastilles) et le texte sur fond sombre. Contraste AA vérifié :
+       --muted 5,2:1 sur --page et 4,9:1 sur --mist, --link 5,1:1 et 4,8:1. */
+    --page: #F6F5F1;
     --paper: #FFFFFF;
-    --mist: #F5F5F7;
+    --mist: #EEEDE8;
     --mist-2: #EDEDF0;
     --text: #515154;
-    --muted: #6E6E73;
+    --muted: #66666B;
     --line: #E5E5EA;
     --line-2: #D2D2D7;
     --blue: #0071E3;
@@ -122,7 +126,7 @@ html {
 
 body {
     margin: 0;
-    background: var(--paper);
+    background: var(--page);
     color: var(--ink);
     font-family: var(--font);
     font-size: 17px;
@@ -350,14 +354,14 @@ main:focus {
     inset-block-start: 0;
     z-index: 50;
     border-block-end: 1px solid rgba(0, 0, 0, 0.08);
-    background: rgba(255, 255, 255, 0.82);
+    background: rgba(246, 245, 241, 0.82);
     -webkit-backdrop-filter: saturate(180%) blur(18px);
     backdrop-filter: saturate(180%) blur(18px);
 }
 
 /* Menu ouvert : fond opaque pour que la page ne transparaisse pas sous les liens. */
 .site-header:has(.menu-toggle[aria-expanded="true"]) {
-    background: var(--paper);
+    background: var(--page);
 }
 
 .header-bar {
