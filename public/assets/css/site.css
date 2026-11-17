@@ -1402,6 +1402,25 @@ main:focus {
     }
 }
 
+/* ---------- Page Consulting (v6) ---------- */
+
+/* Haut de page : comme l'accueil, l'illustration du Consulting ferme l'écran, arrondie en haut. */
+.consulting-hero {
+    padding-block-end: 0;
+    overflow: hidden;
+}
+
+.accomp-writing {
+    max-width: 640px;
+    margin: 20px auto 0;
+    font-size: 16px;
+}
+
+.tone-edition .shelf-caption {
+    max-width: 640px;
+    margin-inline: auto;
+}
+
 /* ---------- Page Noorwan Connect ---------- */
 
 /* Haut de page : comme l'accueil, l'illustration ferme l'écran, arrondie en haut. */

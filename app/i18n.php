@@ -13,9 +13,11 @@ const LANGS = [
 ];
 const DEFAULT_LANG = 'fr';
 
-// Pages publiques : identifiant => adresse dans public/ (« connect » est réécrite vers connect.php, .htaccess et tests/router.php).
+// Pages publiques : identifiant => adresse dans public/ (« consulting » et « connect » sont réécrites vers leur fichier .php,
+// .htaccess et tests/router.php).
 const PAGES = [
     'index' => '',
+    'consulting' => 'consulting',
     'solutions' => 'solutions.php',
     'edition' => 'edition.php',
     'connect' => 'connect',

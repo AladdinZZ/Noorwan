@@ -20,6 +20,7 @@ return [
         'privacy_description' => 'How Noorwan processes the data sent through the contact form.',
         'cookies_title' => 'Cookies | Noorwan',
         'cookies_description' => 'Cookies on noorwan.com: audience measurement only with your consent, choice kept for six months.',
+        'consulting_title' => 'Consulting | Noorwan',
         'connect_title' => 'Noorwan Connect | Noorwan',
         'connect_description' => 'Noorwan Connect: one account, with your phone number, for every website of the Noorwan group, for you and for your business.',
     ],
@@ -237,6 +238,14 @@ return [
         'partner_btn' => 'Keep me informed',
         'final_h' => 'Create your Noorwan Account',
         'final_text' => 'Your phone number is enough.',
+    ],
+    // Consulting page (v6): TEXTES A VALIDER PAR MARWAN. Title, introduction and expertise come from the home page (home.cons_*).
+    'consulting' => [
+        'tag' => 'Noorwan Consulting',
+        'expertises_title' => 'Our expertise',
+        'accomp_tag' => 'Support and publishing',
+        // Texte à fournir par Marwan (laissé en français dans les trois langues, surligné).
+        'writing' => '[À FOURNIR : accompagnement à l\'écriture, ce que comprend la prestation]',
     ],
     // Solutions page: TEXTES A VALIDER PAR MARWAN. Title and introduction come from the home page (home.sol_h, home.sol_text).
     'solutions' => [
