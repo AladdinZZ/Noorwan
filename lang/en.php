@@ -266,6 +266,7 @@ return [
     'contact' => [
         'tag' => 'Contact',
         'title' => 'Let\'s talk about your project',
+        'photo_alt' => 'Three people in a meeting around a table, with an open laptop in front of them.',
         'lead' => 'Consulting, a product demo or publishing a book: write to us and your message goes to the right team.',
         'form_label' => 'Contact form',
         'required_note' => 'All fields are required unless marked otherwise.',

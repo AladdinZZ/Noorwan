@@ -266,6 +266,7 @@ return [
     'contact' => [
         'tag' => 'Contact',
         'title' => 'Parlons de votre projet',
+        'photo_alt' => 'Trois personnes en réunion autour d\'une table, un ordinateur portable ouvert devant elles.',
         'lead' => 'Conseil, démonstration d\'une solution ou publication d\'un livre : écrivez-nous, votre message est transmis à l\'équipe concernée.',
         'form_label' => 'Formulaire de contact',
         'required_note' => 'Tous les champs sont obligatoires, sauf mention contraire.',
