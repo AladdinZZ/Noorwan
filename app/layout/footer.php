@@ -3,10 +3,10 @@
 declare(strict_types=1);
 
 // Pied de page commun : quatre colonnes (Consulting, Solutions, Édition, Noorwan), Écosystème Noorwan, ligne légale.
-// Noorwan Connect est dans la colonne Noorwan ; aucun lien vers le Compte Noorwan hors de la page Noorwan Connect.
+// La colonne Édition garde la page Édition, sortie du menu en v6. Noorwan Connect est dans la colonne Noorwan ; aucun lien vers le Compte Noorwan hors de la page Noorwan Connect.
 $footerColumns = [
     'nav.consulting' => [
-        ['label' => 'home.btn_explore', 'href' => url('index', 'consulting')],
+        ['label' => 'home.btn_explore', 'href' => url('consulting', 'expertises')],
         ['label' => 'home.btn_talk', 'href' => url('contact', '', ['universe' => 'consulting'])],
     ],
     'nav.solutions' => [
