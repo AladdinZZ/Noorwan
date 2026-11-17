@@ -104,7 +104,7 @@ return [
         'products_label' => 'Nos solutions',
         // Grille des produits (maquette A, M-56). Liste fermée : aucun autre produit confidentiel n'y entre.
         'products' => [
-            'reserva' => ['cat' => 'Réservation', 'name' => 'Reserva', 'text' => '', 'confidential' => true],
+            'reserva' => ['cat' => 'eBusiness', 'name' => 'Reserva', 'text' => '', 'confidential' => true],
             'inteek' => ['cat' => 'Ressources humaines', 'name' => 'Inteek', 'text' => 'Du recrutement à la gestion des équipes, les RH simplifiées.', 'confidential' => false],
             'noor' => ['cat' => 'Intelligence artificielle', 'name' => 'Noor', 'text' => '', 'confidential' => true],
         ],
