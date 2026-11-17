@@ -71,12 +71,12 @@ return [
         ],
         // A VALIDER PAR MARWAN : phrase d'auteur (d'après les présentations d'Harmonie et de Lumière) et « Pourquoi Noorwan » (v3).
         'author_line' => 'A trilogy between science and spirituality: from the origin of the world to human consciousness, it seeks the thread that links reason, faith and mystery.',
-        'why_h' => 'Three trades, one standard',
+        'why_h' => 'One standard, whatever the project',
         'why_eyebrow' => 'Why Noorwan',
         'why_text' => 'A group that brings together consulting, software and publishing with one method: start from the real need and deliver what helps.',
         'why_points' => [
             ['title' => 'Born in Djibouti, open to the world', 'text' => 'Noorwan was born in Djibouti and is growing with an international outlook.'],
-            ['title' => 'Three areas that support each other', 'text' => 'Consulting, software and publishing feed each other: what we learn in one area serves the other two.'],
+            ['title' => 'Areas of expertise that support each other', 'text' => 'Consulting, software and publishing feed each other: what we learn in one area serves the others.'],
             ['title' => 'Tools designed for Africa', 'text' => 'Our solutions are built for the phone first, in French, English and Arabic.'],
         ],
         'app_h' => 'From idea to action',
