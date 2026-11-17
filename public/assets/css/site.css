@@ -654,6 +654,16 @@ main:focus {
     color: var(--ed-text);
 }
 
+/* Noorwan Connect (résumé de l'accueil, v6) : bleu du lien, illustration sans miroir comme sur sa page. */
+.tone-connect .eyebrow,
+.tone-connect .num {
+    color: var(--link);
+}
+
+[dir="rtl"] .tone-connect .illus {
+    transform: none;
+}
+
 .shape {
     width: min(100% - 2 * var(--gutter), 760px);
     margin: 48px auto 0;
