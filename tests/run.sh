@@ -398,7 +398,7 @@ grep -q '^    RewriteRule ^connect$ connect.php \[L\]$' public/.htaccess && pass
 for lang in fr en ar; do
     html=$(curl -s "$BASE_URL/connect?lang=$lang")
     nav=$(sed -n '/<nav class="nav-desktop"/,/<\/nav>/p' <<< "$html")
-    grep -q "href=\"connect?lang=$lang\">Noorwan Connect<" <<< "$nav" && pass "menu : Noorwan Connect ($lang)" || fail "menu : lien Noorwan Connect ($lang)"
+    grep -q "href=\"connect?lang=$lang\" aria-current=\"page\">Noorwan Connect<" <<< "$nav" && pass "menu : Noorwan Connect ($lang)" || fail "menu : lien Noorwan Connect ($lang)"
     grep -q "<link rel=\"canonical\" href=\"[^\"]*/connect?lang=$lang\">" <<< "$html" && pass "adresse canonique /connect ($lang)" || fail "adresse canonique ($lang)"
     title=$(by_lang "$lang" "Un seul compte pour tous les services Noorwan" "One account for all Noorwan services" "حساب واحد لجميع خدمات نوروان")
     grep -qF "<h1 id=\"page-title\" class=\"h1 h1-page\">$title</h1>" <<< "$html" && pass "titre ($lang)" || fail "titre de la page Noorwan Connect ($lang)"
@@ -542,7 +542,7 @@ rm -f "$RL_OLD" "$RL_RECENT"
 
 echo "2 nonies ter. Illustrations dessinées (SVG)"
 # Produits (v3), haut de page, univers, étapes de la méthode et contact (v4) : moins de 20 Ko, sans texte.
-for id in reserva inteek noor hero universe-consulting universe-solutions universe-edition step-field step-build step-improve contact connect-hero connect-personal connect-pro connect-code connect-data connect-partner; do
+for id in reserva inteek noor hero universe-consulting universe-solutions universe-edition step-field step-build step-improve connect-hero connect-personal connect-pro connect-code connect-data connect-partner; do
     file="public/assets/img/$id.svg"
     expect "$id.svg servi" 200 "$(curl -s -o /dev/null -w '%{http_code}' "$BASE_URL/assets/img/$id.svg")"
     size=$(wc -c < "$file" | tr -d ' ')
@@ -551,11 +551,42 @@ for id in reserva inteek noor hero universe-consulting universe-solutions univer
 done
 for lang in fr en ar; do
     home=$(curl -s "$BASE_URL/?lang=$lang")
-    expect "accueil : huit illustrations décoratives ($lang)" 8 "$(grep -cE '<img class="illus" src="assets/img/(hero|universe-(consulting|solutions)|connect-hero|step-(field|build|improve)|contact)\.svg" alt=""' <<< "$home")"
+    expect "accueil : sept illustrations décoratives ($lang)" 7 "$(grep -cE '<img class="illus" src="assets/img/(hero|universe-(consulting|solutions)|connect-hero|step-(field|build|improve))\.svg" alt=""' <<< "$home")"
     expect "méthode : trois étapes ($lang)" 3 "$(sed -n '/id="methode"/,/<\/section>/p' <<< "$home" | grep -c '<span class="method-num"')"
-    expect "page Contact : illustration ($lang)" 1 "$(curl -s "$BASE_URL/contact.php?lang=$lang" | grep -c '<img class="illus" src="assets/img/contact.svg" alt=""')"
+    # Photo de contact (v7) : bandeau de l'accueil (chargée à la demande) et tête de la page Contact, texte alternatif traduit.
+    alt=$(by_lang "$lang" "Trois personnes en réunion" "Three people in a meeting" "ثلاثة أشخاص في اجتماع")
+    photo='<img class="photo" src="assets/img/contact-reunion-600.webp" srcset="assets/img/contact-reunion-600.webp 600w, assets/img/contact-reunion-1200.webp 1200w"'
+    expect "bandeau de contact : photo avec texte alternatif ($lang)" 1 "$(grep -F "$photo" <<< "$home" | grep -F 'loading="lazy"' | grep -c "alt=\"$alt")"
+    expect "page Contact : photo avec texte alternatif ($lang)" 1 "$(curl -s "$BASE_URL/contact.php?lang=$lang" | grep -F "$photo" | grep -v 'loading="lazy"' | grep -c "alt=\"$alt")"
+    if grep -q 'contact\.svg' <<< "$home"; then fail "ancienne illustration de contact encore sur l'accueil ($lang)"; else pass "ancienne illustration de contact retirée ($lang)"; fi
 done
 grep -q '\[dir="rtl"\] \.illus' public/assets/css/site.css && pass "illustrations en miroir en arabe" || fail "miroir des illustrations en arabe absent"
+for width in 600 1200; do
+    file="public/assets/img/contact-reunion-$width.webp"
+    expect "photo de contact $width px servie" 200 "$(curl -s -o /dev/null -w '%{http_code}' "$BASE_URL/assets/img/contact-reunion-$width.webp")"
+    size=$(wc -c < "$file" | tr -d ' ')
+    [[ $size -lt 61440 ]] && pass "photo de contact $width px légère ($size octets)" || fail "photo de contact $width px trop lourde ($size octets)"
+done
+if grep -qE '\[dir="rtl"\] [^{]*\.photo' public/assets/css/site.css; then fail "photo en miroir en arabe"; else pass "photo jamais en miroir"; fi
+
+echo "Onglet actif et titre de « Pourquoi Noorwan » (v7)"
+for lang in fr en ar; do
+    for tab in consulting solutions connect contact; do
+        html=$(curl -s "$BASE_URL/$(case "$tab" in consulting|connect) echo "$tab" ;; *) echo "$tab.php" ;; esac)?lang=$lang")
+        for menu in '<nav class="nav-desktop"' '<nav id="nav-mobile"'; do
+            nav=$(sed -n "/$menu/,/<\/nav>/p" <<< "$html")
+            expect "onglet actif unique sur $tab ($lang, $([[ $menu == *mobile* ]] && echo téléphone || echo ordinateur))" 1 "$(grep -c 'aria-current="page"' <<< "$nav")"
+            grep 'aria-current="page"' <<< "$nav" | grep -qE "href=\"(\./)?$tab(\.php)?\?" && pass "onglet actif : $tab ($lang)" || fail "onglet actif attendu : $tab ($lang)"
+        done
+    done
+    home=$(curl -s "$BASE_URL/?lang=$lang")
+    expect "accueil : aucun onglet actif ($lang)" 0 "$(sed -n '/<nav class="nav-desktop"/,/<\/nav>/p;/<nav id="nav-mobile"/,/<\/nav>/p' <<< "$home" | grep -c 'aria-current="page"')"
+    expect "titre « Une même exigence, quel que soit le projet » ($lang)" 1 "$(grep -c "id=\"why-title\" class=\"h2\">$(by_lang "$lang" "Une même exigence, quel que soit le projet" "One standard, whatever the project" "معيار واحد، أيًّا كان المشروع")<" <<< "$home")"
+    for page in "" consulting; do
+        if curl -s "$BASE_URL/$page?lang=$lang" | grep -qiE 'trois (métiers|univers)|three (trades|areas|worlds)|ثلاث مهن|ثلاثة مجالات'; then fail "« trois métiers » ou « trois univers » encore sur /$page ($lang)"; else pass "ni « trois métiers » ni « trois univers » sur /$page ($lang)"; fi
+    done
+done
+grep -q '\.nav-desktop a\[aria-current="page"\]' public/assets/css/site.css && grep -q '\.nav-mobile a\[aria-current="page"\]' public/assets/css/site.css && pass "onglet actif mis en avant (ordinateur et téléphone)" || fail "style de l'onglet actif absent"
 for lang in fr en ar; do
     html=$(curl -s "$BASE_URL/solutions.php?lang=$lang")
     expect "Solutions : une illustration par carte, une pour Inteek ($lang)" "2|1" \
