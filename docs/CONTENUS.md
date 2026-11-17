@@ -7,9 +7,9 @@
 | Page | État |
 |---|---|
 | Accueil | **v2 en ligne. v3 (textes fournis, Reserva confidentiel, illustrations) sur la branche `feat/v3-textes-visuels` ; v4 (textes resserrés, méthode en trois étapes, illustrations dessinées) sur `feat/v4-textes-visuels`, à relire par Marwan avant fusion.** Voir « État du site au 11/11/2026 (v4) ». |
-| Consulting | Section de l'accueil (5 expertises), pas de page propre. |
+| Consulting | **Page propre depuis la v6 (branche `feat/v6-navigation`)** à l'adresse `/consulting` : expertises, puis « Accompagnement et édition ». Voir « État du site au 17/11/2026 (v6) ». |
 | Solutions | **En ligne, textes à valider** (lot v1.1, 27/10/2026) : `solutions.php`. Reserva, Immobilier, Shopping et page Développeurs hors site. |
-| Édition | **En ligne.** Prestation (4 étapes **à valider**) et catalogue ; annonce Ikra.M **à valider** (27/10/2026). |
+| Édition | **En ligne, hors du menu depuis la v6** (pied de page et plan du site seulement ; présentée dans la page Consulting). Prestation (4 étapes **à valider**) et catalogue ; annonce Ikra.M **à valider** (27/10/2026). |
 | À propos | À rédiger (hors menu). |
 | Noorwan Connect | **Nouvelle page (v5, branche `feat/v5-noorwan-connect`)** à l'adresse `/connect`, dans le menu et le pied de page. Textes **proposés par Maestro, à valider** par Marwan. Voir « État du site au 14/11/2026 (v5) », complété par « État du site au 16/11/2026 (v5 bis) » : le site n'a plus de « Mon compte », seule cette page mène au Compte Noorwan. |
 | Contact | En ligne. |
@@ -256,6 +256,46 @@ Même trait que les illustrations de produits de la v3 : formes pleines, coins a
 - `universe-consulting.svg` (carte déroulée, itinéraire en étapes, boussole, crayon), `universe-solutions.svg` (portable et téléphone, même interface, sur fond nuit), `universe-edition.svg` (feuilles du manuscrit et stylo, livre imprimé et liseuse).
 - `step-field.svg` (boutique et bulle de parole), `step-build.svg` (écran assemblé bloc par bloc), `step-improve.svg` (téléphone en service dans une boucle de retours).
 - `contact.svg` : enveloppe ouverte et bulle de réponse, dans le bandeau de contact et en tête de la page Contact.
+
+## État du site au 17/11/2026 (v6, branche `feat/v6-navigation`, à relire avant fusion)
+
+Brief v6 de Maestro du 17/11/2026, d'après huit constats de Marwan. Seuls les changements par rapport à la v5 bis sont listés. Choix de Maestro : une page par onglet, l'accueil résume chaque onglet. Nouveaux textes **à valider** par Marwan ; arabe à relire par un arabophone.
+
+### Commun
+
+- **Menu** : Consulting (`/consulting`), Solutions, Noorwan Connect, Contact. Chaque onglet a sa page ; l'Édition n'est plus un onglet.
+- **Pied de page** : inchangé, sauf « Découvrir nos expertises » qui mène à `/consulting#expertises`. La colonne Édition (Voir le catalogue, Publier votre livre) garde la page Édition accessible ; elle reste aussi dans le plan du site.
+- **Écosystème Noorwan** : le Compte Noorwan n'y figure plus (on le rajoutera plus tard) ; `ECOSYSTEM_ACCOUNT_URL` est retirée de `.env.example` et ignorée si elle traîne dans un `.env`. Restent Noorwan (sans lien), Reserva et Inteek (masqués sans adresse).
+- **Fond blanc cassé** : fond de page `#F6F5F1`, sections grises `#EEEDE8`, gris des textes secondaires `#66666B` (au lieu de `#6E6E73`) pour garder le contraste AA (5,2:1 sur le fond, 4,9:1 sur le gris ; liens 5,1:1 et 4,8:1, contrôlé par `tests/run.sh`). Formulaire, menus et pastilles restent blancs. Le site n'a pas de thème sombre : rendu identique quel que soit le réglage du téléphone.
+
+### Accueil
+
+Ordre : haut de page · 01 Consulting · 02 Solutions · 03 Noorwan Connect · De l'idée à l'action · Pourquoi Noorwan · contact.
+
+- Haut de page : plus de petit titre « Consulting, Solutions, Édition » au-dessus de « Une vision claire. Des étapes concrètes. » ; « Découvrir nos expertises » mène à `/consulting`.
+- Chaque onglet en un écran, textes existants, lien « En savoir plus » vers sa page :
+  - 01 Consulting : « Clarifier avant d'accélérer. » et le texte de l'univers Consulting.
+  - 02 Solutions : « Des logiciels pour le travail de chaque jour » et le texte de l'univers Solutions.
+  - 03 Noorwan Connect : titre et introduction de la page `/connect` (« Un seul compte pour tous les services Noorwan » ; « Un compte par personne, avec votre numéro de téléphone. Il vous ouvre les sites du groupe, pour vous comme pour votre entreprise. »), illustration de la page.
+- Quittent l'accueil : les cinq expertises (page Consulting), la grille des produits (page Solutions), l'écran Édition et l'étagère {méta}Physique (page Consulting).
+- Anciennes ancres : `#consulting` mène à `/consulting`, `#edition-univers` et `#edition` à `/consulting#accompagnement` (avec JavaScript ; sans, elles restent sur le résumé du Consulting).
+
+### Page Consulting (`/consulting`, nouvelle)
+
+- Haut de page : « Noorwan Consulting » (EN identique, AR « نوروان للاستشارات ») ; « Clarifier avant d'accélérer. » ; « Vingt ans de digital, de marketing et d'eCommerce au service d'une question simple : quelle est la prochaine étape utile pour votre projet ? » ; bouton « Parlons de votre projet » (univers Consulting) ; illustration du Consulting.
+- « Nos expertises » (EN « Our expertise », AR « خبراتنا ») : les cinq expertises de la v4, puis « Une étape utile livrée vaut mieux qu'un grand plan sur le papier. »
+- « Accompagnement et édition » (EN « Support and publishing », AR « المرافقة والنشر ») : « Des livres, du manuscrit à Amazon » ; texte de l'univers Édition ; **[À FOURNIR : accompagnement à l'écriture, ce que comprend la prestation]** ; couvertures d'Harmonie et Lumière, Vibration « À paraître » ; « {méta}Physique : » suivi de la phrase d'auteur ; « Chemins de l'Âme : Le Mal, Le Bien, Être pour Avoir » ; liens « En savoir plus » (page Édition) et « Publier votre livre » (formulaire, univers Édition).
+- Bandeau de contact, univers Consulting.
+
+### Page Solutions
+
+- Ordre : en-tête · Notre façon de faire · **Inteek** en détail (une seule fois, avec l'illustration de son ancienne carte) · cartes Reserva et Noor · Bientôt · contact.
+- Plus de carte Inteek (doublon) ni de carte Noorwan Édition (l'Édition est présentée dans Consulting) ; l'illustration du livre (`edition.svg`) est retirée.
+- Reserva : catégorie **« eBusiness »** (au lieu de « Réservation » ; même mot en EN et AR), toujours « Confidentiel ».
+
+### Page Noorwan Connect
+
+- Bandeau final : **« Créez votre compte Noorwan Connect »** (EN « Create your Noorwan Connect account », AR « أنشئ حسابك على Noorwan Connect »).
 
 ## État du site au 16/11/2026 (v5 bis, même branche `feat/v5-noorwan-connect`, à relire avant fusion)
 
