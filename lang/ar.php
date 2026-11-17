@@ -58,7 +58,6 @@ return [
     // Écosystème Noorwan (D63), mêmes libellés que sur Inteek.
     'ecosystem' => [
         'title' => 'منظومة Noorwan',
-        'account' => 'حساب Noorwan',
         'reserva' => 'Reserva',
         'inteek' => 'Inteek',
     ],
