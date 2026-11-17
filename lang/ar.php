@@ -248,7 +248,7 @@ return [
         'partner_h' => 'للمؤسسات الشريكة',
         'partner_text' => "ستتمكن مؤسسة من خارج المجموعة من اقتراح «تسجيل الدخول عبر \u{2066}Noorwan\u{2069}» على موقعها. سيدخل عملاؤها بأرقامهم دون حساب جديد، ويأذنون لهذا الموقع مرة واحدة بمعرفة أسمائهم.",
         'partner_btn' => 'أبقوني على اطلاع',
-        'final_h' => 'أنشئ حساب Noorwan',
+        'final_h' => 'أنشئ حسابك على Noorwan Connect',
         'final_text' => 'رقم هاتفك يكفي.',
     ],
     // Page Consulting (v6) : TEXTES A VALIDER PAR MARWAN, arabe à relire. Titre, introduction et expertises : ceux de l'accueil (home.cons_*).

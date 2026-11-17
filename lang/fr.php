@@ -235,7 +235,7 @@ return [
         'partner_h' => 'Pour les entreprises partenaires',
         'partner_text' => 'Une entreprise hors du groupe pourra proposer « Se connecter avec Noorwan » sur son site. Ses clients entreront avec leur numéro, sans nouveau compte, et autoriseront une seule fois ce site à connaître leur nom.',
         'partner_btn' => 'Être tenu informé',
-        'final_h' => 'Créez votre Compte Noorwan',
+        'final_h' => 'Créez votre compte Noorwan Connect',
         'final_text' => 'Votre numéro de téléphone suffit.',
     ],
     // Page Consulting (v6) : TEXTES A VALIDER PAR MARWAN. Le titre, l'introduction et les expertises sont ceux de l'accueil (home.cons_*).

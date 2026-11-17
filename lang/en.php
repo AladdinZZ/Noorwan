@@ -235,7 +235,7 @@ return [
         'partner_h' => 'For partner businesses',
         'partner_text' => 'A business outside the group will be able to offer "Sign in with Noorwan" on its website. Its customers will sign in with their number, without a new account, and will allow that website once to know their name.',
         'partner_btn' => 'Keep me informed',
-        'final_h' => 'Create your Noorwan Account',
+        'final_h' => 'Create your Noorwan Connect account',
         'final_text' => 'Your phone number is enough.',
     ],
     // Consulting page (v6): TEXTES A VALIDER PAR MARWAN. Title, introduction and expertise come from the home page (home.cons_*).
