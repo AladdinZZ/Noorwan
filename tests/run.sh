@@ -56,7 +56,7 @@ done < <(find app bin lang public -name '*.php')
 [[ $failures -eq 0 ]] && pass "php -l sur tous les fichiers"
 
 echo "2. Pages (code 200 attendu) sur $BASE_URL"
-for page in "" solutions.php edition.php connect contact.php mentions-legales.php confidentialite.php cookies.php; do
+for page in "" consulting solutions.php edition.php connect contact.php mentions-legales.php confidentialite.php cookies.php; do
     for lang in fr en ar; do
         code=$(curl -s -o /dev/null -w '%{http_code}' "$BASE_URL/$page?lang=$lang")
         expect "/${page:-index} lang=$lang" 200 "$code"
@@ -96,8 +96,8 @@ expect "robots.txt en texte" "text/plain; charset=utf-8" "$(curl -s -o /dev/null
 robots_prod=$("$PHP" -r 'require "app/bootstrap.php"; require "app/seo.php"; echo robots_txt(true);' 2>&1)
 if [[ "$robots_prod" == $'User-agent: *\nAllow: /\n\nSitemap: '*'/sitemap.xml' ]]; then pass "robots.txt de production"; else fail "robots.txt de production : $robots_prod"; fi
 sitemap=$(curl -s "$BASE_URL/sitemap.xml")
-expect "sitemap.xml : 8 pages x 3 langues" 24 "$(grep -c '<loc>' <<< "$sitemap")"
-expect "sitemap.xml : 4 versions par adresse (fr, en, ar, x-default)" 96 "$(grep -c 'hreflang=' <<< "$sitemap")"
+expect "sitemap.xml : 9 pages x 3 langues" 27 "$(grep -c '<loc>' <<< "$sitemap")"
+expect "sitemap.xml : 4 versions par adresse (fr, en, ar, x-default)" 108 "$(grep -c 'hreflang=' <<< "$sitemap")"
 if command -v xmllint >/dev/null; then
     xmllint --noout - <<< "$sitemap" 2>/dev/null && pass "sitemap.xml bien formé" || fail "sitemap.xml mal formé"
 fi
@@ -132,35 +132,57 @@ for lang in fr en ar; do
     expect "langue courante marquée ($lang)" "$lang" "$(grep -oE 'lang="[a-z]+" hreflang="[a-z]+" aria-current="true"' <<< "$header" | sed -E 's/lang="([a-z]+)".*/\1/')"
 done
 
-echo "2 sexies. Accueil, maquette A : haut de page et trois univers"
+echo "2 sexies. Accueil (v6) : haut de page, puis un résumé par onglet avec « En savoir plus »"
 for lang in fr en ar; do
     home=$(curl -s "$BASE_URL/?lang=$lang")
     hero=$(sed -n '/<section id="top" class="screen hero"/,/<\/section>/p' <<< "$home")
-    expect "haut de page : titre en deux temps, accroche, 2 liens, visuel ($lang)" "1|1|1|2|1" \
-        "$(grep -c '<h1 id="hero-title" class="h1">' <<< "$hero")|$(grep -c 'class="h1-soft"' <<< "$hero")|$(grep -c 'class="lead"' <<< "$hero")|$(grep -c 'class="more"' <<< "$hero")|$(grep -c 'class="hero-visual"' <<< "$hero")"
+    expect "haut de page : sans petit titre, titre en deux temps, accroche, 2 liens, visuel ($lang)" "0|1|1|1|2|1" \
+        "$(grep -c 'class="eyebrow' <<< "$hero")|$(grep -c '<h1 id="hero-title" class="h1">' <<< "$hero")|$(grep -c 'class="h1-soft"' <<< "$hero")|$(grep -c 'class="lead"' <<< "$hero")|$(grep -c 'class="more"' <<< "$hero")|$(grep -c 'class="hero-visual"' <<< "$hero")"
     motto=$(by_lang "$lang" "Une vision claire." "A clear vision." "رؤية واضحة.")
     grep -qF "class=\"h1\">$motto <span" <<< "$hero" && pass "haut de page : « $motto » ($lang)" || fail "haut de page : devise ($lang)"
-    expect "trois univers numérotés, un écran chacun ($lang)" "01|02|03" \
+    grep -q "href=\"consulting?lang=$lang\">$(by_lang "$lang" "Découvrir nos expertises" "Explore our expertise" "اكتشف خبراتنا")<" <<< "$hero" && pass "haut de page : expertises vers /consulting ($lang)" || fail "haut de page : lien des expertises ($lang)"
+    expect "trois résumés numérotés : Consulting, Solutions, Noorwan Connect ($lang)" "01|02|03" \
         "$(grep -o '<p class="num" aria-hidden="true">0[0-9]</p>' <<< "$home" | sed -E 's/.*>(0[0-9])<.*/\1/' | paste -sd '|' -)"
-    expect "cinq expertises du Consulting ($lang)" 5 "$(sed -n '/<ul class="expertises">/,/<\/ul>/p' <<< "$home" | grep -c '<li>')"
+    more=$(by_lang "$lang" "En savoir plus" "Learn more" "اعرف المزيد")
+    expect "« $more » vers chaque page ($lang)" "consulting?lang=$lang|solutions.php?lang=$lang|connect?lang=$lang" \
+        "$(sed -n '/<div id="univers">/,/^<\/div>/p' <<< "$home" | grep -oE "href=\"[^\"]+\">$more<" | sed -E 's/href="([^"]+)".*/\1/' | paste -sd '|' -)"
+    expect "ni expertises, ni produits, ni livres sur l'accueil ($lang)" "0|0|0" \
+        "$(grep -c '<ul class="expertises">' <<< "$home")|$(grep -c '<article id="product-' <<< "$home")|$(grep -c 'class="shelf"' <<< "$home")"
+    expect "anciennes ancres vers la page Consulting ($lang)" "consulting|consulting#accompagnement|consulting#accompagnement" \
+        "$(grep -oE 'id="(consulting|edition-univers|edition)"[^>]* data-hash-redirect="[^"]+"' <<< "$home" | sed -E "s/.*data-hash-redirect=\"([^?]+)\?lang=$lang([^\"]*)\"/\1\2/" | paste -sd '|' -)"
+    nav=$(sed -n '/<nav class="nav-desktop"/,/<\/nav>/p' <<< "$home")
+    expect "menu : Consulting, Solutions, Noorwan Connect, Contact, chacun sa page ($lang)" "consulting?lang=$lang|solutions.php?lang=$lang|connect?lang=$lang|contact.php?lang=$lang" \
+        "$(grep -oE 'href="[^"]+"' <<< "$nav" | sed -E 's/href="([^"]+)"/\1/' | paste -sd '|' -)"
+    expect "menu mobile : mêmes quatre onglets ($lang)" 4 "$(sed -n '/<nav id="nav-mobile"/,/<\/nav>/p' <<< "$home" | grep -c '<a ')"
+    footer=$(sed -n '/<nav class="footer-cols"/,/<\/nav>/p' <<< "$home")
+    grep -q "href=\"edition.php?lang=$lang#catalogue\"" <<< "$footer" && pass "pied de page : page Édition gardée ($lang)" || fail "pied de page : lien vers la page Édition ($lang)"
     grep -q 'id="contact" class="screen screen-mist cta"' <<< "$home" && pass "bandeau contact en bas de l'accueil ($lang)" || fail "bandeau contact ($lang)"
-done
-
-echo "2 septies. Accueil : Édition et textes à fournir"
-for lang in fr en ar; do
-    home=$(curl -s "$BASE_URL/?lang=$lang")
-    section=$(sed -n '/<section id="edition" class="screen tone-edition"/,/<\/section>/p' <<< "$home")
-    tag=$(by_lang "$lang" "Noorwan Édition" "Noorwan Publishing" "نوروان للنشر")
-    grep -q "<p class=\"eyebrow\">$tag</p>" <<< "$section" && pass "petit titre « $tag » ($lang)" || fail "petit titre de la section Édition ($lang)"
-    expect "trilogie : deux couvertures et un tome à paraître ($lang)" "2|1" \
-        "$(grep -c '<img class="cover"' <<< "$section")|$(grep -c 'class="cover-soon"' <<< "$section")"
-    grep -q "href=\"edition.php?lang=$lang#catalogue\"" <<< "$section" && pass "lien vers le catalogue ($lang)" || fail "lien vers le catalogue absent ($lang)"
-    grep -q "href=\"contact.php?lang=$lang&amp;universe=edition\"" <<< "$section" && pass "« Publier votre livre » vers le formulaire ($lang)" || fail "lien Publier votre livre ($lang)"
-    # Textes manquants : visibles, surlignés, jamais inventés.
-    expect "accueil : plus aucun texte à fournir ($lang)" 0 "$(grep -c '<mark class="todo">' <<< "$home")"
+    expect "accueil : aucun texte à fournir ($lang)" 0 "$(grep -c '<mark class="todo">' <<< "$home")"
     why=$(sed -n '/aria-labelledby="why-title"/,/<\/section>/p' <<< "$home")
     expect "Pourquoi Noorwan : texte et trois points forts, sans chiffre ($lang)" "1|3|0" \
         "$(grep -c '<p class="lead">' <<< "$why")|$(sed -n '/<ul class="why-points">/,/<\/ul>/p' <<< "$why" | grep -c '<li>')|$(sed -n '/<ul class="why-points">/,/<\/ul>/p' <<< "$why" | grep -cE '[0-9]')"
+done
+grep -q "data-hash-redirect" public/assets/js/site.js && pass "site.js suit data-hash-redirect" || fail "site.js : redirection des anciennes ancres absente"
+
+echo "2 septies. Page Consulting (/consulting)"
+grep -q '/consulting?lang=fr</loc>' <<< "$sitemap" && pass "page Consulting dans le plan du site" || fail "page Consulting absente du plan du site"
+grep -q '/edition.php?lang=fr</loc>' <<< "$sitemap" && pass "page Édition gardée dans le plan du site" || fail "page Édition absente du plan du site"
+grep -q '^    RewriteRule ^consulting$ consulting.php \[L\]$' public/.htaccess && pass ".htaccess : /consulting réécrite vers consulting.php" || fail ".htaccess : réécriture de /consulting absente"
+for lang in fr en ar; do
+    html=$(curl -s "$BASE_URL/consulting?lang=$lang")
+    grep -q "<link rel=\"canonical\" href=\"[^\"]*/consulting?lang=$lang\">" <<< "$html" && pass "adresse canonique /consulting ($lang)" || fail "adresse canonique /consulting ($lang)"
+    grep -qF "<h1 id=\"page-title\" class=\"h1 h1-page\">$(by_lang "$lang" "Clarifier avant d&apos;accélérer." "Clarify before you accelerate." "التوضيح قبل التسريع.")</h1>" <<< "$html" && pass "titre ($lang)" || fail "titre de la page Consulting ($lang)"
+    expect "cinq expertises ($lang)" 5 "$(sed -n '/<ul class="expertises">/,/<\/ul>/p' <<< "$html" | grep -c '<li>')"
+    section=$(sed -n '/<section id="accompagnement"/,/<\/section>/p' <<< "$html")
+    tag=$(by_lang "$lang" "Accompagnement et édition" "Support and publishing" "المرافقة والنشر")
+    grep -q "<p class=\"eyebrow\">$tag</p>" <<< "$section" && pass "« $tag » ($lang)" || fail "petit titre « $tag » ($lang)"
+    expect "trilogie : deux couvertures et un tome à paraître ($lang)" "2|1" \
+        "$(grep -c '<img class="cover"' <<< "$section")|$(grep -c 'class="cover-soon"' <<< "$section")"
+    grep -q "href=\"edition.php?lang=$lang\"" <<< "$section" && pass "lien vers la page Édition ($lang)" || fail "lien vers la page Édition ($lang)"
+    grep -q "href=\"contact.php?lang=$lang&amp;universe=edition\"" <<< "$section" && pass "« Publier votre livre » vers le formulaire ($lang)" || fail "lien Publier votre livre ($lang)"
+    expect "accompagnement à l'écriture : un texte à fournir, surligné ($lang)" 1 "$(grep -c '<mark class="todo">\[À FOURNIR : accompagnement à l&apos;écriture' <<< "$html")"
+    grep -q "href=\"contact.php?lang=$lang&amp;universe=consulting\"" <<< "$html" && pass "contact, univers Consulting ($lang)" || fail "lien de contact Consulting ($lang)"
+    if sed -n '/<nav class="nav-desktop"/,/<\/nav>/p' <<< "$html" | grep -q 'edition.php'; then fail "Édition encore dans le menu ($lang)"; else pass "Édition hors du menu ($lang)"; fi
 done
 
 echo "2 octies. Page Édition : livre à paraître"
@@ -183,15 +205,15 @@ for lang in fr en ar; do
 done
 expect "couverture_belles_manieres.webp servie" 200 "$(curl -s -o /dev/null -w '%{http_code}' "$BASE_URL/assets/images/covers/couverture_belles_manieres.webp")"
 
-echo "2 nonies. Solutions : produits sur l'accueil et sur la page"
+echo "2 nonies. Solutions : produits sur la page, Inteek une seule fois"
 grep -q '/solutions.php?lang=fr</loc>' <<< "$sitemap" && pass "page Solutions dans le plan du site" || fail "page Solutions absente du plan du site"
 for lang in fr en ar; do
     home=$(curl -s "$BASE_URL/?lang=$lang")
     nav=$(sed -n '/<nav class="nav-desktop"/,/<\/nav>/p' <<< "$home")
     grep -q "href=\"solutions.php?lang=$lang\">$(by_lang "$lang" "Solutions" "Solutions" "الحلول")<" <<< "$nav" && pass "menu : Solutions mène à solutions.php ($lang)" || fail "menu : lien Solutions ($lang)"
-    for page in "" solutions.php; do
+    for page in solutions.php; do
         html=$(curl -s "$BASE_URL/$page?lang=$lang")
-        expect "produits Reserva, Inteek, Noor, Édition, deux confidentiels (${page:-index}, $lang)" "reserva|inteek|noor|edition|2" \
+        expect "cartes Reserva et Noor, toutes deux confidentielles (${page:-index}, $lang)" "reserva|noor|2" \
             "$(grep -oE '<article id="product-[a-z]+"' <<< "$html" | sed -E 's/.*product-([a-z]+)"/\1/' | paste -sd '|' -)|$(grep -c 'class="badge-confidential"' <<< "$html")"
         grep -q 'id="product-noor"' <<< "$html" && sed -n '/id="product-noor"/,/<\/article>/p' <<< "$html" | grep -q 'badge-confidential' \
             && pass "Noor marqué « Confidentiel » (${page:-index}, $lang)" || fail "Noor sans mention Confidentiel (${page:-index}, $lang)"
@@ -206,7 +228,10 @@ for lang in fr en ar; do
         && pass "page Solutions : titre ($lang)" || fail "page Solutions : titre ($lang)"
     expect "page Solutions : 3 principes, 5 modules d'Inteek ($lang)" "3|5" \
         "$(sed -n '/<ol class="principles">/,/<\/ol>/p' <<< "$page" | grep -c '<li>')|$(sed -n '/<ul class="modules">/,/<\/ul>/p' <<< "$page" | grep -c '<li>')"
-    grep -q "href=\"#inteek\"" <<< "$page" && pass "page Solutions : carte Inteek mène à sa présentation ($lang)" || fail "page Solutions : lien vers #inteek ($lang)"
+    expect "page Solutions : Inteek une seule fois, sans carte ($lang)" "1|0|1" \
+        "$(grep -c '<h2 id="inteek-title" class="h2">Inteek</h2>' <<< "$page")|$(grep -c 'id="product-inteek"' <<< "$page")|$(sed -n '/<main/,/<\/main>/p' <<< "$page" | grep -o '>Inteek<' | wc -l | tr -d ' ')"
+    grep -q '<p class="product-cat">eBusiness</p>' <<< "$(sed -n '/id="product-reserva"/,/<\/article>/p' <<< "$page")" && pass "Reserva : catégorie « eBusiness » ($lang)" || fail "Reserva : catégorie ($lang)"
+    if grep -qE 'Réservation<|>Booking<|>الحجز<' <<< "$page"; then fail "ancienne catégorie de Reserva ($lang)"; else pass "plus de catégorie « Réservation » ($lang)"; fi
     expect "page Solutions : « Demander une présentation » vers le formulaire, univers Solutions ($lang)" 5 \
         "$(grep -c "href=\"contact.php?lang=$lang&amp;universe=solutions\">$(by_lang "$lang" "Demander une présentation" "Request a presentation" "اطلب عرضًا تقديميًا")" <<< "$page")"
     # Ni prix ni chiffres de clients : aucun montant ni symbole monétaire sur la page.
@@ -227,7 +252,7 @@ echo "2 undecies. Aucun lien vers le Compte Noorwan hors de /connect (v5 bis)"
 # render PAGE LANGUE ACTIVÉ [ADRESSE, « - » pour une adresse vide] [GTM_ID] [CHOIX]
 # Écosystème sans adresse : les pages rendues ne dépendent pas des réglages du .env local.
 render() {
-    ECOSYSTEM_ACCOUNT_URL= ECOSYSTEM_RESERVA_URL= ECOSYSTEM_INTEEK_URL= "$PHP" -r '[, $page, $lang, $enabled, $url, $gtm, $consent] = $argv + [4 => "", 5 => "", 6 => ""];
+    ECOSYSTEM_RESERVA_URL= ECOSYSTEM_INTEEK_URL= "$PHP" -r '[, $page, $lang, $enabled, $url, $gtm, $consent] = $argv + [4 => "", 5 => "", 6 => ""];
         define("COMPTE_LINK_ENABLED", $enabled === "true");
         if ($url === "-") { define("COMPTE_URL", ""); } elseif ($url !== "") { define("COMPTE_URL", $url); }
         define("GTM_ID", $gtm);
@@ -344,18 +369,20 @@ expect "refus : cookies Google Analytics effacés" 2 "$(grep -ciE '^Set-Cookie: 
 expect "jeton signé : choix forgé refusé" 400 "$(curl -s -o /dev/null -w '%{http_code}' -X POST -d 'token=1.2.3&choice=granted' "$BASE_URL/consent.php")"
 
 echo "2 quindecies. Écosystème Noorwan (D63)"
-eco() { env ECOSYSTEM_ACCOUNT_URL= ECOSYSTEM_RESERVA_URL= ECOSYSTEM_INTEEK_URL= "$@" "$PHP" -r '$_GET["lang"] = "fr"; require "public/index.php";' 2>&1 | sed -n '/<nav class="ecosystem"/,/<\/nav>/p'; }
-expect "aucune adresse : bloc masqué" 0 "$(eco ECOSYSTEM_ACCOUNT_URL= | grep -c 'ecosystem')"
+eco() { env ECOSYSTEM_RESERVA_URL= ECOSYSTEM_INTEEK_URL= "$@" "$PHP" -r '$_GET["lang"] = "fr"; require "public/index.php";' 2>&1 | sed -n '/<nav class="ecosystem"/,/<\/nav>/p'; }
+expect "aucune adresse : bloc masqué" 0 "$(eco | grep -c 'ecosystem')"
 block=$(eco ECOSYSTEM_ACCOUNT_URL=https://compte.example.invalid ECOSYSTEM_RESERVA_URL=https://reserva.example.invalid ECOSYSTEM_INTEEK_URL=)
 grep -q 'Écosystème Noorwan' <<< "$block" && pass "titre « Écosystème Noorwan »" || fail "titre de l'écosystème"
 grep -q '<li><span aria-current="page">Noorwan</span></li>' <<< "$block" && pass "site courant nommé sans lien" || fail "site courant"
-expect "Compte Noorwan et Reserva liés, Inteek sans adresse masqué" "https://compte.example.invalid|https://reserva.example.invalid|0" \
-    "$(grep -oE 'href="[^"]+"' <<< "$block" | sed -E 's/href="([^"]+)"/\1/' | paste -sd '|' -)|$(grep -c 'Inteek' <<< "$block")"
-expect "adresse non https ignorée" 0 "$(eco 'ECOSYSTEM_ACCOUNT_URL=javascript:alert(1)' | grep -c 'ecosystem')"
-if grep -qi 'onepay' <<< "$(eco ECOSYSTEM_ACCOUNT_URL=https://a.invalid ECOSYSTEM_RESERVA_URL=https://b.invalid ECOSYSTEM_INTEEK_URL=https://c.invalid)"; then fail "OnePay dans l'écosystème"; else pass "OnePay absent de l'écosystème"; fi
+# v6 : le Compte Noorwan ne figure plus dans le bloc, même si l'ancienne variable traîne dans un .env.
+expect "Reserva lié, Compte Noorwan absent, Inteek sans adresse masqué" "https://reserva.example.invalid|0|0" \
+    "$(grep -oE 'href="[^"]+"' <<< "$block" | sed -E 's/href="([^"]+)"/\1/' | paste -sd '|' -)|$(grep -ciE 'compte|account' <<< "$block")|$(grep -c 'Inteek' <<< "$block")"
+expect "adresse non https ignorée" 0 "$(eco 'ECOSYSTEM_RESERVA_URL=javascript:alert(1)' | grep -c 'ecosystem')"
+if grep -q 'ECOSYSTEM_ACCOUNT_URL' .env.example app/layout/ecosystem.php; then fail "ECOSYSTEM_ACCOUNT_URL encore présente"; else pass "ECOSYSTEM_ACCOUNT_URL retirée"; fi
+if grep -qi 'onepay' <<< "$(eco ECOSYSTEM_RESERVA_URL=https://b.invalid ECOSYSTEM_INTEEK_URL=https://c.invalid)"; then fail "OnePay dans l'écosystème"; else pass "OnePay absent de l'écosystème"; fi
 
 echo "2 sexdecies. OnePay absent de toutes les pages"
-for page in "" solutions.php edition.php connect contact.php mentions-legales.php confidentialite.php cookies.php; do
+for page in "" consulting solutions.php edition.php connect contact.php mentions-legales.php confidentialite.php cookies.php; do
     for lang in fr en ar; do
         if curl -s "$BASE_URL/$page?lang=$lang" | grep -qi 'onepay'; then fail "OnePay présent : /${page:-index} ($lang)"; else pass "OnePay absent : /${page:-index} ($lang)"; fi
     done
@@ -396,6 +423,8 @@ for lang in fr en ar; do
     expect "textes : « $dest » deux fois, plus de « Mon compte » ($lang)" "2|0" \
         "$(sed -n '/id="donnees"/,/<\/section>/p' <<< "$html" | grep -o "$dest" | wc -l | tr -d ' ')|$(grep -cE 'Mon compte|My account|«حسابي»' <<< "$html")"
     grep -q 'id="creer"' <<< "$html" && pass "activé : bandeau final ($lang)" || fail "activé : bandeau final absent ($lang)"
+    final=$(by_lang "$lang" "Créez votre compte Noorwan${nbsp}Connect" "Create your Noorwan${nbsp}Connect account" "أنشئ حسابك على Noorwan${nbsp}Connect")
+    grep -qF "<h2 id=\"creer-title\" class=\"h2 h2-section\">$final</h2>" <<< "$html" && pass "bandeau final : « $final » ($lang)" || fail "bandeau final : titre ($lang)"
     html=$(render connect.php "$lang" false)
     expect "désactivé : ni bouton ni bandeau final, page complète ($lang)" "0|0|5" \
         "$(grep -c 'connect-create' <<< "$html")|$(grep -c 'id="creer"' <<< "$html")|$(grep -c 'connect-section' <<< "$html")"
@@ -513,7 +542,7 @@ rm -f "$RL_OLD" "$RL_RECENT"
 
 echo "2 nonies ter. Illustrations dessinées (SVG)"
 # Produits (v3), haut de page, univers, étapes de la méthode et contact (v4) : moins de 20 Ko, sans texte.
-for id in reserva inteek noor edition hero universe-consulting universe-solutions universe-edition step-field step-build step-improve contact connect-hero connect-personal connect-pro connect-code connect-data connect-partner; do
+for id in reserva inteek noor hero universe-consulting universe-solutions universe-edition step-field step-build step-improve contact connect-hero connect-personal connect-pro connect-code connect-data connect-partner; do
     file="public/assets/img/$id.svg"
     expect "$id.svg servi" 200 "$(curl -s -o /dev/null -w '%{http_code}' "$BASE_URL/assets/img/$id.svg")"
     size=$(wc -c < "$file" | tr -d ' ')
@@ -522,25 +551,35 @@ for id in reserva inteek noor edition hero universe-consulting universe-solution
 done
 for lang in fr en ar; do
     home=$(curl -s "$BASE_URL/?lang=$lang")
-    expect "accueil : huit illustrations décoratives ($lang)" 8 "$(grep -cE '<img class="illus" src="assets/img/(hero|universe-(consulting|solutions|edition)|step-(field|build|improve)|contact)\.svg" alt=""' <<< "$home")"
+    expect "accueil : huit illustrations décoratives ($lang)" 8 "$(grep -cE '<img class="illus" src="assets/img/(hero|universe-(consulting|solutions)|connect-hero|step-(field|build|improve)|contact)\.svg" alt=""' <<< "$home")"
     expect "méthode : trois étapes ($lang)" 3 "$(sed -n '/id="methode"/,/<\/section>/p' <<< "$home" | grep -c '<span class="method-num"')"
     expect "page Contact : illustration ($lang)" 1 "$(curl -s "$BASE_URL/contact.php?lang=$lang" | grep -c '<img class="illus" src="assets/img/contact.svg" alt=""')"
 done
 grep -q '\[dir="rtl"\] \.illus' public/assets/css/site.css && pass "illustrations en miroir en arabe" || fail "miroir des illustrations en arabe absent"
 for lang in fr en ar; do
-    for page in "" solutions.php; do
-        html=$(curl -s "$BASE_URL/$page?lang=$lang")
-        expect "une illustration décorative par produit (${page:-index}, $lang)" 4 "$(grep -cE '<div class="glyph"><img src="assets/img/(reserva|inteek|noor|edition)\.svg" alt=""' <<< "$html")"
-    done
+    html=$(curl -s "$BASE_URL/solutions.php?lang=$lang")
+    expect "Solutions : une illustration par carte, une pour Inteek ($lang)" "2|1" \
+        "$(grep -cE '<div class="glyph"><img src="assets/img/(reserva|noor)\.svg" alt=""' <<< "$html")|$(grep -c '<div class="inteek-visual"><img src="assets/img/inteek.svg" alt=""' <<< "$html")"
 done
 
 echo "2 nonies bis. Reserva confidentiel : aucune description sur le site"
-for page in "" solutions.php edition.php connect contact.php; do
+for page in "" consulting solutions.php edition.php connect contact.php; do
     for lang in fr en ar; do
         if curl -s "$BASE_URL/$page?lang=$lang" | grep -qE 'prise de rendez-vous|reservation booking|حجز المواعيد'; then fail "description de Reserva présente : /${page:-index} ($lang)"; else pass "aucune description de Reserva : /${page:-index} ($lang)"; fi
     done
 done
 if grep -rnE 'prise de rendez-vous|reservation booking|حجز المواعيد' lang >/dev/null; then fail "description de Reserva dans lang/"; else pass "aucune description de Reserva dans lang/"; fi
+
+echo "3 quater. Fond blanc cassé (v6)"
+grep -qE '^    --page: #F6F5F1;$' public/assets/css/site.css && grep -qE '^    background: var\(--page\);$' public/assets/css/site.css \
+    && pass "fond de page blanc cassé (--page)" || fail "fond de page : --page absent"
+# Contraste AA (4,5:1) des textes gris et des liens sur le fond de page et sur les sections grises.
+contrast=$("$PHP" -r '$css = file_get_contents("public/assets/css/site.css");
+    $v = fn ($n) => preg_match("/--$n: #([0-9A-F]{6});/i", $css, $m) ? $m[1] : "000000";
+    $l = function ($h) { $c = array_map(fn ($x) => ($x /= 255) <= 0.03928 ? $x / 12.92 : (($x + 0.055) / 1.055) ** 2.4, array_map("hexdec", str_split($h, 2))); return 0.2126 * $c[0] + 0.7152 * $c[1] + 0.0722 * $c[2]; };
+    $min = 99; foreach (["text", "muted", "link"] as $fg) { foreach (["page", "mist"] as $bg) { $a = $l($v($fg)); $b = $l($v($bg)); $min = min($min, (max($a, $b) + 0.05) / (min($a, $b) + 0.05)); } }
+    echo $min >= 4.5 ? "AA" : sprintf("%.2f", $min);')
+expect "contraste AA des textes gris et des liens" AA "$contrast"
 
 echo "4. Textes interdits"
 files=(app bin lang public database CLAUDE.md)
