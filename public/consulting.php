@@ -8,7 +8,7 @@ require ROOT_DIR . '/app/books.php';
 // Page Consulting (v6), servie à l'adresse /consulting : reprend la section Consulting de l'ancien accueil
 // (titre, introduction, cinq expertises), puis « Accompagnement et édition » : l'Édition n'est plus un onglet,
 // elle est présentée ici comme une forme d'accompagnement, les livres en bref, avec un lien vers la page Édition.
-// Aucun texte inventé : ce qui manque reste en [À FOURNIR : …] (consulting.writing).
+// Aucun texte inventé : accompagnement à l'écriture (consulting.writing) validé par Marwan en v8.
 current_page('consulting');
 $meta = ['title' => raw('meta.consulting_title'), 'description' => raw('home.univers.consulting.text')];
 
@@ -45,7 +45,7 @@ require ROOT_DIR . '/app/layout/header.php';
         <p class="eyebrow"><?= t('consulting.accomp_tag') ?></p>
         <h2 id="accompagnement-title" class="h2 h2-section"><?= t('home.ed_h') ?></h2>
         <p class="lead"><?= e(tl('home.univers')['edition']['text']) ?></p>
-        <p class="accomp-writing"><?= todo('consulting.writing') ?></p>
+        <p class="accomp-writing"><?= t('consulting.writing') ?></p>
         <ul class="shelf">
 <?php foreach ($trilogy as $book): ?>
             <li>

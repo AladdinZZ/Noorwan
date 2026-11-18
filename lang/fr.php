@@ -241,8 +241,8 @@ return [
         'tag' => 'Noorwan Consulting',
         'expertises_title' => 'Nos expertises',
         'accomp_tag' => 'Accompagnement et édition',
-        // Texte à fournir par Marwan (laissé en français dans les trois langues, surligné).
-        'writing' => '[À FOURNIR : accompagnement à l\'écriture, ce que comprend la prestation]',
+        // Accompagnement à l'écriture : texte validé par Marwan (v8, 18/11/2026), traduit dans le même ton.
+        'writing' => 'Vous avez un livre en tête, ou un manuscrit en cours. Nous vous aidons à le mener au bout : clarifier l\'idée et le plan, relire chapitre après chapitre, corriger, puis préparer la mise en page et la publication. Vous restez l\'auteur ; nous tenons le cap et le calendrier avec vous.',
     ],
     // Page Solutions : TEXTES A VALIDER PAR MARWAN. Le titre et l'introduction sont ceux de l'accueil (home.sol_h, home.sol_text).
     'solutions' => [

@@ -254,8 +254,8 @@ return [
         'tag' => 'نوروان للاستشارات',
         'expertises_title' => 'خبراتنا',
         'accomp_tag' => 'المرافقة والنشر',
-        // Texte à fournir par Marwan (laissé en français dans les trois langues, surligné).
-        'writing' => '[À FOURNIR : accompagnement à l\'écriture, ce que comprend la prestation]',
+        // Accompagnement à l'écriture : texte validé par Marwan (v8, 18/11/2026), traduit dans le même ton.
+        'writing' => 'في ذهنك كتاب، أو بين يديك مخطوط قيد الكتابة. نعينك على المضيّ به حتى غايته: نوضّح الفكرة ونرسم الخطة، ونراجع النص فصلًا بعد فصل، ونصحّح، ثم نُعِدّ الإخراج والنشر. تبقى أنت المؤلِّف؛ ونحن نُمسك معك بالدفّة ونرعى المواعيد.',
     ],
     // Page Solutions : TEXTES A VALIDER PAR MARWAN, traduction à relire par un arabophone.
     // Le titre et l'introduction sont ceux de l'accueil (home.sol_h, home.sol_text).
