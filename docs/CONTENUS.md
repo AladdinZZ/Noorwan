@@ -12,7 +12,7 @@
 | Édition | **En ligne, hors du menu depuis la v6** (pied de page et plan du site seulement ; présentée dans la page Consulting). Prestation (4 étapes **à valider**) et catalogue ; annonce Ikra.M **à valider** (27/10/2026). |
 | À propos | À rédiger (hors menu). |
 | Noorwan Connect | **Nouvelle page (v5, branche `feat/v5-noorwan-connect`)** à l'adresse `/connect`, dans le menu et le pied de page. Textes **proposés par Maestro, à valider** par Marwan. Voir « État du site au 14/11/2026 (v5) », complété par « État du site au 16/11/2026 (v5 bis) » : le site n'a plus de « Mon compte », seule cette page mène au Compte Noorwan. |
-| Contact | En ligne. |
+| Contact | En ligne. Photo de réunion depuis la v7 (branche `feat/v7-finitions`). Voir « État du site au 17/11/2026 (v7) ». |
 | Mentions légales, Confidentialité, Cookies | En ligne, **à faire relire par un juriste**. Mentions légales en cours de mise à jour (encadré). Confidentialité et Cookies réécrites en v2 pour la mesure d'audience avec accord (M-59), **à valider**. |
 
 L'état de la v2 est décrit dans « État du site au 6/11/2026 (v2) », en fin de document ; l'état en ligne avant sa fusion, dans « État du site au 27/10/2026 » (complété le 30/10/2026 par le lien « Connexion »), en fin de document. Les sections intermédiaires sont l'historique des décisions.
@@ -353,3 +353,30 @@ Brief v5 de Maestro du 14/11/2026, d'après la maquette « parcours » de Noorwa
 - Pour les entreprises partenaires, pastille « Bientôt » (sans date) : « Une entreprise hors du groupe pourra proposer « Se connecter avec Noorwan » sur son site. Ses clients entreront avec leur numéro, sans nouveau compte, et autoriseront une seule fois ce site à connaître leur nom. » ; lien « Être tenu informé » vers le formulaire (univers Solutions).
 - Bandeau final (seulement quand le Compte est en service) : « Créez votre Compte Noorwan » ; « Votre numéro de téléphone suffit. » ; « Créer mon compte ».
 - Six illustrations dessinées (`public/assets/img/connect-*.svg`, moins de 3 ko, sans texte), sans miroir en arabe : le compte relié aux services et à une place de partenaire en pointillés, un agenda sur téléphone, une entreprise et ses établissements avec son équipe, le code en six cases et une clé, un bouclier avec deux réglages et un calendrier, le site d'un partenaire avec un bouton marqué du point bleu.
+
+## État du site au 17/11/2026 (v7, branche `feat/v7-finitions`, à relire avant fusion)
+
+Brief v7 de Maestro (daté du 18/11/2026), d'après Marwan. Seuls les changements par rapport à la v6 sont listés. Textes **à valider** par Marwan ; arabe à relire par un arabophone.
+
+### Commun
+
+- **Onglet actif** : dans le menu (ordinateur et téléphone), l'onglet de la page affichée porte `aria-current="page"`. Ordinateur : texte plus gras, souligné d'un trait bleu. Téléphone : texte plus gras, trait bleu du côté où commence la lecture (à gauche, à droite en arabe). L'accueil n'a pas d'onglet actif (il n'est pas dans le menu).
+- **Photo de contact** : la réunion de trois personnes (validée par Marwan) remplace l'illustration dessinée en tête de la page Contact et dans le bandeau « Un projet en tête ? » de chaque page. WebP recadré en 3:2, 600 px (19 Ko) et 1200 px (48 Ko), le navigateur choisit ; chargée à la demande dans le bandeau. Jamais en miroir en arabe. Texte alternatif : FR « Trois personnes en réunion autour d'une table, un ordinateur portable ouvert devant elles. » ; EN « Three people in a meeting around a table, with an open laptop in front of them. » ; AR « ثلاثة أشخاص في اجتماع حول طاولة، وأمامهم حاسوب محمول مفتوح. ».
+
+### Accueil, « Pourquoi Noorwan »
+
+Le groupe n'est plus présenté comme « trois métiers » ou « trois univers » (les expertises débordent).
+
+| Avant | Après |
+|---|---|
+| Titre : « Trois métiers, une même exigence » (EN « Three trades, one standard », AR « ثلاث مهن، ومعيار واحد ») | « Une même exigence, quel que soit le projet » (EN « One standard, whatever the project », AR « معيار واحد، أيًّا كان المشروع ») |
+| Point 2, titre : « Trois univers qui se répondent » (EN « Three areas that support each other », AR « ثلاثة مجالات يكمل بعضها بعضًا ») | « Des expertises qui se répondent » (EN « Areas of expertise that support each other », AR « خبرات يكمل بعضها بعضًا ») |
+| Point 2, texte : « Conseil, logiciel et édition se nourrissent : ce que nous apprenons dans un univers sert les deux autres. » (EN « ... serves the other two. », AR « ... يخدم المجالين الآخرين. ») | « Conseil, logiciel et édition se nourrissent : ce que nous apprenons dans un domaine sert les autres. » (EN « ... serves the others. », AR « ... يخدم المجالات الأخرى. ») |
+
+Le titre vient du brief ; les deux phrases du point 2 sont une proposition de l'exécutant, **à valider**.
+
+Laissées telles quelles, car elles nomment des activités sans les compter (à trancher par Marwan) : l'introduction de l'accueil (« Nous conseillons les entreprises, nous concevons leurs logiciels et nous publions des livres. ... »), le texte de « Pourquoi Noorwan » (« Un groupe qui relie le conseil, le logiciel et l'édition avec une même méthode ... »), « C'est notre méthode pour un conseil, un logiciel ou un livre. » et le titre de l'onglet du navigateur « Noorwan : conseil, solutions et édition ». « En trois langues » et la méthode en trois étapes ne sont pas concernées.
+
+### Page Consulting
+
+Relue : aucune formule « trois métiers » ou « trois univers ». Rien de changé.

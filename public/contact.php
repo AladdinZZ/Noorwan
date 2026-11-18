@@ -61,7 +61,7 @@ require ROOT_DIR . '/app/layout/header.php';
 ?>
 <section class="page-hero" aria-labelledby="page-title">
     <div class="wrap">
-        <div class="cta-visual"><img class="illus" src="assets/img/contact.svg" alt="" width="360" height="200" decoding="async"></div>
+<?php $photoLazy = false; require ROOT_DIR . '/app/layout/contact-photo.php'; ?>
         <p class="eyebrow eyebrow-muted"><?= t('contact.tag') ?></p>
         <h1 id="page-title" class="h1 h1-page"><?= t('contact.title') ?></h1>
         <p class="lead"><?= t('contact.lead') ?></p>

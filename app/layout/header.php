@@ -8,11 +8,13 @@ declare(strict_types=1);
 // Une page par onglet (v6). « À propos » viendra avec sa propre page : il n'est pas dans le menu.
 // L'Édition n'est plus un onglet : elle est présentée dans la page Consulting ; sa page reste dans le pied de page et le plan du site.
 $navItems = [
-    ['label' => 'nav.consulting', 'href' => url('consulting')],
-    ['label' => 'nav.solutions', 'href' => url('solutions')],
-    ['label' => 'nav.connect', 'href' => url('connect')],
-    ['label' => 'nav.contact', 'href' => url('contact')],
+    ['page' => 'consulting', 'label' => 'nav.consulting', 'href' => url('consulting')],
+    ['page' => 'solutions', 'label' => 'nav.solutions', 'href' => url('solutions')],
+    ['page' => 'connect', 'label' => 'nav.connect', 'href' => url('connect')],
+    ['page' => 'contact', 'label' => 'nav.contact', 'href' => url('contact')],
 ];
+// Onglet de la page affichée : aria-current="page", mis en avant par la feuille de style (v7).
+$navCurrent = static fn (array $item): string => $item['page'] === current_page() ? ' aria-current="page"' : '';
 // Le site ne gère aucun compte : on entre dans l'écosystème depuis la page Noorwan Connect (v5 bis).
 
 $asset = static fn (string $path): string => $path . '?v=' . (string) @filemtime(ROOT_DIR . '/public/' . $path);
@@ -63,7 +65,7 @@ gtag('consent', 'update', { analytics_storage: 'granted' });
         <a class="logo" href="<?= e(url('index')) ?>" aria-label="<?= t('nav.home_label') ?>" dir="ltr">noorwan<span class="logo-dot">.</span></a>
         <nav class="nav-desktop" aria-label="<?= t('nav.main_label') ?>">
 <?php foreach ($navItems as $item): ?>
-            <a href="<?= e($item['href']) ?>"><?= t($item['label']) ?></a>
+            <a href="<?= e($item['href']) ?>"<?= $navCurrent($item) ?>><?= t($item['label']) ?></a>
 <?php endforeach; ?>
         </nav>
         <div class="header-tools">
@@ -83,7 +85,7 @@ gtag('consent', 'update', { analytics_storage: 'granted' });
     </div>
     <nav id="nav-mobile" class="nav-mobile" aria-label="<?= t('nav.mobile_label') ?>">
 <?php foreach ($navItems as $item): ?>
-        <a href="<?= e($item['href']) ?>"><?= t($item['label']) ?></a>
+        <a href="<?= e($item['href']) ?>"<?= $navCurrent($item) ?>><?= t($item['label']) ?></a>
 <?php endforeach; ?>
     </nav>
 </header>
