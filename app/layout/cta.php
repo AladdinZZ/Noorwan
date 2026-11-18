@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 // Bandeau « Un projet en tête ? » qui mène au formulaire. $ctaId : ancre de la section (facultative),
 // $ctaParams : paramètres du lien (univers présélectionné), $ctaButton : clé du libellé du bouton (facultatifs).
-// Photo de réunion (app/layout/contact-photo.php), aussi en tête de la page Contact.
+// Photo de réunion (app/layout/contact-photo.php), aussi en tête de la page Contact : après le titre sur téléphone,
+// au-dessus à partir de 768 px (v8, classe wrap-photo).
 ?>
 <section<?= isset($ctaId) ? ' id="' . e($ctaId) . '"' : '' ?> class="screen screen-mist cta" aria-labelledby="cta-title">
-    <div class="wrap">
-<?php require ROOT_DIR . '/app/layout/contact-photo.php'; ?>
+    <div class="wrap wrap-photo">
         <h2 id="cta-title" class="h2"><?= t('home.cta_h') ?></h2>
+<?php require ROOT_DIR . '/app/layout/contact-photo.php'; ?>
         <p class="lead"><?= t('home.cta_text') ?></p>
         <div class="links links-cta">
             <a class="btn btn-blue" href="<?= e(url('contact', '', $ctaParams ?? [])) ?>"><?= t($ctaButton ?? 'home.cta_btn') ?> <span aria-hidden="true"><?= t('common.arrow') ?></span></a>

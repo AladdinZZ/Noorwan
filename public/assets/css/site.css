@@ -1030,10 +1030,24 @@ main:focus {
 
 .cta-visual {
     width: min(100%, 520px);
-    margin: 0 auto 32px;
+    margin: 28px auto 0;
     aspect-ratio: 3 / 2;
     border-radius: 20px;
     overflow: hidden;
+}
+
+/* v8 : sur téléphone, le titre vient avant la photo (ordre du document) ;
+   à partir de 768 px, la photo repasse au-dessus, comme avant. */
+@media (min-width: 768px) {
+    .wrap-photo {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .wrap-photo > .cta-visual {
+        order: -1;
+        margin: 0 auto 32px;
+    }
 }
 
 /* Photo : recadrée sans déformation, jamais en miroir (contrairement aux illustrations dessinées). */

@@ -7,7 +7,7 @@ declare(strict_types=1);
 return [
     'meta' => [
         'home_title' => 'Noorwan : conseil, solutions et édition',
-        'home_description' => 'Nous conseillons les entreprises, nous concevons leurs logiciels et nous publions des livres. Toujours de la même façon : partir d\'un besoin réel, livrer vite, améliorer ensuite.',
+        'home_description' => 'Partir d\'un besoin réel, livrer vite, améliorer ensuite.',
         'edition_title' => 'Édition | Noorwan',
         'edition_description' => 'Noorwan Édition accompagne les auteurs jusqu\'à la publication sur Amazon et publie ses collections {méta}Physique et Chemins de l\'Âme.',
         'solutions_title' => 'Solutions | Noorwan',
@@ -60,7 +60,7 @@ return [
         'cookies' => 'Cookies',
     ],
     'home' => [
-        'lead' => 'Nous conseillons les entreprises, nous concevons leurs logiciels et nous publions des livres. Toujours de la même façon : partir d\'un besoin réel, livrer vite, améliorer ensuite.',
+        'lead' => 'Partir d\'un besoin réel, livrer vite, améliorer ensuite.',
         'btn_explore' => 'Découvrir nos expertises',
         'btn_talk' => 'Parlons de votre projet',
         'motto' => 'Une vision claire. Des étapes concrètes.',
@@ -69,18 +69,17 @@ return [
             'solutions' => ['title' => 'Solutions', 'text' => 'Des logiciels pour les tâches qui reviennent chaque jour : réservation, ressources humaines, intelligence artificielle. Sur téléphone d\'abord, en trois langues.'],
             'edition' => ['title' => 'Édition', 'text' => 'De la relecture du manuscrit à la mise en ligne sur Amazon, nous accompagnons les auteurs. Et nous publions nos propres collections.'],
         ],
-        // A VALIDER PAR MARWAN : phrase d'auteur (d'après les présentations d'Harmonie et de Lumière) et « Pourquoi Noorwan » (v3 ; v7 : plus de « trois métiers » ni « trois univers »).
+        // A VALIDER PAR MARWAN : phrase d'auteur (d'après les présentations d'Harmonie et de Lumière) et « Pourquoi Noorwan » (v3 ; v7 : plus de « trois métiers » ni « trois univers » ; v8 : point 2 « Nos savoir-faire », phrases qui nommaient conseil, logiciel et édition retirées).
         'author_line' => 'Une trilogie entre science et spiritualité : de l\'origine du monde à la conscience humaine, elle cherche le fil qui relie la raison, la foi et le mystère.',
         'why_h' => 'Une même exigence, quel que soit le projet',
         'why_eyebrow' => 'Pourquoi Noorwan',
-        'why_text' => 'Un groupe qui relie le conseil, le logiciel et l\'édition avec une même méthode : partir du besoin réel et livrer ce qui sert.',
+        'why_text' => 'Partir du besoin réel et livrer ce qui sert.',
         'why_points' => [
             ['title' => 'Né à Djibouti, ouvert sur le monde', 'text' => 'Noorwan est né à Djibouti et se construit avec une vocation internationale.'],
-            ['title' => 'Des expertises qui se répondent', 'text' => 'Conseil, logiciel et édition se nourrissent : ce que nous apprenons dans un domaine sert les autres.'],
+            ['title' => 'Nos savoir-faire', 'text' => 'Ce que nous apprenons dans un domaine sert les autres.'],
             ['title' => 'Des outils pensés pour l\'Afrique', 'text' => 'Nos solutions sont conçues pour le téléphone d\'abord, en français, en anglais et en arabe.'],
         ],
         'app_h' => 'De l\'idée à l\'action',
-        'app_lead' => 'C\'est notre méthode pour un conseil, un logiciel ou un livre.',
         'steps' => [
             ['title' => 'Partir du terrain', 'text' => 'Nous regardons d\'abord comment vous travaillez aujourd\'hui et ce qui vous fait perdre du temps. Le besoin réel passe avant l\'idée.'],
             ['title' => 'Construire vite', 'text' => 'Une première version simple, mise rapidement entre les mains des personnes qui s\'en serviront. On apprend plus en l\'utilisant qu\'en la décrivant.'],
@@ -242,8 +241,8 @@ return [
         'tag' => 'Noorwan Consulting',
         'expertises_title' => 'Nos expertises',
         'accomp_tag' => 'Accompagnement et édition',
-        // Texte à fournir par Marwan (laissé en français dans les trois langues, surligné).
-        'writing' => '[À FOURNIR : accompagnement à l\'écriture, ce que comprend la prestation]',
+        // Accompagnement à l'écriture : texte validé par Marwan (v8, 18/11/2026), traduit dans le même ton.
+        'writing' => 'Vous avez un livre en tête, ou un manuscrit en cours. Nous vous aidons à le mener au bout : clarifier l\'idée et le plan, relire chapitre après chapitre, corriger, puis préparer la mise en page et la publication. Vous restez l\'auteur ; nous tenons le cap et le calendrier avec vous.',
     ],
     // Page Solutions : TEXTES A VALIDER PAR MARWAN. Le titre et l'introduction sont ceux de l'accueil (home.sol_h, home.sol_text).
     'solutions' => [

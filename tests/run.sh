@@ -180,7 +180,9 @@ for lang in fr en ar; do
         "$(grep -c '<img class="cover"' <<< "$section")|$(grep -c 'class="cover-soon"' <<< "$section")"
     grep -q "href=\"edition.php?lang=$lang\"" <<< "$section" && pass "lien vers la page Édition ($lang)" || fail "lien vers la page Édition ($lang)"
     grep -q "href=\"contact.php?lang=$lang&amp;universe=edition\"" <<< "$section" && pass "« Publier votre livre » vers le formulaire ($lang)" || fail "lien Publier votre livre ($lang)"
-    expect "accompagnement à l'écriture : un texte à fournir, surligné ($lang)" 1 "$(grep -c '<mark class="todo">\[À FOURNIR : accompagnement à l&apos;écriture' <<< "$html")"
+    # v8 : texte de l'accompagnement à l'écriture validé par Marwan, plus rien de surligné.
+    expect "accompagnement à l'écriture : texte validé, non surligné ($lang)" "1|0" \
+        "$(grep -c "<p class=\"accomp-writing\">$(by_lang "$lang" "Vous avez un livre en tête, ou un manuscrit en cours." "You have a book in mind, or a manuscript under way." "في ذهنك كتاب، أو بين يديك مخطوط قيد الكتابة.")" <<< "$section")|$(grep -c '<mark class="todo">' <<< "$html")"
     grep -q "href=\"contact.php?lang=$lang&amp;universe=consulting\"" <<< "$html" && pass "contact, univers Consulting ($lang)" || fail "lien de contact Consulting ($lang)"
     if sed -n '/<nav class="nav-desktop"/,/<\/nav>/p' <<< "$html" | grep -q 'edition.php'; then fail "Édition encore dans le menu ($lang)"; else pass "Édition hors du menu ($lang)"; fi
 done
@@ -592,6 +594,28 @@ for lang in fr en ar; do
     expect "Solutions : une illustration par carte, une pour Inteek ($lang)" "2|1" \
         "$(grep -cE '<div class="glyph"><img src="assets/img/(reserva|noor)\.svg" alt=""' <<< "$html")|$(grep -c '<div class="inteek-visual"><img src="assets/img/inteek.svg" alt=""' <<< "$html")"
 done
+
+echo "« Nos savoir-faire », phrases retirées, titre de contact avant la photo sur téléphone (v8)"
+# Plus aucun texte « À FOURNIR » dans les chaînes du site (le dernier, l'accompagnement à l'écriture, est fourni en v8).
+expect "aucun « À FOURNIR » restant dans lang/" 0 "$(cat lang/*.php | grep -c 'À FOURNIR')"
+for lang in fr en ar; do
+    home=$(curl -s "$BASE_URL/?lang=$lang")
+    why=$(sed -n '/aria-labelledby="why-title"/,/<\/section>/p' <<< "$home")
+    expect "point 2 de « Pourquoi Noorwan » : « Nos savoir-faire » ($lang)" 1 \
+        "$(grep -c "<li><strong>$(by_lang "$lang" "Nos savoir-faire" "What we do best" "خبراتنا")</strong>" <<< "$why")"
+    removed=$(by_lang "$lang" 'Nous conseillons les entreprises|relie le conseil|se nourrissent|notre méthode pour' \
+        'We advise businesses|brings together consulting|feed each other|This is our method' \
+        'نقدّم الاستشارات للمؤسسات|تجمع الاستشارات والبرمجيات|تتغذى الاستشارات|هذا منهجنا')
+    expect "accueil : plus de phrase qui nomme conseil, logiciel et édition ($lang)" 0 "$(grep -cE "$removed" <<< "$home")"
+    expect "méthode : plus de paragraphe d'introduction ($lang)" 0 "$(sed -n '/id="methode"/,/<\/section>/p' <<< "$home" | grep -c '<p class="lead">')"
+    # Ordre du document = ordre sur téléphone : titre, puis photo.
+    expect "bandeau de contact : titre puis photo ($lang)" "cta-title|cta-visual" \
+        "$(sed -n '/class="screen screen-mist cta"/,/<\/section>/p' <<< "$home" | grep -oE 'id="cta-title"|class="cta-visual"' | sed -E 's/(id|class)="([^"]+)"/\2/' | paste -sd '|' -)"
+    expect "page Contact : titre puis photo ($lang)" "page-title|cta-visual" \
+        "$(curl -s "$BASE_URL/contact.php?lang=$lang" | sed -n '/<section class="page-hero"/,/<\/section>/p' | grep -oE 'id="page-title"|class="cta-visual"' | sed -E 's/(id|class)="([^"]+)"/\2/' | paste -sd '|' -)"
+done
+sed -n '/@media (min-width: 768px) {/,/^}/p' public/assets/css/site.css | grep -A3 '\.wrap-photo > \.cta-visual' | grep -q 'order: -1' \
+    && pass "à partir de 768 px, la photo repasse au-dessus du titre" || fail "ordre de la photo sur grand écran"
 
 echo "2 nonies bis. Reserva confidentiel : aucune description sur le site"
 for page in "" consulting solutions.php edition.php connect contact.php; do

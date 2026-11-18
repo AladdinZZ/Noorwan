@@ -380,3 +380,33 @@ Laissées telles quelles, car elles nomment des activités sans les compter (à 
 ### Page Consulting
 
 Relue : aucune formule « trois métiers » ou « trois univers ». Rien de changé.
+
+## État du site au 18/11/2026 (v8, branche `feat/v8-savoir-faire`, à relire avant fusion)
+
+Brief v8 de Maestro (18/11/2026), réponses de Marwan du jour. Seuls les changements par rapport à la v7 sont listés. Arabe à relire par un arabophone.
+
+### Accueil
+
+| Où | Avant (v7) | Après (v8) |
+|---|---|---|
+| « Pourquoi Noorwan », point 2, titre | « Des expertises qui se répondent » (EN « Areas of expertise that support each other », AR « خبرات يكمل بعضها بعضًا ») | « Nos savoir-faire » (EN « What we do best », AR « خبراتنا »), décision de Marwan |
+| Introduction (et description pour les moteurs de recherche) | « Nous conseillons les entreprises, nous concevons leurs logiciels et nous publions des livres. Toujours de la même façon : partir d'un besoin réel, livrer vite, améliorer ensuite. » | « Partir d'un besoin réel, livrer vite, améliorer ensuite. » (EN « Start from a real need, deliver fast, improve afterwards. », AR « ننطلق من حاجة حقيقية، ونُنجز بسرعة، ثم نحسّن. ») |
+| « Pourquoi Noorwan », texte | « Un groupe qui relie le conseil, le logiciel et l'édition avec une même méthode : partir du besoin réel et livrer ce qui sert. » | « Partir du besoin réel et livrer ce qui sert. » (EN « Start from the real need and deliver what helps. », AR « الانطلاق من الحاجة الحقيقية وتقديم ما ينفع. ») |
+| « Pourquoi Noorwan », point 2, texte | « Conseil, logiciel et édition se nourrissent : ce que nous apprenons dans un domaine sert les autres. » | « Ce que nous apprenons dans un domaine sert les autres. » (EN « What we learn in one area serves the others. », AR « ما نتعلمه في مجال يخدم المجالات الأخرى. ») |
+| « De l'idée à l'action », introduction | « C'est notre méthode pour un conseil, un logiciel ou un livre. » | Retirée (le titre est suivi directement des trois étapes) |
+
+Les quatre phrases qui nommaient conseil, logiciel et édition sont retirées sans rien écrire à leur place (décision de Marwan) : seule la partie qui les nommait est supprimée, le reste de la phrase est gardé tel quel, majuscule initiale comprise. Le titre de l'onglet du navigateur, « Noorwan : conseil, solutions et édition », n'est pas une de ces phrases : inchangé.
+
+### Bandeau « Un projet en tête ? » et page Contact
+
+Sur téléphone, le titre passe avant la photo, la photo ensuite ; à partir de 768 px, la photo reste au-dessus du titre, comme en v7.
+
+### Page Consulting, « Accompagnement et édition »
+
+Le texte à fournir sur l'accompagnement à l'écriture est remplacé par le texte validé par Marwan, et n'est plus surligné :
+
+- FR : « Vous avez un livre en tête, ou un manuscrit en cours. Nous vous aidons à le mener au bout : clarifier l'idée et le plan, relire chapitre après chapitre, corriger, puis préparer la mise en page et la publication. Vous restez l'auteur ; nous tenons le cap et le calendrier avec vous. »
+- EN : « You have a book in mind, or a manuscript under way. We help you see it through: clarifying the idea and the outline, reading it chapter after chapter, correcting, then preparing the layout and the publication. You remain the author; we keep it on course and on schedule with you. »
+- AR (littéraire, à relire) : « في ذهنك كتاب، أو بين يديك مخطوط قيد الكتابة. نعينك على المضيّ به حتى غايته: نوضّح الفكرة ونرسم الخطة، ونراجع النص فصلًا بعد فصل، ونصحّح، ثم نُعِدّ الإخراج والنشر. تبقى أنت المؤلِّف؛ ونحن نُمسك معك بالدفّة ونرعى المواعيد. »
+
+Il ne reste plus aucun texte « À FOURNIR » sur le site.
