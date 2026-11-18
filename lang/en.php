@@ -7,7 +7,7 @@ declare(strict_types=1);
 return [
     'meta' => [
         'home_title' => 'Noorwan: consulting, solutions and publishing',
-        'home_description' => 'We advise businesses, build their software and publish books. Always the same way: start from a real need, deliver fast, improve afterwards.',
+        'home_description' => 'Start from a real need, deliver fast, improve afterwards.',
         'edition_title' => 'Publishing | Noorwan',
         'edition_description' => 'Noorwan Publishing guides authors all the way to publication on Amazon and publishes its {méta}Physique and Chemins de l\'Âme collections.',
         'solutions_title' => 'Solutions | Noorwan',
@@ -60,7 +60,7 @@ return [
         'cookies' => 'Cookies',
     ],
     'home' => [
-        'lead' => 'We advise businesses, build their software and publish books. Always the same way: start from a real need, deliver fast, improve afterwards.',
+        'lead' => 'Start from a real need, deliver fast, improve afterwards.',
         'btn_explore' => 'Explore our expertise',
         'btn_talk' => 'Let\'s talk about your project',
         'motto' => 'A clear vision. Concrete steps.',
@@ -73,14 +73,13 @@ return [
         'author_line' => 'A trilogy between science and spirituality: from the origin of the world to human consciousness, it seeks the thread that links reason, faith and mystery.',
         'why_h' => 'One standard, whatever the project',
         'why_eyebrow' => 'Why Noorwan',
-        'why_text' => 'A group that brings together consulting, software and publishing with one method: start from the real need and deliver what helps.',
+        'why_text' => 'Start from the real need and deliver what helps.',
         'why_points' => [
             ['title' => 'Born in Djibouti, open to the world', 'text' => 'Noorwan was born in Djibouti and is growing with an international outlook.'],
-            ['title' => 'Areas of expertise that support each other', 'text' => 'Consulting, software and publishing feed each other: what we learn in one area serves the others.'],
+            ['title' => 'What we do best', 'text' => 'What we learn in one area serves the others.'],
             ['title' => 'Tools designed for Africa', 'text' => 'Our solutions are built for the phone first, in French, English and Arabic.'],
         ],
         'app_h' => 'From idea to action',
-        'app_lead' => 'This is our method, for advice, software or a book.',
         'steps' => [
             ['title' => 'Start from the field', 'text' => 'We first look at how you work today and what wastes your time. The real need comes before the idea.'],
             ['title' => 'Build fast', 'text' => 'A simple first version, put quickly in the hands of the people who will use it. You learn more by using it than by describing it.'],

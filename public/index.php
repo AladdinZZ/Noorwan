@@ -73,7 +73,6 @@ require ROOT_DIR . '/app/layout/header.php';
 <section id="methode" class="screen method" aria-labelledby="method-title">
     <div class="wrap">
         <h2 id="method-title" class="h2"><?= t('home.app_h') ?></h2>
-        <p class="lead"><?= t('home.app_lead') ?></p>
         <ol class="method-steps">
 <?php foreach (tl('home.steps') as $i => $step): ?>
             <li>
