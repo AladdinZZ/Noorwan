@@ -172,7 +172,17 @@ for lang in fr en ar; do
     html=$(curl -s "$BASE_URL/consulting?lang=$lang")
     grep -q "<link rel=\"canonical\" href=\"[^\"]*/consulting?lang=$lang\">" <<< "$html" && pass "adresse canonique /consulting ($lang)" || fail "adresse canonique /consulting ($lang)"
     grep -qF "<h1 id=\"page-title\" class=\"h1 h1-page\">$(by_lang "$lang" "Clarifier avant d&apos;accélérer." "Clarify before you accelerate." "التوضيح قبل التسريع.")</h1>" <<< "$html" && pass "titre ($lang)" || fail "titre de la page Consulting ($lang)"
-    expect "cinq expertises ($lang)" 5 "$(sed -n '/<ul class="expertises">/,/<\/ul>/p' <<< "$html" | grep -c '<li>')"
+    # Expertises illustrées (variante 1) : cinq cartes à pictogramme, puis la carte sombre « Clarifier avant d'accélérer. ».
+    expertises=$(sed -n '/<ul class="expertises">/,/<\/ul>/p' <<< "$html")
+    expect "cinq expertises et une carte sombre ($lang)" "5|1" \
+        "$(grep -c '<li class="expertise">' <<< "$expertises")|$(grep -c '<li class="expertise expertise-motto">' <<< "$expertises")"
+    expect "un pictogramme par expertise, clair et sombre dans le même <picture>, sans miroir ($lang)" "strategy|marketing|ecommerce|web|training" \
+        "$(grep -oE '<source srcset="assets/img/expertises/[a-z]+-dark\.svg" media="\(prefers-color-scheme: dark\)" data-theme-media="dark"><img class="expertise-icon" src="assets/img/expertises/[a-z]+\.svg" alt="" width="64" height="64"' <<< "$expertises" \
+            | sed -E 's/.*expertises\/([a-z]+)-dark\.svg.*expertises\/([a-z]+)\.svg.*/\1 \2/' | awk '$1 == $2 { print $1 }' | paste -sd '|' -)"
+    motto=$(sed -n '/expertise-motto/,/<\/li>/p' <<< "$expertises")
+    expect "carte sombre : titre et ligne d'explication ($lang)" "1|1" \
+        "$(grep -cF "<strong>$(by_lang "$lang" "Clarifier avant d&apos;accélérer." "Clarify before you accelerate." "التوضيح قبل التسريع.")</strong>" <<< "$motto")|$(grep -c '<span>' <<< "$motto")"
+    expect "plus de note sous les expertises ($lang)" 0 "$(grep -c 'class="universe-note"' <<< "$html")"
     section=$(sed -n '/<section id="accompagnement"/,/<\/section>/p' <<< "$html")
     tag=$(by_lang "$lang" "Accompagnement et édition" "Support and publishing" "المرافقة والنشر")
     grep -q "<p class=\"eyebrow\">$tag</p>" <<< "$section" && pass "« $tag » ($lang)" || fail "petit titre « $tag » ($lang)"
@@ -564,6 +574,19 @@ for lang in fr en ar; do
     expect "page Contact : photo avec texte alternatif ($lang)" 1 "$(curl -s "$BASE_URL/contact.php?lang=$lang" | grep -F "$photo" | grep -v 'loading="lazy"' | grep -c "alt=\"$alt")"
     if grep -q 'contact\.svg' <<< "$home"; then fail "ancienne illustration de contact encore sur l'accueil ($lang)"; else pass "ancienne illustration de contact retirée ($lang)"; fi
 done
+# Pictogrammes des expertises (variante 1) : couleurs du Consulting, version sombre aux couleurs de la planche, jamais en miroir.
+for id in strategy marketing ecommerce web training; do
+    for variant in "$id" "$id-dark"; do
+        file="public/assets/img/expertises/$variant.svg"
+        expect "expertises/$variant.svg servi" 200 "$(curl -s -o /dev/null -w '%{http_code}' "$BASE_URL/assets/img/expertises/$variant.svg")"
+        expect "expertises/$variant.svg sans texte ni image externe ni script" 0 "$(grep -ciE '<text|<image|href=|<script' "$file")"
+    done
+    expect "expertises/$id.svg : trait, accent et pastille du Consulting" "1|1|1" \
+        "$(grep -c '#A8915F' "public/assets/img/expertises/$id.svg")|$(grep -c '#6F5B2E' "public/assets/img/expertises/$id.svg")|$(grep -c 'fill="#F3EEE3"' "public/assets/img/expertises/$id.svg")"
+    expect "expertises/$id-dark.svg : trait, accent et pastille sombres" "1|1|1|0" \
+        "$(grep -c '#CDB98A' "public/assets/img/expertises/$id-dark.svg")|$(grep -c '#E6D3A3' "public/assets/img/expertises/$id-dark.svg")|$(grep -c 'fill="#2A2A2C"' "public/assets/img/expertises/$id-dark.svg")|$(grep -ciE '#(A8915F|6F5B2E|F3EEE3)' "public/assets/img/expertises/$id-dark.svg")"
+done
+if grep -qE '\[dir="rtl"\][^{]*\.expertise-icon' public/assets/css/site.css; then fail "pictogrammes des expertises retournés en arabe"; else pass "pictogrammes des expertises sans miroir en arabe"; fi
 grep -q '\[dir="rtl"\] \.illus' public/assets/css/site.css && pass "illustrations en miroir en arabe" || fail "miroir des illustrations en arabe absent"
 for width in 600 1200; do
     file="public/assets/img/contact-reunion-$width.webp"
