@@ -25,7 +25,7 @@ require ROOT_DIR . '/app/layout/header.php';
         <p class="lead"><?= t('home.cons_lead') ?></p>
         <p class="links"><a class="btn btn-dark" href="<?= e(url('contact', '', ['universe' => 'consulting'])) ?>"><?= t('home.btn_talk') ?> <span aria-hidden="true"><?= t('common.arrow') ?></span></a></p>
     </div>
-    <div class="shape"><img class="illus" src="assets/img/universe-consulting.svg" alt="" width="760" height="380" decoding="async"></div>
+    <div class="shape"><?= illustration('universe-consulting', 'illus', 760, 380, ['decoding' => 'async']) ?></div>
 </section>
 
 <section id="expertises" class="section section-mist tone-consulting" aria-labelledby="expertises-title">

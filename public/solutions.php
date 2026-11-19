@@ -53,7 +53,7 @@ require ROOT_DIR . '/app/layout/header.php';
             <li><?= e($module) ?></li>
 <?php endforeach; ?>
         </ul>
-        <div class="inteek-visual"><img src="assets/img/inteek.svg" alt="" width="360" height="260" loading="lazy" decoding="async"></div>
+        <div class="inteek-visual"><?= illustration('inteek', '', 360, 260, ['loading' => 'lazy', 'decoding' => 'async']) ?></div>
     </div>
 </section>
 

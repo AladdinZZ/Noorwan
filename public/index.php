@@ -31,7 +31,7 @@ require ROOT_DIR . '/app/layout/header.php';
             <a class="more" href="<?= e(url('index', 'contact')) ?>"><?= t('home.btn_talk') ?></a>
         </p>
     </div>
-    <div class="hero-visual"><img class="illus" src="assets/img/hero.svg" alt="" width="1600" height="1000" fetchpriority="high" decoding="async"></div>
+    <div class="hero-visual"><?= illustration('hero', 'illus', 1600, 1000, ['fetchpriority' => 'high', 'decoding' => 'async']) ?></div>
 </section>
 
 <div id="univers">
@@ -44,7 +44,7 @@ require ROOT_DIR . '/app/layout/header.php';
         <p class="lead"><?= e($universes['consulting']['text']) ?></p>
         <p class="links"><a class="more" href="<?= e(url('consulting')) ?>"><?= t('common.learn_more') ?></a></p>
     </div>
-    <div class="shape"><img class="illus" src="assets/img/universe-consulting.svg" alt="" width="760" height="380" loading="lazy" decoding="async"></div>
+    <div class="shape"><?= illustration('universe-consulting', 'illus', 760, 380, ['loading' => 'lazy', 'decoding' => 'async']) ?></div>
 </section>
 
 <section id="solutions" class="screen universe screen-dark tone-solutions" aria-labelledby="solutions-title">
@@ -55,7 +55,7 @@ require ROOT_DIR . '/app/layout/header.php';
         <p class="lead"><?= e($universes['solutions']['text']) ?></p>
         <p class="links"><a class="more" href="<?= e(url('solutions')) ?>"><?= t('common.learn_more') ?></a></p>
     </div>
-    <div class="shape"><img class="illus" src="assets/img/universe-solutions.svg" alt="" width="760" height="380" loading="lazy" decoding="async"></div>
+    <div class="shape"><?= illustration('universe-solutions', 'illus', 760, 380, ['loading' => 'lazy', 'decoding' => 'async']) ?></div>
 </section>
 
 <section id="connect" class="screen universe screen-mist tone-connect" aria-labelledby="connect-title">
@@ -66,7 +66,7 @@ require ROOT_DIR . '/app/layout/header.php';
         <p class="lead"><?= t('connect.lead') ?></p>
         <p class="links"><a class="more" href="<?= e(url('connect')) ?>"><?= t('common.learn_more') ?></a></p>
     </div>
-    <div class="shape"><img class="illus" src="assets/img/connect-hero.svg" alt="" width="640" height="400" loading="lazy" decoding="async"></div>
+    <div class="shape"><?= illustration('connect-hero', 'illus', 640, 400, ['loading' => 'lazy', 'decoding' => 'async']) ?></div>
 </section>
 </div>
 
@@ -76,7 +76,7 @@ require ROOT_DIR . '/app/layout/header.php';
         <ol class="method-steps">
 <?php foreach (tl('home.steps') as $i => $step): ?>
             <li>
-                <div class="step-visual"><img class="illus" src="assets/img/step-<?= e($stepVisuals[$i]) ?>.svg" alt="" width="320" height="220" loading="lazy" decoding="async"></div>
+                <div class="step-visual"><?= illustration('step-' . $stepVisuals[$i], 'illus', 320, 220, ['loading' => 'lazy', 'decoding' => 'async']) ?></div>
                 <span class="method-num" aria-hidden="true"><?= $i + 1 ?></span>
                 <strong><?= e($step['title']) ?></strong>
                 <span class="step-text"><?= e($step['text']) ?></span>
