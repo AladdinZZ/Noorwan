@@ -37,6 +37,8 @@ return [
         'footer_label' => 'Footer',
         'lang_label' => 'Language',
         'menu' => 'Menu',
+        'theme_to_dark' => 'Switch to dark',
+        'theme_to_light' => 'Switch to light',
     ],
     'common' => [
         'foot_line' => 'Ideas for concrete solutions.',

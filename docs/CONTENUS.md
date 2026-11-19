@@ -410,3 +410,11 @@ Le texte à fournir sur l'accompagnement à l'écriture est remplacé par le tex
 - AR (littéraire, à relire) : « في ذهنك كتاب، أو بين يديك مخطوط قيد الكتابة. نعينك على المضيّ به حتى غايته: نوضّح الفكرة ونرسم الخطة، ونراجع النص فصلًا بعد فصل، ونصحّح، ثم نُعِدّ الإخراج والنشر. تبقى أنت المؤلِّف؛ ونحن نُمسك معك بالدفّة ونرعى المواعيد. »
 
 Il ne reste plus aucun texte « À FOURNIR » sur le site.
+
+## État du site au 19/11/2026 (v9, branche `feat/theme-sombre`, à relire avant fusion)
+
+Brief « thème sombre » de Maestro (19/11/2026), demande de Marwan. Aucun texte de page ne change ; la phrase de la v6 « Le site n'a pas de thème sombre » ne vaut plus.
+
+- **Thème sombre sur tout le site**, couleurs de la charte (page 4) : page `#000000`, brume `#111113`, papier `#1C1C1E`, traits `#2A2A2C` et `#3A3A3C`, encre `#F5F5F7`, texte `#A1A1A6`, discret `#8E8E93`, lien `#2997FF` ; univers en sombre : Consulting fond `#2A2418` texte `#D9C49A`, Solutions `#1A2230` et `#A9BCD6`, Édition `#2C1C20` et `#D9A5AE` ; erreur `#FF6B60`, réussite `#4CD47A`. Bleu action, or et sections déjà noires inchangés. Point du logotype en `#2997FF`. Contrastes AA notés dans `site.css` et contrôlés par `tests/run.sh`.
+- **Illustrations** : chaque dessin a sa version sombre (`<nom>-dark.svg`, produite par `bin/illustrations-dark.php` à partir du dessin clair, couleurs seulement). Les deux dessins faits pour le fond noir (Noor, « sans mot de passe ») sont repris tels quels.
+- **Bascule** : bouton rond (soleil en clair, croissant de lune en sombre) à côté du choix de langue, et ligne « Passer en sombre » / « Passer en clair » dans le menu sur téléphone (EN « Switch to dark » / « Switch to light », AR « التبديل إلى الوضع الداكن » / « التبديل إلى الوضع الفاتح », à relire). À l'arrivée, le site suit l'appareil. Un choix différent de l'appareil est gardé dans le navigateur (`localStorage`, clé `nw-theme`, aucun cookie) ; un choix qui redevient celui de l'appareil est oublié, y compris quand l'appareil change de lui-même.

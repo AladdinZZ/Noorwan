@@ -25,7 +25,7 @@ $block = static function (string $id, string $class, string $key, string $image,
         <p class="eyebrow"><?= t('connect.' . $key . '_tag') ?></p>
         <h2 id="<?= e($id) ?>-title" class="h2 h2-section"><?= t('connect.' . $key . '_h') ?></h2>
         <p class="lead"><?= t('connect.' . $key . '_text') ?></p>
-        <div class="connect-visual"><img class="illus" src="assets/img/<?= e($image) ?>.svg" alt="" width="320" height="220" loading="lazy" decoding="async"></div>
+        <div class="connect-visual"><?= illustration($image, 'illus', 320, 220, ['loading' => 'lazy', 'decoding' => 'async']) ?></div>
         <ol class="<?= e($listClass) ?>">
 <?php foreach (tl('connect.' . $pointsKey) as $i => $point): ?>
             <li>
@@ -56,7 +56,7 @@ require ROOT_DIR . '/app/layout/header.php';
         <p class="connect-already"><a href="<?= e($accountUrl) ?>"><?= t('connect.already') ?></a></p>
 <?php endif; ?>
     </div>
-    <div class="hero-visual connect-hero-visual"><img class="illus" src="assets/img/connect-hero.svg" alt="" width="640" height="400" decoding="async"></div>
+    <div class="hero-visual connect-hero-visual"><?= illustration('connect-hero', 'illus', 640, 400, ['decoding' => 'async']) ?></div>
 </section>
 
 <?php
@@ -71,7 +71,7 @@ $block('donnees', 'connect-section', 'data', 'connect-data', 'data_points');
         <p class="badge-soon"><?= t('connect.partner_tag') ?></p>
         <h2 id="partenaires-title" class="h2 h2-section"><?= t('connect.partner_h') ?></h2>
         <p class="lead"><?= t('connect.partner_text') ?></p>
-        <div class="connect-visual"><img class="illus" src="assets/img/connect-partner.svg" alt="" width="320" height="220" loading="lazy" decoding="async"></div>
+        <div class="connect-visual"><?= illustration('connect-partner', 'illus', 320, 220, ['loading' => 'lazy', 'decoding' => 'async']) ?></div>
         <p class="links"><a class="more" href="<?= e(url('contact', '', ['universe' => 'solutions'])) ?>"><?= t('connect.partner_btn') ?></a></p>
     </div>
 </section>

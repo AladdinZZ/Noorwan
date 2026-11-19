@@ -77,6 +77,23 @@ function e(string|int|float|null $value): string
     return htmlspecialchars((string) $value, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML5, 'UTF-8');
 }
 
+/**
+ * Illustration décorative (assets/img/<nom>.svg) et sa version sombre (<nom>-dark.svg, bin/illustrations-dark.php).
+ * La version sombre suit l'appareil par media ; theme-init.js réécrit ce media quand le visiteur a choisi un thème.
+ * $attributes : attributs ajoutés à l'image après la taille (loading, decoding, fetchpriority).
+ */
+function illustration(string $name, string $class, int $width, int $height, array $attributes = []): string
+{
+    $extra = '';
+    foreach ($attributes as $attribute => $value) {
+        $extra .= ' ' . e($attribute) . '="' . e($value) . '"';
+    }
+
+    return '<picture><source srcset="assets/img/' . e($name) . '-dark.svg" media="(prefers-color-scheme: dark)" data-theme-media="dark">'
+        . '<img' . ($class !== '' ? ' class="' . e($class) . '"' : '') . ' src="assets/img/' . e($name) . '.svg" alt="" width="' . $width
+        . '" height="' . $height . '"' . $extra . '></picture>';
+}
+
 // Compte Noorwan (compte.noorwan.com) : adresse et affichage des liens « Créer mon compte » et « J'ai déjà un compte » de la page Noorwan Connect.
 // Le lien reste masqué tant que COMPTE_LINK_ENABLED ne vaut pas « true » dans .env.
 // Un script peut définir ces constantes avant l'amorçage (tests/run.sh, pour les deux états).

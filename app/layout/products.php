@@ -27,7 +27,7 @@ $productTones = ['reserva' => 'light', 'noor' => 'dark'];
         <p class="product-text"><?= e($product['text']) ?></p>
 <?php endif; ?>
         <p class="links"><a class="more" href="<?= e($productLinks[$productId]['href']) ?>"><?= t($productLinks[$productId]['label']) ?></a></p>
-        <div class="glyph"><img src="assets/img/<?= e($productId) ?>.svg" alt="" width="360" height="260" loading="lazy" decoding="async"></div>
+        <div class="glyph"><?= illustration($productId, '', 360, 260, ['loading' => 'lazy', 'decoding' => 'async']) ?></div>
     </article>
 <?php endforeach; ?>
 </div>

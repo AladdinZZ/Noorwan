@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 220" fill="none">
+  <!-- Professionnels : une entreprise et ses établissements (une boutique, une agence), et son équipe. Aucun texte. -->
+  <path d="M20 200h280" stroke="#3A3A3C" stroke-width="3" stroke-linecap="round"/>
+  <rect x="116" y="44" width="88" height="156" rx="6" fill="#3D5A80"/>
+  <g fill="#9DB2CF">
+    <rect x="130" y="60" width="22" height="18" rx="3"/><rect x="168" y="60" width="22" height="18" rx="3"/>
+    <rect x="130" y="90" width="22" height="18" rx="3"/><rect x="168" y="90" width="22" height="18" rx="3"/>
+    <rect x="130" y="120" width="22" height="18" rx="3"/><rect x="168" y="120" width="22" height="18" rx="3"/>
+  </g>
+  <rect x="146" y="160" width="28" height="40" rx="3" fill="#1A2230"/>
+  <rect x="24" y="132" width="66" height="68" rx="5" fill="#2A2418"/>
+  <path d="M20 132h74l-8-20H28z" fill="#A8915F"/>
+  <path d="M28 132a8 8 0 0 0 16 0a8 8 0 0 0 16 0a8 8 0 0 0 16 0a8 8 0 0 0 14 0" fill="#6F5B2E"/>
+  <rect x="34" y="152" width="22" height="48" rx="3" fill="#1C1C1E"/>
+  <rect x="62" y="152" width="20" height="18" rx="3" fill="#1C1C1E"/>
+  <rect x="230" y="124" width="66" height="76" rx="5" fill="#2C1C20"/>
+  <rect x="230" y="124" width="66" height="14" rx="5" fill="#B07A84"/>
+  <rect x="242" y="148" width="18" height="16" rx="3" fill="#1C1C1E"/><rect x="266" y="148" width="18" height="16" rx="3" fill="#1C1C1E"/>
+  <rect x="252" y="174" width="22" height="26" rx="3" fill="#7D2E3B"/>
+  <g stroke="#9DB2CF" stroke-width="3" stroke-linecap="round" stroke-dasharray="2 8">
+    <path d="M114 96c-28 0-44 4-54 12"/>
+    <path d="M206 96c30 0 46 8 56 22"/>
+  </g>
+  <circle cx="246" cy="44" r="12" fill="#F5D58A"/>
+  <path d="M230 74a16 14 0 0 1 32 0z" fill="#F5D58A"/>
+  <circle cx="276" cy="50" r="10" fill="#7C93B2"/>
+  <path d="M263 76a13 11 0 0 1 26 0z" fill="#7C93B2"/>
+  <circle cx="216" cy="50" r="10" fill="#B07A84"/>
+  <path d="M203 76a13 11 0 0 1 26 0z" fill="#B07A84"/>
+</svg>
