@@ -18,12 +18,30 @@ $navCurrent = static fn (array $item): string => $item['page'] === current_page(
 // Le site ne gère aucun compte : on entre dans l'écosystème depuis la page Noorwan Connect (v5 bis).
 
 $asset = static fn (string $path): string => $path . '?v=' . (string) @filemtime(ROOT_DIR . '/public/' . $path);
+
+// Bouton du thème (v9) : masqué sans JavaScript (le site suit alors l'appareil), réglé par theme-init.js.
+// Icône du thème affiché (soleil en clair, croissant de lune en sombre) ; le libellé dit ce que fait le clic.
+$themeToggle = static function (string $class, bool $withText): string {
+    $icons = '<svg class="theme-icon theme-icon-sun" width="20" height="20" viewBox="0 0 20 20" aria-hidden="true" focusable="false">'
+        . '<g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="10" cy="10" r="3.5"/>'
+        . '<path d="M10 2v1.8M10 16.2V18M2 10h1.8M16.2 10H18M4.3 4.3l1.3 1.3M14.4 14.4l1.3 1.3M4.3 15.7l1.3-1.3M14.4 5.6l1.3-1.3"/></g></svg>'
+        . '<svg class="theme-icon theme-icon-moon" width="20" height="20" viewBox="0 0 20 20" aria-hidden="true" focusable="false">'
+        . '<path d="M16.5 12.6A7 7 0 0 1 7.4 3.5a7 7 0 1 0 9.1 9.1z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>';
+
+    return '<button class="theme-toggle ' . $class . '" type="button" hidden aria-label="' . t('nav.theme_to_dark') . '"'
+        . ' data-label-dark="' . t('nav.theme_to_dark') . '" data-label-light="' . t('nav.theme_to_light') . '">'
+        . $icons . ($withText ? '<span class="theme-toggle-text">' . t('nav.theme_to_dark') . '</span>' : '') . "</button>\n";
+};
 ?>
 <!doctype html>
 <html lang="<?= e(lang()) ?>" dir="<?= e(dir_attr()) ?>">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#F6F5F1" media="(prefers-color-scheme: light)" data-theme-media="light">
+<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)" data-theme-media="dark">
+<script src="<?= e($asset('assets/js/theme-init.js')) ?>"></script>
 <title><?= e($meta['title']) ?></title>
 <meta name="description" content="<?= e($meta['description']) ?>">
 <link rel="canonical" href="<?= e(absolute_url(current_page(), lang())) ?>">
@@ -69,6 +87,7 @@ gtag('consent', 'update', { analytics_storage: 'granted' });
 <?php endforeach; ?>
         </nav>
         <div class="header-tools">
+            <?= $themeToggle('theme-toggle-bar', false) ?>
             <details class="lang-menu">
                 <summary><span class="visually-hidden"><?= t('nav.lang_label') ?>, <?= e(LANGS[lang()]['name']) ?></span><span aria-hidden="true"><?= e(LANGS[lang()]['label']) ?></span><svg class="lang-chevron" width="10" height="10" viewBox="0 0 10 10" aria-hidden="true" focusable="false"><path d="M2 3.5l3 3 3-3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
                 <ul class="lang-list" aria-label="<?= t('nav.lang_label') ?>">
@@ -87,6 +106,7 @@ gtag('consent', 'update', { analytics_storage: 'granted' });
 <?php foreach ($navItems as $item): ?>
         <a href="<?= e($item['href']) ?>"<?= $navCurrent($item) ?>><?= t($item['label']) ?></a>
 <?php endforeach; ?>
+        <?= $themeToggle('theme-toggle-row', true) ?>
     </nav>
 </header>
 <main id="main" tabindex="-1">

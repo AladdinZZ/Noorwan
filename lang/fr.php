@@ -37,6 +37,8 @@ return [
         'footer_label' => 'Pied de page',
         'lang_label' => 'Langue',
         'menu' => 'Menu',
+        'theme_to_dark' => 'Passer en sombre',
+        'theme_to_light' => 'Passer en clair',
     ],
     'common' => [
         'foot_line' => 'Des idées pour des solutions concrètes.',
