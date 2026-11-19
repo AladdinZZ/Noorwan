@@ -544,12 +544,14 @@ rm -f "$RL_OLD" "$RL_RECENT"
 
 echo "2 nonies ter. Illustrations dessinées (SVG)"
 # Produits (v3), haut de page, univers, étapes de la méthode et contact (v4) : moins de 20 Ko, sans texte.
-for id in reserva inteek noor hero universe-consulting universe-solutions universe-edition step-field step-build step-improve connect-hero connect-personal connect-pro connect-code connect-data connect-partner; do
+for base in reserva inteek noor hero universe-consulting universe-solutions universe-edition step-field step-build step-improve connect-hero connect-personal connect-pro connect-code connect-data connect-partner; do
+  for id in "$base" "$base-dark"; do
     file="public/assets/img/$id.svg"
     expect "$id.svg servi" 200 "$(curl -s -o /dev/null -w '%{http_code}' "$BASE_URL/assets/img/$id.svg")"
     size=$(wc -c < "$file" | tr -d ' ')
     [[ $size -lt 20480 ]] && pass "$id.svg léger ($size octets)" || fail "$id.svg trop lourd ($size octets)"
     expect "$id.svg sans texte ni image externe ni script" 0 "$(grep -ciE '<text|<image|href=|<script' "$file")"
+  done
 done
 for lang in fr en ar; do
     home=$(curl -s "$BASE_URL/?lang=$lang")
@@ -592,7 +594,7 @@ grep -q '\.nav-desktop a\[aria-current="page"\]' public/assets/css/site.css && g
 for lang in fr en ar; do
     html=$(curl -s "$BASE_URL/solutions.php?lang=$lang")
     expect "Solutions : une illustration par carte, une pour Inteek ($lang)" "2|1" \
-        "$(grep -cE '<div class="glyph"><img src="assets/img/(reserva|noor)\.svg" alt=""' <<< "$html")|$(grep -c '<div class="inteek-visual"><img src="assets/img/inteek.svg" alt=""' <<< "$html")"
+        "$(grep -cE '<div class="glyph"><picture><source srcset="assets/img/(reserva|noor)-dark\.svg" media="\(prefers-color-scheme: dark\)" data-theme-media="dark"><img src="assets/img/(reserva|noor)\.svg" alt=""' <<< "$html")|$(grep -c '<div class="inteek-visual"><picture><source srcset="assets/img/inteek-dark.svg" media="(prefers-color-scheme: dark)" data-theme-media="dark"><img src="assets/img/inteek.svg" alt=""' <<< "$html")"
 done
 
 echo "« Nos savoir-faire », phrases retirées, titre de contact avant la photo sur téléphone (v8)"
@@ -635,6 +637,61 @@ contrast=$("$PHP" -r '$css = file_get_contents("public/assets/css/site.css");
     $min = 99; foreach (["text", "muted", "link"] as $fg) { foreach (["page", "mist"] as $bg) { $a = $l($v($fg)); $b = $l($v($bg)); $min = min($min, (max($a, $b) + 0.05) / (min($a, $b) + 0.05)); } }
     echo $min >= 4.5 ? "AA" : sprintf("%.2f", $min);')
 expect "contraste AA des textes gris et des liens" AA "$contrast"
+
+echo "Thème sombre (v9)"
+# Bouton du thème sur toutes les pages : rond dans la barre, ligne dans le menu mobile, libellés traduits.
+for page in "" consulting solutions.php edition.php connect contact.php mentions-legales.php confidentialite.php cookies.php; do
+    for lang in fr en ar; do
+        html=$(curl -s "$BASE_URL/$page?lang=$lang")
+        to_dark=$(by_lang "$lang" "Passer en sombre" "Switch to dark" "التبديل إلى الوضع الداكن")
+        to_light=$(by_lang "$lang" "Passer en clair" "Switch to light" "التبديل إلى الوضع الفاتح")
+        expect "bouton du thème dans la barre et le menu, libellés traduits (/${page:-index}, $lang)" "1|1|2" \
+            "$(sed -n '/<div class="header-tools">/,/<details/p' <<< "$html" | grep -c '<button class="theme-toggle theme-toggle-bar" type="button" hidden')|$(sed -n '/<nav id="nav-mobile"/,/<\/nav>/p' <<< "$html" | grep -c '<button class="theme-toggle theme-toggle-row" type="button" hidden')|$(grep -cF "data-label-dark=\"$to_dark\" data-label-light=\"$to_light\"" <<< "$html")"
+        head=$(sed -n '/<head>/,/<\/head>/p' <<< "$html")
+        expect "theme-init.js dans <head>, sans defer, avant la feuille de style (/${page:-index}, $lang)" "theme-init|site.css" \
+            "$(grep -oE '<script src="assets/js/theme-init\.js\?v=[0-9]+"></script>|<link rel="stylesheet" href="assets/css/site\.css' <<< "$head" | sed -E 's/.*(theme-init|site\.css).*/\1/' | paste -sd '|' -)"
+        expect "theme-color clair et sombre, color-scheme (/${page:-index}, $lang)" "1|1|1" \
+            "$(grep -c '<meta name="theme-color" content="#F6F5F1" media="(prefers-color-scheme: light)" data-theme-media="light">' <<< "$head")|$(grep -c '<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)" data-theme-media="dark">' <<< "$head")|$(grep -c '<meta name="color-scheme" content="light dark">' <<< "$head")"
+        # Chaque illustration de la page a sa version sombre, juste avant elle, dans le même <picture>.
+        svg=$(grep -oE '<img [^>]*src="assets/img/[a-z-]+\.svg"' <<< "$html" | wc -l | tr -d ' ')
+        paired=$(grep -oE '<source srcset="assets/img/[a-z-]+-dark\.svg" media="\(prefers-color-scheme: dark\)" data-theme-media="dark"><img [^>]*src="assets/img/[a-z-]+\.svg"' <<< "$html" \
+            | sed -E 's/.*srcset="assets\/img\/([a-z-]+)-dark\.svg".*src="assets\/img\/([a-z-]+)\.svg"/\1 \2/' | awk '$1 == $2' | wc -l | tr -d ' ')
+        expect "illustrations avec leur version sombre (/${page:-index}, $lang)" "$svg" "$paired"
+    done
+done
+for file in public/assets/img/*.svg; do
+    [[ "$file" == *-dark.svg ]] && continue
+    dark="${file%.svg}-dark.svg"
+    [[ -f "$dark" ]] && pass "version sombre de $(basename "$file")" || fail "version sombre absente : $(basename "$dark")"
+done
+"$PHP" bin/illustrations-dark.php --check >/dev/null 2>&1 && pass "versions sombres à jour (bin/illustrations-dark.php)" || fail "versions sombres à régénérer : php bin/illustrations-dark.php"
+expect "noir du dessin éclairci dans les versions sombres (hors dessins pour fond noir)" 0 \
+    "$(grep -li '#1D1D1F' public/assets/img/*-dark.svg | grep -vcE '/(connect-code|noor)-dark\.svg$')"
+expect "theme-init.js servi" 200 "$(curl -s -o /dev/null -w '%{http_code}' "$BASE_URL/assets/js/theme-init.js")"
+# Aucun cookie : le choix est gardé dans localStorage, nw_consent reste le seul cookie du site.
+expect "theme-init.js : localStorage, aucun cookie" "1|0" \
+    "$(grep -c "var KEY = 'nw-theme';" public/assets/js/theme-init.js)|$(grep -c 'document.cookie' public/assets/js/theme-init.js)"
+# Les deux blocs de couleurs sombres (choix manuel, appareil sombre) sont identiques.
+css_block() { sed -n "/^$1/,/^ *}/p" public/assets/css/site.css | sed -e '1d' -e '$d' -e 's/^ *//'; }
+dark_manual=$(css_block ':root\[data-theme="dark"\] {')
+dark_device=$(css_block '    :root:not(\[data-theme="light"\]) {')
+[[ -n "$dark_manual" && "$dark_manual" == "$dark_device" ]] && pass "couleurs sombres : choix manuel et appareil identiques ($(wc -l <<< "$dark_manual" | tr -d ' ') réglages)" || fail "couleurs sombres : blocs différents"
+grep -q '^@media (prefers-color-scheme: dark) {$' public/assets/css/site.css && pass "couleurs sombres sous @media (prefers-color-scheme: dark)" || fail "@media (prefers-color-scheme: dark) absent"
+for name in page mist paper line line-2 ink text muted link; do
+    grep -q "^--$name: #" <<< "$dark_manual" && pass "couleur sombre --$name" || fail "couleur sombre --$name absente"
+done
+expect "point du logotype en #2997FF dans le thème sombre" 1 "$(grep -c '^--logo-dot: var(--link-dark);$' <<< "$dark_manual")"
+expect "aucune couleur de texte blanc fixée sur --paper (blanc sur bleu : --white)" 0 "$(grep -c 'color: var(--paper)' public/assets/css/site.css)"
+# Contraste AA (4,5:1) en sombre : textes gris et liens sur page, brume, papier ; textes des univers sur leur fond ; erreur et réussite.
+contrast_dark=$(DARK="$dark_manual" "$PHP" -r '$css = getenv("DARK");
+    $v = fn ($n) => preg_match("/^--$n: #([0-9A-F]{6});/mi", $css, $m) ? $m[1] : "FFFFFF";
+    $l = function ($h) { $c = array_map(fn ($x) => ($x /= 255) <= 0.03928 ? $x / 12.92 : (($x + 0.055) / 1.055) ** 2.4, array_map("hexdec", str_split($h, 2))); return 0.2126 * $c[0] + 0.7152 * $c[1] + 0.0722 * $c[2]; };
+    $r = fn ($a, $b) => (max($l($v($a)), $l($v($b))) + 0.05) / (min($l($v($a)), $l($v($b))) + 0.05);
+    $pairs = [["cons-text", "cons-tint"], ["sol-text", "sol-tint"], ["ed-text", "ed-tint"], ["error", "error-tint"], ["success", "success-tint"], ["error", "paper"], ["success", "paper"]];
+    foreach (["ink", "text", "muted", "link"] as $fg) { foreach (["page", "mist", "paper"] as $bg) { $pairs[] = [$fg, $bg]; } }
+    $bad = []; foreach ($pairs as [$a, $b]) { if ($r($a, $b) < 4.5) { $bad[] = "$a/$b " . round($r($a, $b), 2); } }
+    echo $bad === [] ? "AA" : implode(", ", $bad);')
+expect "contraste AA du thème sombre" AA "$contrast_dark"
 
 echo "4. Textes interdits"
 files=(app bin lang public database CLAUDE.md)
