@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <!-- Formation : un tableau, une courbe montante et deux personnes. Version clair, planche « Nos expertises », variante 1. Pastille 64 px, pictogramme 32 x 32 au trait 2 agrandi à 34 px. Aucun texte. -->
+  <rect width="64" height="64" rx="18" fill="#F3EEE3"/>
+  <g transform="translate(15 15) scale(1.0625)"><rect x="4" y="5" width="24" height="15" rx="2" stroke="#A8915F" stroke-width="2"/><circle cx="11" cy="25" r="2.5" stroke="#6F5B2E" stroke-width="2"/><circle cx="21" cy="25" r="2.5" stroke="#6F5B2E" stroke-width="2"/><path d="m9 15 5-5 4 3 5-5" stroke="#6F5B2E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></g>
+</svg>
