@@ -82,6 +82,18 @@
     --success: #1D6B3A;
     --success-tint: #EAF5EE;
 
+    /* Rôles ajoutés pour le thème sombre (v9) : texte blanc sur le bleu, texte et survol des boutons noirs,
+       en-tête translucide, filets, bandeau de consentement, gris du menu, point du logotype. */
+    --white: #FFFFFF;
+    --on-ink: #FFFFFF;
+    --ink-hover: #000000;
+    --nav-text: #333336;
+    --header-bg: rgba(246, 245, 241, 0.82);
+    --header-line: rgba(0, 0, 0, 0.08);
+    --hairline: rgba(0, 0, 0, 0.05);
+    --consent-bg: rgba(255, 255, 255, 0.96);
+    --logo-dot: var(--blue);
+
     --radius-btn: 3px;
     --radius-card: 28px;
     --gutter: 20px;
@@ -92,6 +104,89 @@
     --ls-h: -0.035em;
     --ls-num: -0.05em;
     --lh-h: 1.05;
+}
+
+/*
+ * Thème sombre (v9, charte graphique page 4). Deux blocs identiques (tests/run.sh le vérifie) :
+ * choix manuel (data-theme="dark", posé par theme-init.js) et appareil sombre sans choix contraire.
+ * Bleu action, or, sections noires (--night*) et traits des univers inchangés.
+ * Contrastes AA vérifiés (WCAG, 4,5:1 au moins) :
+ *   --text #A1A1A6 : 8,2 sur --page, 7,3 sur --mist, 6,6 sur --paper ;
+ *   --muted #8E8E93 : 6,4 sur --page, 5,8 sur --mist, 5,2 sur --paper ;
+ *   --link #2997FF : 7,0 sur --page, 6,3 sur --mist, 5,6 sur --paper ;
+ *   --ink #F5F5F7 : 19,3 sur --page, 15,6 sur --paper ; boutons noirs inversés : #000 sur #F5F5F7, 19,3 ;
+ *   univers : Consulting #D9C49A 9,0 sur son fond, Solutions #A9BCD6 8,3, Édition #D9A5AE 7,7 ;
+ *   erreur #FF6B60 6,1 sur son fond et sur --paper ; réussite #4CD47A 8,4 sur son fond, 8,9 sur --paper ;
+ *   texte blanc sur le bleu #0071E3 : 4,7 (inchangé) ; menu #D1D1D6 : 13,8 sur --page.
+ */
+:root {
+    color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+    color-scheme: dark;
+    --page: #000000;
+    --mist: #111113;
+    --mist-2: #161618;
+    --paper: #1C1C1E;
+    --line: #2A2A2C;
+    --line-2: #3A3A3C;
+    --ink: #F5F5F7;
+    --text: #A1A1A6;
+    --muted: #8E8E93;
+    --link: #2997FF;
+    --cons-tint: #2A2418;
+    --cons-text: #D9C49A;
+    --sol-tint: #1A2230;
+    --sol-text: #A9BCD6;
+    --ed-tint: #2C1C20;
+    --ed-text: #D9A5AE;
+    --error: #FF6B60;
+    --error-tint: #2C1517;
+    --success: #4CD47A;
+    --success-tint: #10261A;
+    --on-ink: #000000;
+    --ink-hover: #FFFFFF;
+    --nav-text: #D1D1D6;
+    --header-bg: rgba(0, 0, 0, 0.78);
+    --header-line: rgba(255, 255, 255, 0.12);
+    --hairline: rgba(255, 255, 255, 0.08);
+    --consent-bg: rgba(28, 28, 30, 0.96);
+    --logo-dot: var(--link-dark);
+}
+
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+        color-scheme: dark;
+        --page: #000000;
+        --mist: #111113;
+        --mist-2: #161618;
+        --paper: #1C1C1E;
+        --line: #2A2A2C;
+        --line-2: #3A3A3C;
+        --ink: #F5F5F7;
+        --text: #A1A1A6;
+        --muted: #8E8E93;
+        --link: #2997FF;
+        --cons-tint: #2A2418;
+        --cons-text: #D9C49A;
+        --sol-tint: #1A2230;
+        --sol-text: #A9BCD6;
+        --ed-tint: #2C1C20;
+        --ed-text: #D9A5AE;
+        --error: #FF6B60;
+        --error-tint: #2C1517;
+        --success: #4CD47A;
+        --success-tint: #10261A;
+        --on-ink: #000000;
+        --ink-hover: #FFFFFF;
+        --nav-text: #D1D1D6;
+        --header-bg: rgba(0, 0, 0, 0.78);
+        --header-line: rgba(255, 255, 255, 0.12);
+        --hairline: rgba(255, 255, 255, 0.08);
+        --consent-bg: rgba(28, 28, 30, 0.96);
+        --logo-dot: var(--link-dark);
+    }
 }
 
 /* L'arabe ne supporte pas l'interlettrage serré : tout revient à zéro, interligne plus large. */
@@ -140,6 +235,11 @@ img {
     display: block;
     max-width: 100%;
     height: auto;
+}
+
+/* <picture> des illustrations (version claire et sombre) : sans boîte propre, l'image garde sa mise en page. */
+picture {
+    display: contents;
 }
 
 a {
@@ -195,13 +295,13 @@ main:focus {
     z-index: 100;
     padding: 12px 18px;
     background: var(--ink);
-    color: var(--paper);
+    color: var(--on-ink);
     border-radius: var(--radius-btn);
 }
 
 .skip-link:focus {
     inset-block-start: 12px;
-    color: var(--paper);
+    color: var(--on-ink);
 }
 
 .wrap {
@@ -318,22 +418,22 @@ main:focus {
 
 .btn-blue {
     background: var(--blue);
-    color: var(--paper);
+    color: var(--white);
 }
 
 .btn-blue:hover {
     background: var(--blue-hover);
-    color: var(--paper);
+    color: var(--white);
 }
 
 .btn-dark {
     background: var(--ink);
-    color: var(--paper);
+    color: var(--on-ink);
 }
 
 .btn-dark:hover {
-    background: #000;
-    color: var(--paper);
+    background: var(--ink-hover);
+    color: var(--on-ink);
 }
 
 .btn-outline {
@@ -353,8 +453,8 @@ main:focus {
     position: sticky;
     inset-block-start: 0;
     z-index: 50;
-    border-block-end: 1px solid rgba(0, 0, 0, 0.08);
-    background: rgba(246, 245, 241, 0.82);
+    border-block-end: 1px solid var(--header-line);
+    background: var(--header-bg);
     -webkit-backdrop-filter: saturate(180%) blur(18px);
     backdrop-filter: saturate(180%) blur(18px);
 }
@@ -388,7 +488,7 @@ main:focus {
 }
 
 .logo-dot {
-    color: var(--blue);
+    color: var(--logo-dot);
 }
 
 .nav-desktop {
@@ -398,7 +498,7 @@ main:focus {
 }
 
 .nav-desktop a {
-    color: #333336;
+    color: var(--nav-text);
 }
 
 .nav-desktop a:hover {
@@ -542,11 +642,59 @@ main:focus {
     transform: translateY(-3.5px) rotate(-45deg);
 }
 
+/* Bouton du thème (v9) : rond de 44 px dans la barre, ligne avec libellé dans le menu mobile.
+   L'icône montre le thème affiché : soleil en clair, croissant de lune en sombre (data-shown, theme-init.js). */
+.theme-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--ink);
+    font: inherit;
+    cursor: pointer;
+}
+
+.theme-toggle[hidden] {
+    display: none;
+}
+
+.theme-toggle-bar {
+    flex: none;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+}
+
+.theme-toggle-bar:hover {
+    background: var(--mist);
+}
+
+.theme-icon {
+    flex: none;
+}
+
+.theme-toggle[data-shown="dark"] .theme-icon-sun,
+.theme-toggle:not([data-shown="dark"]) .theme-icon-moon {
+    display: none;
+}
+
+.theme-toggle-row {
+    justify-content: flex-start;
+    min-height: 52px;
+    padding: 14px var(--gutter);
+    font-size: 17px;
+    font-weight: 500;
+    text-align: start;
+}
+
 .nav-mobile {
     display: flex;
     flex-direction: column;
     padding-block-end: 12px;
-    border-block-start: 1px solid rgba(0, 0, 0, 0.05);
+    border-block-start: 1px solid var(--hairline);
 }
 
 .nav-mobile[hidden] {
@@ -555,7 +703,7 @@ main:focus {
 
 .nav-mobile a {
     padding: 14px var(--gutter);
-    border-block-end: 1px solid rgba(0, 0, 0, 0.05);
+    border-block-end: 1px solid var(--hairline);
     color: var(--ink);
     font-size: 22px;
     font-weight: 600;
@@ -1980,7 +2128,7 @@ main:focus {
     padding: 18px 20px;
     border: 1px solid var(--line);
     border-radius: 18px;
-    background: rgba(255, 255, 255, 0.96);
+    background: var(--consent-bg);
     -webkit-backdrop-filter: saturate(180%) blur(18px);
     backdrop-filter: saturate(180%) blur(18px);
     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.16);
@@ -2008,12 +2156,12 @@ main:focus {
 .btn-consent {
     min-height: 44px;
     background: var(--ink);
-    color: var(--paper);
+    color: var(--on-ink);
     font-size: 15px;
 }
 
 .btn-consent:hover {
-    background: #000;
+    background: var(--ink-hover);
 }
 
 .consent-manage .consent-actions {
