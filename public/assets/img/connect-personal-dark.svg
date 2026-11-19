@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 220" fill="none">
+  <!-- Particuliers : un téléphone montre un créneau choisi dans un agenda, coché, à côté d'une étiquette de rendez-vous. Aucun texte. -->
+  <path d="M20 200h280" stroke="#3A3A3C" stroke-width="3" stroke-linecap="round"/>
+  <rect x="98" y="18" width="124" height="184" rx="22" fill="#F5F5F7"/>
+  <rect x="106" y="26" width="108" height="168" rx="16" fill="#1C1C1E"/>
+  <rect x="142" y="32" width="36" height="8" rx="4" fill="#F5F5F7"/>
+  <rect x="118" y="52" width="84" height="10" rx="5" fill="#F5F5F7"/>
+  <g fill="#1A2230">
+    <rect x="118" y="74" width="24" height="22" rx="5"/><rect x="148" y="74" width="24" height="22" rx="5"/><rect x="178" y="74" width="24" height="22" rx="5"/>
+    <rect x="118" y="102" width="24" height="22" rx="5"/><rect x="178" y="102" width="24" height="22" rx="5"/>
+    <rect x="118" y="130" width="24" height="22" rx="5"/><rect x="148" y="130" width="24" height="22" rx="5"/><rect x="178" y="130" width="24" height="22" rx="5"/>
+  </g>
+  <rect x="148" y="102" width="24" height="22" rx="5" fill="#0071E3"/>
+  <path d="m154 113 4 4 8-8" stroke="#1C1C1E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="118" y="164" width="84" height="20" rx="10" fill="#F5F5F7"/>
+  <rect x="232" y="56" width="66" height="52" rx="12" fill="#2A2418"/>
+  <circle cx="252" cy="82" r="10" fill="#A8915F"/>
+  <path d="M252 76v6l4 3" stroke="#1C1C1E" stroke-width="2.5" stroke-linecap="round"/>
+  <rect x="268" y="74" width="20" height="6" rx="3" fill="#A8915F"/>
+  <rect x="268" y="86" width="14" height="6" rx="3" fill="#3A3A3C"/>
+  <path d="M232 104c-6 6-12 8-20 10" stroke="#A8915F" stroke-width="3" stroke-linecap="round" stroke-dasharray="2 8"/>
+  <circle cx="58" cy="128" r="24" fill="#F5D58A"/>
+  <circle cx="58" cy="120" r="9" fill="#A8915F"/>
+  <path d="M42 146a16 13 0 0 1 32 0z" fill="#A8915F"/>
+</svg>
