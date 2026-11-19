@@ -6,7 +6,7 @@ require __DIR__ . '/../app/bootstrap.php';
 require ROOT_DIR . '/app/books.php';
 
 // Page Consulting (v6), servie à l'adresse /consulting : reprend la section Consulting de l'ancien accueil
-// (titre, introduction, cinq expertises), puis « Accompagnement et édition » : l'Édition n'est plus un onglet,
+// (titre, introduction, cinq expertises en cartes illustrées et carte « Clarifier avant d'accélérer. », gabarit app/layout/expertises.php), puis « Accompagnement et édition » : l'Édition n'est plus un onglet,
 // elle est présentée ici comme une forme d'accompagnement, les livres en bref, avec un lien vers la page Édition.
 // Aucun texte inventé : accompagnement à l'écriture (consulting.writing) validé par Marwan en v8.
 current_page('consulting');
@@ -31,12 +31,7 @@ require ROOT_DIR . '/app/layout/header.php';
 <section id="expertises" class="section section-mist tone-consulting" aria-labelledby="expertises-title">
     <div class="wrap">
         <h2 id="expertises-title" class="h2 h2-section section-title"><?= t('consulting.expertises_title') ?></h2>
-        <ul class="expertises">
-<?php foreach (tl('home.expertises') as $expertise): ?>
-            <li><strong><?= e($expertise['title']) ?></strong> <span><?= e($expertise['text']) ?></span></li>
-<?php endforeach; ?>
-        </ul>
-        <p class="universe-note"><?= t('home.cons_app') ?></p>
+<?php require ROOT_DIR . '/app/layout/expertises.php'; ?>
     </div>
 </section>
 

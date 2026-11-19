@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <!-- E-commerce et parcours client : un chariot. Version sombre, planche « Nos expertises », variante 1. Pastille 64 px, pictogramme 32 x 32 au trait 2 agrandi à 34 px. Aucun texte. -->
+  <rect width="64" height="64" rx="18" fill="#2A2A2C"/>
+  <g transform="translate(15 15) scale(1.0625)"><path d="M4 6h4l3 14h14l3-10H10" stroke="#CDB98A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="13" cy="25" r="2" fill="#E6D3A3"/><circle cx="23" cy="25" r="2" fill="#E6D3A3"/></g>
+</svg>

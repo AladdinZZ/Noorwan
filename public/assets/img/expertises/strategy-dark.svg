@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <!-- Stratégie et structuration de projet : une cible et une flèche. Version sombre, planche « Nos expertises », variante 1. Pastille 64 px, pictogramme 32 x 32 au trait 2 agrandi à 34 px. Aucun texte. -->
+  <rect width="64" height="64" rx="18" fill="#2A2A2C"/>
+  <g transform="translate(15 15) scale(1.0625)"><circle cx="16" cy="16" r="11" stroke="#CDB98A" stroke-width="2"/><circle cx="16" cy="16" r="6" stroke="#CDB98A" stroke-width="2"/><circle cx="16" cy="16" r="1.8" fill="#E6D3A3"/><path d="M16 16 26 6M22 6h4v4" stroke="#E6D3A3" stroke-width="2" stroke-linecap="round"/></g>
+</svg>

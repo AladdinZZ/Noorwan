@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <!-- Marketing digital et présence en ligne : un haut-parleur et ses ondes. Version sombre, planche « Nos expertises », variante 1. Pastille 64 px, pictogramme 32 x 32 au trait 2 agrandi à 34 px. Aucun texte. -->
+  <rect width="64" height="64" rx="18" fill="#2A2A2C"/>
+  <g transform="translate(15 15) scale(1.0625)"><path d="M5 13v6h4l9 6V7l-9 6z" stroke="#CDB98A" stroke-width="2" stroke-linejoin="round"/><path d="M23 12a5 5 0 0 1 0 8M26 9a9 9 0 0 1 0 14" stroke="#E6D3A3" stroke-width="2" stroke-linecap="round"/></g>
+</svg>
