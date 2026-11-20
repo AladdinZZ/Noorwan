@@ -436,3 +436,14 @@ Brief « Noorwan Connect dans Solutions, visuels sans texte » de Maestro (20/11
 - **Images sans texte** : le texte n'est jamais dans une image ; il est posé en HTML par-dessus, sélectionnable et traduit.
 - **Photos d'en-tête des pages Consulting, Solutions et Édition** (emplacements prêts, images à déposer par Marwan) : `public/assets/img/<page>-hero-1440.webp` et `<page>-hero-780.webp` (`consulting`, `solutions`, `edition`), servies avec `srcset` ; titre, introduction et boutons par-dessus, sur un voile sombre, en blanc dans les deux thèmes ; jamais en miroir en arabe. Tant qu'une des deux largeurs manque, l'en-tête garde son rendu (Consulting : son illustration). Textes alternatifs **[À FOURNIR : description de la photo d'en-tête de la page Consulting / Solutions / Édition]**, à écrire dans les trois langues quand l'image arrive.
 
+
+## État du site au 20/11/2026 (page Solutions, un produit par ligne, branche `feat/solutions-une-ligne`, à relire avant fusion)
+
+Brief « Page Solutions, un produit par ligne ; catégorie de Noorwan Connect » de Maestro (20/11/2026), d'après deux décisions de Marwan. Aucun texte nouveau inventé. Remplace, pour ce qui suit, la grille des produits décrite dans la section précédente.
+
+- **Catégorie de Noorwan Connect** : « Numérique » (EN « Digital », AR « رقمي »). Plus de marqueur [À FOURNIR] pour elle.
+- **Page Solutions, disposition A** : après « Notre façon de faire », les quatre produits l'un sous l'autre, une ligne chacun, même gabarit et même poids : **Inteek** (Ressources humaines), **Reserva** (eBusiness, « Confidentiel »), **Noorwan Connect** (Numérique), **Noor** (Intelligence artificielle, « Confidentiel »). Puis « Bientôt : Immobilier, Shopping ». Plus de grille de cartes.
+  - Chaque ligne : catégorie, nom, texte, lien, illustration. Inteek garde son contenu détaillé (introduction, « Vous commencez par les modules… », les cinq modules), sans lien (pas de page à lui). Reserva et Noor : pastille « Confidentiel », « Présentation sur rendez-vous. », lien « Demander une présentation » (formulaire, univers Solutions). Noorwan Connect : introduction de `/connect`, lien « En savoir plus » vers `/connect`.
+  - Téléphone : illustration au-dessus du texte, centrés. Ordinateur (834 px et plus) : deux colonnes, illustration à gauche puis à droite en alternance (à droite puis à gauche en arabe). Grand espace et filet fin entre les lignes.
+  - Illustrations : celles des anciennes cartes ; Inteek en miroir en arabe, les autres jamais.
+- **Inchangés** (pas de décision de Marwan) : la phrase « Un seul compte pour tous les services Noorwan. Découvrir Noorwan Connect » sous l'introduction de Solutions, et le résumé « 03 Noorwan Connect » de l'accueil.
