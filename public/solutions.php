@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 require __DIR__ . '/../app/bootstrap.php';
 
-// Page Solutions, maquette A épurée (M-56) : en-tête, notre façon de faire, Inteek en détail, puis les autres produits.
-// v6 : Inteek n'apparaît qu'une fois (plus de carte dans la grille) ; Noorwan Édition quitte la grille, l'Édition étant présentée dans Consulting.
+// Page Solutions, maquette A épurée (M-56) : en-tête, notre façon de faire, puis les quatre produits, une ligne chacun
+// (disposition A du 20/11/2026, app/layout/products.php) : Inteek, avec son contenu détaillé, Reserva, Noorwan Connect, Noor.
 // Le titre et l'introduction reprennent ceux de la section Solutions de l'accueil. Aucun produit confidentiel hors liste (vérifié par tests/run.sh).
 current_page('solutions');
 $meta = ['title' => raw('meta.solutions_title'), 'description' => raw('meta.solutions_description')];
 
 $contactSolutions = url('contact', '', ['universe' => 'solutions']);
-$inteek = tl('home.products')['inteek'];
 // Photo d'en-tête sans texte (solutions-hero-780.webp et -1440.webp), titre en HTML par-dessus ; en-tête actuel tant qu'elle manque.
 $heroPhoto = hero_photo('solutions-hero', 'solutions.hero_alt');
 
@@ -41,22 +40,6 @@ require ROOT_DIR . '/app/layout/header.php';
             </li>
 <?php endforeach; ?>
         </ol>
-    </div>
-</section>
-
-<section id="inteek" class="screen universe tone-solutions" aria-labelledby="inteek-title">
-    <div class="wrap">
-        <p class="eyebrow eyebrow-sol"><?= e($inteek['cat']) ?></p>
-        <h2 id="inteek-title" class="h2"><?= e($inteek['name']) ?></h2>
-        <p class="lead"><?= t('solutions.inteek_lead') ?></p>
-        <p class="inteek-text"><?= t('solutions.inteek_text') ?></p>
-        <h3 class="modules-title"><?= t('solutions.modules_title') ?></h3>
-        <ul class="modules">
-<?php foreach (tl('solutions.modules') as $module): ?>
-            <li><?= e($module) ?></li>
-<?php endforeach; ?>
-        </ul>
-        <div class="inteek-visual"><?= illustration('inteek', '', 360, 260, ['loading' => 'lazy', 'decoding' => 'async']) ?></div>
     </div>
 </section>
 

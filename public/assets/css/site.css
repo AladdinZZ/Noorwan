@@ -913,68 +913,66 @@ main:focus {
     }
 }
 
-/* ---------- Produits de Solutions : un écran arrondi par produit ---------- */
+/* ---------- Produits de Solutions : une ligne par produit (disposition A, 20/11/2026) ---------- */
 
-.products {
-    display: grid;
-    gap: 12px;
-    padding: 12px;
+/* Inteek, Reserva, Noorwan Connect, Noor l'un sous l'autre, même gabarit et même poids, beaucoup d'air entre les lignes
+   (un message par écran). Téléphone : illustration au-dessus du texte, centrés. Ordinateur (834 px) : deux colonnes,
+   illustration côté début puis côté fin en alternance ; la grille suit le sens de la page, donc juste en arabe. */
+.product-rows {
+    width: min(100% - 2 * var(--gutter), 1080px);
+    margin-inline: auto;
 }
 
-.product {
-    display: flex;
-    flex-direction: column;
+.product-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 40px;
     align-items: center;
-    min-height: 440px;
-    padding: 64px 24px 0;
-    border-radius: var(--radius-card);
-    background: var(--mist);
+    padding-block: 88px;
     text-align: center;
-    overflow: hidden;
     scroll-margin-block-start: calc(var(--header-h) + 8px);
 }
 
-.product-cat {
-    margin-block-end: 12px;
-    color: var(--sol-text);
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: 0.02em;
+.product-row + .product-row {
+    border-block-start: 1px solid var(--line);
 }
 
-.product h3 {
+.product-row-visual {
+    width: 100%;
+    max-width: 420px;
+    margin-inline: auto;
+}
+
+.product-row-visual img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+/* Inteek : sa scène se lit dans le sens de la page, en miroir en arabe comme avant. */
+[dir="rtl"] .mirror-rtl img {
+    transform: scaleX(-1);
+}
+
+.product-row-body {
+    min-width: 0;
+}
+
+.product-name {
     font-size: clamp(34px, 8vw, 56px);
-    font-weight: 650;
-    line-height: var(--lh-h);
-    letter-spacing: var(--ls-h);
 }
 
 .product-text {
-    max-width: 420px;
-    margin-block-start: 12px;
+    max-width: 520px;
+    margin: 16px auto 0;
     color: var(--text);
-    font-size: 18px;
+    font-size: clamp(18px, 4.4vw, 22px);
+    line-height: 1.4;
+    text-wrap: pretty;
 }
 
-.product .links {
-    margin-block-start: 16px;
-}
-
-.product-dark {
-    background: var(--night-2);
-    color: var(--night-text);
-}
-
-.product-dark .product-cat {
-    color: var(--sol-light);
-}
-
-.product-dark .product-text {
-    color: var(--night-muted);
-}
-
-.product-dark .more {
-    color: var(--link-dark);
+.product-row .links {
+    margin-block-start: 20px;
 }
 
 .badge-confidential {
@@ -985,26 +983,9 @@ main:focus {
     padding: 4px 12px;
     border: 1px solid currentColor;
     border-radius: 999px;
-    color: var(--sol-light);
+    color: var(--sol-text);
     font-size: 12px;
     font-weight: 600;
-}
-
-/* Illustration de chaque produit (assets/img), collée au bas de la carte. */
-.glyph {
-    display: flex;
-    flex: 1;
-    align-items: flex-end;
-    justify-content: center;
-    width: 90%;
-    max-width: 380px;
-    margin-block-start: 36px;
-}
-
-.glyph img {
-    display: block;
-    width: 100%;
-    height: auto;
 }
 
 .soon-row {
@@ -1497,12 +1478,27 @@ main:focus {
         padding-block-end: 0;
     }
 
-    .products {
+    .product-row {
         grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 64px;
+        padding-block: 128px;
+        text-align: start;
     }
 
-    .product {
-        min-height: 560px;
+    /* Une ligne sur deux : illustration côté fin. */
+    .product-row:nth-child(even) .product-row-visual {
+        order: 1;
+    }
+
+    .product-row .product-text,
+    .product-row .inteek-text,
+    .product-row .modules {
+        margin-inline: 0;
+    }
+
+    .product-row .modules,
+    .product-row .links {
+        justify-content: flex-start;
     }
 
     .steps {
@@ -1532,20 +1528,6 @@ main:focus {
 
     .page-hero {
         padding-block: 112px 64px;
-    }
-}
-
-/* Trois cartes de produits (Reserva, Noorwan Connect, Noor) : une colonne au téléphone, deux dès 834 px avec la dernière
-   carte seule sur toute la largeur, trois dès 1024 px. */
-@media (min-width: 834px) and (max-width: 1023.98px) {
-    .product:last-child:nth-child(odd) {
-        grid-column: 1 / -1;
-    }
-}
-
-@media (min-width: 1024px) {
-    .products {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
     }
 }
 
@@ -1607,16 +1589,6 @@ main:focus {
     margin: 8px auto 0;
     color: var(--text);
     font-size: 16px;
-}
-
-/* Illustration d'Inteek, reprise de son ancienne carte : posée en bas de l'écran (.universe), en miroir en arabe comme elle. */
-.inteek-visual {
-    max-width: 360px;
-    margin: 40px auto 0;
-}
-
-[dir="rtl"] .inteek-visual img {
-    transform: scaleX(-1);
 }
 
 .inteek-text {
