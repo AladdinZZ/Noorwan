@@ -243,8 +243,8 @@ return [
     ],
     // Consulting page (v6): TEXTES A VALIDER PAR MARWAN. Title, introduction and expertise come from the home page (home.cons_*).
     'consulting' => [
-        // Texte alternatif de la photo d'en-tête (consulting-hero), à écrire quand Marwan dépose l'image.
-        'hero_alt' => '[À FOURNIR : description de la photo d\'en-tête de la page Consulting]',
+        // Texte alternatif de la photo d'en-tête (consulting-hero, image Canva sans texte, 20/11/2026).
+        'hero_alt' => 'Illustration: tangled threads pass through a lens and become a golden arrow towards rising columns, next to an annotated plan and a compass.',
         'tag' => 'Noorwan Consulting',
         'expertises_title' => 'Our expertise',
         'accomp_tag' => 'Support and publishing',
@@ -262,9 +262,9 @@ return [
         'btn_demo' => 'Request a presentation',
         'approach_title' => 'How we work',
         'principles' => [
-            ['title' => 'Phone first', 'text' => 'Every screen is designed for the phone, then adapted to the computer.'],
-            ['title' => 'Three languages, including Arabic', 'text' => 'French, English and Arabic, with right-to-left display for Arabic.'],
-            ['title' => 'Protected data', 'text' => 'Hosted and protected data, with access based on each person\'s role.'],
+            ['title' => 'Easy to pick up', 'text' => 'Clear tools you can use from day one, without long training.'],
+            ['title' => 'Built with the field', 'text' => 'Each tool starts from the real needs of businesses and the way they work.'],
+            ['title' => 'Support over time', 'text' => 'A team that stays with you, from setup to improvements.'],
         ],
         'inteek_lead' => 'Human resources in modules, switched on according to your company\'s needs.',
         'inteek_text' => 'Start with the modules that matter to you and add the others when the need arises.',

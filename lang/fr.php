@@ -243,8 +243,8 @@ return [
     ],
     // Page Consulting (v6) : TEXTES A VALIDER PAR MARWAN. Le titre, l'introduction et les expertises sont ceux de l'accueil (home.cons_*).
     'consulting' => [
-        // Texte alternatif de la photo d'en-tête (consulting-hero), à écrire quand Marwan dépose l'image.
-        'hero_alt' => '[À FOURNIR : description de la photo d\'en-tête de la page Consulting]',
+        // Texte alternatif de la photo d'en-tête (consulting-hero, image Canva sans texte, 20/11/2026).
+        'hero_alt' => 'Illustration : des fils emmêlés passent par une lentille et deviennent une flèche dorée vers des colonnes qui montent, à côté d\'un plan annoté et d\'une boussole.',
         'tag' => 'Noorwan Consulting',
         'expertises_title' => 'Nos expertises',
         'accomp_tag' => 'Accompagnement et édition',
@@ -262,9 +262,9 @@ return [
         'btn_demo' => 'Demander une présentation',
         'approach_title' => 'Notre façon de faire',
         'principles' => [
-            ['title' => 'Pensés pour le téléphone d\'abord', 'text' => 'Chaque écran est conçu pour le téléphone, puis adapté à l\'ordinateur.'],
-            ['title' => 'Trois langues, dont l\'arabe', 'text' => 'Français, anglais et arabe, avec un affichage de droite à gauche pour l\'arabe.'],
-            ['title' => 'Des données protégées', 'text' => 'Données hébergées et protégées, accès selon le rôle de chacun.'],
+            ['title' => 'Simples à prendre en main', 'text' => 'Des outils clairs, utilisables dès le premier jour, sans longue formation.'],
+            ['title' => 'Conçus avec le terrain', 'text' => 'Chaque outil part des besoins réels des entreprises et de leur façon de travailler.'],
+            ['title' => 'Un accompagnement dans la durée', 'text' => 'Une équipe qui vous suit, de la mise en place aux améliorations.'],
         ],
         'inteek_lead' => 'Les ressources humaines en modules, à activer selon les besoins de votre entreprise.',
         'inteek_text' => 'Vous commencez par les modules qui comptent pour vous et ajoutez les autres quand le besoin se présente.',
