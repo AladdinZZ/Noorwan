@@ -170,6 +170,8 @@ return [
     ],
     // Page Édition : textes traduits du français, à relire par un arabophone.
     'edition' => [
+        // Texte alternatif de la photo d'en-tête (edition-hero), à écrire quand Marwan dépose l'image.
+        'hero_alt' => '[À FOURNIR : description de la photo d\'en-tête de la page Édition]',
         'tag' => 'نوروان للنشر',
         'title' => 'من مخطوطتك إلى كتابك على أمازون',
         'lead' => 'ترافق نوروان للنشر المؤلفين في كل مرحلة حتى نشر كتبهم على أمازون، وسلسلتانا ' . $metaphysique . ' ودروب الروح خير دليل على ذلك.',
@@ -254,6 +256,8 @@ return [
     ],
     // Page Consulting (v6) : TEXTES A VALIDER PAR MARWAN, arabe à relire. Titre, introduction et expertises : ceux de l'accueil (home.cons_*).
     'consulting' => [
+        // Texte alternatif de la photo d'en-tête (consulting-hero), à écrire quand Marwan dépose l'image.
+        'hero_alt' => '[À FOURNIR : description de la photo d\'en-tête de la page Consulting]',
         'tag' => 'نوروان للاستشارات',
         'expertises_title' => 'خبراتنا',
         'accomp_tag' => 'المرافقة والنشر',
@@ -263,6 +267,8 @@ return [
     // Page Solutions : TEXTES A VALIDER PAR MARWAN, traduction à relire par un arabophone.
     // Le titre et l'introduction sont ceux de l'accueil (home.sol_h, home.sol_text).
     'solutions' => [
+        // Texte alternatif de la photo d'en-tête (solutions-hero), à écrire quand Marwan dépose l'image.
+        'hero_alt' => '[À FOURNIR : description de la photo d\'en-tête de la page Solutions]',
         'tag' => 'نوروان للحلول',
         // À relire.
         'connect_text' => 'حساب واحد لجميع خدمات نوروان.',

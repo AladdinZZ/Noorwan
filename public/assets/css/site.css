@@ -1664,6 +1664,73 @@ main:focus {
     overflow: hidden;
 }
 
+/* Photo d'en-tête des pages Consulting, Solutions et Édition (classe has-photo, posée seulement quand l'image existe) :
+   image sans texte en fond, voile sombre dégradé vers le bas, titre et liens en HTML par-dessus, mêmes couleurs dans les deux
+   thèmes. Texte en bas de l'image au téléphone comme sur ordinateur. Jamais en miroir en arabe. */
+.page-hero.has-photo {
+    position: relative;
+    isolation: isolate;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    min-height: min(600px, 88svh);
+    padding-block: 120px 56px;
+    overflow: hidden;
+    color: var(--night-text);
+}
+
+.hero-photo {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--night-2);
+}
+
+.hero-photo::after {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.78) 0%, rgba(0, 0, 0, 0.5) 55%, rgba(0, 0, 0, 0.22) 100%);
+    content: "";
+}
+
+.hero-photo img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.page-hero.has-photo .eyebrow,
+.page-hero.has-photo .h1,
+.page-hero.has-photo .lead,
+.page-hero.has-photo .page-connect {
+    color: var(--night-text);
+}
+
+.page-hero.has-photo .more,
+.page-hero.has-photo .page-connect a {
+    color: var(--white);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.page-hero.has-photo .btn-dark {
+    background: var(--white);
+    color: var(--night-2);
+}
+
+.page-hero.has-photo .btn-dark:hover {
+    background: var(--night-text);
+    color: var(--night);
+}
+
+@media (min-width: 768px) {
+    .page-hero.has-photo {
+        min-height: min(680px, 82svh);
+        padding-block: 160px 80px;
+    }
+}
+
 .accomp-writing {
     max-width: 640px;
     margin: 20px auto 0;

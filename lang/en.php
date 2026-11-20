@@ -158,6 +158,8 @@ return [
         ],
     ],
     'edition' => [
+        // Texte alternatif de la photo d'en-tête (edition-hero), à écrire quand Marwan dépose l'image.
+        'hero_alt' => '[À FOURNIR : description de la photo d\'en-tête de la page Édition]',
         'tag' => 'Noorwan Publishing',
         'title' => 'From your manuscript to your book on Amazon',
         'lead' => 'Noorwan Publishing guides authors through every step, all the way to publishing their book on Amazon. Our own collections, {méta}Physique and Chemins de l\'Âme, are the proof.',
@@ -241,6 +243,8 @@ return [
     ],
     // Consulting page (v6): TEXTES A VALIDER PAR MARWAN. Title, introduction and expertise come from the home page (home.cons_*).
     'consulting' => [
+        // Texte alternatif de la photo d'en-tête (consulting-hero), à écrire quand Marwan dépose l'image.
+        'hero_alt' => '[À FOURNIR : description de la photo d\'en-tête de la page Consulting]',
         'tag' => 'Noorwan Consulting',
         'expertises_title' => 'Our expertise',
         'accomp_tag' => 'Support and publishing',
@@ -249,6 +253,8 @@ return [
     ],
     // Solutions page: TEXTES A VALIDER PAR MARWAN. Title and introduction come from the home page (home.sol_h, home.sol_text).
     'solutions' => [
+        // Texte alternatif de la photo d'en-tête (solutions-hero), à écrire quand Marwan dépose l'image.
+        'hero_alt' => '[À FOURNIR : description de la photo d\'en-tête de la page Solutions]',
         'tag' => 'Noorwan Solutions',
         'connect_text' => 'One account for all Noorwan services.',
         'connect_link' => 'Discover Noorwan Connect',

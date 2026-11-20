@@ -14,18 +14,24 @@ $meta = ['title' => raw('meta.consulting_title'), 'description' => raw('home.uni
 
 $trilogy = books_in('metaphysique');
 $chemins = array_map('book_title', books_in('chemins'));
+// Photo d'en-tête sans texte (consulting-hero-780.webp et -1440.webp), titre en HTML par-dessus ;
+// tant qu'elle manque, l'en-tête garde l'illustration du Consulting.
+$heroPhoto = hero_photo('consulting-hero', 'consulting.hero_alt');
 
 require ROOT_DIR . '/app/layout/header.php';
 ?>
 <!-- TEXTES A VALIDER PAR MARWAN -->
-<section class="page-hero consulting-hero tone-consulting" aria-labelledby="page-title">
+<section class="page-hero <?= $heroPhoto !== '' ? 'has-photo' : 'consulting-hero' ?> tone-consulting" aria-labelledby="page-title">
+<?= $heroPhoto !== '' ? '    ' . $heroPhoto . "\n" : '' ?>
     <div class="wrap">
         <p class="eyebrow"><?= t('consulting.tag') ?></p>
         <h1 id="page-title" class="h1 h1-page"><?= t('home.cons_app_h') ?></h1>
         <p class="lead"><?= t('home.cons_lead') ?></p>
         <p class="links"><a class="btn btn-dark" href="<?= e(url('contact', '', ['universe' => 'consulting'])) ?>"><?= t('home.btn_talk') ?> <span aria-hidden="true"><?= t('common.arrow') ?></span></a></p>
     </div>
+<?php if ($heroPhoto === ''): ?>
     <div class="shape"><?= illustration('universe-consulting', 'illus', 760, 380, ['decoding' => 'async']) ?></div>
+<?php endif; ?>
 </section>
 
 <section id="expertises" class="section section-mist tone-consulting" aria-labelledby="expertises-title">

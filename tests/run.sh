@@ -608,6 +608,51 @@ for width in 600 1200; do
 done
 if grep -qE '\[dir="rtl"\] [^{]*\.photo' public/assets/css/site.css; then fail "photo en miroir en arabe"; else pass "photo jamais en miroir"; fi
 
+echo "Photos d'en-tête des trois univers (20/11/2026)"
+# Emplacements prêts : <page>-hero-780.webp et -1440.webp dans assets/img, titre en HTML par-dessus.
+# Tant qu'une image manque, la page garde son rendu ; Consulting garde son illustration.
+hero_render() { "$PHP" -r '[, $dir, $page, $lang] = $argv; if ($dir !== "") { define("HERO_PHOTO_DIR", $dir); } $_GET["lang"] = $lang; require "public/" . $page;' "$@" 2>&1; }
+for univ in consulting solutions edition; do
+    page=$([[ $univ == consulting ]] && echo consulting.php || echo "$univ.php")
+    if [[ -f "public/assets/img/$univ-hero-780.webp" && -f "public/assets/img/$univ-hero-1440.webp" ]]; then
+        expect "$univ : photo d'en-tête déposée et affichée" 1 "$(hero_render "" "$page" fr | grep -c 'class="hero-photo"')"
+        for width in 780 1440; do
+            size=$(wc -c < "public/assets/img/$univ-hero-$width.webp" | tr -d ' ')
+            [[ $size -lt 307200 ]] && pass "$univ-hero-$width.webp léger ($size octets)" || fail "$univ-hero-$width.webp trop lourd ($size octets)"
+            expect "$univ-hero-$width.webp : largeur $width px" "$width" "$("$PHP" -r 'echo getimagesize($argv[1])[0];' "public/assets/img/$univ-hero-$width.webp")"
+        done
+    else
+        for lang in fr en ar; do
+            html=$(curl -s "$BASE_URL/$([[ $univ == consulting ]] && echo consulting || echo "$page")?lang=$lang")
+            expect "$univ sans photo : en-tête inchangé ($lang)" "0|0|$([[ $univ == consulting ]] && echo 1 || echo 0)" \
+                "$(grep -c 'has-photo' <<< "$html")|$(grep -c 'class="hero-photo"' <<< "$html")|$(sed -n '/<section class="page-hero/,/<\/section>/p' <<< "$html" | grep -c 'class="shape"')"
+        done
+    fi
+done
+if "$PHP" -r 'exit(function_exists("imagewebp") ? 0 : 1);'; then
+    HERO_DIR=$(mktemp -d)
+    # Images d'essai sans texte, aux deux largeurs (non versionnées).
+    "$PHP" -r 'foreach ([780 => 488, 1440 => 900] as $w => $h) { $i = imagecreatetruecolor($w, $h); imagefilledrectangle($i, 0, 0, $w, $h, imagecolorallocate($i, 60, 70, 90));
+        foreach (["consulting", "solutions", "edition"] as $n) { imagewebp($i, $argv[1] . "/$n-hero-$w.webp", 70); } }' "$HERO_DIR"
+    for univ in consulting solutions edition; do
+        page=$([[ $univ == consulting ]] && echo consulting.php || echo "$univ.php")
+        for lang in fr en ar; do
+            hero=$(hero_render "$HERO_DIR" "$page" "$lang" | sed -n '/<section class="page-hero/,/<\/section>/p')
+            img="<div class=\"hero-photo\"><img src=\"assets/img/$univ-hero-780.webp\" srcset=\"assets/img/$univ-hero-780.webp 780w, assets/img/$univ-hero-1440.webp 1440w\" sizes=\"100vw\" alt=\"[À FOURNIR : description de la photo d&apos;en-tête de la page "
+            expect "$univ avec photo : classe, image deux largeurs, alt, dimensions, titre en HTML après l'image ($lang)" "1|1|1|1" \
+                "$(grep -c 'class="page-hero has-photo' <<< "$hero")|$(grep -cF "$img" <<< "$hero")|$(grep -c 'width="1440" height="900" fetchpriority="high" decoding="async"></div>' <<< "$hero")|$(sed -n '/class="hero-photo"/,$p' <<< "$hero" | grep -c '<h1 id="page-title"')"
+            [[ $univ == consulting ]] && expect "consulting avec photo : plus d'illustration en tête ($lang)" 0 "$(grep -c 'class="shape"' <<< "$hero")"
+        done
+    done
+    rm -f "$HERO_DIR/solutions-hero-1440.webp"
+    expect "une seule largeur déposée : pas de photo" 0 "$(hero_render "$HERO_DIR" solutions.php fr | grep -c 'hero-photo')"
+    rm -rf "$HERO_DIR"
+else
+    pass "GD sans WebP : contrôle avec images d'essai ignoré"
+fi
+grep -q '^\.hero-photo img {$' public/assets/css/site.css && pass "photo d'en-tête en object-fit, voile par-dessus" || fail "styles de la photo d'en-tête absents"
+if grep -qE '\[dir="rtl"\][^{]*\.hero-photo' public/assets/css/site.css; then fail "photo d'en-tête en miroir en arabe"; else pass "photo d'en-tête jamais en miroir"; fi
+
 echo "Onglet actif et titre de « Pourquoi Noorwan » (v7)"
 for lang in fr en ar; do
     for tab in consulting solutions contact; do
@@ -633,9 +678,11 @@ for lang in fr en ar; do
 done
 
 echo "« Nos savoir-faire », phrases retirées, titre de contact avant la photo sur téléphone (v8)"
-# Textes « À FOURNIR » dans les chaînes du site : la catégorie de Noorwan Connect (20/11/2026), une par langue.
+# Textes « À FOURNIR » dans les chaînes du site (20/11/2026) : catégorie de Noorwan Connect et textes alternatifs
+# des photos d'en-tête, dans chaque langue.
 expect "« À FOURNIR » dans lang/ : catégorie de Noorwan Connect seulement" 3 "$(cat lang/*.php | grep -c 'À FOURNIR : catégorie de Noorwan Connect')"
-expect "« À FOURNIR » dans lang/ : rien d'autre" 3 "$(cat lang/*.php | grep -c 'À FOURNIR')"
+expect "« À FOURNIR » dans lang/ : textes alternatifs des trois photos d'en-tête" 9 "$(cat lang/*.php | grep -c "'hero_alt' => '\[À FOURNIR : description de la photo d")"
+expect "« À FOURNIR » dans lang/ : rien d'autre" 12 "$(cat lang/*.php | grep -c 'À FOURNIR')"
 for lang in fr en ar; do
     home=$(curl -s "$BASE_URL/?lang=$lang")
     why=$(sed -n '/aria-labelledby="why-title"/,/<\/section>/p' <<< "$home")

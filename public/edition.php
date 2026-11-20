@@ -11,6 +11,8 @@ current_page('edition');
 $meta = ['title' => raw('meta.edition_title'), 'description' => raw('meta.edition_description')];
 
 $contactEdition = url('contact', '', ['universe' => 'edition']);
+// Photo d'en-tête sans texte (edition-hero-780.webp et -1440.webp), titre en HTML par-dessus ; en-tête actuel tant qu'elle manque.
+$heroPhoto = hero_photo('edition-hero', 'edition.hero_alt');
 
 // Rubriques du catalogue : les deux collections, puis « Prochainement » (livres annoncés, sans bouton « Acheter »).
 $rubrics = [];
@@ -25,7 +27,8 @@ $rubrics['upcoming'] = ['name' => raw('edition.upcoming'), 'text' => '', 'books'
 
 require ROOT_DIR . '/app/layout/header.php';
 ?>
-<section class="page-hero tone-edition" aria-labelledby="page-title">
+<section class="page-hero<?= $heroPhoto !== '' ? ' has-photo' : '' ?> tone-edition" aria-labelledby="page-title">
+<?= $heroPhoto !== '' ? '    ' . $heroPhoto . "\n" : '' ?>
     <div class="wrap">
         <p class="eyebrow"><?= t('edition.tag') ?></p>
         <h1 id="page-title" class="h1 h1-page"><?= t('edition.title') ?></h1>
