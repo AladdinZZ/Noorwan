@@ -648,7 +648,7 @@ if "$PHP" -r 'exit(function_exists("imagewebp") ? 0 : 1);'; then
         page=$([[ $univ == consulting ]] && echo consulting.php || echo "$univ.php")
         for lang in fr en ar; do
             hero=$(hero_render "$HERO_DIR" "$page" "$lang" | sed -n '/<section class="page-hero/,/<\/section>/p')
-            img="<div class=\"hero-photo\"><img src=\"assets/img/$univ-hero-780.webp\" srcset=\"assets/img/$univ-hero-780.webp 780w, assets/img/$univ-hero-1440.webp 1440w\" sizes=\"100vw\" alt=\"[À FOURNIR : description de la photo d&apos;en-tête de la page "
+            img="<div class=\"hero-photo\"><img src=\"assets/img/$univ-hero-780.webp\" srcset=\"assets/img/$univ-hero-780.webp 780w, assets/img/$univ-hero-1440.webp 1440w\" sizes=\"100vw\" alt=\""
             expect "$univ avec photo : classe, image deux largeurs, alt, dimensions, titre en HTML après l'image ($lang)" "1|1|1|1" \
                 "$(grep -c 'class="page-hero has-photo' <<< "$hero")|$(grep -cF "$img" <<< "$hero")|$(grep -c 'width="1440" height="900" fetchpriority="high" decoding="async"></div>' <<< "$hero")|$(sed -n '/class="hero-photo"/,$p' <<< "$hero" | grep -c '<h1 id="page-title"')"
             [[ $univ == consulting ]] && expect "consulting avec photo : plus d'illustration en tête ($lang)" 0 "$(grep -c 'class="shape"' <<< "$hero")"
@@ -689,10 +689,11 @@ done
 
 echo "« Nos savoir-faire », phrases retirées, titre de contact avant la photo sur téléphone (v8)"
 # Textes « À FOURNIR » dans les chaînes du site (20/11/2026) : textes alternatifs des photos d'en-tête, dans chaque langue.
+# Consulting a sa photo depuis le 20/11/2026 : restent Solutions et Édition (2 x 3 langues).
 # La catégorie de Noorwan Connect est fournie (« Numérique », 20/11/2026) : la clé solutions.connect_cat disparaît.
 expect "« À FOURNIR » dans lang/ : plus de catégorie de Noorwan Connect à fournir" 0 "$(cat lang/*.php | grep -c 'connect_cat\|catégorie de Noorwan Connect')"
-expect "« À FOURNIR » dans lang/ : textes alternatifs des trois photos d'en-tête" 9 "$(cat lang/*.php | grep -c "'hero_alt' => '\[À FOURNIR : description de la photo d")"
-expect "« À FOURNIR » dans lang/ : rien d'autre" 9 "$(cat lang/*.php | grep -c 'À FOURNIR')"
+expect "« À FOURNIR » dans lang/ : textes alternatifs des deux photos d'en-tête restantes" 6 "$(cat lang/*.php | grep -c "'hero_alt' => '\[À FOURNIR : description de la photo d")"
+expect "« À FOURNIR » dans lang/ : rien d'autre" 6 "$(cat lang/*.php | grep -c 'À FOURNIR')"
 for lang in fr en ar; do
     home=$(curl -s "$BASE_URL/?lang=$lang")
     why=$(sed -n '/aria-labelledby="why-title"/,/<\/section>/p' <<< "$home")

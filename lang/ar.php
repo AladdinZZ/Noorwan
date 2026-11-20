@@ -256,8 +256,8 @@ return [
     ],
     // Page Consulting (v6) : TEXTES A VALIDER PAR MARWAN, arabe à relire. Titre, introduction et expertises : ceux de l'accueil (home.cons_*).
     'consulting' => [
-        // Texte alternatif de la photo d'en-tête (consulting-hero), à écrire quand Marwan dépose l'image.
-        'hero_alt' => '[À FOURNIR : description de la photo d\'en-tête de la page Consulting]',
+        // Texte alternatif de la photo d'en-tête (consulting-hero, image Canva sans texte, 20/11/2026).
+        'hero_alt' => 'رسم توضيحي: خيوط متشابكة تمر عبر عدسة فتتحول إلى سهم ذهبي نحو أعمدة متصاعدة، بجانب مخطط عليه علامات وبوصلة.',
         'tag' => 'نوروان للاستشارات',
         'expertises_title' => 'خبراتنا',
         'accomp_tag' => 'المرافقة والنشر',
@@ -277,9 +277,9 @@ return [
         'btn_demo' => 'اطلب عرضًا تقديميًا',
         'approach_title' => 'طريقتنا في العمل',
         'principles' => [
-            ['title' => 'للهاتف أولًا', 'text' => 'كل شاشة مصممة للهاتف أولًا، ثم مهيأة للحاسوب.'],
-            ['title' => 'ثلاث لغات منها العربية', 'text' => 'الفرنسية والإنجليزية والعربية، مع عرض من اليمين إلى اليسار للعربية.'],
-            ['title' => 'بيانات محمية', 'text' => 'بيانات مستضافة ومحمية، وصلاحيات وصول حسب دور كل مستخدم.'],
+            ['title' => 'سهلة الاستخدام', 'text' => 'أدوات واضحة يمكن استخدامها من اليوم الأول، دون تدريب طويل.'],
+            ['title' => 'مصمَّمة انطلاقًا من الميدان', 'text' => 'كل أداة تنطلق من الاحتياجات الفعلية للمؤسسات وطريقة عملها.'],
+            ['title' => 'مرافقة مستمرة', 'text' => 'فريق يرافقكم من بدء التشغيل إلى التحسينات.'],
         ],
         'inteek_lead' => 'الموارد البشرية في وحدات، تُفعَّل حسب احتياجات مؤسستك.',
         'inteek_text' => 'ابدأ بالوحدات التي تهمك، وأضف غيرها عند الحاجة.',
