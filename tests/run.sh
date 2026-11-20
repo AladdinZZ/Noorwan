@@ -226,12 +226,20 @@ for lang in fr en ar; do
     grep -q "href=\"solutions.php?lang=$lang\">$(by_lang "$lang" "Solutions" "Solutions" "الحلول")<" <<< "$nav" && pass "menu : Solutions mène à solutions.php ($lang)" || fail "menu : lien Solutions ($lang)"
     for page in solutions.php; do
         html=$(curl -s "$BASE_URL/$page?lang=$lang")
-        expect "cartes Reserva et Noor, toutes deux confidentielles (${page:-index}, $lang)" "reserva|noor|2" \
+        expect "cartes Reserva, Noorwan Connect et Noor, deux confidentielles (${page:-index}, $lang)" "reserva|connect|noor|2" \
             "$(grep -oE '<article id="product-[a-z]+"' <<< "$html" | sed -E 's/.*product-([a-z]+)"/\1/' | paste -sd '|' -)|$(grep -c 'class="badge-confidential"' <<< "$html")"
         grep -q 'id="product-noor"' <<< "$html" && sed -n '/id="product-noor"/,/<\/article>/p' <<< "$html" | grep -q 'badge-confidential' \
             && pass "Noor marqué « Confidentiel » (${page:-index}, $lang)" || fail "Noor sans mention Confidentiel (${page:-index}, $lang)"
         sed -n '/id="product-reserva"/,/<\/article>/p' <<< "$html" | grep -q 'badge-confidential' \
             && pass "Reserva marqué « Confidentiel » (${page:-index}, $lang)" || fail "Reserva sans mention Confidentiel (${page:-index}, $lang)"
+        # Noorwan Connect, produit de Solutions (20/11/2026) : même gabarit, nom en lettres latines, introduction de /connect,
+        # catégorie à fournir, « En savoir plus » vers sa page, illustration du haut de sa page.
+        card=$(sed -n '/id="product-connect"/,/<\/article>/p' <<< "$html")
+        lead=$(by_lang "$lang" "Un compte par personne, avec votre numéro de téléphone." "One account per person, with your phone number." "حساب واحد لكل شخص، برقم هاتفك.")
+        expect "carte Noorwan Connect : nom, introduction, catégorie à fournir, lien, pas confidentielle (${page:-index}, $lang)" "1|1|1|1|0" \
+            "$(grep -c '<h3 id="product-connect-name">Noorwan Connect</h3>' <<< "$card")|$(grep -cF "<p class=\"product-text\">$lead" <<< "$card")|$(grep -c '<p class="product-cat"><mark class="todo">\[À FOURNIR : catégorie de Noorwan Connect\]</mark></p>' <<< "$card")|$(grep -c "<a class=\"more\" href=\"connect?lang=$lang\">$(by_lang "$lang" "En savoir plus" "Learn more" "اعرف المزيد")</a>" <<< "$card")|$(grep -c 'badge-confidential' <<< "$card")"
+        grep -qF '<div class="glyph"><picture><source srcset="assets/img/connect-hero-dark.svg" media="(prefers-color-scheme: dark)" data-theme-media="dark"><img src="assets/img/connect-hero.svg" alt=""' <<< "$card" \
+            && pass "carte Noorwan Connect : illustration de sa page, sans miroir (${page:-index}, $lang)" || fail "carte Noorwan Connect : illustration (${page:-index}, $lang)"
         expect "Immobilier et Shopping « bientôt » (${page:-index}, $lang)" 2 "$(sed -n '/<div class="soon-row">/,/<\/ul>/p' <<< "$html" | grep -c '<li>')"
     done
 
@@ -588,6 +596,8 @@ for id in strategy marketing ecommerce web training; do
     expect "expertises/$id-dark.svg : trait, accent et pastille sombres" "1|1|1|0" \
         "$(grep -c '#CDB98A' "public/assets/img/expertises/$id-dark.svg")|$(grep -c '#E6D3A3' "public/assets/img/expertises/$id-dark.svg")|$(grep -c 'fill="#2A2A2C"' "public/assets/img/expertises/$id-dark.svg")|$(grep -ciE '#(A8915F|6F5B2E|F3EEE3)' "public/assets/img/expertises/$id-dark.svg")"
 done
+grep -q '^    \.product:last-child:nth-child(odd) {$' public/assets/css/site.css && grep -q '^        grid-template-columns: repeat(3, minmax(0, 1fr));$' <<< "$(sed -n '/^@media (min-width: 1024px) {$/,/^}$/p' public/assets/css/site.css)" \
+    && pass "trois cartes de produits : dernière seule sur deux colonnes, trois colonnes dès 1024 px" || fail "grille des trois cartes de produits"
 if grep -qE '\[dir="rtl"\][^{]*\.expertise-icon' public/assets/css/site.css; then fail "pictogrammes des expertises retournés en arabe"; else pass "pictogrammes des expertises sans miroir en arabe"; fi
 grep -q '\[dir="rtl"\] \.illus' public/assets/css/site.css && pass "illustrations en miroir en arabe" || fail "miroir des illustrations en arabe absent"
 for width in 600 1200; do
@@ -623,8 +633,9 @@ for lang in fr en ar; do
 done
 
 echo "« Nos savoir-faire », phrases retirées, titre de contact avant la photo sur téléphone (v8)"
-# Plus aucun texte « À FOURNIR » dans les chaînes du site (le dernier, l'accompagnement à l'écriture, est fourni en v8).
-expect "aucun « À FOURNIR » restant dans lang/" 0 "$(cat lang/*.php | grep -c 'À FOURNIR')"
+# Textes « À FOURNIR » dans les chaînes du site : la catégorie de Noorwan Connect (20/11/2026), une par langue.
+expect "« À FOURNIR » dans lang/ : catégorie de Noorwan Connect seulement" 3 "$(cat lang/*.php | grep -c 'À FOURNIR : catégorie de Noorwan Connect')"
+expect "« À FOURNIR » dans lang/ : rien d'autre" 3 "$(cat lang/*.php | grep -c 'À FOURNIR')"
 for lang in fr en ar; do
     home=$(curl -s "$BASE_URL/?lang=$lang")
     why=$(sed -n '/aria-labelledby="why-title"/,/<\/section>/p' <<< "$home")

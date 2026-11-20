@@ -105,6 +105,7 @@ return [
         // À relire : textes de Reserva, « Coming soon » et « Real estate » traduits du français.
         'products' => [
             'reserva' => ['cat' => 'eBusiness', 'name' => 'Reserva', 'text' => '', 'confidential' => true],
+            'connect' => ['cat' => '', 'name' => 'Noorwan Connect', 'text' => '', 'confidential' => false],
             'inteek' => ['cat' => 'Human resources', 'name' => 'Inteek', 'text' => 'From hiring to team management, HR made simple.', 'confidential' => false],
             'noor' => ['cat' => 'Artificial intelligence', 'name' => 'Noor', 'text' => '', 'confidential' => true],
         ],
@@ -251,6 +252,8 @@ return [
         'tag' => 'Noorwan Solutions',
         'connect_text' => 'One account for all Noorwan services.',
         'connect_link' => 'Discover Noorwan Connect',
+        // Catégorie de la carte Noorwan Connect (comme « eBusiness » pour Reserva) : à fournir par Marwan.
+        'connect_cat' => '[À FOURNIR : catégorie de Noorwan Connect]',
         'btn_demo' => 'Request a presentation',
         'approach_title' => 'How we work',
         'principles' => [

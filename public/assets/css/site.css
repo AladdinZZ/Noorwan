@@ -1535,6 +1535,20 @@ main:focus {
     }
 }
 
+/* Trois cartes de produits (Reserva, Noorwan Connect, Noor) : une colonne au téléphone, deux dès 834 px avec la dernière
+   carte seule sur toute la largeur, trois dès 1024 px. */
+@media (min-width: 834px) and (max-width: 1023.98px) {
+    .product:last-child:nth-child(odd) {
+        grid-column: 1 / -1;
+    }
+}
+
+@media (min-width: 1024px) {
+    .products {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
 /* ---------- Page Solutions ---------- */
 
 .h1-page {

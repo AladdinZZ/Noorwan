@@ -105,6 +105,7 @@ return [
         // Grille des produits (maquette A, M-56). Liste fermée : aucun autre produit confidentiel n'y entre.
         'products' => [
             'reserva' => ['cat' => 'eBusiness', 'name' => 'Reserva', 'text' => '', 'confidential' => true],
+            'connect' => ['cat' => '', 'name' => 'Noorwan Connect', 'text' => '', 'confidential' => false],
             'inteek' => ['cat' => 'Ressources humaines', 'name' => 'Inteek', 'text' => 'Du recrutement à la gestion des équipes, les RH simplifiées.', 'confidential' => false],
             'noor' => ['cat' => 'Intelligence artificielle', 'name' => 'Noor', 'text' => '', 'confidential' => true],
         ],
@@ -251,6 +252,8 @@ return [
         'tag' => 'Noorwan Solutions',
         'connect_text' => 'Un seul compte pour tous les services Noorwan.',
         'connect_link' => 'Découvrir Noorwan Connect',
+        // Catégorie de la carte Noorwan Connect (comme « eBusiness » pour Reserva) : à fournir par Marwan.
+        'connect_cat' => '[À FOURNIR : catégorie de Noorwan Connect]',
         'btn_demo' => 'Demander une présentation',
         'approach_title' => 'Notre façon de faire',
         'principles' => [
