@@ -151,9 +151,10 @@ for lang in fr en ar; do
     expect "anciennes ancres vers la page Consulting ($lang)" "consulting|consulting#accompagnement|consulting#accompagnement" \
         "$(grep -oE 'id="(consulting|edition-univers|edition)"[^>]* data-hash-redirect="[^"]+"' <<< "$home" | sed -E "s/.*data-hash-redirect=\"([^?]+)\?lang=$lang([^\"]*)\"/\1\2/" | paste -sd '|' -)"
     nav=$(sed -n '/<nav class="nav-desktop"/,/<\/nav>/p' <<< "$home")
-    expect "menu : Consulting, Solutions, Noorwan Connect, Contact, chacun sa page ($lang)" "consulting?lang=$lang|solutions.php?lang=$lang|connect?lang=$lang|contact.php?lang=$lang" \
+    # Noorwan Connect quitte le menu (20/11/2026) : produit de Solutions, sa page reste dans le pied de page.
+    expect "menu : Consulting, Solutions, Contact, chacun sa page ($lang)" "consulting?lang=$lang|solutions.php?lang=$lang|contact.php?lang=$lang" \
         "$(grep -oE 'href="[^"]+"' <<< "$nav" | sed -E 's/href="([^"]+)"/\1/' | paste -sd '|' -)"
-    expect "menu mobile : mêmes quatre onglets ($lang)" 4 "$(sed -n '/<nav id="nav-mobile"/,/<\/nav>/p' <<< "$home" | grep -c '<a ')"
+    expect "menu mobile : mêmes trois onglets ($lang)" 3 "$(sed -n '/<nav id="nav-mobile"/,/<\/nav>/p' <<< "$home" | grep -c '<a ')"
     footer=$(sed -n '/<nav class="footer-cols"/,/<\/nav>/p' <<< "$home")
     grep -q "href=\"edition.php?lang=$lang#catalogue\"" <<< "$footer" && pass "pied de page : page Édition gardée ($lang)" || fail "pied de page : lien vers la page Édition ($lang)"
     grep -q 'id="contact" class="screen screen-mist cta"' <<< "$home" && pass "bandeau contact en bas de l'accueil ($lang)" || fail "bandeau contact ($lang)"
@@ -287,7 +288,7 @@ for lang in fr en ar; do
     html=$(render solutions.php "$lang" true)
     expect "en-tête : plus de pastille, seulement le choix de langue ($lang)" 0 \
         "$(sed -n '/<div class="header-tools">/,/<details/p' <<< "$html" | grep -c '<a ')"
-    expect "menu mobile : Noorwan Connect avant Contact, sans « Mon compte » ($lang)" "connect?lang=$lang|contact.php?lang=$lang" \
+    expect "menu mobile : Solutions puis Contact, sans Noorwan Connect ni « Mon compte » ($lang)" "solutions.php?lang=$lang|contact.php?lang=$lang" \
         "$(sed -n '/<nav id="nav-mobile"/,/<\/nav>/p' <<< "$html" | grep -oE 'href="[^"]+"' | tail -n 2 | sed -E 's/href="([^"]+)"/\1/' | paste -sd '|' -)"
     expect "pied de page : colonne Noorwan, Noorwan Connect puis Contact ($lang)" "connect?lang=$lang|contact.php?lang=$lang" \
         "$(sed -n '/<nav class="footer-cols"/,/<\/nav>/p' <<< "$html" | grep -oE 'href="[^"]+"' | tail -n 2 | sed -E 's/href="([^"]+)"/\1/' | paste -sd '|' -)"
@@ -410,7 +411,8 @@ grep -q '^    RewriteRule ^connect$ connect.php \[L\]$' public/.htaccess && pass
 for lang in fr en ar; do
     html=$(curl -s "$BASE_URL/connect?lang=$lang")
     nav=$(sed -n '/<nav class="nav-desktop"/,/<\/nav>/p' <<< "$html")
-    grep -q "href=\"connect?lang=$lang\" aria-current=\"page\">Noorwan Connect<" <<< "$nav" && pass "menu : Noorwan Connect ($lang)" || fail "menu : lien Noorwan Connect ($lang)"
+    expect "menu : plus de Noorwan Connect, aucun onglet actif sur sa page ($lang)" "0|0" \
+        "$(grep -c 'href="connect?' <<< "$nav")|$(grep -c 'aria-current="page"' <<< "$nav")"
     grep -q "<link rel=\"canonical\" href=\"[^\"]*/connect?lang=$lang\">" <<< "$html" && pass "adresse canonique /connect ($lang)" || fail "adresse canonique ($lang)"
     title=$(by_lang "$lang" "Un seul compte pour tous les services Noorwan" "One account for all Noorwan services" "حساب واحد لجميع خدمات نوروان")
     grep -qF "<h1 id=\"page-title\" class=\"h1 h1-page\">$title</h1>" <<< "$html" && pass "titre ($lang)" || fail "titre de la page Noorwan Connect ($lang)"
@@ -598,7 +600,7 @@ if grep -qE '\[dir="rtl"\] [^{]*\.photo' public/assets/css/site.css; then fail "
 
 echo "Onglet actif et titre de « Pourquoi Noorwan » (v7)"
 for lang in fr en ar; do
-    for tab in consulting solutions connect contact; do
+    for tab in consulting solutions contact; do
         html=$(curl -s "$BASE_URL/$(case "$tab" in consulting|connect) echo "$tab" ;; *) echo "$tab.php" ;; esac)?lang=$lang")
         for menu in '<nav class="nav-desktop"' '<nav id="nav-mobile"'; do
             nav=$(sed -n "/$menu/,/<\/nav>/p" <<< "$html")
