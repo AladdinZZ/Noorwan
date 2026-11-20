@@ -7,15 +7,16 @@ declare(strict_types=1);
 
 // Une page par onglet (v6). « À propos » viendra avec sa propre page : il n'est pas dans le menu.
 // L'Édition n'est plus un onglet : elle est présentée dans la page Consulting ; sa page reste dans le pied de page et le plan du site.
+// Noorwan Connect n'est plus un onglet (décision de Marwan du 20/11/2026) : c'est un produit de l'univers Solutions,
+// présenté dans la grille de la page Solutions ; sa page /connect reste dans le pied de page et le plan du site.
 $navItems = [
     ['page' => 'consulting', 'label' => 'nav.consulting', 'href' => url('consulting')],
     ['page' => 'solutions', 'label' => 'nav.solutions', 'href' => url('solutions')],
-    ['page' => 'connect', 'label' => 'nav.connect', 'href' => url('connect')],
     ['page' => 'contact', 'label' => 'nav.contact', 'href' => url('contact')],
 ];
 // Onglet de la page affichée : aria-current="page", mis en avant par la feuille de style (v7).
 $navCurrent = static fn (array $item): string => $item['page'] === current_page() ? ' aria-current="page"' : '';
-// Le site ne gère aucun compte : on entre dans l'écosystème depuis la page Noorwan Connect (v5 bis).
+// Le site ne gère aucun compte : on entre dans l'écosystème depuis la page Noorwan Connect (v5 bis), présentée dans Solutions.
 
 $asset = static fn (string $path): string => $path . '?v=' . (string) @filemtime(ROOT_DIR . '/public/' . $path);
 

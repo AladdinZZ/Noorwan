@@ -151,9 +151,10 @@ for lang in fr en ar; do
     expect "anciennes ancres vers la page Consulting ($lang)" "consulting|consulting#accompagnement|consulting#accompagnement" \
         "$(grep -oE 'id="(consulting|edition-univers|edition)"[^>]* data-hash-redirect="[^"]+"' <<< "$home" | sed -E "s/.*data-hash-redirect=\"([^?]+)\?lang=$lang([^\"]*)\"/\1\2/" | paste -sd '|' -)"
     nav=$(sed -n '/<nav class="nav-desktop"/,/<\/nav>/p' <<< "$home")
-    expect "menu : Consulting, Solutions, Noorwan Connect, Contact, chacun sa page ($lang)" "consulting?lang=$lang|solutions.php?lang=$lang|connect?lang=$lang|contact.php?lang=$lang" \
+    # Noorwan Connect quitte le menu (20/11/2026) : produit de Solutions, sa page reste dans le pied de page.
+    expect "menu : Consulting, Solutions, Contact, chacun sa page ($lang)" "consulting?lang=$lang|solutions.php?lang=$lang|contact.php?lang=$lang" \
         "$(grep -oE 'href="[^"]+"' <<< "$nav" | sed -E 's/href="([^"]+)"/\1/' | paste -sd '|' -)"
-    expect "menu mobile : mêmes quatre onglets ($lang)" 4 "$(sed -n '/<nav id="nav-mobile"/,/<\/nav>/p' <<< "$home" | grep -c '<a ')"
+    expect "menu mobile : mêmes trois onglets ($lang)" 3 "$(sed -n '/<nav id="nav-mobile"/,/<\/nav>/p' <<< "$home" | grep -c '<a ')"
     footer=$(sed -n '/<nav class="footer-cols"/,/<\/nav>/p' <<< "$home")
     grep -q "href=\"edition.php?lang=$lang#catalogue\"" <<< "$footer" && pass "pied de page : page Édition gardée ($lang)" || fail "pied de page : lien vers la page Édition ($lang)"
     grep -q 'id="contact" class="screen screen-mist cta"' <<< "$home" && pass "bandeau contact en bas de l'accueil ($lang)" || fail "bandeau contact ($lang)"
@@ -225,12 +226,20 @@ for lang in fr en ar; do
     grep -q "href=\"solutions.php?lang=$lang\">$(by_lang "$lang" "Solutions" "Solutions" "الحلول")<" <<< "$nav" && pass "menu : Solutions mène à solutions.php ($lang)" || fail "menu : lien Solutions ($lang)"
     for page in solutions.php; do
         html=$(curl -s "$BASE_URL/$page?lang=$lang")
-        expect "cartes Reserva et Noor, toutes deux confidentielles (${page:-index}, $lang)" "reserva|noor|2" \
+        expect "cartes Reserva, Noorwan Connect et Noor, deux confidentielles (${page:-index}, $lang)" "reserva|connect|noor|2" \
             "$(grep -oE '<article id="product-[a-z]+"' <<< "$html" | sed -E 's/.*product-([a-z]+)"/\1/' | paste -sd '|' -)|$(grep -c 'class="badge-confidential"' <<< "$html")"
         grep -q 'id="product-noor"' <<< "$html" && sed -n '/id="product-noor"/,/<\/article>/p' <<< "$html" | grep -q 'badge-confidential' \
             && pass "Noor marqué « Confidentiel » (${page:-index}, $lang)" || fail "Noor sans mention Confidentiel (${page:-index}, $lang)"
         sed -n '/id="product-reserva"/,/<\/article>/p' <<< "$html" | grep -q 'badge-confidential' \
             && pass "Reserva marqué « Confidentiel » (${page:-index}, $lang)" || fail "Reserva sans mention Confidentiel (${page:-index}, $lang)"
+        # Noorwan Connect, produit de Solutions (20/11/2026) : même gabarit, nom en lettres latines, introduction de /connect,
+        # catégorie à fournir, « En savoir plus » vers sa page, illustration du haut de sa page.
+        card=$(sed -n '/id="product-connect"/,/<\/article>/p' <<< "$html")
+        lead=$(by_lang "$lang" "Un compte par personne, avec votre numéro de téléphone." "One account per person, with your phone number." "حساب واحد لكل شخص، برقم هاتفك.")
+        expect "carte Noorwan Connect : nom, introduction, catégorie à fournir, lien, pas confidentielle (${page:-index}, $lang)" "1|1|1|1|0" \
+            "$(grep -c '<h3 id="product-connect-name">Noorwan Connect</h3>' <<< "$card")|$(grep -cF "<p class=\"product-text\">$lead" <<< "$card")|$(grep -c '<p class="product-cat"><mark class="todo">\[À FOURNIR : catégorie de Noorwan Connect\]</mark></p>' <<< "$card")|$(grep -c "<a class=\"more\" href=\"connect?lang=$lang\">$(by_lang "$lang" "En savoir plus" "Learn more" "اعرف المزيد")</a>" <<< "$card")|$(grep -c 'badge-confidential' <<< "$card")"
+        grep -qF '<div class="glyph"><picture><source srcset="assets/img/connect-hero-dark.svg" media="(prefers-color-scheme: dark)" data-theme-media="dark"><img src="assets/img/connect-hero.svg" alt=""' <<< "$card" \
+            && pass "carte Noorwan Connect : illustration de sa page, sans miroir (${page:-index}, $lang)" || fail "carte Noorwan Connect : illustration (${page:-index}, $lang)"
         expect "Immobilier et Shopping « bientôt » (${page:-index}, $lang)" 2 "$(sed -n '/<div class="soon-row">/,/<\/ul>/p' <<< "$html" | grep -c '<li>')"
     done
 
@@ -287,7 +296,7 @@ for lang in fr en ar; do
     html=$(render solutions.php "$lang" true)
     expect "en-tête : plus de pastille, seulement le choix de langue ($lang)" 0 \
         "$(sed -n '/<div class="header-tools">/,/<details/p' <<< "$html" | grep -c '<a ')"
-    expect "menu mobile : Noorwan Connect avant Contact, sans « Mon compte » ($lang)" "connect?lang=$lang|contact.php?lang=$lang" \
+    expect "menu mobile : Solutions puis Contact, sans Noorwan Connect ni « Mon compte » ($lang)" "solutions.php?lang=$lang|contact.php?lang=$lang" \
         "$(sed -n '/<nav id="nav-mobile"/,/<\/nav>/p' <<< "$html" | grep -oE 'href="[^"]+"' | tail -n 2 | sed -E 's/href="([^"]+)"/\1/' | paste -sd '|' -)"
     expect "pied de page : colonne Noorwan, Noorwan Connect puis Contact ($lang)" "connect?lang=$lang|contact.php?lang=$lang" \
         "$(sed -n '/<nav class="footer-cols"/,/<\/nav>/p' <<< "$html" | grep -oE 'href="[^"]+"' | tail -n 2 | sed -E 's/href="([^"]+)"/\1/' | paste -sd '|' -)"
@@ -410,7 +419,8 @@ grep -q '^    RewriteRule ^connect$ connect.php \[L\]$' public/.htaccess && pass
 for lang in fr en ar; do
     html=$(curl -s "$BASE_URL/connect?lang=$lang")
     nav=$(sed -n '/<nav class="nav-desktop"/,/<\/nav>/p' <<< "$html")
-    grep -q "href=\"connect?lang=$lang\" aria-current=\"page\">Noorwan Connect<" <<< "$nav" && pass "menu : Noorwan Connect ($lang)" || fail "menu : lien Noorwan Connect ($lang)"
+    expect "menu : plus de Noorwan Connect, aucun onglet actif sur sa page ($lang)" "0|0" \
+        "$(grep -c 'href="connect?' <<< "$nav")|$(grep -c 'aria-current="page"' <<< "$nav")"
     grep -q "<link rel=\"canonical\" href=\"[^\"]*/connect?lang=$lang\">" <<< "$html" && pass "adresse canonique /connect ($lang)" || fail "adresse canonique ($lang)"
     title=$(by_lang "$lang" "Un seul compte pour tous les services Noorwan" "One account for all Noorwan services" "حساب واحد لجميع خدمات نوروان")
     grep -qF "<h1 id=\"page-title\" class=\"h1 h1-page\">$title</h1>" <<< "$html" && pass "titre ($lang)" || fail "titre de la page Noorwan Connect ($lang)"
@@ -586,6 +596,8 @@ for id in strategy marketing ecommerce web training; do
     expect "expertises/$id-dark.svg : trait, accent et pastille sombres" "1|1|1|0" \
         "$(grep -c '#CDB98A' "public/assets/img/expertises/$id-dark.svg")|$(grep -c '#E6D3A3' "public/assets/img/expertises/$id-dark.svg")|$(grep -c 'fill="#2A2A2C"' "public/assets/img/expertises/$id-dark.svg")|$(grep -ciE '#(A8915F|6F5B2E|F3EEE3)' "public/assets/img/expertises/$id-dark.svg")"
 done
+grep -q '^    \.product:last-child:nth-child(odd) {$' public/assets/css/site.css && grep -q '^        grid-template-columns: repeat(3, minmax(0, 1fr));$' <<< "$(sed -n '/^@media (min-width: 1024px) {$/,/^}$/p' public/assets/css/site.css)" \
+    && pass "trois cartes de produits : dernière seule sur deux colonnes, trois colonnes dès 1024 px" || fail "grille des trois cartes de produits"
 if grep -qE '\[dir="rtl"\][^{]*\.expertise-icon' public/assets/css/site.css; then fail "pictogrammes des expertises retournés en arabe"; else pass "pictogrammes des expertises sans miroir en arabe"; fi
 grep -q '\[dir="rtl"\] \.illus' public/assets/css/site.css && pass "illustrations en miroir en arabe" || fail "miroir des illustrations en arabe absent"
 for width in 600 1200; do
@@ -596,9 +608,54 @@ for width in 600 1200; do
 done
 if grep -qE '\[dir="rtl"\] [^{]*\.photo' public/assets/css/site.css; then fail "photo en miroir en arabe"; else pass "photo jamais en miroir"; fi
 
+echo "Photos d'en-tête des trois univers (20/11/2026)"
+# Emplacements prêts : <page>-hero-780.webp et -1440.webp dans assets/img, titre en HTML par-dessus.
+# Tant qu'une image manque, la page garde son rendu ; Consulting garde son illustration.
+hero_render() { "$PHP" -r '[, $dir, $page, $lang] = $argv; if ($dir !== "") { define("HERO_PHOTO_DIR", $dir); } $_GET["lang"] = $lang; require "public/" . $page;' "$@" 2>&1; }
+for univ in consulting solutions edition; do
+    page=$([[ $univ == consulting ]] && echo consulting.php || echo "$univ.php")
+    if [[ -f "public/assets/img/$univ-hero-780.webp" && -f "public/assets/img/$univ-hero-1440.webp" ]]; then
+        expect "$univ : photo d'en-tête déposée et affichée" 1 "$(hero_render "" "$page" fr | grep -c 'class="hero-photo"')"
+        for width in 780 1440; do
+            size=$(wc -c < "public/assets/img/$univ-hero-$width.webp" | tr -d ' ')
+            [[ $size -lt 307200 ]] && pass "$univ-hero-$width.webp léger ($size octets)" || fail "$univ-hero-$width.webp trop lourd ($size octets)"
+            expect "$univ-hero-$width.webp : largeur $width px" "$width" "$("$PHP" -r 'echo getimagesize($argv[1])[0];' "public/assets/img/$univ-hero-$width.webp")"
+        done
+    else
+        for lang in fr en ar; do
+            html=$(curl -s "$BASE_URL/$([[ $univ == consulting ]] && echo consulting || echo "$page")?lang=$lang")
+            expect "$univ sans photo : en-tête inchangé ($lang)" "0|0|$([[ $univ == consulting ]] && echo 1 || echo 0)" \
+                "$(grep -c 'has-photo' <<< "$html")|$(grep -c 'class="hero-photo"' <<< "$html")|$(sed -n '/<section class="page-hero/,/<\/section>/p' <<< "$html" | grep -c 'class="shape"')"
+        done
+    fi
+done
+if "$PHP" -r 'exit(function_exists("imagewebp") ? 0 : 1);'; then
+    HERO_DIR=$(mktemp -d)
+    # Images d'essai sans texte, aux deux largeurs (non versionnées).
+    "$PHP" -r 'foreach ([780 => 488, 1440 => 900] as $w => $h) { $i = imagecreatetruecolor($w, $h); imagefilledrectangle($i, 0, 0, $w, $h, imagecolorallocate($i, 60, 70, 90));
+        foreach (["consulting", "solutions", "edition"] as $n) { imagewebp($i, $argv[1] . "/$n-hero-$w.webp", 70); } }' "$HERO_DIR"
+    for univ in consulting solutions edition; do
+        page=$([[ $univ == consulting ]] && echo consulting.php || echo "$univ.php")
+        for lang in fr en ar; do
+            hero=$(hero_render "$HERO_DIR" "$page" "$lang" | sed -n '/<section class="page-hero/,/<\/section>/p')
+            img="<div class=\"hero-photo\"><img src=\"assets/img/$univ-hero-780.webp\" srcset=\"assets/img/$univ-hero-780.webp 780w, assets/img/$univ-hero-1440.webp 1440w\" sizes=\"100vw\" alt=\"[À FOURNIR : description de la photo d&apos;en-tête de la page "
+            expect "$univ avec photo : classe, image deux largeurs, alt, dimensions, titre en HTML après l'image ($lang)" "1|1|1|1" \
+                "$(grep -c 'class="page-hero has-photo' <<< "$hero")|$(grep -cF "$img" <<< "$hero")|$(grep -c 'width="1440" height="900" fetchpriority="high" decoding="async"></div>' <<< "$hero")|$(sed -n '/class="hero-photo"/,$p' <<< "$hero" | grep -c '<h1 id="page-title"')"
+            [[ $univ == consulting ]] && expect "consulting avec photo : plus d'illustration en tête ($lang)" 0 "$(grep -c 'class="shape"' <<< "$hero")"
+        done
+    done
+    rm -f "$HERO_DIR/solutions-hero-1440.webp"
+    expect "une seule largeur déposée : pas de photo" 0 "$(hero_render "$HERO_DIR" solutions.php fr | grep -c 'hero-photo')"
+    rm -rf "$HERO_DIR"
+else
+    pass "GD sans WebP : contrôle avec images d'essai ignoré"
+fi
+grep -q '^\.hero-photo img {$' public/assets/css/site.css && pass "photo d'en-tête en object-fit, voile par-dessus" || fail "styles de la photo d'en-tête absents"
+if grep -qE '\[dir="rtl"\][^{]*\.hero-photo' public/assets/css/site.css; then fail "photo d'en-tête en miroir en arabe"; else pass "photo d'en-tête jamais en miroir"; fi
+
 echo "Onglet actif et titre de « Pourquoi Noorwan » (v7)"
 for lang in fr en ar; do
-    for tab in consulting solutions connect contact; do
+    for tab in consulting solutions contact; do
         html=$(curl -s "$BASE_URL/$(case "$tab" in consulting|connect) echo "$tab" ;; *) echo "$tab.php" ;; esac)?lang=$lang")
         for menu in '<nav class="nav-desktop"' '<nav id="nav-mobile"'; do
             nav=$(sed -n "/$menu/,/<\/nav>/p" <<< "$html")
@@ -621,8 +678,11 @@ for lang in fr en ar; do
 done
 
 echo "« Nos savoir-faire », phrases retirées, titre de contact avant la photo sur téléphone (v8)"
-# Plus aucun texte « À FOURNIR » dans les chaînes du site (le dernier, l'accompagnement à l'écriture, est fourni en v8).
-expect "aucun « À FOURNIR » restant dans lang/" 0 "$(cat lang/*.php | grep -c 'À FOURNIR')"
+# Textes « À FOURNIR » dans les chaînes du site (20/11/2026) : catégorie de Noorwan Connect et textes alternatifs
+# des photos d'en-tête, dans chaque langue.
+expect "« À FOURNIR » dans lang/ : catégorie de Noorwan Connect seulement" 3 "$(cat lang/*.php | grep -c 'À FOURNIR : catégorie de Noorwan Connect')"
+expect "« À FOURNIR » dans lang/ : textes alternatifs des trois photos d'en-tête" 9 "$(cat lang/*.php | grep -c "'hero_alt' => '\[À FOURNIR : description de la photo d")"
+expect "« À FOURNIR » dans lang/ : rien d'autre" 12 "$(cat lang/*.php | grep -c 'À FOURNIR')"
 for lang in fr en ar; do
     home=$(curl -s "$BASE_URL/?lang=$lang")
     why=$(sed -n '/aria-labelledby="why-title"/,/<\/section>/p' <<< "$home")

@@ -94,6 +94,37 @@ function illustration(string $name, string $class, int $width, int $height, arra
         . '" height="' . $height . '"' . $extra . '></picture>';
 }
 
+// Photos d'en-tête des pages Consulting, Solutions et Édition (20/11/2026) : images sans texte, en WebP,
+// deux largeurs (assets/img/<nom>-780.webp et <nom>-1440.webp). Le titre reste en HTML par-dessus, sélectionnable et traduit.
+// Un script peut fixer le dossier lu avant l'amorçage (tests/run.sh, avec des images d'essai).
+if (!defined('HERO_PHOTO_DIR')) {
+    define('HERO_PHOTO_DIR', ROOT_DIR . '/public/assets/img');
+}
+const HERO_PHOTO_WIDTHS = [780, 1440];
+
+/**
+ * Photo d'en-tête d'une page, avec srcset et texte alternatif traduit ($altKey), ou chaîne vide tant qu'une des
+ * deux largeurs manque : la page garde alors son rendu sans photo. Jamais en miroir en arabe.
+ */
+function hero_photo(string $name, string $altKey): string
+{
+    $sources = [];
+    foreach (HERO_PHOTO_WIDTHS as $width) {
+        if (!is_file(HERO_PHOTO_DIR . '/' . $name . '-' . $width . '.webp')) {
+            return '';
+        }
+        $sources[] = 'assets/img/' . $name . '-' . $width . '.webp ' . $width . 'w';
+    }
+    // Dimensions lues sur la plus grande image, pour réserver la place avant chargement.
+    $size = @getimagesize(HERO_PHOTO_DIR . '/' . $name . '-' . max(HERO_PHOTO_WIDTHS) . '.webp');
+    if ($size === false) {
+        return '';
+    }
+
+    return '<div class="hero-photo"><img src="assets/img/' . e($name) . '-' . min(HERO_PHOTO_WIDTHS) . '.webp" srcset="' . e(implode(', ', $sources)) . '"'
+        . ' sizes="100vw" alt="' . t($altKey) . '" width="' . $size[0] . '" height="' . $size[1] . '" fetchpriority="high" decoding="async"></div>';
+}
+
 // Compte Noorwan (compte.noorwan.com) : adresse et affichage des liens « Créer mon compte » et « J'ai déjà un compte » de la page Noorwan Connect.
 // Le lien reste masqué tant que COMPTE_LINK_ENABLED ne vaut pas « true » dans .env.
 // Un script peut définir ces constantes avant l'amorçage (tests/run.sh, pour les deux états).

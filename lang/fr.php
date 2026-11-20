@@ -105,6 +105,7 @@ return [
         // Grille des produits (maquette A, M-56). Liste fermée : aucun autre produit confidentiel n'y entre.
         'products' => [
             'reserva' => ['cat' => 'eBusiness', 'name' => 'Reserva', 'text' => '', 'confidential' => true],
+            'connect' => ['cat' => '', 'name' => 'Noorwan Connect', 'text' => '', 'confidential' => false],
             'inteek' => ['cat' => 'Ressources humaines', 'name' => 'Inteek', 'text' => 'Du recrutement à la gestion des équipes, les RH simplifiées.', 'confidential' => false],
             'noor' => ['cat' => 'Intelligence artificielle', 'name' => 'Noor', 'text' => '', 'confidential' => true],
         ],
@@ -157,6 +158,8 @@ return [
         ],
     ],
     'edition' => [
+        // Texte alternatif de la photo d'en-tête (edition-hero), à écrire quand Marwan dépose l'image.
+        'hero_alt' => '[À FOURNIR : description de la photo d\'en-tête de la page Édition]',
         'tag' => 'Noorwan Édition',
         'title' => 'De votre manuscrit à votre livre sur Amazon',
         'lead' => 'Noorwan Édition accompagne les auteurs à chaque étape, jusqu\'à la publication de leur livre sur Amazon. Nos propres collections, {méta}Physique et Chemins de l\'Âme, en sont la preuve.',
@@ -240,6 +243,8 @@ return [
     ],
     // Page Consulting (v6) : TEXTES A VALIDER PAR MARWAN. Le titre, l'introduction et les expertises sont ceux de l'accueil (home.cons_*).
     'consulting' => [
+        // Texte alternatif de la photo d'en-tête (consulting-hero), à écrire quand Marwan dépose l'image.
+        'hero_alt' => '[À FOURNIR : description de la photo d\'en-tête de la page Consulting]',
         'tag' => 'Noorwan Consulting',
         'expertises_title' => 'Nos expertises',
         'accomp_tag' => 'Accompagnement et édition',
@@ -248,9 +253,13 @@ return [
     ],
     // Page Solutions : TEXTES A VALIDER PAR MARWAN. Le titre et l'introduction sont ceux de l'accueil (home.sol_h, home.sol_text).
     'solutions' => [
+        // Texte alternatif de la photo d'en-tête (solutions-hero), à écrire quand Marwan dépose l'image.
+        'hero_alt' => '[À FOURNIR : description de la photo d\'en-tête de la page Solutions]',
         'tag' => 'Noorwan Solutions',
         'connect_text' => 'Un seul compte pour tous les services Noorwan.',
         'connect_link' => 'Découvrir Noorwan Connect',
+        // Catégorie de la carte Noorwan Connect (comme « eBusiness » pour Reserva) : à fournir par Marwan.
+        'connect_cat' => '[À FOURNIR : catégorie de Noorwan Connect]',
         'btn_demo' => 'Demander une présentation',
         'approach_title' => 'Notre façon de faire',
         'principles' => [

@@ -12,11 +12,14 @@ $meta = ['title' => raw('meta.solutions_title'), 'description' => raw('meta.solu
 
 $contactSolutions = url('contact', '', ['universe' => 'solutions']);
 $inteek = tl('home.products')['inteek'];
+// Photo d'en-tête sans texte (solutions-hero-780.webp et -1440.webp), titre en HTML par-dessus ; en-tête actuel tant qu'elle manque.
+$heroPhoto = hero_photo('solutions-hero', 'solutions.hero_alt');
 
 require ROOT_DIR . '/app/layout/header.php';
 ?>
 <!-- TEXTES A VALIDER PAR MARWAN -->
-<section class="page-hero tone-solutions" aria-labelledby="page-title">
+<section class="page-hero<?= $heroPhoto !== '' ? ' has-photo' : '' ?> tone-solutions" aria-labelledby="page-title">
+<?= $heroPhoto !== '' ? '    ' . $heroPhoto . "\n" : '' ?>
     <div class="wrap">
         <p class="eyebrow eyebrow-sol"><?= t('solutions.tag') ?></p>
         <h1 id="page-title" class="h1 h1-page"><?= t('home.sol_h') ?></h1>
