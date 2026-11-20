@@ -233,11 +233,11 @@ for lang in fr en ar; do
         sed -n '/id="product-reserva"/,/<\/article>/p' <<< "$html" | grep -q 'badge-confidential' \
             && pass "Reserva marqué « Confidentiel » (${page:-index}, $lang)" || fail "Reserva sans mention Confidentiel (${page:-index}, $lang)"
         # Noorwan Connect, produit de Solutions (20/11/2026) : même gabarit, nom en lettres latines, introduction de /connect,
-        # catégorie à fournir, « En savoir plus » vers sa page, illustration du haut de sa page.
+        # catégorie « Numérique » (décision de Marwan, 20/11/2026), « En savoir plus » vers sa page, illustration du haut de sa page.
         card=$(sed -n '/id="product-connect"/,/<\/article>/p' <<< "$html")
         lead=$(by_lang "$lang" "Un compte par personne, avec votre numéro de téléphone." "One account per person, with your phone number." "حساب واحد لكل شخص، برقم هاتفك.")
-        expect "carte Noorwan Connect : nom, introduction, catégorie à fournir, lien, pas confidentielle (${page:-index}, $lang)" "1|1|1|1|0" \
-            "$(grep -c '<h3 id="product-connect-name">Noorwan Connect</h3>' <<< "$card")|$(grep -cF "<p class=\"product-text\">$lead" <<< "$card")|$(grep -c '<p class="product-cat"><mark class="todo">\[À FOURNIR : catégorie de Noorwan Connect\]</mark></p>' <<< "$card")|$(grep -c "<a class=\"more\" href=\"connect?lang=$lang\">$(by_lang "$lang" "En savoir plus" "Learn more" "اعرف المزيد")</a>" <<< "$card")|$(grep -c 'badge-confidential' <<< "$card")"
+        expect "carte Noorwan Connect : nom, introduction, catégorie, lien, pas confidentielle (${page:-index}, $lang)" "1|1|1|1|0" \
+            "$(grep -c '<h3 id="product-connect-name">Noorwan Connect</h3>' <<< "$card")|$(grep -cF "<p class=\"product-text\">$lead" <<< "$card")|$(grep -c "<p class=\"product-cat\">$(by_lang "$lang" "Numérique" "Digital" "رقمي")</p>" <<< "$card")|$(grep -c "<a class=\"more\" href=\"connect?lang=$lang\">$(by_lang "$lang" "En savoir plus" "Learn more" "اعرف المزيد")</a>" <<< "$card")|$(grep -c 'badge-confidential' <<< "$card")"
         grep -qF '<div class="glyph"><picture><source srcset="assets/img/connect-hero-dark.svg" media="(prefers-color-scheme: dark)" data-theme-media="dark"><img src="assets/img/connect-hero.svg" alt=""' <<< "$card" \
             && pass "carte Noorwan Connect : illustration de sa page, sans miroir (${page:-index}, $lang)" || fail "carte Noorwan Connect : illustration (${page:-index}, $lang)"
         expect "Immobilier et Shopping « bientôt » (${page:-index}, $lang)" 2 "$(sed -n '/<div class="soon-row">/,/<\/ul>/p' <<< "$html" | grep -c '<li>')"
@@ -678,11 +678,11 @@ for lang in fr en ar; do
 done
 
 echo "« Nos savoir-faire », phrases retirées, titre de contact avant la photo sur téléphone (v8)"
-# Textes « À FOURNIR » dans les chaînes du site (20/11/2026) : catégorie de Noorwan Connect et textes alternatifs
-# des photos d'en-tête, dans chaque langue.
-expect "« À FOURNIR » dans lang/ : catégorie de Noorwan Connect seulement" 3 "$(cat lang/*.php | grep -c 'À FOURNIR : catégorie de Noorwan Connect')"
+# Textes « À FOURNIR » dans les chaînes du site (20/11/2026) : textes alternatifs des photos d'en-tête, dans chaque langue.
+# La catégorie de Noorwan Connect est fournie (« Numérique », 20/11/2026) : la clé solutions.connect_cat disparaît.
+expect "« À FOURNIR » dans lang/ : plus de catégorie de Noorwan Connect à fournir" 0 "$(cat lang/*.php | grep -c 'connect_cat\|catégorie de Noorwan Connect')"
 expect "« À FOURNIR » dans lang/ : textes alternatifs des trois photos d'en-tête" 9 "$(cat lang/*.php | grep -c "'hero_alt' => '\[À FOURNIR : description de la photo d")"
-expect "« À FOURNIR » dans lang/ : rien d'autre" 12 "$(cat lang/*.php | grep -c 'À FOURNIR')"
+expect "« À FOURNIR » dans lang/ : rien d'autre" 9 "$(cat lang/*.php | grep -c 'À FOURNIR')"
 for lang in fr en ar; do
     home=$(curl -s "$BASE_URL/?lang=$lang")
     why=$(sed -n '/aria-labelledby="why-title"/,/<\/section>/p' <<< "$home")

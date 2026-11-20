@@ -15,8 +15,6 @@ $productLinks = [
 ];
 // Texte repris d'une autre page plutôt que recopié : l'introduction de /connect pour Noorwan Connect.
 $productTextKeys = ['connect' => 'connect.lead'];
-// Catégorie encore à fournir par Marwan (catégorie vide dans home.products) : « [À FOURNIR : …] » surligné.
-$productCatTodos = ['connect' => 'solutions.connect_cat'];
 // Ton de chaque carte : clair pour les produits en service, sombre pour les autres (comme la maquette A).
 // Illustration de chaque carte : assets/img/<produit>.svg, décorative (alt vide), abstraite pour les produits confidentiels ;
 // Noorwan Connect reprend l'illustration du haut de sa page (connect-hero), sans miroir en arabe comme sur sa page.
@@ -26,7 +24,7 @@ $productVisuals = ['connect' => ['connect-hero', 640, 400]];
 <div class="products">
 <?php foreach (array_intersect_key(tl('home.products'), $productLinks) as $productId => $product): ?>
     <article id="product-<?= e($productId) ?>" class="product product-<?= e($productTones[$productId]) ?> glyph-<?= e($productId) ?>" aria-labelledby="product-<?= e($productId) ?>-name">
-        <p class="product-cat"><?= $product['cat'] === '' && isset($productCatTodos[$productId]) ? todo($productCatTodos[$productId]) : e($product['cat']) ?></p>
+        <p class="product-cat"><?= e($product['cat']) ?></p>
         <h3 id="product-<?= e($productId) ?>-name"><?= e($product['name']) ?></h3>
 <?php if ($product['confidential']): ?>
         <p class="badge-confidential"><svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true" focusable="false"><rect x="2" y="5.5" width="8" height="5.5" rx="1.2" fill="none" stroke="currentColor" stroke-width="1.2"/><path d="M4 5.5V4a2 2 0 0 1 4 0v1.5" fill="none" stroke="currentColor" stroke-width="1.2"/></svg><?= t('home.confidential') ?></p>

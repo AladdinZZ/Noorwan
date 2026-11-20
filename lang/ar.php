@@ -113,7 +113,7 @@ return [
         // À relire par un arabophone : Reserva, « Bientôt », Immobilier, Shopping.
         'products' => [
             'reserva' => ['cat' => 'eBusiness', 'name' => 'Reserva', 'text' => '', 'confidential' => true],
-            'connect' => ['cat' => '', 'name' => 'Noorwan Connect', 'text' => '', 'confidential' => false],
+            'connect' => ['cat' => 'رقمي', 'name' => 'Noorwan Connect', 'text' => '', 'confidential' => false],
             'inteek' => ['cat' => 'الموارد البشرية', 'name' => 'Inteek', 'text' => 'من التوظيف إلى إدارة الفرق، موارد بشرية مبسطة.', 'confidential' => false],
             'noor' => ['cat' => 'الذكاء الاصطناعي', 'name' => 'Noor', 'text' => '', 'confidential' => true],
         ],
@@ -274,7 +274,6 @@ return [
         'connect_text' => 'حساب واحد لجميع خدمات نوروان.',
         'connect_link' => "اكتشف\u{00A0}\u{2066}Noorwan\u{00A0}Connect\u{2069}",
         // Catégorie de la carte Noorwan Connect (comme « eBusiness » pour Reserva) : à fournir par Marwan.
-        'connect_cat' => '[À FOURNIR : catégorie de Noorwan Connect]',
         'btn_demo' => 'اطلب عرضًا تقديميًا',
         'approach_title' => 'طريقتنا في العمل',
         'principles' => [
