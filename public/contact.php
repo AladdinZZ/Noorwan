@@ -57,13 +57,18 @@ $errorText = static fn (string $field): string => isset($errors[$field])
     ? '<p class="field-error" id="' . e($field) . '-error">' . t('contact.errors.' . $errors[$field]) . '</p>'
     : '';
 
+// En-tête en photo comme Consulting (21/11/2026) : la photo de réunion en fond, titre en HTML par-dessus.
+// Elle n'existe qu'en 1200 px : contact-hero-780.webp (recadrée sans redimensionnement) et contact-hero-1200.webp.
+// Plus de photo dans le corps de l'en-tête, pour ne pas la montrer deux fois.
+$heroPhoto = hero_photo('contact-hero', 'contact.photo_alt', [780, 1200]);
+
 require ROOT_DIR . '/app/layout/header.php';
 ?>
-<section class="page-hero" aria-labelledby="page-title">
-    <div class="wrap wrap-photo">
+<section class="page-hero<?= $heroPhoto !== '' ? ' has-photo' : '' ?>" aria-labelledby="page-title">
+<?= $heroPhoto !== '' ? '    ' . $heroPhoto . "\n" : '' ?>
+    <div class="wrap">
         <p class="eyebrow eyebrow-muted"><?= t('contact.tag') ?></p>
         <h1 id="page-title" class="h1 h1-page"><?= t('contact.title') ?></h1>
-<?php $photoLazy = false; require ROOT_DIR . '/app/layout/contact-photo.php'; ?>
         <p class="lead"><?= t('contact.lead') ?></p>
         <p class="cta-mail"><a href="mailto:<?= e(CONTACT_EMAIL) ?>" dir="ltr"><?= e(CONTACT_EMAIL) ?></a></p>
     </div>
