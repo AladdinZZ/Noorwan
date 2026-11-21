@@ -582,11 +582,11 @@ for lang in fr en ar; do
     home=$(curl -s "$BASE_URL/?lang=$lang")
     expect "accueil : sept illustrations décoratives ($lang)" 7 "$(grep -cE '<img class="illus" src="assets/img/(hero|universe-(consulting|solutions)|connect-hero|step-(field|build|improve))\.svg" alt=""' <<< "$home")"
     expect "méthode : trois étapes ($lang)" 3 "$(sed -n '/id="methode"/,/<\/section>/p' <<< "$home" | grep -c '<span class="method-num"')"
-    # Photo de contact (v7) : bandeau de l'accueil (chargée à la demande) et tête de la page Contact, texte alternatif traduit.
+    # Photo de contact (v7) : bandeau de l'accueil (chargée à la demande), texte alternatif traduit.
+    # Depuis le 21/11/2026, la page Contact la porte en fond de son en-tête (contrôlé avec les photos d'en-tête).
     alt=$(by_lang "$lang" "Trois personnes en réunion" "Three people in a meeting" "ثلاثة أشخاص في اجتماع")
     photo='<img class="photo" src="assets/img/contact-reunion-600.webp" srcset="assets/img/contact-reunion-600.webp 600w, assets/img/contact-reunion-1200.webp 1200w"'
     expect "bandeau de contact : photo avec texte alternatif ($lang)" 1 "$(grep -F "$photo" <<< "$home" | grep -F 'loading="lazy"' | grep -c "alt=\"$alt")"
-    expect "page Contact : photo avec texte alternatif ($lang)" 1 "$(curl -s "$BASE_URL/contact.php?lang=$lang" | grep -F "$photo" | grep -v 'loading="lazy"' | grep -c "alt=\"$alt")"
     if grep -q 'contact\.svg' <<< "$home"; then fail "ancienne illustration de contact encore sur l'accueil ($lang)"; else pass "ancienne illustration de contact retirée ($lang)"; fi
 done
 # Pictogrammes des expertises (variante 1) : couleurs du Consulting, version sombre aux couleurs de la planche, jamais en miroir.
@@ -660,6 +660,28 @@ if "$PHP" -r 'exit(function_exists("imagewebp") ? 0 : 1);'; then
 else
     pass "GD sans WebP : contrôle avec images d'essai ignoré"
 fi
+# Page Contact (21/11/2026) : en-tête en photo comme Consulting, à partir de la photo de réunion (1200 px au plus :
+# grande largeur 1200, jamais d'agrandissement). La photo n'est plus dans le corps de l'en-tête (pas deux fois la même).
+for width in 780 1200; do
+    file="public/assets/img/contact-hero-$width.webp"
+    expect "contact-hero-$width.webp servi" 200 "$(curl -s -o /dev/null -w '%{http_code}' "$BASE_URL/assets/img/contact-hero-$width.webp")"
+    size=$(wc -c < "$file" | tr -d ' ')
+    [[ $size -lt 307200 ]] && pass "contact-hero-$width.webp léger ($size octets)" || fail "contact-hero-$width.webp trop lourd ($size octets)"
+    expect "contact-hero-$width.webp : largeur $width px, hauteur de l'original (800 px), sans agrandissement" "$width|800" \
+        "$("$PHP" -r '$s = getimagesize($argv[1]); echo $s[0] . "|" . $s[1];' "$file")"
+done
+for lang in fr en ar; do
+    html=$(curl -s "$BASE_URL/contact.php?lang=$lang")
+    hero=$(sed -n '/<section class="page-hero/,/<\/section>/p' <<< "$html")
+    alt=$(by_lang "$lang" "Trois personnes en réunion" "Three people in a meeting" "ثلاثة أشخاص في اجتماع")
+    img='<div class="hero-photo"><img src="assets/img/contact-hero-780.webp" srcset="assets/img/contact-hero-780.webp 780w, assets/img/contact-hero-1200.webp 1200w" sizes="100vw" alt="'
+    expect "page Contact : en-tête en photo, deux largeurs, alt, dimensions, titre en HTML après l'image ($lang)" "1|1|1|1" \
+        "$(grep -c '<section class="page-hero has-photo"' <<< "$hero")|$(grep -F "$img" <<< "$hero" | grep -c "alt=\"$alt")|$(grep -c 'width="1200" height="800" fetchpriority="high" decoding="async"></div>' <<< "$hero")|$(sed -n '/class="hero-photo"/,$p' <<< "$hero" | grep -c '<h1 id="page-title"')"
+    expect "page Contact : plus de photo dans le corps de l'en-tête ni ailleurs sur la page ($lang)" "0|0" \
+        "$(grep -c 'class="cta-visual"' <<< "$html")|$(grep -c 'contact-reunion-' <<< "$html")"
+    expect "page Contact : adresse sous l'introduction ($lang)" 1 "$(grep -c '<p class="cta-mail"><a href="mailto:' <<< "$hero")"
+done
+grep -q '^\.page-hero\.has-photo \.cta-mail a {$' public/assets/css/site.css && pass "page Contact : adresse en blanc sur la photo" || fail "couleur de l'adresse sur la photo de Contact"
 grep -q '^\.hero-photo img {$' public/assets/css/site.css && pass "photo d'en-tête en object-fit, voile par-dessus" || fail "styles de la photo d'en-tête absents"
 if grep -qE '\[dir="rtl"\][^{]*\.hero-photo' public/assets/css/site.css; then fail "photo d'en-tête en miroir en arabe"; else pass "photo d'en-tête jamais en miroir"; fi
 
@@ -689,11 +711,16 @@ done
 
 echo "« Nos savoir-faire », phrases retirées, titre de contact avant la photo sur téléphone (v8)"
 # Textes « À FOURNIR » dans les chaînes du site (20/11/2026) : textes alternatifs des photos d'en-tête, dans chaque langue.
-# Consulting a sa photo depuis le 20/11/2026 : restent Solutions et Édition (2 x 3 langues).
+# Consulting a sa photo depuis le 20/11/2026 ; le texte alternatif de Solutions est écrit le 21/11/2026, avant l'image :
+# reste Édition (3 langues).
 # La catégorie de Noorwan Connect est fournie (« Numérique », 20/11/2026) : la clé solutions.connect_cat disparaît.
 expect "« À FOURNIR » dans lang/ : plus de catégorie de Noorwan Connect à fournir" 0 "$(cat lang/*.php | grep -c 'connect_cat\|catégorie de Noorwan Connect')"
-expect "« À FOURNIR » dans lang/ : textes alternatifs des deux photos d'en-tête restantes" 6 "$(cat lang/*.php | grep -c "'hero_alt' => '\[À FOURNIR : description de la photo d")"
-expect "« À FOURNIR » dans lang/ : rien d'autre" 6 "$(cat lang/*.php | grep -c 'À FOURNIR')"
+expect "« À FOURNIR » dans lang/ : texte alternatif de la photo d'en-tête restante (Édition)" 3 "$(cat lang/*.php | grep -c "'hero_alt' => '\[À FOURNIR : description de la photo d.*en-tête de la page Édition\]'")"
+expect "« À FOURNIR » dans lang/ : rien d'autre" 3 "$(cat lang/*.php | grep -c 'À FOURNIR')"
+for lang in fr en ar; do
+    expect "texte alternatif de la photo d'en-tête de Solutions écrit ($lang)" 1 \
+        "$(grep -cF "'hero_alt' => '$(by_lang "$lang" "Illustration : deux personnes assemblent des écrans d\\'application et des modules reliés entre eux." "Illustration: two people assemble app screens and connected modules." "رسم توضيحي: شخصان يجمّعان شاشات تطبيقات ووحدات مترابطة.")'," "lang/$lang.php")"
+done
 for lang in fr en ar; do
     home=$(curl -s "$BASE_URL/?lang=$lang")
     why=$(sed -n '/aria-labelledby="why-title"/,/<\/section>/p' <<< "$home")
@@ -707,8 +734,6 @@ for lang in fr en ar; do
     # Ordre du document = ordre sur téléphone : titre, puis photo.
     expect "bandeau de contact : titre puis photo ($lang)" "cta-title|cta-visual" \
         "$(sed -n '/class="screen screen-mist cta"/,/<\/section>/p' <<< "$home" | grep -oE 'id="cta-title"|class="cta-visual"' | sed -E 's/(id|class)="([^"]+)"/\2/' | paste -sd '|' -)"
-    expect "page Contact : titre puis photo ($lang)" "page-title|cta-visual" \
-        "$(curl -s "$BASE_URL/contact.php?lang=$lang" | sed -n '/<section class="page-hero"/,/<\/section>/p' | grep -oE 'id="page-title"|class="cta-visual"' | sed -E 's/(id|class)="([^"]+)"/\2/' | paste -sd '|' -)"
 done
 sed -n '/@media (min-width: 768px) {/,/^}/p' public/assets/css/site.css | grep -A3 '\.wrap-photo > \.cta-visual' | grep -q 'order: -1' \
     && pass "à partir de 768 px, la photo repasse au-dessus du titre" || fail "ordre de la photo sur grand écran"

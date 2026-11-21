@@ -447,3 +447,12 @@ Brief « Page Solutions, un produit par ligne ; catégorie de Noorwan Connect »
   - Téléphone : illustration au-dessus du texte, centrés. Ordinateur (834 px et plus) : deux colonnes, illustration à gauche puis à droite en alternance (à droite puis à gauche en arabe). Grand espace et filet fin entre les lignes.
   - Illustrations : celles des anciennes cartes ; Inteek en miroir en arabe, les autres jamais.
 - **Inchangés** (pas de décision de Marwan) : la phrase « Un seul compte pour tous les services Noorwan. Découvrir Noorwan Connect » sous l'introduction de Solutions, et le résumé « 03 Noorwan Connect » de l'accueil.
+
+
+## État du site au 21/11/2026 (en-tête en photo de Contact, texte alternatif de Solutions, branche `feat/visuels-solutions-contact`, à relire avant fusion)
+
+Brief « En-têtes en photo pour Solutions et Contact » de Maestro (21/11/2026), d'après la demande de Marwan.
+
+- **Page Contact** : en-tête en photo comme Consulting. La photo de réunion (trois personnes autour d'une table) passe en fond, sous le même voile sombre ; « Contact », « Parlons de votre projet », l'introduction et l'adresse contact@noorwan.com restent en HTML par-dessus, en blanc dans les deux thèmes. Elle n'apparaît plus dans le corps de l'en-tête (pas deux fois la même photo) ; elle reste dans le bandeau « Un projet en tête ? » des autres pages. Fichiers `contact-hero-780.webp` (780 x 800, recadrée au centre) et `contact-hero-1200.webp` : l'original n'a que 1200 px, la grande largeur reste 1200, sans agrandissement. Texte alternatif inchangé (celui de la photo de contact).
+- **Page Solutions** : texte alternatif de la future photo d'en-tête, écrit avant l'image : FR « Illustration : deux personnes assemblent des écrans d'application et des modules reliés entre eux. » ; EN « Illustration: two people assemble app screens and connected modules. » ; AR « رسم توضيحي: شخصان يجمّعان شاشات تطبيقات ووحدات مترابطة. ». L'en-tête ne change pas tant que `solutions-hero-780.webp` et `-1440.webp` ne sont pas déposés.
+- **Reste à fournir** : le texte alternatif de la photo d'en-tête d'Édition (trois langues).

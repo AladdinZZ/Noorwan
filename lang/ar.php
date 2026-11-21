@@ -268,7 +268,7 @@ return [
     // Le titre et l'introduction sont ceux de l'accueil (home.sol_h, home.sol_text).
     'solutions' => [
         // Texte alternatif de la photo d'en-tête (solutions-hero), à écrire quand Marwan dépose l'image.
-        'hero_alt' => '[À FOURNIR : description de la photo d\'en-tête de la page Solutions]',
+        'hero_alt' => 'رسم توضيحي: شخصان يجمّعان شاشات تطبيقات ووحدات مترابطة.',
         'tag' => 'نوروان للحلول',
         // À relire.
         'connect_text' => 'حساب واحد لجميع خدمات نوروان.',

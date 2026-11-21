@@ -1636,7 +1636,7 @@ main:focus {
     overflow: hidden;
 }
 
-/* Photo d'en-tête des pages Consulting, Solutions et Édition (classe has-photo, posée seulement quand l'image existe) :
+/* Photo d'en-tête des pages Consulting, Solutions, Édition et Contact (classe has-photo, posée seulement quand l'image existe) :
    image sans texte en fond, voile sombre dégradé vers le bas, titre et liens en HTML par-dessus, mêmes couleurs dans les deux
    thèmes. Texte en bas de l'image au téléphone comme sur ordinateur. Jamais en miroir en arabe. */
 .page-hero.has-photo {
@@ -1675,12 +1675,14 @@ main:focus {
 .page-hero.has-photo .eyebrow,
 .page-hero.has-photo .h1,
 .page-hero.has-photo .lead,
-.page-hero.has-photo .page-connect {
+.page-hero.has-photo .page-connect,
+.page-hero.has-photo .cta-mail {
     color: var(--night-text);
 }
 
 .page-hero.has-photo .more,
-.page-hero.has-photo .page-connect a {
+.page-hero.has-photo .page-connect a,
+.page-hero.has-photo .cta-mail a {
     color: var(--white);
     text-decoration: underline;
     text-underline-offset: 3px;

@@ -254,7 +254,7 @@ return [
     // Page Solutions : TEXTES A VALIDER PAR MARWAN. Le titre et l'introduction sont ceux de l'accueil (home.sol_h, home.sol_text).
     'solutions' => [
         // Texte alternatif de la photo d'en-tête (solutions-hero), à écrire quand Marwan dépose l'image.
-        'hero_alt' => '[À FOURNIR : description de la photo d\'en-tête de la page Solutions]',
+        'hero_alt' => 'Illustration : deux personnes assemblent des écrans d\'application et des modules reliés entre eux.',
         'tag' => 'Noorwan Solutions',
         'connect_text' => 'Un seul compte pour tous les services Noorwan.',
         'connect_link' => 'Découvrir Noorwan Connect',
