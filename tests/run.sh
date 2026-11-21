@@ -711,11 +711,16 @@ done
 
 echo "« Nos savoir-faire », phrases retirées, titre de contact avant la photo sur téléphone (v8)"
 # Textes « À FOURNIR » dans les chaînes du site (20/11/2026) : textes alternatifs des photos d'en-tête, dans chaque langue.
-# Consulting a sa photo depuis le 20/11/2026 : restent Solutions et Édition (2 x 3 langues).
+# Consulting a sa photo depuis le 20/11/2026 ; le texte alternatif de Solutions est écrit le 21/11/2026, avant l'image :
+# reste Édition (3 langues).
 # La catégorie de Noorwan Connect est fournie (« Numérique », 20/11/2026) : la clé solutions.connect_cat disparaît.
 expect "« À FOURNIR » dans lang/ : plus de catégorie de Noorwan Connect à fournir" 0 "$(cat lang/*.php | grep -c 'connect_cat\|catégorie de Noorwan Connect')"
-expect "« À FOURNIR » dans lang/ : textes alternatifs des deux photos d'en-tête restantes" 6 "$(cat lang/*.php | grep -c "'hero_alt' => '\[À FOURNIR : description de la photo d")"
-expect "« À FOURNIR » dans lang/ : rien d'autre" 6 "$(cat lang/*.php | grep -c 'À FOURNIR')"
+expect "« À FOURNIR » dans lang/ : texte alternatif de la photo d'en-tête restante (Édition)" 3 "$(cat lang/*.php | grep -c "'hero_alt' => '\[À FOURNIR : description de la photo d.*en-tête de la page Édition\]'")"
+expect "« À FOURNIR » dans lang/ : rien d'autre" 3 "$(cat lang/*.php | grep -c 'À FOURNIR')"
+for lang in fr en ar; do
+    expect "texte alternatif de la photo d'en-tête de Solutions écrit ($lang)" 1 \
+        "$(grep -cF "'hero_alt' => '$(by_lang "$lang" "Illustration : deux personnes assemblent des écrans d\\'application et des modules reliés entre eux." "Illustration: two people assemble app screens and connected modules." "رسم توضيحي: شخصان يجمّعان شاشات تطبيقات ووحدات مترابطة.")'," "lang/$lang.php")"
+done
 for lang in fr en ar; do
     home=$(curl -s "$BASE_URL/?lang=$lang")
     why=$(sed -n '/aria-labelledby="why-title"/,/<\/section>/p' <<< "$home")
