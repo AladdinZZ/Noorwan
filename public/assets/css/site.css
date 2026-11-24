@@ -874,6 +874,147 @@ main:focus {
     color: var(--text);
 }
 
+/* ---------- Lanceur des sites (M-121) : bouton « grille » de l'en-tête, entre le thème et « Connexion » ---------- */
+
+/* Bouton rond de 44 px, comme le thème ; il ouvre le volet #launcher-panel (ancre sans JavaScript). */
+.launcher-toggle {
+    display: flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    color: var(--ink);
+}
+
+.launcher-toggle:hover,
+.launcher-toggle[aria-expanded="true"] {
+    background: var(--mist);
+    color: var(--ink);
+    text-decoration: none;
+}
+
+/* Grille de tuiles, trois par ligne : pastille ronde à la couleur du site, sa lettre, son nom dessous. */
+.launcher-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 4px;
+}
+
+.launcher-tile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 96px;
+    padding: 10px 4px;
+    border-radius: 14px;
+    color: var(--ink);
+    font-size: 14px;
+    line-height: 1.25;
+    text-align: center;
+}
+
+.launcher-tile bdi {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+}
+
+.launcher-tile:hover {
+    background: var(--mist);
+    color: var(--ink);
+    text-decoration: none;
+}
+
+/* Site courant (noorwan.com) : il reste dans la liste, sur un fond doux. */
+.launcher-tile[aria-current="page"] {
+    background: var(--sol-tint);
+    font-weight: 600;
+}
+
+.launcher-dot {
+    flex: none;
+}
+
+/* Trait fin qui détache la pastille du fond, dans les deux thèmes. */
+.launcher-dot circle {
+    stroke: var(--line);
+    stroke-width: 1;
+}
+
+.launcher-dot text {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif;
+}
+
+/* « Mon compte Connect », tout en bas. */
+.launcher-account {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 48px;
+    color: var(--link);
+    font-size: 15px;
+    font-weight: 500;
+}
+
+/* « › » est un caractère miroir : en arabe, il se retourne de lui-même. */
+.launcher-account::after {
+    content: "\203A";
+    margin-inline-start: 6px;
+}
+
+/* Dès 640 px : panneau sous l'en-tête, aligné sur la fin de ligne comme le menu des langues ; le voile reste
+   (transparent) pour qu'un toucher à côté ferme. Au téléphone, volet de fin de ligne plein écran. */
+@media (min-width: 640px) {
+    .panel-launcher .panel-scrim {
+        background: transparent;
+    }
+
+    .panel-launcher .panel {
+        inset-block: calc(var(--header-h) + 4px) auto;
+        inset-inline-end: 8px;
+        width: 344px;
+        max-height: calc(100vh - var(--header-h) - 16px);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+    }
+
+    .panel-launcher .panel-head {
+        min-height: 48px;
+        padding-inline: 16px 4px;
+        border-block-end: 0;
+    }
+
+    .panel-launcher .panel-title {
+        font-size: 15px;
+    }
+
+    .panel-launcher .panel-body {
+        padding: 0 12px 8px;
+    }
+
+    .panel-launcher .panel-foot {
+        padding: 0 12px;
+    }
+}
+
+/* En-tête à 390 px : avec le lanceur, rien ne passe à la ligne ni ne déborde. */
+@media (max-width: 419px) {
+    .header-bar {
+        gap: 0;
+    }
+
+    .lang-menu summary {
+        padding-inline: 6px;
+    }
+
+    .account-toggle {
+        padding-inline: 6px;
+    }
+}
+
 /* ---------- Écrans : un message par écran, centré ---------- */
 
 .screen {
@@ -1422,35 +1563,6 @@ main:focus {
 .footer-cols a:hover,
 .footer-legal a:hover {
     color: var(--ink);
-}
-
-/* Écosystème Noorwan : une ligne, les autres sites du groupe seulement. */
-.ecosystem {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 6px 20px;
-    padding-block: 16px;
-    border-block-start: 1px solid var(--line);
-}
-
-.ecosystem .footer-h {
-    margin: 0;
-    color: var(--muted);
-}
-
-.ecosystem ul {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0 20px;
-}
-
-.ecosystem a {
-    display: inline-flex;
-    align-items: center;
-    min-height: 36px;
-    color: var(--ink);
-    font-weight: 500;
 }
 
 .footer-bottom {

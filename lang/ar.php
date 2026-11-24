@@ -62,12 +62,14 @@ return [
         'learn_more' => 'اعرف المزيد',
         'brand' => 'نوروان',
     ],
-    // Écosystème Noorwan (D63), mêmes libellés que sur Inteek.
-    'ecosystem' => [
-        'title' => 'منظومة Noorwan',
+    // Lanceur des sites (M-121), mêmes libellés que sur Reserva.
+    'launcher' => [
+        'title' => 'مواقع Noorwan',
+        'account' => 'حسابي في Connect',
+        'noorwan' => 'noorwan.com',
+        'connect' => 'Connect',
         'reserva' => 'Reserva',
         'inteek' => 'Inteek',
-        'connect' => 'Connect',
     ],
     'legal_nav' => [
         'mentions' => 'الإشعارات القانونية',

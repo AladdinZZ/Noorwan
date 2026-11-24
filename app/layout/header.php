@@ -3,7 +3,8 @@
 declare(strict_types=1);
 
 // En-tête commun (charte commune M-118, M-120) : <head>, barre fixe de 48 px (Menu, logo, liens principaux dès 900 px,
-// langue, thème, « Connexion »), puis les deux volets : le menu en début de ligne, la connexion en fin de ligne.
+// langue, thème, lanceur des sites, « Connexion »), puis les volets : le menu en début de ligne, le lanceur des sites
+// (M-121 : volet plein écran au téléphone, panneau sous l'en-tête dès 640 px) et la connexion en fin de ligne.
 // Sans JavaScript, chaque volet s'ouvre par son ancre (:target) et se ferme par « # » ; site.js y ajoute Échap,
 // le voile, le retour arrière et le focus. Jamais de fenêtre surgissante.
 // Attend $meta = ['title' => ..., 'description' => ...] (chaînes brutes, échappées ici).
@@ -27,6 +28,14 @@ $navCurrent = static fn (array $item): string => $item['page'] === current_page(
 // présente Connect et renvoie vers sa page.
 $accountUrl = account_url();
 $closeIcon = '<svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M5 5l10 10M15 5L5 15" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>';
+
+// Lanceur des sites (M-121) : liste publique (launcher_sites()) et lien « Mon compte Connect » (masqué sans adresse).
+// Pastille d'un site : rond à sa couleur, sa lettre en blanc, en SVG (couleur par l'attribut fill, jamais de style en ligne).
+$launcherAccount = launcher_account_url();
+$launcherDot = static fn (string $color, string $letter): string => '<svg class="launcher-dot" width="48" height="48" viewBox="0 0 48 48"'
+    . ' aria-hidden="true" focusable="false"><circle cx="24" cy="24" r="23" fill="' . e($color) . '"/>'
+    . '<text x="24" y="24" text-anchor="middle" dominant-baseline="central" fill="#FFFFFF" font-size="22" font-weight="600">'
+    . e($letter) . '</text></svg>';
 
 $asset = static fn (string $path): string => $path . '?v=' . (string) @filemtime(ROOT_DIR . '/public/' . $path);
 
@@ -112,6 +121,9 @@ gtag('consent', 'update', { analytics_storage: 'granted' });
                 </ul>
             </details>
             <?= $themeToggle() ?>
+            <a class="launcher-toggle" href="#launcher-panel" aria-controls="launcher-panel" aria-expanded="false" aria-label="<?= t('launcher.title') ?>" title="<?= t('launcher.title') ?>" data-panel-open>
+                <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><g fill="currentColor"><circle cx="4" cy="4" r="1.6"/><circle cx="10" cy="4" r="1.6"/><circle cx="16" cy="4" r="1.6"/><circle cx="4" cy="10" r="1.6"/><circle cx="10" cy="10" r="1.6"/><circle cx="16" cy="10" r="1.6"/><circle cx="4" cy="16" r="1.6"/><circle cx="10" cy="16" r="1.6"/><circle cx="16" cy="16" r="1.6"/></g></svg>
+            </a>
             <a class="account-toggle" href="#connect-panel" aria-controls="connect-panel" aria-expanded="false" data-panel-open><?= t('nav.sign_in') ?></a>
         </div>
     </div>
@@ -132,20 +144,31 @@ gtag('consent', 'update', { analytics_storage: 'granted' });
 <?php endforeach; ?>
                 </ul>
             </nav>
-<?php if (ecosystem_sites() !== []): ?>
-            <nav class="panel-ecosystem" aria-labelledby="menu-panel-ecosystem">
-                <p id="menu-panel-ecosystem" class="panel-group"><?= t('ecosystem.title') ?></p>
-                <ul class="panel-list">
-<?php foreach (ecosystem_sites() as $label => $siteUrl): ?>
-                    <li><a href="<?= e($siteUrl) ?>" rel="noopener"><bdi><?= t($label) ?></bdi></a></li>
-<?php endforeach; ?>
-                </ul>
-            </nav>
-<?php endif; ?>
         </div>
 <?php if ($accountUrl !== null): ?>
         <div class="panel-foot">
             <a class="btn btn-connect btn-block connect-continue" href="<?= e($accountUrl) ?>"><?= t('connect.continue') ?></a>
+        </div>
+<?php endif; ?>
+    </section>
+</div>
+<div id="launcher-panel" class="panel-layer panel-end panel-launcher" data-panel>
+    <a class="panel-scrim" href="#" tabindex="-1" aria-hidden="true" data-panel-close></a>
+    <section class="panel" role="dialog" aria-modal="true" aria-labelledby="launcher-panel-title">
+        <div class="panel-head">
+            <h2 id="launcher-panel-title" class="panel-title"><?= t('launcher.title') ?></h2>
+            <a class="panel-close" href="#" data-panel-close><span class="visually-hidden"><?= t('nav.close') ?></span><?= $closeIcon ?></a>
+        </div>
+        <div class="panel-body">
+            <ul class="launcher-grid">
+<?php foreach (launcher_sites() as $site): ?>
+                <li><a class="launcher-tile" href="<?= e($site['url']) ?>" data-launcher-site="<?= e($site['key']) ?>"<?= $site['current'] ? ' aria-current="page"' : ' rel="noopener"' ?>><?= $launcherDot($site['color'], $site['letter']) ?><bdi><?= t($site['label']) ?></bdi></a></li>
+<?php endforeach; ?>
+            </ul>
+        </div>
+<?php if ($launcherAccount !== null): ?>
+        <div class="panel-foot">
+            <a class="launcher-account" href="<?= e($launcherAccount) ?>" rel="noopener"><?= t('launcher.account') ?></a>
         </div>
 <?php endif; ?>
     </section>
