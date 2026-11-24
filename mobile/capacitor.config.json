@@ -1,0 +1,17 @@
+{
+  "appId": "com.noorwan.site",
+  "appName": "Noorwan",
+  "webDir": "www",
+  "server": {
+    "url": "https://noorwan.com",
+    "cleartext": false,
+    "androidScheme": "https",
+    "errorPath": "index.html",
+    "allowNavigation": [
+      "compte.noorwan.com"
+    ]
+  },
+  "android": {
+    "allowMixedContent": false
+  }
+}

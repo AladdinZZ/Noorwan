@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<!--
+    Page de secours de l'application Android Noorwan, affichée quand le site
+    https://noorwan.com ne peut pas être chargé (pas de réseau, serveur indisponible).
+    Elle est servie depuis le téléphone (capacitor.config.json : webDir et
+    server.errorPath). « Réessayer » renvoie vers le site en ligne : un rechargement ne
+    ferait que réafficher cette page locale. Aucune ressource externe, aucun script en ligne
+    (la politique de sécurité du site l'interdit) : le script est un fichier voisin.
+-->
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#1D1D1F">
+    <title>Noorwan : pas de connexion</title>
+    <link rel="stylesheet" href="offline.css">
+</head>
+<body>
+    <main class="card">
+        <svg class="logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" aria-hidden="true">
+            <rect width="64" height="64" rx="14" fill="#1D1D1F"/>
+            <path fill="#FFFFFF" d="M24.186046511627907 30.767441860465116C24.186046511627907 27.0 26.51162790697674 24.813953488372093 29.74418604651163 24.813953488372093C32.906976744186046 24.813953488372093 34.81395348837209 26.906976744186046 34.81395348837209 30.395348837209305V46.0H40.860465116279066V29.46511627906977C40.860465116279066 23.209302325581394 37.325581395348834 19.674418604651162 31.97674418604651 19.674418604651162C28.162790697674417 19.674418604651162 25.46511627906977 21.53488372093023 23.930232558139537 25.186046511627907L23.86046511627907 20.0H18.13953488372093V46.0H24.186046511627907Z"/>
+            <circle cx="48" cy="44" r="4.5" fill="#2997FF"/>
+        </svg>
+        <h1>Pas de connexion</h1>
+        <p>Impossible d'afficher Noorwan pour le moment. Vérifiez votre connexion Internet, puis réessayez.</p>
+        <button type="button" id="retry">Réessayer</button>
+    </main>
+    <script src="offline.js"></script>
+</body>
+</html>
