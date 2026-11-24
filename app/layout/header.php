@@ -2,36 +2,47 @@
 
 declare(strict_types=1);
 
-// En-tête commun : <head>, barre fine avec logo, navigation, choix de langue et menu mobile.
+// En-tête commun (charte commune M-118, M-120) : <head>, barre fixe de 48 px (Menu, logo, liens principaux dès 900 px,
+// langue, thème, « Connexion »), puis les deux volets : le menu en début de ligne, la connexion en fin de ligne.
+// Sans JavaScript, chaque volet s'ouvre par son ancre (:target) et se ferme par « # » ; site.js y ajoute Échap,
+// le voile, le retour arrière et le focus. Jamais de fenêtre surgissante.
 // Attend $meta = ['title' => ..., 'description' => ...] (chaînes brutes, échappées ici).
 
-// Une page par onglet (v6). « À propos » viendra avec sa propre page : il n'est pas dans le menu.
-// L'Édition n'est plus un onglet : elle est présentée dans la page Consulting ; sa page reste dans le pied de page et le plan du site.
-// Noorwan Connect n'est plus un onglet (décision de Marwan du 20/11/2026) : c'est un produit de l'univers Solutions,
-// présenté dans la grille de la page Solutions ; sa page /connect reste dans le pied de page et le plan du site.
 $navItems = [
     ['page' => 'consulting', 'label' => 'nav.consulting', 'href' => url('consulting')],
     ['page' => 'solutions', 'label' => 'nav.solutions', 'href' => url('solutions')],
     ['page' => 'contact', 'label' => 'nav.contact', 'href' => url('contact')],
 ];
+// Volet du menu : toutes les rubriques du site, Accueil et Édition comprises (maquette « noorwan-menu », 24/11/2026).
+$panelItems = array_merge(
+    [['page' => 'index', 'label' => 'nav.home', 'href' => url('index')]],
+    array_slice($navItems, 0, 2),
+    [['page' => 'edition', 'label' => 'nav.edition', 'href' => url('edition')]],
+    array_slice($navItems, 2),
+);
 // Onglet de la page affichée : aria-current="page", mis en avant par la feuille de style (v7).
 $navCurrent = static fn (array $item): string => $item['page'] === current_page() ? ' aria-current="page"' : '';
-// Le site ne gère aucun compte : on entre dans l'écosystème depuis la page Noorwan Connect (v5 bis), présentée dans Solutions.
+// Le site ne gère aucun compte : « Continuer avec Noorwan » mène au Compte (Connect) seulement quand il est en service
+// (account_url(), COMPTE_LINK_ENABLED), dans les deux volets et sur la page /connect ; sinon le volet de connexion
+// présente Connect et renvoie vers sa page.
+$accountUrl = account_url();
+$closeIcon = '<svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M5 5l10 10M15 5L5 15" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>';
 
 $asset = static fn (string $path): string => $path . '?v=' . (string) @filemtime(ROOT_DIR . '/public/' . $path);
 
-// Bouton du thème (v9) : masqué sans JavaScript (le site suit alors l'appareil), réglé par theme-init.js.
+// Bouton du thème (v9), dans la barre sur toutes les largeurs (charte commune) : masqué sans JavaScript
+// (le site suit alors l'appareil), réglé par theme-init.js.
 // Icône du thème affiché (soleil en clair, croissant de lune en sombre) ; le libellé dit ce que fait le clic.
-$themeToggle = static function (string $class, bool $withText): string {
+$themeToggle = static function (): string {
     $icons = '<svg class="theme-icon theme-icon-sun" width="20" height="20" viewBox="0 0 20 20" aria-hidden="true" focusable="false">'
         . '<g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="10" cy="10" r="3.5"/>'
         . '<path d="M10 2v1.8M10 16.2V18M2 10h1.8M16.2 10H18M4.3 4.3l1.3 1.3M14.4 14.4l1.3 1.3M4.3 15.7l1.3-1.3M14.4 5.6l1.3-1.3"/></g></svg>'
         . '<svg class="theme-icon theme-icon-moon" width="20" height="20" viewBox="0 0 20 20" aria-hidden="true" focusable="false">'
         . '<path d="M16.5 12.6A7 7 0 0 1 7.4 3.5a7 7 0 1 0 9.1 9.1z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>';
 
-    return '<button class="theme-toggle ' . $class . '" type="button" hidden aria-label="' . t('nav.theme_to_dark') . '"'
+    return '<button class="theme-toggle theme-toggle-bar" type="button" hidden aria-label="' . t('nav.theme_to_dark') . '"'
         . ' data-label-dark="' . t('nav.theme_to_dark') . '" data-label-light="' . t('nav.theme_to_light') . '">'
-        . $icons . ($withText ? '<span class="theme-toggle-text">' . t('nav.theme_to_dark') . '</span>' : '') . "</button>\n";
+        . $icons . "</button>\n";
 };
 ?>
 <!doctype html>
@@ -80,7 +91,11 @@ gtag('consent', 'update', { analytics_storage: 'granted' });
 <body>
 <a class="skip-link" href="#main"><?= t('nav.skip') ?></a>
 <header class="site-header">
-    <div class="wrap header-bar">
+    <div class="header-bar">
+        <a class="menu-toggle" href="#menu-panel" aria-controls="menu-panel" aria-expanded="false" data-panel-open>
+            <span class="visually-hidden"><?= t('nav.menu') ?></span>
+            <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M3 5.5h14M3 10h14M3 14.5h14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </a>
         <a class="logo" href="<?= e(url('index')) ?>" aria-label="<?= t('nav.home_label') ?>" dir="ltr">noorwan<span class="logo-dot">.</span></a>
         <nav class="nav-desktop" aria-label="<?= t('nav.main_label') ?>">
 <?php foreach ($navItems as $item): ?>
@@ -88,7 +103,6 @@ gtag('consent', 'update', { analytics_storage: 'granted' });
 <?php endforeach; ?>
         </nav>
         <div class="header-tools">
-            <?= $themeToggle('theme-toggle-bar', false) ?>
             <details class="lang-menu">
                 <summary><span class="visually-hidden"><?= t('nav.lang_label') ?>, <?= e(LANGS[lang()]['name']) ?></span><span aria-hidden="true"><?= e(LANGS[lang()]['label']) ?></span><svg class="lang-chevron" width="10" height="10" viewBox="0 0 10 10" aria-hidden="true" focusable="false"><path d="M2 3.5l3 3 3-3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
                 <ul class="lang-list" aria-label="<?= t('nav.lang_label') ?>">
@@ -97,17 +111,61 @@ gtag('consent', 'update', { analytics_storage: 'granted' });
 <?php endforeach; ?>
                 </ul>
             </details>
-            <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="nav-mobile" hidden>
-                <span class="visually-hidden"><?= t('nav.menu') ?></span>
-                <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><g stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><line class="menu-line-1" x1="3" y1="6.5" x2="17" y2="6.5"/><line class="menu-line-2" x1="3" y1="13.5" x2="17" y2="13.5"/></g></svg>
-            </button>
+            <?= $themeToggle() ?>
+            <a class="account-toggle" href="#connect-panel" aria-controls="connect-panel" aria-expanded="false" data-panel-open><?= t('nav.sign_in') ?></a>
         </div>
     </div>
-    <nav id="nav-mobile" class="nav-mobile" aria-label="<?= t('nav.mobile_label') ?>">
-<?php foreach ($navItems as $item): ?>
-        <a href="<?= e($item['href']) ?>"<?= $navCurrent($item) ?>><?= t($item['label']) ?></a>
-<?php endforeach; ?>
-        <?= $themeToggle('theme-toggle-row', true) ?>
-    </nav>
 </header>
+<div id="menu-panel" class="panel-layer panel-start" data-panel>
+    <a class="panel-scrim" href="#" tabindex="-1" aria-hidden="true" data-panel-close></a>
+    <section class="panel" role="dialog" aria-modal="true" aria-labelledby="menu-panel-title">
+        <div class="panel-head">
+            <h2 id="menu-panel-title" class="visually-hidden"><?= t('nav.menu_panel_label') ?></h2>
+            <a class="logo" href="<?= e(url('index')) ?>" aria-label="<?= t('nav.home_label') ?>" dir="ltr">noorwan<span class="logo-dot">.</span></a>
+            <a class="panel-close" href="#" data-panel-close><span class="visually-hidden"><?= t('nav.close') ?></span><?= $closeIcon ?></a>
+        </div>
+        <div class="panel-body">
+            <nav id="nav-mobile" class="nav-mobile" aria-label="<?= t('nav.mobile_label') ?>">
+                <ul class="panel-list">
+<?php foreach ($panelItems as $item): ?>
+                    <li><a href="<?= e($item['href']) ?>"<?= $navCurrent($item) ?>><?= t($item['label']) ?></a></li>
+<?php endforeach; ?>
+                </ul>
+            </nav>
+<?php if (ecosystem_sites() !== []): ?>
+            <nav class="panel-ecosystem" aria-labelledby="menu-panel-ecosystem">
+                <p id="menu-panel-ecosystem" class="panel-group"><?= t('ecosystem.title') ?></p>
+                <ul class="panel-list">
+<?php foreach (ecosystem_sites() as $label => $siteUrl): ?>
+                    <li><a href="<?= e($siteUrl) ?>" rel="noopener"><bdi><?= t($label) ?></bdi></a></li>
+<?php endforeach; ?>
+                </ul>
+            </nav>
+<?php endif; ?>
+        </div>
+<?php if ($accountUrl !== null): ?>
+        <div class="panel-foot">
+            <a class="btn btn-connect btn-block connect-continue" href="<?= e($accountUrl) ?>"><?= t('connect.continue') ?></a>
+        </div>
+<?php endif; ?>
+    </section>
+</div>
+<div id="connect-panel" class="panel-layer panel-end" data-panel>
+    <a class="panel-scrim" href="#" tabindex="-1" aria-hidden="true" data-panel-close></a>
+    <section class="panel" role="dialog" aria-modal="true" aria-labelledby="connect-panel-title">
+        <div class="panel-head">
+            <h2 id="connect-panel-title" class="panel-title"><?= t('nav.sign_in') ?></h2>
+            <a class="panel-close" href="#" data-panel-close><span class="visually-hidden"><?= t('nav.close') ?></span><?= $closeIcon ?></a>
+        </div>
+        <div class="panel-body panel-connect">
+            <p class="connect-lockup" dir="ltr" lang="en">noorwan<span class="logo-dot">.</span><span class="connect-lockup-name">Connect</span></p>
+            <p class="panel-lead"><?= t('connect.title') ?></p>
+            <p class="panel-text"><?= t('connect.lead') ?></p>
+<?php if ($accountUrl !== null): ?>
+            <a class="btn btn-connect btn-block connect-continue" href="<?= e($accountUrl) ?>"><?= t('connect.continue') ?></a>
+<?php endif; ?>
+            <p><a class="more" href="<?= e(url('connect')) ?>"><?= t('common.learn_more') ?></a></p>
+        </div>
+    </section>
+</div>
 <main id="main" tabindex="-1">

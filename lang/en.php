@@ -21,15 +21,15 @@ return [
         'cookies_title' => 'Cookies | Noorwan',
         'cookies_description' => 'Cookies on noorwan.com: audience measurement only with your consent, choice kept for six months.',
         'consulting_title' => 'Consulting | Noorwan',
-        'connect_title' => 'Noorwan Connect | Noorwan',
-        'connect_description' => 'Noorwan Connect: one account, with your phone number, for every website of the Noorwan group, for you and for your business.',
+        'connect_title' => 'Connect | Noorwan',
+        'connect_description' => 'Connect: one account, with your phone number, for every website of the Noorwan group, for you and for your business.',
     ],
     'nav' => [
         'consulting' => 'Consulting',
         'solutions' => 'Solutions',
         'edition' => 'Publishing',
         'contact' => 'Contact',
-        'connect' => 'Noorwan Connect',
+        'connect' => 'Connect',
         'skip' => 'Skip to content',
         'home_label' => 'Noorwan, home',
         'main_label' => 'Main navigation',
@@ -39,6 +39,11 @@ return [
         'menu' => 'Menu',
         'theme_to_dark' => 'Switch to dark',
         'theme_to_light' => 'Switch to light',
+        // Charte commune (M-118, M-120) : volet du menu, volet de connexion, bouton « Connexion » de l'en-tête.
+        'home' => 'Home',
+        'close' => 'Close',
+        'sign_in' => 'Sign in',
+        'menu_panel_label' => 'Site menu',
     ],
     'common' => [
         'foot_line' => 'Ideas for concrete solutions.',
@@ -55,6 +60,7 @@ return [
         'title' => 'Noorwan ecosystem',
         'reserva' => 'Reserva',
         'inteek' => 'Inteek',
+        'connect' => 'Connect',
     ],
     'legal_nav' => [
         'mentions' => 'Legal notice',
@@ -105,7 +111,7 @@ return [
         // À relire : textes de Reserva, « Coming soon » et « Real estate » traduits du français.
         'products' => [
             'reserva' => ['cat' => 'eBusiness', 'name' => 'Reserva', 'text' => '', 'confidential' => true],
-            'connect' => ['cat' => 'Digital', 'name' => 'Noorwan Connect', 'text' => '', 'confidential' => false],
+            'connect' => ['cat' => 'Digital', 'name' => 'Connect', 'text' => '', 'confidential' => false],
             'inteek' => ['cat' => 'Human resources', 'name' => 'Inteek', 'text' => 'From hiring to team management, HR made simple.', 'confidential' => false],
             'noor' => ['cat' => 'Artificial intelligence', 'name' => 'Noor', 'text' => '', 'confidential' => true],
         ],
@@ -196,14 +202,14 @@ return [
     ],
     // Noorwan Connect page (v5): TEXTS PROPOSED BY MAESTRO, TO BE APPROVED BY MARWAN. No date promised for partners.
     'connect' => [
-        'tag' => 'Noorwan Connect',
+        'tag' => 'Connect',
         'title' => 'One account for all Noorwan services',
         'lead' => 'One account per person, with your phone number. It opens the group\'s websites, for you and for your business.',
         'btn_create' => 'Create my account',
         'already' => 'I already have an account',
         'personal_tag' => 'For individuals',
         'personal_h' => 'Sign in everywhere with the same account',
-        'personal_text' => 'Book an appointment, follow a request: on every website of the group, "Continue with Noorwan Connect" lets you in without creating a new account.',
+        'personal_text' => 'Book an appointment, follow a request: on every website of the group, "Continue with Noorwan" lets you in without creating a new account.',
         'personal_points' => [
             ['title' => 'One tap to sign in', 'text' => 'Already signed in on your phone? You enter another website of the group without typing a code again.'],
             ['title' => 'Your details in one place', 'text' => 'Your name, number and language are changed once, in your account, for every website.'],
@@ -231,15 +237,17 @@ return [
         'data_text' => 'Your account is only there to let you in. You see what each website receives, and you can stop everything.',
         'data_points' => [
             ['title' => 'What websites receive', 'text' => 'A website of the group receives your name. Your number, only if you agree.'],
-            ['title' => 'You stay in control', 'text' => 'Your details, your connected devices and the services you use are all in your Noorwan Connect account.'],
-            ['title' => 'Delete your account', 'text' => 'From your Noorwan Connect account, whenever you wish. You have 30 days to change your mind; after that, your personal data is erased.'],
+            ['title' => 'You stay in control', 'text' => 'Your details, your connected devices and the services you use are all in your Connect account.'],
+            ['title' => 'Delete your account', 'text' => 'From your Connect account, whenever you wish. You have 30 days to change your mind; after that, your personal data is erased.'],
         ],
         'partner_tag' => 'Coming soon',
         'partner_h' => 'For partner businesses',
         'partner_text' => 'A business outside the group will be able to offer "Sign in with Noorwan" on its website. Its customers will sign in with their number, without a new account, and will allow that website once to know their name.',
         'partner_btn' => 'Keep me informed',
-        'final_h' => 'Create your Noorwan Connect account',
+        'final_h' => 'Create your Connect account',
         'final_text' => 'Your phone number is enough.',
+        // Bouton commun à tous les sites (M-116), toujours bleu.
+        'continue' => 'Continue with Noorwan',
     ],
     // Consulting page (v6): TEXTES A VALIDER PAR MARWAN. Title, introduction and expertise come from the home page (home.cons_*).
     'consulting' => [
@@ -257,7 +265,7 @@ return [
         'hero_alt' => 'Illustration: two people assemble app screens and connected modules.',
         'tag' => 'Noorwan Solutions',
         'connect_text' => 'One account for all Noorwan services.',
-        'connect_link' => 'Discover Noorwan Connect',
+        'connect_link' => 'Discover Connect',
         // Catégorie de la carte Noorwan Connect (comme « eBusiness » pour Reserva) : à fournir par Marwan.
         'btn_demo' => 'Request a presentation',
         'approach_title' => 'How we work',

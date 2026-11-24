@@ -95,11 +95,16 @@
     --hairline: rgba(0, 0, 0, 0.05);
     --consent-bg: rgba(255, 255, 255, 0.96);
     --logo-dot: var(--blue);
+    /* Charte commune (M-120) : bord des champs et des boutons en contour (3:1), voile sous un volet, anneau de focus. */
+    --control-line: #86868B;
+    --scrim: rgba(29, 29, 31, 0.36);
+    --focus: #0071E3;
 
     --radius-btn: 3px;
     --radius-card: 28px;
     --gutter: 20px;
     --header-h: 48px;
+    --panel-w: 400px;
 
     --font: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', Helvetica, Arial, sans-serif;
     --ls-body: -0.01em;
@@ -156,6 +161,9 @@
     --consent-bg: rgba(28, 28, 30, 0.96);
     --logo-dot: var(--link-dark);
     --motto-card: #000000;
+    --control-line: #7C7C80;
+    --scrim: rgba(0, 0, 0, 0.6);
+    --focus: #2997FF;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -190,6 +198,9 @@
         --consent-bg: rgba(28, 28, 30, 0.96);
         --logo-dot: var(--link-dark);
         --motto-card: #000000;
+        --control-line: #7C7C80;
+        --scrim: rgba(0, 0, 0, 0.6);
+        --focus: #2997FF;
     }
 }
 
@@ -272,8 +283,8 @@ ol {
 }
 
 :focus-visible {
-    outline: 2px solid var(--blue);
-    outline-offset: 3px;
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
 }
 
 main:focus {
@@ -441,7 +452,7 @@ main:focus {
 }
 
 .btn-outline {
-    border: 1px solid var(--line-2);
+    border: 1px solid var(--control-line);
     background: var(--paper);
     color: var(--ink);
 }
@@ -451,7 +462,22 @@ main:focus {
     color: var(--ink);
 }
 
-/* ---------- En-tête : barre fine et translucide ---------- */
+/* « Continuer avec Noorwan » : toujours le bleu d'action, sur tous les sites et dans les deux thèmes (M-116). */
+.btn-connect {
+    background: #0071E3;
+    color: #FFFFFF;
+}
+
+.btn-connect:hover {
+    background: #0062C4;
+    color: #FFFFFF;
+}
+
+.btn-block {
+    width: 100%;
+}
+
+/* ---------- En-tête fixe (charte commune M-120) : Menu, logo, liens dès 900 px, langue, thème, Connexion ---------- */
 
 .site-header {
     position: sticky;
@@ -459,21 +485,16 @@ main:focus {
     z-index: 50;
     border-block-end: 1px solid var(--header-line);
     background: var(--header-bg);
-    -webkit-backdrop-filter: saturate(180%) blur(18px);
-    backdrop-filter: saturate(180%) blur(18px);
-}
-
-/* Menu ouvert : fond opaque pour que la page ne transparaisse pas sous les liens. */
-.site-header:has(.menu-toggle[aria-expanded="true"]) {
-    background: var(--page);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    backdrop-filter: saturate(180%) blur(20px);
 }
 
 .header-bar {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    min-height: var(--header-h);
+    gap: 4px;
+    height: var(--header-h);
+    padding-inline: 4px;
 }
 
 /* Le logo reste en latin et de gauche à droite dans toutes les langues. */
@@ -495,9 +516,14 @@ main:focus {
     color: var(--logo-dot);
 }
 
+.header-bar .logo {
+    margin-inline: 4px auto;
+}
+
 .nav-desktop {
     display: none;
     gap: 32px;
+    margin-inline-end: auto;
     font-size: 13px;
 }
 
@@ -520,7 +546,7 @@ main:focus {
 .header-tools {
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: 2px;
 }
 
 /* Menu des langues : <details> natif, utilisable sans JavaScript ; site.js ajoute Échap et le clic extérieur. */
@@ -569,9 +595,8 @@ main:focus {
     min-width: 168px;
     padding: 6px;
     border: 1px solid var(--line);
-    border-radius: 12px;
+    border-radius: 14px;
     background: var(--paper);
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
 }
 
 .lang-list a {
@@ -603,6 +628,7 @@ main:focus {
 
 /* Langue courante : coche à la fin de la ligne (bords physiques : la coche ne se retourne pas en RTL). */
 .lang-list a[aria-current="true"] {
+    background: var(--sol-tint);
     font-weight: 650;
 }
 
@@ -616,37 +642,47 @@ main:focus {
     transform: rotate(-45deg);
 }
 
-.menu-toggle {
+/* Bouton Menu (trois traits) : ouvre le volet du menu ; laisse la place aux liens dès 900 px. */
+.menu-toggle,
+.panel-close {
     display: flex;
+    flex: none;
     align-items: center;
     justify-content: center;
     width: 44px;
     height: 44px;
-    padding: 0;
-    border: 0;
-    background: none;
+    border-radius: var(--radius-btn);
     color: var(--ink);
-    cursor: pointer;
 }
 
-.menu-toggle[hidden] {
-    display: none;
+.menu-toggle:hover,
+.panel-close:hover {
+    background: var(--mist);
+    color: var(--ink);
+    text-decoration: none;
 }
 
-.menu-toggle line {
-    transition: transform 0.2s;
-    transform-origin: 10px 10px;
+/* Bouton « Connexion » : ouvre le volet de connexion (fin de ligne). */
+.account-toggle {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    min-height: 44px;
+    padding-inline: 8px;
+    border-radius: var(--radius-btn);
+    color: var(--ink);
+    font-size: 14px;
+    font-weight: 500;
+    white-space: nowrap;
 }
 
-.menu-toggle[aria-expanded="true"] .menu-line-1 {
-    transform: translateY(3.5px) rotate(45deg);
+.account-toggle:hover {
+    background: var(--mist);
+    color: var(--ink);
+    text-decoration: none;
 }
 
-.menu-toggle[aria-expanded="true"] .menu-line-2 {
-    transform: translateY(-3.5px) rotate(-45deg);
-}
-
-/* Bouton du thème (v9) : rond de 44 px dans la barre, ligne avec libellé dans le menu mobile.
+/* Bouton du thème (v9) : rond de 44 px dans la barre, sur toutes les largeurs.
    L'icône montre le thème affiché : soleil en clair, croissant de lune en sombre (data-shown, theme-init.js). */
 .theme-toggle {
     display: flex;
@@ -685,51 +721,157 @@ main:focus {
     display: none;
 }
 
-.theme-toggle-row {
-    justify-content: flex-start;
-    min-height: 52px;
-    padding: 14px var(--gutter);
-    font-size: 17px;
-    font-weight: 500;
-    text-align: start;
+/* ---------- Volets (M-118) : menu en début de ligne, options en fin de ligne, jamais de fenêtre centrée ---------- */
+
+/* Sans JavaScript, le volet visé par l'adresse (:target) s'ouvre ; avec, site.js pose .is-open. */
+.panel-layer {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 80;
 }
 
-.nav-mobile {
+:root:not(.js-panels) .panel-layer:target,
+.panel-layer.is-open {
+    display: block;
+}
+
+:root.has-panel {
+    overflow: hidden;
+}
+
+.panel-scrim {
+    position: absolute;
+    inset: 0;
+    background: var(--scrim);
+}
+
+/* Plein écran au téléphone, 400 px au plus au-delà ; côtés logiques : en arabe, le menu passe à droite. */
+.panel {
+    position: absolute;
+    inset-block: 0;
     display: flex;
     flex-direction: column;
-    padding-block-end: 12px;
-    border-block-start: 1px solid var(--hairline);
-}
-
-.nav-mobile[hidden] {
-    display: none;
-}
-
-.nav-mobile a {
-    padding: 14px var(--gutter);
-    border-block-end: 1px solid var(--hairline);
+    width: min(100%, var(--panel-w));
+    background: var(--paper);
     color: var(--ink);
-    font-size: 22px;
+    overflow: hidden;
+}
+
+.panel-start .panel {
+    inset-inline-start: 0;
+    border-inline-end: 1px solid var(--line);
+}
+
+.panel-end .panel {
+    inset-inline-end: 0;
+    border-inline-start: 1px solid var(--line);
+}
+
+.panel-head {
+    display: flex;
+    flex: none;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    min-height: 56px;
+    padding-inline: 24px 8px;
+    border-block-end: 1px solid var(--line);
+}
+
+.panel-title {
+    font-size: 17px;
     font-weight: 600;
-    letter-spacing: -0.02em;
 }
 
-:root[lang="ar"] .nav-mobile a {
-    letter-spacing: 0;
+.panel-body {
+    flex: 1;
+    padding: 16px 24px 24px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
 }
 
-.nav-mobile a:hover {
+.panel-foot {
+    flex: none;
+    padding: 16px 24px;
+    border-block-start: 1px solid var(--line);
+}
+
+.panel-list a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    min-height: 48px;
+    border-block-end: 1px solid var(--line);
+    color: var(--ink);
+    font-size: 17px;
+}
+
+.panel-list a:hover {
+    color: var(--ink);
     text-decoration: none;
 }
 
-/* Onglet de la page affichée : trait bleu du côté où commence la lecture (gauche, droite en arabe). */
-.nav-mobile a[aria-current="page"] {
-    box-shadow: inset 4px 0 0 var(--blue);
-    font-weight: 700;
+/* « › » est un caractère miroir : en arabe, il se retourne de lui-même. */
+.panel-list a::after {
+    content: "\203A";
+    color: var(--muted);
 }
 
-[dir="rtl"] .nav-mobile a[aria-current="page"] {
-    box-shadow: inset -4px 0 0 var(--blue);
+/* Rubrique de la page affichée : en bleu et plus grasse. */
+.nav-mobile a[aria-current="page"] {
+    color: var(--link);
+    font-weight: 600;
+}
+
+.panel-group {
+    margin-block: 24px 4px;
+    color: var(--muted);
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+}
+
+:root[lang="ar"] .panel-group {
+    letter-spacing: 0;
+}
+
+/* Volet de connexion : logotype Connect (noorwan. puis Connect, en bleu), présentation, bouton bleu. */
+.panel-connect {
+    display: grid;
+    align-content: start;
+    gap: 16px;
+    padding-block-start: 32px;
+}
+
+.connect-lockup {
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif;
+    font-size: 32px;
+    font-weight: 600;
+    letter-spacing: -0.045em;
+    line-height: 1;
+    text-align: left;
+}
+
+.connect-lockup-name {
+    display: block;
+    margin-block-start: 4px;
+    color: var(--logo-dot);
+    font-size: 22px;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+}
+
+.panel-lead {
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 1.25;
+}
+
+.panel-text {
+    color: var(--text);
 }
 
 /* ---------- Écrans : un message par écran, centré ---------- */
@@ -1234,27 +1376,37 @@ main:focus {
     color: var(--muted);
 }
 
-/* ---------- Pied de page ---------- */
+/* ---------- Pied de page commun (charte commune M-120) ---------- */
 
 .site-footer {
-    padding-block: 32px 40px;
+    padding-block: 40px 24px;
     background: var(--mist);
-    color: var(--muted);
-    font-size: 13px;
+    color: var(--text);
+    font-size: 14px;
 }
 
+.footer-brand {
+    display: grid;
+    justify-items: start;
+    gap: 8px;
+}
+
+.footer-tagline {
+    color: var(--text);
+}
+
+/* Quatre colonnes au plus, deux par ligne au téléphone. */
 .footer-cols {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 22px 16px;
-    padding-block-end: 20px;
-    border-block-end: 1px solid var(--line-2);
+    gap: 24px 16px;
+    margin-block: 24px;
 }
 
 .footer-h {
-    margin-block-end: 4px;
+    margin-block-end: 8px;
     color: var(--ink);
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 600;
 }
 
@@ -1263,8 +1415,8 @@ main:focus {
 .footer-legal button {
     display: inline-flex;
     align-items: center;
-    min-height: 32px;
-    color: var(--muted);
+    min-height: 36px;
+    color: var(--text);
 }
 
 .footer-cols a:hover,
@@ -1272,56 +1424,54 @@ main:focus {
     color: var(--ink);
 }
 
-/* Écosystème Noorwan : liens vers les autres sites du groupe, site courant sans lien. */
+/* Écosystème Noorwan : une ligne, les autres sites du groupe seulement. */
 .ecosystem {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px 20px;
     padding-block: 16px;
-    border-block-end: 1px solid var(--line-2);
+    border-block-start: 1px solid var(--line);
+}
+
+.ecosystem .footer-h {
+    margin: 0;
+    color: var(--muted);
 }
 
 .ecosystem ul {
     display: flex;
     flex-wrap: wrap;
-    gap: 0 18px;
-}
-
-.ecosystem a,
-.ecosystem span {
-    display: inline-flex;
-    align-items: center;
-    min-height: 32px;
+    gap: 0 20px;
 }
 
 .ecosystem a {
-    color: var(--muted);
-    text-decoration: underline;
-    text-underline-offset: 2px;
-}
-
-.ecosystem a:hover {
+    display: inline-flex;
+    align-items: center;
+    min-height: 36px;
     color: var(--ink);
-}
-
-.ecosystem span {
-    color: var(--ink);
-    font-weight: 600;
+    font-weight: 500;
 }
 
 .footer-bottom {
-    display: grid;
-    gap: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px 24px;
     padding-block-start: 16px;
-}
-
-.footer-line {
-    display: grid;
-    justify-items: start;
-    gap: 2px;
+    border-block-start: 1px solid var(--line);
+    color: var(--muted);
 }
 
 .footer-legal {
     display: flex;
     flex-wrap: wrap;
-    gap: 0 18px;
+    gap: 0 20px;
+}
+
+.footer-legal a {
+    color: var(--muted);
 }
 
 /* ---------- Pages intérieures : en-tête centré ---------- */
@@ -1456,16 +1606,6 @@ main:focus {
         --gutter: 32px;
     }
 
-    .nav-desktop {
-        display: flex;
-    }
-
-    .menu-toggle,
-    .nav-mobile,
-    .nav-mobile[hidden] {
-        display: none;
-    }
-
     .screen {
         padding-block: 128px;
     }
@@ -1512,14 +1652,6 @@ main:focus {
     .method-steps {
         grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: 32px;
-    }
-
-    .footer-bottom {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        justify-content: space-between;
-        gap: 10px 24px;
     }
 
     .section {
@@ -2009,7 +2141,8 @@ main:focus {
     display: grid;
     gap: 22px;
     padding: 24px 20px;
-    border-radius: 20px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-card);
     background: var(--paper);
 }
 
@@ -2041,8 +2174,8 @@ main:focus {
     width: 100%;
     min-height: 48px;
     padding: 12px 14px;
-    border: 1px solid var(--line-2);
-    border-radius: 10px;
+    border: 1px solid var(--control-line);
+    border-radius: var(--radius-btn);
     background: var(--paper);
     color: var(--ink);
     font: inherit;
@@ -2271,5 +2404,28 @@ main:focus {
 
     .btn-consent {
         min-width: 132px;
+    }
+}
+
+/* Grand écran (charte commune) : les liens principaux remplacent le bouton Menu, l'en-tête prend ses marges. */
+@media (min-width: 900px) {
+    .header-bar {
+        padding-inline: 24px;
+    }
+
+    .header-bar .logo {
+        margin-inline: 0 32px;
+    }
+
+    .nav-desktop {
+        display: flex;
+    }
+
+    .menu-toggle {
+        display: none;
+    }
+
+    .site-footer {
+        padding-block: 56px 28px;
     }
 }

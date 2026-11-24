@@ -26,15 +26,15 @@ return [
         'cookies_title' => 'ملفات تعريف الارتباط | Noorwan',
         'cookies_description' => 'ملفات تعريف الارتباط في noorwan.com: قياس عدد الزوار بموافقتك فقط، ويُحفظ اختيارك ستة أشهر.',
         'consulting_title' => 'الاستشارات | Noorwan',
-        'connect_title' => 'Noorwan Connect | Noorwan',
-        'connect_description' => 'Noorwan Connect: حساب واحد برقم هاتفك لجميع مواقع مجموعة نوروان، لك ولمؤسستك.',
+        'connect_title' => 'Connect | Noorwan',
+        'connect_description' => 'Connect: حساب واحد برقم هاتفك لجميع مواقع مجموعة نوروان، لك ولمؤسستك.',
     ],
     'nav' => [
         'consulting' => 'الاستشارات',
         'solutions' => 'الحلول',
         'edition' => 'النشر',
         'contact' => 'اتصل بنا',
-        'connect' => 'Noorwan Connect',
+        'connect' => 'Connect',
         // À relire.
         'skip' => 'الانتقال إلى المحتوى',
         'home_label' => 'نوروان، الصفحة الرئيسية',
@@ -45,6 +45,11 @@ return [
         'menu' => 'القائمة',
         'theme_to_dark' => 'التبديل إلى الوضع الداكن',
         'theme_to_light' => 'التبديل إلى الوضع الفاتح',
+        // Charte commune (M-118, M-120) : volet du menu, volet de connexion, bouton « Connexion » de l'en-tête. À relire.
+        'home' => 'الرئيسية',
+        'close' => 'إغلاق',
+        'sign_in' => 'الدخول',
+        'menu_panel_label' => 'قائمة الموقع',
     ],
     'common' => [
         'foot_line' => 'أفكار من أجل حلول ملموسة.',
@@ -62,6 +67,7 @@ return [
         'title' => 'منظومة Noorwan',
         'reserva' => 'Reserva',
         'inteek' => 'Inteek',
+        'connect' => 'Connect',
     ],
     'legal_nav' => [
         'mentions' => 'الإشعارات القانونية',
@@ -113,7 +119,7 @@ return [
         // À relire par un arabophone : Reserva, « Bientôt », Immobilier, Shopping.
         'products' => [
             'reserva' => ['cat' => 'eBusiness', 'name' => 'Reserva', 'text' => '', 'confidential' => true],
-            'connect' => ['cat' => 'رقمي', 'name' => 'Noorwan Connect', 'text' => '', 'confidential' => false],
+            'connect' => ['cat' => 'رقمي', 'name' => 'Connect', 'text' => '', 'confidential' => false],
             'inteek' => ['cat' => 'الموارد البشرية', 'name' => 'Inteek', 'text' => 'من التوظيف إلى إدارة الفرق، موارد بشرية مبسطة.', 'confidential' => false],
             'noor' => ['cat' => 'الذكاء الاصطناعي', 'name' => 'Noor', 'text' => '', 'confidential' => true],
         ],
@@ -209,14 +215,14 @@ return [
     ],
     // Page Noorwan Connect (v5) : TEXTES PROPOSÉS PAR MAESTRO, À VALIDER PAR MARWAN, traduction à relire par un arabophone.
     'connect' => [
-        'tag' => 'Noorwan Connect',
+        'tag' => 'Connect',
         'title' => 'حساب واحد لجميع خدمات نوروان',
         'lead' => 'حساب واحد لكل شخص، برقم هاتفك. يفتح لك مواقع المجموعة، لك ولمؤسستك.',
         'btn_create' => 'إنشاء حسابي',
         'already' => 'لديّ حساب بالفعل',
         'personal_tag' => 'للأفراد',
         'personal_h' => 'ادخل إلى كل المواقع بالحساب نفسه',
-        'personal_text' => "حجز موعد أو متابعة طلب: في كل موقع من مواقع المجموعة، يتيح لك زر «المتابعة عبر \u{2066}Noorwan\u{00A0}Connect\u{2069}» الدخول دون إنشاء حساب جديد.",
+        'personal_text' => "حجز موعد أو متابعة طلب: في كل موقع من مواقع المجموعة، يتيح لك زر «المتابعة باستخدام \u{2066}Noorwan\u{2069}» الدخول دون إنشاء حساب جديد.",
         'personal_points' => [
             ['title' => 'دخول بلمسة واحدة', 'text' => 'أنت متصل على هاتفك؟ تدخل إلى موقع آخر من مواقع المجموعة دون إعادة إدخال الرمز.'],
             ['title' => 'معلوماتك في مكان واحد', 'text' => 'اسمك ورقمك ولغتك تُعدَّل مرة واحدة في حسابك، لجميع المواقع.'],
@@ -244,15 +250,17 @@ return [
         'data_text' => 'لا يفيد حسابك إلا في إدخالك. ترى ما يتلقاه كل موقع، ويمكنك إيقاف كل شيء.',
         'data_points' => [
             ['title' => 'ما تتلقاه المواقع', 'text' => 'يتلقى موقع المجموعة اسمك. أما رقمك فلا يتلقاه إلا بموافقتك.'],
-            ['title' => 'القرار بيدك', 'text' => "تجد معلوماتك وأجهزتك المتصلة والخدمات التي تستعملها في حسابك على \u{2066}Noorwan\u{00A0}Connect\u{2069}."],
-            ['title' => 'حذف حسابك', 'text' => "من حسابك على \u{2066}Noorwan\u{00A0}Connect\u{2069}، متى شئت. لديك 30 يومًا لتغيير رأيك، وبعدها تُمحى بياناتك الشخصية."],
+            ['title' => 'القرار بيدك', 'text' => "تجد معلوماتك وأجهزتك المتصلة والخدمات التي تستعملها في حسابك على \u{2066}Connect\u{2069}."],
+            ['title' => 'حذف حسابك', 'text' => "من حسابك على \u{2066}Connect\u{2069}، متى شئت. لديك 30 يومًا لتغيير رأيك، وبعدها تُمحى بياناتك الشخصية."],
         ],
         'partner_tag' => 'قريبًا',
         'partner_h' => 'للمؤسسات الشريكة',
         'partner_text' => "ستتمكن مؤسسة من خارج المجموعة من اقتراح «تسجيل الدخول عبر \u{2066}Noorwan\u{2069}» على موقعها. سيدخل عملاؤها بأرقامهم دون حساب جديد، ويأذنون لهذا الموقع مرة واحدة بمعرفة أسمائهم.",
         'partner_btn' => 'أبقوني على اطلاع',
-        'final_h' => 'أنشئ حسابك على Noorwan Connect',
+        'final_h' => 'أنشئ حسابك على Connect',
         'final_text' => 'رقم هاتفك يكفي.',
+        // Bouton commun à tous les sites (M-116), toujours bleu (libellé du Compte).
+        'continue' => 'المتابعة باستخدام Noorwan',
     ],
     // Page Consulting (v6) : TEXTES A VALIDER PAR MARWAN, arabe à relire. Titre, introduction et expertises : ceux de l'accueil (home.cons_*).
     'consulting' => [
@@ -272,7 +280,7 @@ return [
         'tag' => 'نوروان للحلول',
         // À relire.
         'connect_text' => 'حساب واحد لجميع خدمات نوروان.',
-        'connect_link' => "اكتشف\u{00A0}\u{2066}Noorwan\u{00A0}Connect\u{2069}",
+        'connect_link' => "اكتشف\u{00A0}\u{2066}Connect\u{2069}",
         // Catégorie de la carte Noorwan Connect (comme « eBusiness » pour Reserva) : à fournir par Marwan.
         'btn_demo' => 'اطلب عرضًا تقديميًا',
         'approach_title' => 'طريقتنا في العمل',

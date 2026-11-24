@@ -15,52 +15,165 @@
     window.addEventListener('hashchange', follow);
 })();
 
-// Menu mobile. Sans JavaScript, le bouton reste masqué et la navigation mobile s'affiche telle quelle.
+// Volets de la charte commune (M-118) : menu en début de ligne, connexion en fin de ligne, jamais de fenêtre surgissante.
+// Sans JavaScript, chaque volet s'ouvre par son ancre (:target) et se ferme par « # ». Ici : ouverture sans changer
+// l'adresse visible, une entrée d'historique pour que le retour arrière ferme, fermeture par la croix, le voile et Échap,
+// focus gardé dans le volet puis rendu au bouton, page figée derrière.
 (function () {
     'use strict';
 
-    var button = document.querySelector('.menu-toggle');
-    var menu = button ? document.getElementById(button.getAttribute('aria-controls')) : null;
-    if (!button || !menu) {
+    var panels = document.querySelectorAll('[data-panel]');
+    if (!panels.length || !window.history || !window.history.pushState) {
         return;
     }
+    var root = document.documentElement;
+    // Les volets passent aux mains du script : l'ancre (:target) ne les ouvre plus (feuille de style).
+    root.classList.add('js-panels');
+    var current = null;
+    var opener = null;
 
-    function setOpen(open) {
-        button.setAttribute('aria-expanded', open ? 'true' : 'false');
-        menu.hidden = !open;
+    function openers(panel) {
+        return document.querySelectorAll('[data-panel-open][aria-controls="' + panel.id + '"]');
     }
 
-    setOpen(false);
-    button.hidden = false;
+    function setExpanded(panel, value) {
+        var buttons = openers(panel);
+        for (var i = 0; i < buttons.length; i++) {
+            buttons[i].setAttribute('aria-expanded', value ? 'true' : 'false');
+        }
+    }
 
-    button.addEventListener('click', function () {
-        setOpen(button.getAttribute('aria-expanded') !== 'true');
-    });
+    function focusables(panel) {
+        return panel.querySelectorAll('.panel a[href], .panel button:not([disabled])');
+    }
 
-    // Un lien choisi ferme le menu (les liens sont surtout des ancres de la même page).
-    menu.addEventListener('click', function (event) {
-        if (event.target.closest('a')) {
-            setOpen(false);
+    function show(panel, from) {
+        if (current && current !== panel) {
+            hide(false);
+        }
+        var lang = document.querySelector('.lang-menu[open]');
+        if (lang) {
+            lang.open = false;
+        }
+        current = panel;
+        opener = from || null;
+        panel.classList.add('is-open');
+        root.classList.add('has-panel');
+        setExpanded(panel, true);
+        var close = panel.querySelector('.panel-close');
+        if (close) {
+            close.focus();
+        }
+    }
+
+    function hide(restoreFocus) {
+        if (!current) {
+            return;
+        }
+        current.classList.remove('is-open');
+        setExpanded(current, false);
+        root.classList.remove('has-panel');
+        current = null;
+        if (restoreFocus !== false && opener) {
+            opener.focus();
+        }
+        opener = null;
+    }
+
+    // Fermer par l'historique quand le volet y a laissé une entrée : le retour arrière et la croix font la même chose.
+    function close() {
+        if (window.history.state && window.history.state.nwPanel) {
+            window.history.back();
+        } else {
+            hide();
+        }
+    }
+
+    document.addEventListener('click', function (event) {
+        var trigger = event.target.closest('[data-panel-open]');
+        if (trigger) {
+            var panel = document.getElementById(trigger.getAttribute('aria-controls'));
+            if (panel) {
+                event.preventDefault();
+                if (current === panel) {
+                    close();
+                    return;
+                }
+                var replace = window.history.state && window.history.state.nwPanel;
+                window.history[replace ? 'replaceState' : 'pushState']({ nwPanel: panel.id }, '');
+                show(panel, trigger);
+            }
+            return;
+        }
+        if (current && event.target.closest('[data-panel-close]')) {
+            event.preventDefault();
+            close();
+            return;
+        }
+        // Un lien vers une ancre de la page ferme le volet avant d'y mener.
+        var link = current ? event.target.closest('.panel a[href^="#"]:not([data-panel-close])') : null;
+        if (link) {
+            hide(false);
         }
     });
 
-    // Échap ferme le menu et rend le focus au bouton.
+    window.addEventListener('popstate', function (event) {
+        var id = event.state && event.state.nwPanel;
+        var panel = id ? document.getElementById(id) : null;
+        if (panel) {
+            show(panel, openers(panel)[0]);
+        } else {
+            hide();
+        }
+    });
+
     document.addEventListener('keydown', function (event) {
-        if (event.key === 'Escape' && button.getAttribute('aria-expanded') === 'true') {
-            setOpen(false);
-            button.focus();
+        if (!current) {
+            return;
+        }
+        if (event.key === 'Escape') {
+            event.preventDefault();
+            close();
+            return;
+        }
+        if (event.key === 'Tab') {
+            var items = focusables(current);
+            if (!items.length) {
+                return;
+            }
+            var first = items[0];
+            var last = items[items.length - 1];
+            if (event.shiftKey && document.activeElement === first) {
+                event.preventDefault();
+                last.focus();
+            } else if (!event.shiftKey && document.activeElement === last) {
+                event.preventDefault();
+                first.focus();
+            } else if (!current.contains(document.activeElement)) {
+                event.preventDefault();
+                first.focus();
+            }
         }
     });
 
-    // Passage en largeur bureau : le menu mobile se referme.
-    var desktop = window.matchMedia('(min-width: 834px)');
-    var onChange = function (event) {
-        if (event.matches) {
-            setOpen(false);
+    // Le volet du menu n'existe pas en grand écran (liens dans la barre) : il se referme en passant à 900 px.
+    var wide = window.matchMedia('(min-width: 900px)');
+    var onWide = function (event) {
+        if (event.matches && current && current.id === 'menu-panel') {
+            close();
         }
     };
-    if (desktop.addEventListener) {
-        desktop.addEventListener('change', onChange);
+    if (wide.addEventListener) {
+        wide.addEventListener('change', onWide);
+    }
+
+    // Arrivée sur une adresse avec l'ancre d'un volet (lien partagé, page rechargée) : le volet s'ouvre de la même façon.
+    var hash = window.location.hash.slice(1);
+    var target = hash ? document.getElementById(hash) : null;
+    if (target && target.hasAttribute('data-panel')) {
+        window.history.replaceState(null, '', window.location.pathname + window.location.search);
+        window.history.pushState({ nwPanel: target.id }, '');
+        show(target, openers(target)[0]);
     }
 })();
 

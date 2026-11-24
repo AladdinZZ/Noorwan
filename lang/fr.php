@@ -21,15 +21,15 @@ return [
         'cookies_title' => 'Cookies | Noorwan',
         'cookies_description' => 'Cookies de noorwan.com : mesure d\'audience seulement avec votre accord, choix gardé six mois.',
         'consulting_title' => 'Consulting | Noorwan',
-        'connect_title' => 'Noorwan Connect | Noorwan',
-        'connect_description' => 'Noorwan Connect : un seul compte, avec votre numéro de téléphone, pour tous les sites du groupe Noorwan, pour vous comme pour votre entreprise.',
+        'connect_title' => 'Connect | Noorwan',
+        'connect_description' => 'Connect : un seul compte, avec votre numéro de téléphone, pour tous les sites du groupe Noorwan, pour vous comme pour votre entreprise.',
     ],
     'nav' => [
         'consulting' => 'Consulting',
         'solutions' => 'Solutions',
         'edition' => 'Édition',
         'contact' => 'Contact',
-        'connect' => 'Noorwan Connect',
+        'connect' => 'Connect',
         'skip' => 'Aller au contenu',
         'home_label' => 'Noorwan, accueil',
         'main_label' => 'Navigation principale',
@@ -39,6 +39,11 @@ return [
         'menu' => 'Menu',
         'theme_to_dark' => 'Passer en sombre',
         'theme_to_light' => 'Passer en clair',
+        // Charte commune (M-118, M-120) : volet du menu, volet de connexion, bouton « Connexion » de l'en-tête.
+        'home' => 'Accueil',
+        'close' => 'Fermer',
+        'sign_in' => 'Connexion',
+        'menu_panel_label' => 'Menu du site',
     ],
     'common' => [
         'foot_line' => 'Des idées pour des solutions concrètes.',
@@ -55,6 +60,7 @@ return [
         'title' => 'Écosystème Noorwan',
         'reserva' => 'Reserva',
         'inteek' => 'Inteek',
+        'connect' => 'Connect',
     ],
     'legal_nav' => [
         'mentions' => 'Mentions légales',
@@ -105,7 +111,7 @@ return [
         // Grille des produits (maquette A, M-56). Liste fermée : aucun autre produit confidentiel n'y entre.
         'products' => [
             'reserva' => ['cat' => 'eBusiness', 'name' => 'Reserva', 'text' => '', 'confidential' => true],
-            'connect' => ['cat' => 'Numérique', 'name' => 'Noorwan Connect', 'text' => '', 'confidential' => false],
+            'connect' => ['cat' => 'Numérique', 'name' => 'Connect', 'text' => '', 'confidential' => false],
             'inteek' => ['cat' => 'Ressources humaines', 'name' => 'Inteek', 'text' => 'Du recrutement à la gestion des équipes, les RH simplifiées.', 'confidential' => false],
             'noor' => ['cat' => 'Intelligence artificielle', 'name' => 'Noor', 'text' => '', 'confidential' => true],
         ],
@@ -196,14 +202,14 @@ return [
     ],
     // Page Noorwan Connect (v5) : TEXTES PROPOSÉS PAR MAESTRO, À VALIDER PAR MARWAN. Aucune promesse de date pour les partenaires.
     'connect' => [
-        'tag' => 'Noorwan Connect',
+        'tag' => 'Connect',
         'title' => 'Un seul compte pour tous les services Noorwan',
         'lead' => 'Un compte par personne, avec votre numéro de téléphone. Il vous ouvre les sites du groupe, pour vous comme pour votre entreprise.',
         'btn_create' => 'Créer mon compte',
         'already' => 'J\'ai déjà un compte',
         'personal_tag' => 'Pour les particuliers',
         'personal_h' => 'Entrez partout avec le même compte',
-        'personal_text' => 'Prendre un rendez-vous, suivre une demande : sur chaque site du groupe, « Continuer avec Noorwan Connect » vous fait entrer sans créer de nouveau compte.',
+        'personal_text' => 'Prendre un rendez-vous, suivre une demande : sur chaque site du groupe, « Continuer avec Noorwan » vous fait entrer sans créer de nouveau compte.',
         'personal_points' => [
             ['title' => 'Un geste pour entrer', 'text' => 'Déjà connecté sur votre téléphone ? Vous entrez dans un autre site du groupe sans ressaisir de code.'],
             ['title' => 'Vos informations à un seul endroit', 'text' => 'Votre nom, votre numéro et votre langue se changent une fois, dans votre compte, pour tous les sites.'],
@@ -231,15 +237,17 @@ return [
         'data_text' => 'Votre compte ne sert qu\'à vous faire entrer. Vous voyez ce que chaque site reçoit, et vous pouvez tout arrêter.',
         'data_points' => [
             ['title' => 'Ce que les sites reçoivent', 'text' => 'Un site du groupe reçoit votre nom. Votre numéro, seulement si vous l\'acceptez.'],
-            ['title' => 'Vous gardez la main', 'text' => 'Vos informations, vos appareils connectés et les services que vous utilisez se consultent dans votre compte Noorwan Connect.'],
-            ['title' => 'Supprimer votre compte', 'text' => 'Depuis votre compte Noorwan Connect, quand vous le souhaitez. Vous avez 30 jours pour changer d\'avis ; ensuite, vos données personnelles sont effacées.'],
+            ['title' => 'Vous gardez la main', 'text' => 'Vos informations, vos appareils connectés et les services que vous utilisez se consultent dans votre compte Connect.'],
+            ['title' => 'Supprimer votre compte', 'text' => 'Depuis votre compte Connect, quand vous le souhaitez. Vous avez 30 jours pour changer d\'avis ; ensuite, vos données personnelles sont effacées.'],
         ],
         'partner_tag' => 'Bientôt',
         'partner_h' => 'Pour les entreprises partenaires',
         'partner_text' => 'Une entreprise hors du groupe pourra proposer « Se connecter avec Noorwan » sur son site. Ses clients entreront avec leur numéro, sans nouveau compte, et autoriseront une seule fois ce site à connaître leur nom.',
         'partner_btn' => 'Être tenu informé',
-        'final_h' => 'Créez votre compte Noorwan Connect',
+        'final_h' => 'Créez votre compte Connect',
         'final_text' => 'Votre numéro de téléphone suffit.',
+        // Bouton commun à tous les sites (M-116), toujours bleu.
+        'continue' => 'Continuer avec Noorwan',
     ],
     // Page Consulting (v6) : TEXTES A VALIDER PAR MARWAN. Le titre, l'introduction et les expertises sont ceux de l'accueil (home.cons_*).
     'consulting' => [
@@ -257,7 +265,7 @@ return [
         'hero_alt' => 'Illustration : deux personnes assemblent des écrans d\'application et des modules reliés entre eux.',
         'tag' => 'Noorwan Solutions',
         'connect_text' => 'Un seul compte pour tous les services Noorwan.',
-        'connect_link' => 'Découvrir Noorwan Connect',
+        'connect_link' => 'Découvrir Connect',
         // Catégorie de la carte Noorwan Connect (comme « eBusiness » pour Reserva) : à fournir par Marwan.
         'btn_demo' => 'Demander une présentation',
         'approach_title' => 'Notre façon de faire',
