@@ -47,7 +47,7 @@ return [
     ],
     'common' => [
         'foot_line' => 'Ideas for concrete solutions.',
-        'copy' => '© :year Noorwan',
+        'copy' => '© :year Noorwan SARL',
         'arrow' => '→',
         'arrow_up' => '↗',
         'list_sep' => ', ',
@@ -353,7 +353,7 @@ return [
                 'title' => 'Page being updated',
                 'text' => 'The full legal information will be published soon. What is known to date:',
                 'list' => [
-                    'Website published by Noorwan.',
+                    'Website published by Noorwan SARL.',
                     'Contact: contact@noorwan.com',
                     'Hosting: IONOS server.',
                 ],

@@ -67,6 +67,13 @@ grep -q '<html lang="ar" dir="rtl">' <(curl -s "$BASE_URL/?lang=ar") && pass "ar
 expect "fichier .env inaccessible" 404 "$(curl -s -o /dev/null -w '%{http_code}' "$BASE_URL/../.env")"
 expect "dossier app/ inaccessible" 404 "$(curl -s -o /dev/null -w '%{http_code}' "$BASE_URL/../app/bootstrap.php")"
 expect "dossier bin/ inaccessible" 404 "$(curl -s -o /dev/null -w '%{http_code}' "$BASE_URL/../bin/purge-contacts.php")"
+# Icônes communes (M-120) : à la racine publique, déclarées avec leur version sur chaque page
+for icon in favicon.ico favicon.svg apple-touch-icon.png; do
+    expect "/$icon" 200 "$(curl -s -o /dev/null -w '%{http_code}' "$BASE_URL/$icon")"
+done
+icons_html=$(curl -s "$BASE_URL/mentions-legales.php?lang=fr")
+expect "icônes déclarées (SVG, ICO, écran d'accueil)" "1|1|1" "$(grep -c '<link rel="icon" href="favicon.svg?v=[0-9]*" type="image/svg+xml">' <<< "$icons_html")|$(grep -c '<link rel="icon" href="favicon.ico?v=[0-9]*" sizes="48x48">' <<< "$icons_html")|$(grep -c '<link rel="apple-touch-icon" href="apple-touch-icon.png?v=[0-9]*">' <<< "$icons_html")"
+expect "ancienne icône retirée" 404 "$(curl -s -o /dev/null -w '%{http_code}' "$BASE_URL/assets/images/favicon.svg")"
 
 echo "2 bis. Ressources"
 for lang in fr en ar; do
@@ -884,7 +891,7 @@ for page in index.php consulting.php solutions.php edition.php connect.php conta
             "$(grep -c '<div id="menu-panel" class="panel-layer panel-start" data-panel>' <<< "$html")|$(grep -c '<div id="launcher-panel" class="panel-layer panel-end panel-launcher" data-panel>' <<< "$html")|$(grep -c '<div id="connect-panel" class="panel-layer panel-end" data-panel>' <<< "$html")|$(grep -c '<a class="panel-scrim" href="#" tabindex="-1" aria-hidden="true" data-panel-close></a>' <<< "$html")|$(grep -c "<a class=\"panel-close\" href=\"#\" data-panel-close><span class=\"visually-hidden\">$(by_lang "$lang" "Fermer" "Close" "إغلاق")</span>" <<< "$html")|$(grep -c 'role="dialog" aria-modal="true"' <<< "$html")"
         footer=$(sed -n '/<footer class="site-footer">/,/<\/footer>/p' <<< "$html")
         expect "pied de page : logo et phrase, quatre colonnes, ligne légale (${page%.php}, $lang)" "1|1|4|1|1" \
-            "$(grep -c '<div class="footer-brand">' <<< "$footer")|$(grep -c "<p class=\"footer-tagline\">$(by_lang "$lang" "Des idées pour des solutions concrètes." "Ideas for concrete solutions." "أفكار من أجل حلول ملموسة.")</p>" <<< "$footer")|$(grep -c '<p class="footer-h">' <<< "$(sed -n '/<nav class="footer-cols"/,/<\/nav>/p' <<< "$footer")")|$(grep -c "<p class=\"footer-copy\" dir=\"ltr\">© $(date +%Y) Noorwan</p>" <<< "$footer")|$(grep -c "href=\"confidentialite.php?lang=$lang\"" <<< "$footer")"
+            "$(grep -c '<div class="footer-brand">' <<< "$footer")|$(grep -c "<p class=\"footer-tagline\">$(by_lang "$lang" "Des idées pour des solutions concrètes." "Ideas for concrete solutions." "أفكار من أجل حلول ملموسة.")</p>" <<< "$footer")|$(grep -c '<p class="footer-h">' <<< "$(sed -n '/<nav class="footer-cols"/,/<\/nav>/p' <<< "$footer")")|$(grep -c "<p class=\"footer-copy\" dir=\"ltr\">© $(date +%Y) Noorwan SARL</p>" <<< "$footer")|$(grep -c "href=\"confidentialite.php?lang=$lang\"" <<< "$footer")"
         rendered=$(full "$page" "$lang")
         if grep -qE 'Noorwan( |&nbsp;|'$'\xc2\xa0'')Connect|Compte Noorwan|Noorwan Account|Continuer avec Noorwan Connect' <<< "$(sed -e 's/<[^>]*>//g' <<< "$rendered")"; then
             fail "texte « Noorwan Connect » ou « Compte Noorwan » affiché (${page%.php}, $lang)"

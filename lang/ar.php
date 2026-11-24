@@ -53,7 +53,7 @@ return [
     ],
     'common' => [
         'foot_line' => 'أفكار من أجل حلول ملموسة.',
-        'copy' => '© :year Noorwan',
+        'copy' => '© :year Noorwan SARL',
         'arrow' => '←',
         'arrow_up' => '↖',
         'list_sep' => '، ',
@@ -371,7 +371,7 @@ return [
                 'title' => 'الصفحة قيد التحديث',
                 'text' => 'ستُنشر المعلومات القانونية الكاملة قريبًا. المعروف حتى الآن:',
                 'list' => [
-                    'ينشر الموقع نوروان.',
+                    'ينشر الموقع Noorwan SARL.',
                     'التواصل: contact@noorwan.com',
                     'الاستضافة: خادم لدى IONOS.',
                 ],
