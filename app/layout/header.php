@@ -70,7 +70,10 @@ $themeToggle = static function (): string {
 <link rel="alternate" hreflang="<?= e($code) ?>" href="<?= e(absolute_url(current_page(), $code)) ?>">
 <?php endforeach; ?>
 <link rel="alternate" hreflang="x-default" href="<?= e(absolute_url(current_page(), DEFAULT_LANG)) ?>">
-<link rel="icon" href="<?= e($asset('assets/images/favicon.svg')) ?>" type="image/svg+xml">
+<?php // Icônes communes des sites Noorwan (charte commune, M-120) : « n » blanc sur carré encre, point bleu ; version par la date du fichier. ?>
+<link rel="icon" href="<?= e($asset('favicon.svg')) ?>" type="image/svg+xml">
+<link rel="icon" href="<?= e($asset('favicon.ico')) ?>" sizes="48x48">
+<link rel="apple-touch-icon" href="<?= e($asset('apple-touch-icon.png')) ?>">
 <?php if (is_rtl()): ?>
 <link rel="preload" href="assets/fonts/IBMPlexSansArabic-Regular.woff2" as="font" type="font/woff2" crossorigin>
 <?php endif; ?>
