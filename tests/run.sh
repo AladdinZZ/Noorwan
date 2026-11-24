@@ -278,9 +278,9 @@ done
 echo "2 undecies. Aucun lien vers le Compte Noorwan hors de /connect (v5 bis)"
 # Rendu hors serveur, constantes fixées avant l'amorçage : les états se testent sans toucher au .env.
 # render PAGE LANGUE ACTIVÉ [ADRESSE, « - » pour une adresse vide] [GTM_ID] [CHOIX]
-# Écosystème sans adresse : les pages rendues ne dépendent pas des réglages du .env local.
+# Lanceur sans adresse : les pages rendues ne dépendent pas des réglages du .env local.
 render() {
-    ECOSYSTEM_CONNECT_URL= ECOSYSTEM_RESERVA_URL= ECOSYSTEM_INTEEK_URL= "$PHP" -r '[, $page, $lang, $enabled, $url, $gtm, $consent] = $argv + [4 => "", 5 => "", 6 => ""];
+    LAUNCHER_CONNECT_URL= LAUNCHER_RESERVA_URL= LAUNCHER_INTEEK_URL= ECOSYSTEM_CONNECT_URL= ECOSYSTEM_RESERVA_URL= ECOSYSTEM_INTEEK_URL= "$PHP" -r '[, $page, $lang, $enabled, $url, $gtm, $consent] = $argv + [4 => "", 5 => "", 6 => ""];
         define("COMPTE_LINK_ENABLED", $enabled === "true");
         if ($url === "-") { define("COMPTE_URL", ""); } elseif ($url !== "") { define("COMPTE_URL", $url); }
         define("GTM_ID", $gtm);
@@ -303,10 +303,10 @@ for lang in fr en ar; do
     if grep -qE "'account' =>" <<< "$(sed -n "/'nav' => \[/,/\],/p" "lang/$lang.php")"; then fail "clé nav.account encore présente ($lang)"; else pass "clé nav.account retirée ($lang)"; fi
 
     html=$(render solutions.php "$lang" true)
-    expect "en-tête : un seul lien, « Connexion » vers son volet, jamais le Compte ($lang)" "1|1|0" \
-        "$(sed -n '/<div class="header-tools">/,/<\/header>/p' <<< "$html" | grep -c '<a class')|$(grep -c "<a class=\"account-toggle\" href=\"#connect-panel\" aria-controls=\"connect-panel\" aria-expanded=\"false\" data-panel-open>$(by_lang "$lang" "Connexion" "Sign in" "الدخول")</a>" <<< "$html")|$(sed -n '/<header/,/<\/header>/p' <<< "$html" | grep -c 'compte\.noorwan')"
+    expect "en-tête : lanceur et « Connexion » vers leurs volets, jamais le Compte ($lang)" "launcher-toggle|account-toggle|1|0" \
+        "$(sed -n '/<div class="header-tools">/,/<\/header>/p' <<< "$html" | grep -oE '<a class="[a-z-]+"' | sed -E 's/<a class="([a-z-]+)"/\1/' | paste -sd '|' -)|$(grep -c "<a class=\"account-toggle\" href=\"#connect-panel\" aria-controls=\"connect-panel\" aria-expanded=\"false\" data-panel-open>$(by_lang "$lang" "Connexion" "Sign in" "الدخول")</a>" <<< "$html")|$(sed -n '/<header/,/<\/header>/p' <<< "$html" | grep -c 'compte\.noorwan')"
     expect "volet du menu : ni Connect ni « Mon compte » parmi les rubriques ($lang)" "0|0" \
-        "$(sed -n '/<nav id="nav-mobile"/,/<\/nav>/p' <<< "$html" | grep -c 'connect?')|$(grep -cE 'Mon compte|My account|«حسابي»' <<< "$html")"
+        "$(sed -n '/<nav id="nav-mobile"/,/<\/nav>/p' <<< "$html" | grep -c 'connect?')|$(sed '/<div id="launcher-panel"/,/^<\/div>/d' <<< "$html" | grep -cE 'Mon compte|My account|«حسابي»')"
     expect "pied de page : colonne Noorwan, Noorwan Connect puis Contact ($lang)" "connect?lang=$lang|contact.php?lang=$lang" \
         "$(sed -n '/<nav class="footer-cols"/,/<\/nav>/p' <<< "$html" | grep -oE 'href="[^"]+"' | tail -n 2 | sed -E 's/href="([^"]+)"/\1/' | paste -sd '|' -)"
     phrase=$(by_lang "$lang" "Un seul compte pour tous les services Noorwan." "One account for all Noorwan services." "حساب واحد لجميع خدمات نوروان.")
@@ -398,19 +398,46 @@ grep -q 'nw_consent=denied' <<< "$response" && pass "refus : cookie nw_consent=d
 expect "refus : cookies Google Analytics effacés" 2 "$(grep -ciE '^Set-Cookie: _ga(_ABC123)?=deleted' <<< "$response")"
 expect "jeton signé : choix forgé refusé" 400 "$(curl -s -o /dev/null -w '%{http_code}' -X POST -d 'token=1.2.3&choice=granted' "$BASE_URL/consent.php")"
 
-echo "2 quindecies. Écosystème Noorwan (D63)"
-eco() { env ECOSYSTEM_CONNECT_URL= ECOSYSTEM_RESERVA_URL= ECOSYSTEM_INTEEK_URL= "$@" "$PHP" -r '$_GET["lang"] = "fr"; require "public/index.php";' 2>&1 | sed -n '/<nav class="ecosystem"/,/<\/nav>/p'; }
-expect "aucune adresse : bloc masqué" 0 "$(eco | grep -c 'ecosystem')"
-block=$(eco ECOSYSTEM_ACCOUNT_URL=https://compte.example.invalid ECOSYSTEM_RESERVA_URL=https://reserva.example.invalid ECOSYSTEM_INTEEK_URL=)
-grep -q 'Écosystème Noorwan' <<< "$block" && pass "titre « Écosystème Noorwan »" || fail "titre de l'écosystème"
-# Charte commune (M-120) : le site courant n'est plus dans la ligne.
-if grep -qE 'aria-current|>Noorwan<' <<< "$block"; then fail "site courant dans l'écosystème"; else pass "site courant absent de l'écosystème"; fi
-# v6 : le Compte Noorwan ne figure plus dans le bloc, même si l'ancienne variable traîne dans un .env.
-expect "Reserva lié, Compte Noorwan absent, Inteek sans adresse masqué" "https://reserva.example.invalid|0|0" \
-    "$(grep -oE 'href="[^"]+"' <<< "$block" | sed -E 's/href="([^"]+)"/\1/' | paste -sd '|' -)|$(grep -ciE 'compte|account' <<< "$block")|$(grep -c 'Inteek' <<< "$block")"
-expect "adresse non https ignorée" 0 "$(eco 'ECOSYSTEM_RESERVA_URL=javascript:alert(1)' | grep -c 'ecosystem')"
-if grep -q 'ECOSYSTEM_ACCOUNT_URL' .env.example app/layout/ecosystem.php; then fail "ECOSYSTEM_ACCOUNT_URL encore présente"; else pass "ECOSYSTEM_ACCOUNT_URL retirée"; fi
-if grep -qi 'onepay' <<< "$(eco ECOSYSTEM_RESERVA_URL=https://b.invalid ECOSYSTEM_INTEEK_URL=https://c.invalid)"; then fail "OnePay dans l'écosystème"; else pass "OnePay absent de l'écosystème"; fi
+echo "2 quindecies. Lanceur des sites (M-121)"
+# launch [VARIABLE=valeur ...] : accueil en français rendu hors serveur, lanceur et anciennes adresses vides par défaut.
+launch() { env LAUNCHER_CONNECT_URL= LAUNCHER_RESERVA_URL= LAUNCHER_INTEEK_URL= ECOSYSTEM_CONNECT_URL= ECOSYSTEM_RESERVA_URL= ECOSYSTEM_INTEEK_URL= "$@" "$PHP" -r '$_GET["lang"] = "fr"; require "public/index.php";' 2>&1; }
+launcher_panel() { sed -n '/<div id="launcher-panel"/,/^<\/div>/p'; }
+launcher_sites() { grep -oE 'data-launcher-site="[a-z]+"' | sed -E 's/.*="([a-z]+)"/\1/' | paste -sd '|' -; }
+html=$(launch)
+expect "aucune adresse : noorwan.com seul, marqué, vers l'accueil, sans « Mon compte Connect »" "noorwan|1|1|0" \
+    "$(launcher_panel <<< "$html" | launcher_sites)|$(grep -c '<a class="launcher-tile" href="./?lang=fr" data-launcher-site="noorwan" aria-current="page">' <<< "$html")|$(launcher_panel <<< "$html" | grep -c 'aria-current')|$(grep -c 'launcher-account' <<< "$html")"
+html=$(launch LAUNCHER_CONNECT_URL=https://compte.example.invalid/home LAUNCHER_RESERVA_URL=https://reserva.example.invalid LAUNCHER_INTEEK_URL=https://inteek.example.invalid)
+panel=$(launcher_panel <<< "$html")
+expect "liste publique dans l'ordre : noorwan.com, Connect, Reserva, Inteek" "noorwan|connect|reserva|inteek" "$(launcher_sites <<< "$panel")"
+expect "adresses de .env, noms, pastilles (couleur et lettre)" "https://compte.example.invalid/home|https://reserva.example.invalid|https://inteek.example.invalid|4|4" \
+    "$(grep -oE 'href="https://[^"]+" data-launcher-site' <<< "$panel" | sed -E 's/href="([^"]+)".*/\1/' | paste -sd '|' -)|$(grep -cE '<bdi>(noorwan\.com|Connect|Reserva|Inteek)</bdi>' <<< "$panel")|$(grep -cE '<circle cx="24" cy="24" r="23" fill="#(0071E3|0F6F66|A85A00)"/><text [^>]*>(n|C|r|i)</text>' <<< "$panel")"
+expect "« Mon compte Connect » en bas, vers l'accueil du compte" 1 \
+    "$(grep -c '<a class="launcher-account" href="https://compte.example.invalid/home" rel="noopener">Mon compte Connect</a>' <<< "$panel")"
+expect "volet du lanceur : fin de ligne, voile, titre, croix" "1|1|1|1" \
+    "$(grep -c '<div id="launcher-panel" class="panel-layer panel-end panel-launcher" data-panel>' <<< "$html")|$(grep -c '<a class="panel-scrim" href="#" tabindex="-1" aria-hidden="true" data-panel-close></a>' <<< "$panel")|$(grep -c '<h2 id="launcher-panel-title" class="panel-title">Sites Noorwan</h2>' <<< "$panel")|$(grep -c 'class="panel-close" href="#" data-panel-close' <<< "$panel")"
+expect "anciennes adresses ECOSYSTEM_*_URL lues en repli" "noorwan|reserva" \
+    "$(launch ECOSYSTEM_RESERVA_URL=https://reserva.example.invalid | launcher_panel | launcher_sites)"
+expect "LAUNCHER_*_URL l'emporte sur l'ancienne adresse" 1 \
+    "$(launch LAUNCHER_RESERVA_URL=https://neuf.example.invalid ECOSYSTEM_RESERVA_URL=https://ancien.example.invalid | launcher_panel | grep -c 'https://neuf.example.invalid')"
+expect "adresse non https ignorée" "noorwan" "$(launch 'LAUNCHER_RESERVA_URL=javascript:alert(1)' LAUNCHER_INTEEK_URL=http://inteek.example.invalid | launcher_panel | launcher_sites)"
+expect "Compte en service : l'adresse du lanceur n'est jamais déduite de COMPTE_URL" "noorwan|0" \
+    "$(launch COMPTE_LINK_ENABLED=true | launcher_panel | launcher_sites)|$(launch COMPTE_LINK_ENABLED=true | grep -c 'launcher-account')"
+if grep -qi 'onepay' <<< "$(launch LAUNCHER_CONNECT_URL=https://a.invalid LAUNCHER_RESERVA_URL=https://b.invalid LAUNCHER_INTEEK_URL=https://c.invalid)"; then fail "OnePay dans le lanceur"; else pass "OnePay absent du lanceur"; fi
+expect "plus aucune ligne « Écosystème Noorwan » (pied de page, volet du menu, réglages, textes)" "0|0|0|0" \
+    "$(grep -cE 'class="(ecosystem|panel-ecosystem)"|Écosystème Noorwan|Noorwan ecosystem|منظومة Noorwan' <<< "$html")|$(grep -c 'ecosystem' app/layout/header.php app/layout/footer.php public/assets/css/site.css | awk -F: '{ n += $2 } END { print n }')|$(grep -c '^ECOSYSTEM_' .env.example)|$(grep -c "'ecosystem' =>" lang/fr.php lang/en.php lang/ar.php | awk -F: '{ n += $2 } END { print n }')"
+[[ ! -e app/layout/ecosystem.php ]] && pass "gabarit ecosystem.php retiré" || fail "gabarit ecosystem.php encore présent"
+for lang in fr en ar; do
+    html=$(curl -s "$BASE_URL/?lang=$lang")
+    expect "lanceur traduit : bouton, titre, nom du site courant ($lang)" "1|1|1" \
+        "$(grep -c "<a class=\"launcher-toggle\" href=\"#launcher-panel\" aria-controls=\"launcher-panel\" aria-expanded=\"false\" aria-label=\"$(by_lang "$lang" "Sites Noorwan" "Noorwan sites" "مواقع Noorwan")\"" <<< "$html")|$(grep -c "class=\"panel-title\">$(by_lang "$lang" "Sites Noorwan" "Noorwan sites" "مواقع Noorwan")</h2>" <<< "$html")|$(grep -c "href=\"./?lang=$lang\" data-launcher-site=\"noorwan\" aria-current=\"page\"" <<< "$html")"
+done
+expect "« Mon compte Connect » traduit (en, ar)" "My Connect account|حسابي في Connect" \
+    "$(grep -oE "'account' => '[^']+'" <<< "$(sed -n "/'launcher' => \[/,/\],/p" lang/en.php lang/ar.php)" | sed -E "s/.*'([^']+)'$/\1/" | paste -sd '|' -)"
+# Grille de trois par ligne, panneau dès 640 px (fin de ligne), propriétés logiques seulement.
+launcher_css=$(sed -n '/Lanceur des sites (M-121)/,/En-tête à 390 px : avec le lanceur/p' public/assets/css/site.css)
+expect "feuille : trois tuiles par ligne, panneau dès 640 px, voile transparent" "1|1|1" \
+    "$(grep -c 'grid-template-columns: repeat(3, minmax(0, 1fr));' <<< "$launcher_css")|$(grep -c '@media (min-width: 640px)' <<< "$launcher_css")|$(grep -c 'background: transparent;' <<< "$launcher_css")"
+if grep -qE '(^|[^-])(left|right)\s*:|margin-(left|right)|padding-(left|right)|border-(left|right)' <<< "$launcher_css"; then fail "lanceur : propriété physique (left, right)"; else pass "lanceur : propriétés logiques seulement"; fi
 
 echo "2 sexdecies. OnePay absent de toutes les pages"
 for page in "" consulting solutions.php edition.php connect contact.php mentions-legales.php confidentialite.php cookies.php; do
@@ -453,7 +480,7 @@ for lang in fr en ar; do
     nbsp=$'\xc2\xa0'
     dest=$(by_lang "$lang" "votre compte Connect" "your Connect account" "حسابك على")
     expect "textes : « $dest » deux fois, plus de « Mon compte » ($lang)" "2|0" \
-        "$(sed -n '/id="donnees"/,/<\/section>/p' <<< "$html" | grep -o "$dest" | wc -l | tr -d ' ')|$(grep -cE 'Mon compte|My account|«حسابي»' <<< "$html")"
+        "$(sed -n '/id="donnees"/,/<\/section>/p' <<< "$html" | grep -o "$dest" | wc -l | tr -d ' ')|$(sed '/<div id="launcher-panel"/,/^<\/div>/d' <<< "$html" | grep -cE 'Mon compte|My account|«حسابي»')"
     grep -q 'id="creer"' <<< "$html" && pass "activé : bandeau final ($lang)" || fail "activé : bandeau final absent ($lang)"
     final=$(by_lang "$lang" "Créez votre compte Connect" "Create your Connect account" "أنشئ حسابك على Connect")
     grep -qF "<h2 id=\"creer-title\" class=\"h2 h2-section\">$final</h2>" <<< "$html" && pass "bandeau final : « $final » ($lang)" || fail "bandeau final : titre ($lang)"
@@ -793,9 +820,13 @@ done
 expect "noir du dessin éclairci dans les versions sombres (hors dessins pour fond noir)" 0 \
     "$(grep -li '#1D1D1F' public/assets/img/*-dark.svg | grep -vcE '/(connect-code|noor)-dark\.svg$')"
 expect "theme-init.js servi" 200 "$(curl -s -o /dev/null -w '%{http_code}' "$BASE_URL/assets/js/theme-init.js")"
-# Aucun cookie : le choix est gardé dans localStorage, nw_consent reste le seul cookie du site.
-expect "theme-init.js : localStorage, aucun cookie" "1|0" \
-    "$(grep -c "var KEY = 'nw-theme';" public/assets/js/theme-init.js)|$(grep -c 'document.cookie' public/assets/js/theme-init.js)"
+# Thème du visiteur (socle du lanceur L6) : cookie nw_theme de six mois, jamais localStorage seul (ancien choix repris
+# une fois puis effacé) ; la page Cookies en a sa section, texte à fournir.
+expect "theme-init.js : cookie nw_theme de six mois, ancien localStorage repris puis effacé" "1|1|1|0|0" \
+    "$(grep -c "var COOKIE = 'nw_theme';" public/assets/js/theme-init.js)|$(grep -c 'var MAX_AGE = 182 \* 86400;' public/assets/js/theme-init.js)|$(grep -c 'localStorage.removeItem(LEGACY_KEY)' public/assets/js/theme-init.js)|$(grep -c 'localStorage.setItem' public/assets/js/theme-init.js)|$(grep -c "addEventListener('storage'" public/assets/js/theme-init.js)"
+for lang in fr en ar; do
+    expect "page Cookies : section nw_theme ($lang)" 1 "$(curl -s "$BASE_URL/cookies.php?lang=$lang" | grep -c '<h2>nw_theme</h2>')"
+done
 # Les deux blocs de couleurs sombres (choix manuel, appareil sombre) sont identiques.
 css_block() { sed -n "/^$1/,/^ *}/p" public/assets/css/site.css | sed -e '1d' -e '$d' -e 's/^ *//'; }
 dark_manual=$(css_block ':root\[data-theme="dark"\] {')
@@ -835,9 +866,9 @@ for word in djiboutien PromptEspace "Labo Tech" CEREBRO OnePay googleapis gstati
 done
 
 echo "5. Charte commune (M-116, M-118, M-120)"
-# Rendu hors serveur avec tous les réglages : Compte en service, Tag Manager, trois autres sites dans l'écosystème.
+# Rendu hors serveur avec tous les réglages : Compte en service, Tag Manager, trois autres sites dans le lanceur.
 full() {
-    ECOSYSTEM_CONNECT_URL=https://connect.example.invalid ECOSYSTEM_RESERVA_URL=https://reserva.example.invalid ECOSYSTEM_INTEEK_URL=https://inteek.example.invalid \
+    LAUNCHER_CONNECT_URL=https://connect.example.invalid LAUNCHER_RESERVA_URL=https://reserva.example.invalid LAUNCHER_INTEEK_URL=https://inteek.example.invalid \
         "$PHP" -r '[, $page, $lang] = $argv; define("COMPTE_LINK_ENABLED", true); define("GTM_ID", "GTM-TEST000");
         $_GET["lang"] = $lang; require "public/" . $page;' "$@" 2>&1
 }
@@ -845,12 +876,12 @@ for page in index.php consulting.php solutions.php edition.php connect.php conta
     for lang in fr en ar; do
         html=$(curl -s "$BASE_URL/${page/consulting.php/consulting}?lang=$lang")
         header=$(sed -n '/<header class="site-header">/,/<\/header>/p' <<< "$html")
-        # En-tête fixe : Menu, logo, liens, langue, thème, Connexion, dans cet ordre.
-        expect "en-tête : Menu, logo, liens, langue, thème, Connexion (${page%.php}, $lang)" "menu-toggle|logo|nav-desktop|lang-menu|theme-toggle|account-toggle" \
-            "$(grep -oE 'class="(menu-toggle|logo|nav-desktop|lang-menu|theme-toggle theme-toggle-bar|account-toggle)"' <<< "$header" | sed -E 's/class="([a-z-]+).*/\1/' | paste -sd '|' -)"
-        # Deux volets : menu en début de ligne, connexion en fin de ligne, chacun avec voile et croix.
-        expect "volets : menu au début, connexion à la fin, voile et croix (${page%.php}, $lang)" "1|1|2|2|2" \
-            "$(grep -c '<div id="menu-panel" class="panel-layer panel-start" data-panel>' <<< "$html")|$(grep -c '<div id="connect-panel" class="panel-layer panel-end" data-panel>' <<< "$html")|$(grep -c '<a class="panel-scrim" href="#" tabindex="-1" aria-hidden="true" data-panel-close></a>' <<< "$html")|$(grep -c "<a class=\"panel-close\" href=\"#\" data-panel-close><span class=\"visually-hidden\">$(by_lang "$lang" "Fermer" "Close" "إغلاق")</span>" <<< "$html")|$(grep -c 'role="dialog" aria-modal="true"' <<< "$html")"
+        # En-tête fixe : Menu, logo, liens, langue, thème, lanceur des sites, Connexion, dans cet ordre.
+        expect "en-tête : Menu, logo, liens, langue, thème, lanceur, Connexion (${page%.php}, $lang)" "menu-toggle|logo|nav-desktop|lang-menu|theme-toggle|launcher-toggle|account-toggle" \
+            "$(grep -oE 'class="(menu-toggle|logo|nav-desktop|lang-menu|theme-toggle theme-toggle-bar|launcher-toggle|account-toggle)"' <<< "$header" | sed -E 's/class="([a-z-]+).*/\1/' | paste -sd '|' -)"
+        # Trois volets : menu en début de ligne, lanceur et connexion en fin de ligne, chacun avec voile et croix.
+        expect "volets : menu au début, lanceur et connexion à la fin, voile et croix (${page%.php}, $lang)" "1|1|1|3|3|3" \
+            "$(grep -c '<div id="menu-panel" class="panel-layer panel-start" data-panel>' <<< "$html")|$(grep -c '<div id="launcher-panel" class="panel-layer panel-end panel-launcher" data-panel>' <<< "$html")|$(grep -c '<div id="connect-panel" class="panel-layer panel-end" data-panel>' <<< "$html")|$(grep -c '<a class="panel-scrim" href="#" tabindex="-1" aria-hidden="true" data-panel-close></a>' <<< "$html")|$(grep -c "<a class=\"panel-close\" href=\"#\" data-panel-close><span class=\"visually-hidden\">$(by_lang "$lang" "Fermer" "Close" "إغلاق")</span>" <<< "$html")|$(grep -c 'role="dialog" aria-modal="true"' <<< "$html")"
         footer=$(sed -n '/<footer class="site-footer">/,/<\/footer>/p' <<< "$html")
         expect "pied de page : logo et phrase, quatre colonnes, ligne légale (${page%.php}, $lang)" "1|1|4|1|1" \
             "$(grep -c '<div class="footer-brand">' <<< "$footer")|$(grep -c "<p class=\"footer-tagline\">$(by_lang "$lang" "Des idées pour des solutions concrètes." "Ideas for concrete solutions." "أفكار من أجل حلول ملموسة.")</p>" <<< "$footer")|$(grep -c '<p class="footer-h">' <<< "$(sed -n '/<nav class="footer-cols"/,/<\/nav>/p' <<< "$footer")")|$(grep -c "<p class=\"footer-copy\" dir=\"ltr\">© $(date +%Y) Noorwan</p>" <<< "$footer")|$(grep -c "href=\"confidentialite.php?lang=$lang\"" <<< "$footer")"
@@ -865,15 +896,9 @@ for page in index.php consulting.php solutions.php edition.php connect.php conta
 done
 for lang in fr en ar; do
     html=$(full solutions.php "$lang")
-    # Écosystème : les autres sites, dans le pied de page et le volet du menu ; jamais noorwan.com ni OnePay.
-    eco_footer=$(sed -n '/<nav class="ecosystem"/,/<\/nav>/p' <<< "$html")
-    eco_panel=$(sed -n '/<nav class="panel-ecosystem"/,/<\/nav>/p' <<< "$html")
-    expect "écosystème du pied de page : Connect, Reserva, Inteek ($lang)" "https://connect.example.invalid|https://reserva.example.invalid|https://inteek.example.invalid" \
-        "$(grep -oE 'href="[^"]+"' <<< "$eco_footer" | sed -E 's/href="([^"]+)"/\1/' | paste -sd '|' -)"
-    expect "écosystème du volet du menu : mêmes sites ($lang)" "https://connect.example.invalid|https://reserva.example.invalid|https://inteek.example.invalid" \
-        "$(grep -oE 'href="[^"]+"' <<< "$eco_panel" | sed -E 's/href="([^"]+)"/\1/' | paste -sd '|' -)"
-    expect "écosystème : ni le site courant ni OnePay ($lang)" "0|0" \
-        "$(grep -ciE 'noorwan\.com|aria-current|>(Noorwan|نوروان)<' <<< "$eco_footer$eco_panel")|$(grep -ci 'onepay' <<< "$eco_footer$eco_panel")"
+    # Lanceur : les quatre sites, noorwan.com marqué ; plus aucune ligne écosystème au pied de page ni dans le menu.
+    expect "lanceur : quatre sites, le site courant marqué, ni écosystème ni OnePay ($lang)" "noorwan|connect|reserva|inteek|1|0|0" \
+        "$(launcher_panel <<< "$html" | launcher_sites)|$(launcher_panel <<< "$html" | grep -c 'aria-current="page"')|$(grep -cE 'class="(ecosystem|panel-ecosystem)"' <<< "$html")|$(launcher_panel <<< "$html" | grep -ci 'onepay')"
     # Volet de connexion : Connect, présentation de /connect, « Continuer avec Noorwan » en bleu, « En savoir plus ».
     panel=$(sed -n '/<div id="connect-panel"/,/<\/section>/p' <<< "$html")
     expect "volet de connexion : titre, logotype Connect, bouton, lien vers /connect ($lang)" "1|1|1|1" \

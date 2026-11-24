@@ -468,3 +468,12 @@ Brief « noorwan.com : charte commune » de Maestro (24/11/2026), d'après Marwa
 - **Pied de page commun** : logo et « Des idées pour des solutions concrètes. », quatre colonnes inchangées (deux par ligne au téléphone), ligne « Écosystème Noorwan » avec les autres sites seulement (Connect, Reserva, Inteek selon les adresses `ECOSYSTEM_*_URL` ; noorwan.com n'y est plus nommé), puis « © 2026 Noorwan », Mentions légales, Confidentialité, Cookies et « Gérer les cookies » (quand la mesure d'audience est réglée). Pas de « Powered by Noorwan » : noorwan.com n'est pas un produit.
 - **Composants** : champs du formulaire à coins de 3 px et bord plus marqué, formulaire en carte de 28 px, focus clavier de 2 px. Bandeau de consentement et indexation inchangés.
 
+
+## État du site au 24/11/2026 (lanceur des sites, branche `feat/lanceur`, à relire avant fusion)
+
+Brief « noorwan.com : lanceur des sites » de Maestro (24/11/2026), décision M-121, socle L1 à L6. Remplace, pour ce qui suit, la ligne « Écosystème Noorwan » de la section précédente. Aucun texte de contenu nouveau : seulement les libellés du socle, repris de Reserva (arabe à relire).
+
+- **Bouton « grille »** (neuf points) dans l'en-tête, entre le thème et « Connexion », libellé « Sites Noorwan » (EN « Noorwan sites », AR « مواقع Noorwan »). Au téléphone, volet plein écran en fin de ligne ; dès 640 px, panneau sous l'en-tête, aligné sur la fin de ligne. Échap, toucher à côté, croix et retour arrière ferment ; sans JavaScript, il s'ouvre par son ancre comme les autres volets.
+- **Panneau** : titre « Sites Noorwan », tuiles trois par ligne (pastille ronde à la couleur du site, sa lettre, son nom dessous) : **noorwan.com** (site courant, sur fond doux, vers l'accueil), **Connect**, **Reserva**, **Inteek** selon les adresses `LAUNCHER_*_URL` (une entrée sans adresse est masquée). En bas, **« Mon compte Connect »** (EN « My Connect account », AR « حسابي في Connect ») vers l'adresse de Connect, masqué sans elle.
+- **Plus de ligne « Écosystème Noorwan »** ni au pied de page ni dans le volet du menu.
+- **Thème** : le choix d'un visiteur est gardé six mois dans le cookie `nw_theme` (plus dans `localStorage`). La page Cookies a une section `nw_theme` : **[À COMPLÉTER : texte de la section sur le cookie du thème, trois langues, à faire relire avec les autres pages légales]**.

@@ -139,21 +139,44 @@ if (!defined('COMPTE_LINK_ENABLED')) {
 }
 
 /**
- * Autres sites du groupe pour la ligne « Écosystème Noorwan » du pied de page et le volet du menu (D63, charte commune M-120),
- * clé du libellé => adresse. Adresses lues dans .env (ECOSYSTEM_*_URL), en https seulement ; une entrée sans adresse
- * est masquée. Le site courant (noorwan.com) n'y figure pas, un projet confidentiel jamais.
+ * Lanceur des sites (bouton « grille » de l'en-tête, M-121) : liste publique des sites du groupe, dans l'ordre noorwan.com,
+ * Connect, Reserva, Inteek. noorwan.com n'a pas de session Connect : c'est toujours cette liste. Le site courant
+ * (noorwan.com) y reste, marqué, et mène à l'accueil ; les autres adresses viennent de .env (LAUNCHER_*_URL, puis les
+ * anciennes ECOSYSTEM_*_URL en repli), en https seulement ; une entrée sans adresse est masquée (Connect et le lien
+ * « Mon compte Connect » aussi : l'adresse du Compte n'est jamais déduite de COMPTE_URL, v5 bis). Couleurs et lettres :
+ * celles de Connect. Jamais de projet confidentiel.
  *
- * @return array<string, string>
+ * @return list<array{key: string, label: string, url: string, color: string, letter: string, current: bool}>
  */
-function ecosystem_sites(): array
+function launcher_sites(): array
 {
+    $external = static function (string $name): string {
+        $value = (string) env('LAUNCHER_' . $name . '_URL', (string) env('ECOSYSTEM_' . $name . '_URL', ''));
+
+        return preg_match('#^https://[^\s"<>]+$#', $value) === 1 ? $value : '';
+    };
     $sites = [
-        'ecosystem.connect' => (string) env('ECOSYSTEM_CONNECT_URL', ''),
-        'ecosystem.reserva' => (string) env('ECOSYSTEM_RESERVA_URL', ''),
-        'ecosystem.inteek' => (string) env('ECOSYSTEM_INTEEK_URL', ''),
+        ['key' => 'noorwan', 'label' => 'launcher.noorwan', 'url' => url('index'), 'color' => '#0071E3', 'letter' => 'n', 'current' => true],
+        ['key' => 'connect', 'label' => 'launcher.connect', 'url' => $external('CONNECT'), 'color' => '#0071E3', 'letter' => 'C', 'current' => false],
+        ['key' => 'reserva', 'label' => 'launcher.reserva', 'url' => $external('RESERVA'), 'color' => '#0F6F66', 'letter' => 'r', 'current' => false],
+        ['key' => 'inteek', 'label' => 'launcher.inteek', 'url' => $external('INTEEK'), 'color' => '#A85A00', 'letter' => 'i', 'current' => false],
     ];
 
-    return array_filter($sites, static fn (string $url): bool => preg_match('#^https://[^\s"<>]+$#', $url) === 1);
+    return array_values(array_filter($sites, static fn (array $site): bool => $site['url'] !== ''));
+}
+
+/**
+ * Lien « Mon compte Connect » du bas du lanceur : l'adresse de Connect du lanceur, ou null sans elle (lien masqué).
+ */
+function launcher_account_url(): ?string
+{
+    foreach (launcher_sites() as $site) {
+        if ($site['key'] === 'connect') {
+            return $site['url'];
+        }
+    }
+
+    return null;
 }
 
 error_reporting(E_ALL);

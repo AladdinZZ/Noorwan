@@ -55,12 +55,14 @@ return [
         'learn_more' => 'Learn more',
         'brand' => 'Noorwan',
     ],
-    // Écosystème Noorwan (D63), mêmes libellés que sur Inteek.
-    'ecosystem' => [
-        'title' => 'Noorwan ecosystem',
+    // Lanceur des sites (M-121), mêmes libellés que sur Reserva.
+    'launcher' => [
+        'title' => 'Noorwan sites',
+        'account' => 'My Connect account',
+        'noorwan' => 'noorwan.com',
+        'connect' => 'Connect',
         'reserva' => 'Reserva',
         'inteek' => 'Inteek',
-        'connect' => 'Connect',
     ],
     'legal_nav' => [
         'mentions' => 'Legal notice',
@@ -477,6 +479,13 @@ return [
                     'title' => 'The cookie that keeps your choice',
                     'body' => [
                         'When you click "Accept" or "Decline", the website sets the nw_consent cookie, which keeps your answer for six months. Its only purpose is not to ask you again on every page. After six months, you are asked again.',
+                    ],
+                ],
+                // Cookie du thème (socle du lanceur L6) : texte à fournir par Marwan.
+                [
+                    'title' => 'nw_theme',
+                    'body' => [
+                        '[À COMPLÉTER]',
                     ],
                 ],
                 [

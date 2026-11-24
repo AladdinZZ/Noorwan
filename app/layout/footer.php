@@ -3,7 +3,8 @@
 declare(strict_types=1);
 
 // Pied de page commun (charte commune M-120) : logo et phrase du site, quatre colonnes (Consulting, Solutions, Édition,
-// Noorwan ; deux par ligne au téléphone), ligne « Écosystème Noorwan » (autres sites seulement), ligne légale.
+// Noorwan ; deux par ligne au téléphone), ligne légale. Plus de ligne « Écosystème Noorwan » : le lanceur des sites de
+// l'en-tête la remplace (M-121).
 // La colonne Édition garde la page Édition, sortie du menu en v6. Connect (page /connect) est dans la colonne Noorwan.
 // Pas de « Powered by Noorwan » : noorwan.com est le site du groupe, pas un produit.
 $footerColumns = [
@@ -44,7 +45,6 @@ $footerColumns = [
             </div>
 <?php endforeach; ?>
         </nav>
-<?php require ROOT_DIR . '/app/layout/ecosystem.php'; ?>
         <div class="footer-bottom">
             <p class="footer-copy" dir="ltr"><?= t('common.copy', [':year' => date('Y')]) ?></p>
             <div class="footer-legal">
