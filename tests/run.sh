@@ -34,6 +34,8 @@ TEST_EMAIL="test-run@example.invalid"
 failures=0
 pass() { printf '  ok   %s\n' "$1"; }
 fail() { printf '  ECHEC %s\n' "$1"; failures=$((failures + 1)); }
+# Page sans le volet du lanceur : OnePay (M-123) ne paraît que dans la grille des sites, nulle part ailleurs.
+without_launcher() { sed '/<div id="launcher-panel"/,/^<\/div>/d'; }
 expect() { # expect LIBELLÉ ATTENDU OBTENU
     if [[ "$2" == "$3" ]]; then pass "$1 ($3)"; else fail "$1 : attendu $2, obtenu $3"; fi
 }
@@ -288,7 +290,7 @@ echo "2 undecies. Aucun lien vers le Compte Noorwan hors de /connect (v5 bis)"
 # Lanceur hors de compte.noorwan.com : les pages rendues ne dépendent pas des réglages du .env local et les liens
 # vers le Compte comptés ici sont ceux de l'en-tête et des volets, pas la tuile Connect du lanceur.
 render() {
-    LAUNCHER_CONNECT_URL=https://connect.example.invalid/home LAUNCHER_RESERVA_URL= LAUNCHER_INTEEK_URL= ECOSYSTEM_CONNECT_URL= ECOSYSTEM_RESERVA_URL= ECOSYSTEM_INTEEK_URL= "$PHP" -r '[, $page, $lang, $enabled, $url, $gtm, $consent] = $argv + [4 => "", 5 => "", 6 => ""];
+    LAUNCHER_CONNECT_URL=https://connect.example.invalid/home LAUNCHER_RESERVA_URL= LAUNCHER_INTEEK_URL= LAUNCHER_ONEPAY_URL= ECOSYSTEM_CONNECT_URL= ECOSYSTEM_RESERVA_URL= ECOSYSTEM_INTEEK_URL= "$PHP" -r '[, $page, $lang, $enabled, $url, $gtm, $consent] = $argv + [4 => "", 5 => "", 6 => ""];
         define("COMPTE_LINK_ENABLED", $enabled === "true");
         if ($url === "-") { define("COMPTE_URL", ""); } elseif ($url !== "") { define("COMPTE_URL", $url); }
         define("GTM_ID", $gtm);
@@ -408,17 +410,17 @@ expect "jeton signé : choix forgé refusé" 400 "$(curl -s -o /dev/null -w '%{h
 
 echo "2 quindecies. Lanceur des sites (M-121)"
 # launch [VARIABLE=valeur ...] : accueil en français rendu hors serveur, lanceur et anciennes adresses vides (adresses par défaut).
-launch() { env LAUNCHER_CONNECT_URL= LAUNCHER_RESERVA_URL= LAUNCHER_INTEEK_URL= ECOSYSTEM_CONNECT_URL= ECOSYSTEM_RESERVA_URL= ECOSYSTEM_INTEEK_URL= "$@" "$PHP" -r '$_GET["lang"] = "fr"; require "public/index.php";' 2>&1; }
+launch() { env LAUNCHER_CONNECT_URL= LAUNCHER_RESERVA_URL= LAUNCHER_INTEEK_URL= LAUNCHER_ONEPAY_URL= ECOSYSTEM_CONNECT_URL= ECOSYSTEM_RESERVA_URL= ECOSYSTEM_INTEEK_URL= "$@" "$PHP" -r '$_GET["lang"] = "fr"; require "public/index.php";' 2>&1; }
 launcher_panel() { sed -n '/<div id="launcher-panel"/,/^<\/div>/p'; }
 launcher_sites() { grep -oE 'data-launcher-site="[a-z]+"' | sed -E 's/.*="([a-z]+)"/\1/' | paste -sd '|' -; }
 html=$(launch)
-expect "aucune adresse dans .env : tous les sites aux adresses par défaut, Noorwan marqué, avec « Mon compte Connect »" "noorwan|connect|reserva|inteek|1|1|1|1" \
+expect "aucune adresse dans .env : tous les sites (OnePay après Inteek) aux adresses par défaut, Noorwan marqué, avec « Mon compte Connect »" "noorwan|connect|reserva|inteek|onepay|1|1|1|1" \
     "$(launcher_panel <<< "$html" | launcher_sites)|$(grep -c '<a class="launcher-tile" href="./?lang=fr" data-launcher-site="noorwan" aria-current="page">' <<< "$html")|$(launcher_panel <<< "$html" | grep -c 'aria-current')|$(grep -c 'launcher-account' <<< "$html")|$(launcher_panel <<< "$html" | grep -c 'href="https://dev.reserva.noorwan.com" data-launcher-site')"
 html=$(launch LAUNCHER_CONNECT_URL=https://compte.example.invalid/home LAUNCHER_RESERVA_URL=https://reserva.example.invalid LAUNCHER_INTEEK_URL=https://inteek.example.invalid)
 panel=$(launcher_panel <<< "$html")
-expect "liste publique dans l'ordre : Noorwan, Connect, Reserva, Inteek" "noorwan|connect|reserva|inteek" "$(launcher_sites <<< "$panel")"
-expect "adresses de .env, noms, pastilles (couleur et lettre)" "https://compte.example.invalid/home|https://reserva.example.invalid|https://inteek.example.invalid|4|4" \
-    "$(grep -oE 'href="https://[^"]+" data-launcher-site' <<< "$panel" | sed -E 's/href="([^"]+)".*/\1/' | paste -sd '|' -)|$(grep -cE '<bdi>(Noorwan|Connect|Reserva|Inteek)</bdi>' <<< "$panel")|$(grep -cE '<circle cx="24" cy="24" r="23" fill="#(0071E3|0F6F66|A85A00)"/><text [^>]*>(n|c|r|i)</text>' <<< "$panel")"
+expect "liste publique dans l'ordre : Noorwan, Connect, Reserva, Inteek, OnePay (M-123)" "noorwan|connect|reserva|inteek|onepay" "$(launcher_sites <<< "$panel")"
+expect "adresses de .env, noms, pastilles (couleur et lettre)" "https://compte.example.invalid/home|https://reserva.example.invalid|https://inteek.example.invalid|https://dev.onepay.noorwan.com|5|5" \
+    "$(grep -oE 'href="https://[^"]+" data-launcher-site' <<< "$panel" | sed -E 's/href="([^"]+)".*/\1/' | paste -sd '|' -)|$(grep -cE '<bdi>(Noorwan|Connect|Reserva|Inteek|OnePay)</bdi>' <<< "$panel")|$(grep -cE '<circle cx="24" cy="24" r="23" fill="#(0071E3|0F6F66|A85A00|5B34C7)"/><text [^>]*>(n|c|r|i|o)</text>' <<< "$panel")"
 expect "« Mon compte Connect » en bas, vers l'accueil du compte" 1 \
     "$(grep -c '<a class="launcher-account" href="https://compte.example.invalid/home" rel="noopener">Mon compte Connect</a>' <<< "$panel")"
 expect "volet du lanceur : fin de ligne, voile, titre, croix" "1|1|1|1" \
@@ -427,10 +429,14 @@ expect "anciennes adresses ECOSYSTEM_*_URL lues en repli" 1 \
     "$(launch ECOSYSTEM_RESERVA_URL=https://reserva.example.invalid | launcher_panel | grep -c 'https://reserva.example.invalid')"
 expect "LAUNCHER_*_URL l'emporte sur l'ancienne adresse" 1 \
     "$(launch LAUNCHER_RESERVA_URL=https://neuf.example.invalid ECOSYSTEM_RESERVA_URL=https://ancien.example.invalid | launcher_panel | grep -c 'https://neuf.example.invalid')"
-expect "adresse non https : entrée masquée" "noorwan|connect" "$(launch 'LAUNCHER_RESERVA_URL=javascript:alert(1)' LAUNCHER_INTEEK_URL=http://inteek.example.invalid | launcher_panel | launcher_sites)"
+expect "adresse non https : entrée masquée" "noorwan|connect|onepay" "$(launch 'LAUNCHER_RESERVA_URL=javascript:alert(1)' LAUNCHER_INTEEK_URL=http://inteek.example.invalid | launcher_panel | launcher_sites)"
 expect "Compte en service : l'adresse du lanceur n'est jamais déduite de COMPTE_URL" 0 \
     "$(launch COMPTE_LINK_ENABLED=true COMPTE_URL=https://autre-compte.example.invalid | launcher_panel | grep -c 'autre-compte.example.invalid')"
-if grep -qi 'onepay' <<< "$(launch LAUNCHER_CONNECT_URL=https://a.invalid LAUNCHER_RESERVA_URL=https://b.invalid LAUNCHER_INTEEK_URL=https://c.invalid)"; then fail "OnePay dans le lanceur"; else pass "OnePay absent du lanceur"; fi
+expect "OnePay (M-123) : après Inteek, adresse par défaut, pastille violette et lettre « o »" "1|1" \
+    "$(launcher_panel <<< "$html" | grep -c 'href="https://dev.onepay.noorwan.com" data-launcher-site="onepay" rel="noopener"')|$(launcher_panel <<< "$html" | grep -c '<circle cx="24" cy="24" r="23" fill="#5B34C7"/><text [^>]*>o</text>')"
+expect "OnePay : LAUNCHER_ONEPAY_URL l'emporte, une adresse non https le masque" "1|0" \
+    "$(launch LAUNCHER_ONEPAY_URL=https://onepay.example.invalid | launcher_panel | grep -c 'https://onepay.example.invalid')|$(launch LAUNCHER_ONEPAY_URL=http://onepay.example.invalid | launcher_panel | grep -c 'data-launcher-site="onepay"')"
+if grep -qi 'onepay' <<< "$(launch | without_launcher)"; then fail "OnePay hors du lanceur"; else pass "OnePay absent hors du lanceur"; fi
 expect "plus aucune ligne « Écosystème Noorwan » (pied de page, volet du menu, réglages, textes)" "0|0|0|0" \
     "$(grep -cE 'class="(ecosystem|panel-ecosystem)"|Écosystème Noorwan|Noorwan ecosystem|منظومة Noorwan' <<< "$html")|$(grep -c 'ecosystem' app/layout/header.php app/layout/footer.php public/assets/css/site.css | awk -F: '{ n += $2 } END { print n }')|$(grep -c '^ECOSYSTEM_' .env.example)|$(grep -c "'ecosystem' =>" lang/fr.php lang/en.php lang/ar.php | awk -F: '{ n += $2 } END { print n }')"
 [[ ! -e app/layout/ecosystem.php ]] && pass "gabarit ecosystem.php retiré" || fail "gabarit ecosystem.php encore présent"
@@ -447,14 +453,14 @@ expect "feuille : trois tuiles par ligne, panneau dès 640 px, voile transparent
     "$(grep -c 'grid-template-columns: repeat(3, minmax(0, 1fr));' <<< "$launcher_css")|$(grep -c '@media (min-width: 640px)' <<< "$launcher_css")|$(grep -c 'background: transparent;' <<< "$launcher_css")"
 if grep -qE '(^|[^-])(left|right)\s*:|margin-(left|right)|padding-(left|right)|border-(left|right)' <<< "$launcher_css"; then fail "lanceur : propriété physique (left, right)"; else pass "lanceur : propriétés logiques seulement"; fi
 
-echo "2 sexdecies. OnePay absent de toutes les pages"
+echo "2 sexdecies. OnePay absent de toutes les pages, hors grille du lanceur (M-123)"
 for page in "" consulting solutions.php edition.php connect contact.php mentions-legales.php confidentialite.php cookies.php; do
     for lang in fr en ar; do
-        if curl -s "$BASE_URL/$page?lang=$lang" | grep -qi 'onepay'; then fail "OnePay présent : /${page:-index} ($lang)"; else pass "OnePay absent : /${page:-index} ($lang)"; fi
+        if curl -s "$BASE_URL/$page?lang=$lang" | without_launcher | grep -qi 'onepay'; then fail "OnePay présent : /${page:-index} ($lang)"; else pass "OnePay absent : /${page:-index} ($lang)"; fi
     done
 done
 for lang in fr en ar; do
-    if render index.php "$lang" true "" "$GTM_TEST" granted | grep -qi 'onepay' || render connect.php "$lang" true | grep -qi 'onepay'; then fail "OnePay présent, tout activé ($lang)"; else pass "OnePay absent, tout activé ($lang)"; fi
+    if render index.php "$lang" true "" "$GTM_TEST" granted | without_launcher | grep -qi 'onepay' || render connect.php "$lang" true | without_launcher | grep -qi 'onepay'; then fail "OnePay présent, tout activé ($lang)"; else pass "OnePay absent, tout activé ($lang)"; fi
 done
 
 echo "2 septdecies. Page Noorwan Connect (/connect)"
@@ -866,8 +872,11 @@ else
 fi
 # CLAUDE.md énonce la règle « jamais djiboutien » : il est exclu de cette recherche.
 for word in djiboutien PromptEspace "Labo Tech" CEREBRO OnePay googleapis gstatic; do
-    if grep -rni "$word" app bin lang public database >/dev/null 2>&1; then
-        fail "« $word » présent :"; grep -rni "$word" app bin lang public database
+    # OnePay (M-123) : seules les lignes du lanceur des sites le nomment.
+    hits=$(grep -rni "$word" app bin lang public database 2>/dev/null || true)
+    if [ "$word" = OnePay ]; then hits=$(grep -vE "launcher|^lang/(fr|en|ar)\.php:[0-9]+:\s*'onepay' => 'OnePay',$" <<< "$hits" || true); fi
+    if [ -n "$hits" ]; then
+        fail "« $word » présent :"; printf '%s\n' "$hits"
     else
         pass "aucune occurrence de « $word »"
     fi
@@ -876,7 +885,7 @@ done
 echo "5. Charte commune (M-116, M-118, M-120)"
 # Rendu hors serveur avec tous les réglages : Compte en service, Tag Manager, trois autres sites dans le lanceur.
 full() {
-    LAUNCHER_CONNECT_URL=https://connect.example.invalid LAUNCHER_RESERVA_URL=https://reserva.example.invalid LAUNCHER_INTEEK_URL=https://inteek.example.invalid \
+    LAUNCHER_CONNECT_URL=https://connect.example.invalid LAUNCHER_RESERVA_URL=https://reserva.example.invalid LAUNCHER_INTEEK_URL=https://inteek.example.invalid LAUNCHER_ONEPAY_URL=https://onepay.example.invalid \
         "$PHP" -r '[, $page, $lang] = $argv; define("COMPTE_LINK_ENABLED", true); define("GTM_ID", "GTM-TEST000");
         $_GET["lang"] = $lang; require "public/" . $page;' "$@" 2>&1
 }
@@ -899,14 +908,14 @@ for page in index.php consulting.php solutions.php edition.php connect.php conta
         else
             pass "aucun « Noorwan Connect » ni « Compte Noorwan » affiché (${page%.php}, $lang)"
         fi
-        if grep -qi 'onepay' <<< "$rendered"; then fail "OnePay présent, tout activé (${page%.php}, $lang)"; else pass "OnePay absent, tout activé (${page%.php}, $lang)"; fi
+        if grep -qi 'onepay' <<< "$(without_launcher <<< "$rendered")"; then fail "OnePay présent, tout activé (${page%.php}, $lang)"; else pass "OnePay absent, tout activé (${page%.php}, $lang)"; fi
     done
 done
 for lang in fr en ar; do
     html=$(full solutions.php "$lang")
     # Lanceur : les quatre sites, noorwan.com marqué ; plus aucune ligne écosystème au pied de page ni dans le menu.
-    expect "lanceur : quatre sites, le site courant marqué, ni écosystème ni OnePay ($lang)" "noorwan|connect|reserva|inteek|1|0|0" \
-        "$(launcher_panel <<< "$html" | launcher_sites)|$(launcher_panel <<< "$html" | grep -c 'aria-current="page"')|$(grep -cE 'class="(ecosystem|panel-ecosystem)"' <<< "$html")|$(launcher_panel <<< "$html" | grep -ci 'onepay')"
+    expect "lanceur : cinq sites dont OnePay, le site courant marqué, aucune ligne écosystème, OnePay seulement dans la grille ($lang)" "noorwan|connect|reserva|inteek|onepay|1|0|0" \
+        "$(launcher_panel <<< "$html" | launcher_sites)|$(launcher_panel <<< "$html" | grep -c 'aria-current="page"')|$(grep -cE 'class="(ecosystem|panel-ecosystem)"' <<< "$html")|$(without_launcher <<< "$html" | grep -ci 'onepay')"
     # Volet de connexion : Connect, présentation de /connect, « Continuer avec Noorwan » en bleu, « En savoir plus ».
     panel=$(sed -n '/<div id="connect-panel"/,/<\/section>/p' <<< "$html")
     expect "volet de connexion : titre, logotype Connect, bouton, lien vers /connect ($lang)" "1|1|1|1" \

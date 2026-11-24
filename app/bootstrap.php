@@ -166,6 +166,7 @@ function launcher_sites(): array
         ['key' => 'connect', 'label' => 'launcher.connect', 'url' => $external('CONNECT', 'https://compte.noorwan.com/home'), 'color' => '#0071E3', 'letter' => 'c', 'current' => false],
         ['key' => 'reserva', 'label' => 'launcher.reserva', 'url' => $external('RESERVA', 'https://dev.reserva.noorwan.com'), 'color' => '#0F6F66', 'letter' => 'r', 'current' => false],
         ['key' => 'inteek', 'label' => 'launcher.inteek', 'url' => $external('INTEEK', 'https://dev.inteek.noorwan.com'), 'color' => '#A85A00', 'letter' => 'i', 'current' => false],
+        ['key' => 'onepay', 'label' => 'launcher.onepay', 'url' => $external('ONEPAY', 'https://dev.onepay.noorwan.com'), 'color' => '#5B34C7', 'letter' => 'o', 'current' => false],
     ];
 
     return array_values(array_filter($sites, static fn (array $site): bool => $site['url'] !== ''));
