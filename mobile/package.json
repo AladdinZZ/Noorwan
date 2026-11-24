@@ -1,0 +1,10 @@
+{
+    "name": "noorwan-site-android",
+    "private": true,
+    "description": "Application Android de noorwan.com (enveloppe Capacitor, M-122) : rien ici n'est servi par le site.",
+    "dependencies": {
+        "@capacitor/android": "^8.6.2",
+        "@capacitor/cli": "^8.6.2",
+        "@capacitor/core": "^8.6.2"
+    }
+}
