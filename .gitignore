@@ -1,3 +1,17 @@
 .env
 storage/
 .DS_Store
+
+# Application Android (M-122) : dépendances, compilation et clés de signature jamais dans le dépôt
+mobile/node_modules/
+mobile/android/.gradle/
+mobile/android/build/
+mobile/android/app/build/
+mobile/android/local.properties
+mobile/android/app/src/main/assets/public/
+mobile/android/app/src/main/assets/capacitor.config.json
+mobile/android/app/src/main/assets/capacitor.plugins.json
+mobile/android/capacitor-cordova-android-plugins/
+*.jks
+*.keystore
+keystore.properties

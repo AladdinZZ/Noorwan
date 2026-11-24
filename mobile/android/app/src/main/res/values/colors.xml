@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Charte commune Noorwan : encre #1D1D1F pour la barre d'état, bleu du groupe pour l'accent -->
+    <color name="colorPrimary">#1D1D1F</color>
+    <color name="colorPrimaryDark">#1D1D1F</color>
+    <color name="colorAccent">#2997FF</color>
+</resources>
