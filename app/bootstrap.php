@@ -138,6 +138,24 @@ if (!defined('COMPTE_LINK_ENABLED')) {
     define('COMPTE_LINK_ENABLED', env('COMPTE_LINK_ENABLED', 'false') === 'true');
 }
 
+/**
+ * Autres sites du groupe pour la ligne « Écosystème Noorwan » du pied de page et le volet du menu (D63, charte commune M-120),
+ * clé du libellé => adresse. Adresses lues dans .env (ECOSYSTEM_*_URL), en https seulement ; une entrée sans adresse
+ * est masquée. Le site courant (noorwan.com) n'y figure pas, un projet confidentiel jamais.
+ *
+ * @return array<string, string>
+ */
+function ecosystem_sites(): array
+{
+    $sites = [
+        'ecosystem.connect' => (string) env('ECOSYSTEM_CONNECT_URL', ''),
+        'ecosystem.reserva' => (string) env('ECOSYSTEM_RESERVA_URL', ''),
+        'ecosystem.inteek' => (string) env('ECOSYSTEM_INTEEK_URL', ''),
+    ];
+
+    return array_filter($sites, static fn (string $url): bool => preg_match('#^https://[^\s"<>]+$#', $url) === 1);
+}
+
 error_reporting(E_ALL);
 ini_set('display_errors', is_local() ? '1' : '0');
 ini_set('log_errors', '1');

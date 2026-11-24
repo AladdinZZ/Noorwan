@@ -60,10 +60,6 @@
             var label = buttons[i].getAttribute(shown === 'dark' ? 'data-label-light' : 'data-label-dark');
             buttons[i].setAttribute('data-shown', shown);
             buttons[i].setAttribute('aria-label', label);
-            var text = buttons[i].querySelector('.theme-toggle-text');
-            if (text) {
-                text.textContent = label;
-            }
             buttons[i].hidden = false;
         }
     }

@@ -2,8 +2,10 @@
 
 declare(strict_types=1);
 
-// Pied de page commun : quatre colonnes (Consulting, Solutions, Édition, Noorwan), Écosystème Noorwan, ligne légale.
-// La colonne Édition garde la page Édition, sortie du menu en v6. Noorwan Connect est dans la colonne Noorwan ; aucun lien vers le Compte Noorwan hors de la page Noorwan Connect.
+// Pied de page commun (charte commune M-120) : logo et phrase du site, quatre colonnes (Consulting, Solutions, Édition,
+// Noorwan ; deux par ligne au téléphone), ligne « Écosystème Noorwan » (autres sites seulement), ligne légale.
+// La colonne Édition garde la page Édition, sortie du menu en v6. Connect (page /connect) est dans la colonne Noorwan.
+// Pas de « Powered by Noorwan » : noorwan.com est le site du groupe, pas un produit.
 $footerColumns = [
     'nav.consulting' => [
         ['label' => 'home.btn_explore', 'href' => url('consulting', 'expertises')],
@@ -26,6 +28,10 @@ $footerColumns = [
 </main>
 <footer class="site-footer">
     <div class="wrap">
+        <div class="footer-brand">
+            <a class="logo" href="<?= e(url('index')) ?>" aria-label="<?= t('nav.home_label') ?>" dir="ltr">noorwan<span class="logo-dot">.</span></a>
+            <p class="footer-tagline"><?= t('common.foot_line') ?></p>
+        </div>
         <nav class="footer-cols" aria-label="<?= t('nav.footer_label') ?>">
 <?php foreach ($footerColumns as $heading => $links): ?>
             <div>
@@ -40,7 +46,7 @@ $footerColumns = [
         </nav>
 <?php require ROOT_DIR . '/app/layout/ecosystem.php'; ?>
         <div class="footer-bottom">
-            <p class="footer-line"><span><?= t('common.foot_line') ?></span> <span dir="ltr"><?= t('common.copy', [':year' => date('Y')]) ?></span></p>
+            <p class="footer-copy" dir="ltr"><?= t('common.copy', [':year' => date('Y')]) ?></p>
             <div class="footer-legal">
                 <a href="<?= e(url('mentions-legales')) ?>"><?= t('legal_nav.mentions') ?></a>
                 <a href="<?= e(url('confidentialite')) ?>"><?= t('legal_nav.privacy') ?></a>

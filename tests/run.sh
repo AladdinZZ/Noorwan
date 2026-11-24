@@ -154,7 +154,9 @@ for lang in fr en ar; do
     # Noorwan Connect quitte le menu (20/11/2026) : produit de Solutions, sa page reste dans le pied de page.
     expect "menu : Consulting, Solutions, Contact, chacun sa page ($lang)" "consulting?lang=$lang|solutions.php?lang=$lang|contact.php?lang=$lang" \
         "$(grep -oE 'href="[^"]+"' <<< "$nav" | sed -E 's/href="([^"]+)"/\1/' | paste -sd '|' -)"
-    expect "menu mobile : mêmes trois onglets ($lang)" 3 "$(sed -n '/<nav id="nav-mobile"/,/<\/nav>/p' <<< "$home" | grep -c '<a ')"
+    # Volet du menu (charte commune, 24/11/2026) : toutes les rubriques, Accueil et Édition comprises.
+    expect "volet du menu : Accueil, Consulting, Solutions, Édition, Contact ($lang)" "./?lang=$lang|consulting?lang=$lang|solutions.php?lang=$lang|edition.php?lang=$lang|contact.php?lang=$lang" \
+        "$(sed -n '/<nav id="nav-mobile"/,/<\/nav>/p' <<< "$home" | grep -oE 'href="[^"]+"' | sed -E 's/href="([^"]+)"/\1/' | paste -sd '|' -)"
     footer=$(sed -n '/<nav class="footer-cols"/,/<\/nav>/p' <<< "$home")
     grep -q "href=\"edition.php?lang=$lang#catalogue\"" <<< "$footer" && pass "pied de page : page Édition gardée ($lang)" || fail "pied de page : lien vers la page Édition ($lang)"
     grep -q 'id="contact" class="screen screen-mist cta"' <<< "$home" && pass "bandeau contact en bas de l'accueil ($lang)" || fail "bandeau contact ($lang)"
@@ -278,7 +280,7 @@ echo "2 undecies. Aucun lien vers le Compte Noorwan hors de /connect (v5 bis)"
 # render PAGE LANGUE ACTIVÉ [ADRESSE, « - » pour une adresse vide] [GTM_ID] [CHOIX]
 # Écosystème sans adresse : les pages rendues ne dépendent pas des réglages du .env local.
 render() {
-    ECOSYSTEM_RESERVA_URL= ECOSYSTEM_INTEEK_URL= "$PHP" -r '[, $page, $lang, $enabled, $url, $gtm, $consent] = $argv + [4 => "", 5 => "", 6 => ""];
+    ECOSYSTEM_CONNECT_URL= ECOSYSTEM_RESERVA_URL= ECOSYSTEM_INTEEK_URL= "$PHP" -r '[, $page, $lang, $enabled, $url, $gtm, $consent] = $argv + [4 => "", 5 => "", 6 => ""];
         define("COMPTE_LINK_ENABLED", $enabled === "true");
         if ($url === "-") { define("COMPTE_URL", ""); } elseif ($url !== "") { define("COMPTE_URL", $url); }
         define("GTM_ID", $gtm);
@@ -292,17 +294,19 @@ for lang in fr en ar; do
         html=$(render "$page" "$lang" false)
         expect "désactivé : aucun lien vers le Compte, $page ($lang)" 0 "$(grep -cE 'compte\.noorwan\.com|nav-account|btn-account|connect-create|connect-already' <<< "$html")"
     done
+    # Activé : hors de /connect, le Compte n'est lié que par « Continuer avec Noorwan » des deux volets (charte commune).
     for page in index.php solutions.php edition.php contact.php cookies.php; do
         html=$(render "$page" "$lang" true)
-        expect "activé : aucun lien vers le Compte, $page ($lang)" 0 "$(grep -cE 'compte\.noorwan\.com|nav-account|btn-account' <<< "$html")"
+        expect "activé : Compte lié seulement dans les deux volets, $page ($lang)" "2|2|0" \
+            "$(grep -c 'compte\.noorwan\.com' <<< "$html")|$(grep -c "<a class=\"btn btn-connect btn-block connect-continue\" href=\"$COMPTE_DEFAULT/?lang=$lang\">" <<< "$html")|$(sed -n '/<main/,/<\/main>/p' <<< "$html" | grep -cE 'compte\.noorwan\.com|nav-account|btn-account')"
     done
     if grep -qE "'account' =>" <<< "$(sed -n "/'nav' => \[/,/\],/p" "lang/$lang.php")"; then fail "clé nav.account encore présente ($lang)"; else pass "clé nav.account retirée ($lang)"; fi
 
     html=$(render solutions.php "$lang" true)
-    expect "en-tête : plus de pastille, seulement le choix de langue ($lang)" 0 \
-        "$(sed -n '/<div class="header-tools">/,/<details/p' <<< "$html" | grep -c '<a ')"
-    expect "menu mobile : Solutions puis Contact, sans Noorwan Connect ni « Mon compte » ($lang)" "solutions.php?lang=$lang|contact.php?lang=$lang" \
-        "$(sed -n '/<nav id="nav-mobile"/,/<\/nav>/p' <<< "$html" | grep -oE 'href="[^"]+"' | tail -n 2 | sed -E 's/href="([^"]+)"/\1/' | paste -sd '|' -)"
+    expect "en-tête : un seul lien, « Connexion » vers son volet, jamais le Compte ($lang)" "1|1|0" \
+        "$(sed -n '/<div class="header-tools">/,/<\/header>/p' <<< "$html" | grep -c '<a class')|$(grep -c "<a class=\"account-toggle\" href=\"#connect-panel\" aria-controls=\"connect-panel\" aria-expanded=\"false\" data-panel-open>$(by_lang "$lang" "Connexion" "Sign in" "الدخول")</a>" <<< "$html")|$(sed -n '/<header/,/<\/header>/p' <<< "$html" | grep -c 'compte\.noorwan')"
+    expect "volet du menu : ni Connect ni « Mon compte » parmi les rubriques ($lang)" "0|0" \
+        "$(sed -n '/<nav id="nav-mobile"/,/<\/nav>/p' <<< "$html" | grep -c 'connect?')|$(grep -cE 'Mon compte|My account|«حسابي»' <<< "$html")"
     expect "pied de page : colonne Noorwan, Noorwan Connect puis Contact ($lang)" "connect?lang=$lang|contact.php?lang=$lang" \
         "$(sed -n '/<nav class="footer-cols"/,/<\/nav>/p' <<< "$html" | grep -oE 'href="[^"]+"' | tail -n 2 | sed -E 's/href="([^"]+)"/\1/' | paste -sd '|' -)"
     phrase=$(by_lang "$lang" "Un seul compte pour tous les services Noorwan." "One account for all Noorwan services." "حساب واحد لجميع خدمات نوروان.")
@@ -315,7 +319,7 @@ for lang in fr en ar; do
     done
     if grep -q $'—' <<< "$html"; then fail "activé : tiret cadratin dans la page ($lang)"; else pass "activé : aucun tiret cadratin ($lang)"; fi
 done
-expect "adresse du Compte modifiable sans toucher aux vues (trois liens de /connect)" 3 \
+expect "adresse du Compte modifiable sans toucher aux vues (trois liens de /connect, deux des volets)" 5 \
     "$(render connect.php en true https://compte.example.invalid | grep -c 'href="https://compte.example.invalid/?lang=en"')"
 # Site servi : quel que soit COMPTE_LINK_ENABLED, aucun lien vers le Compte hors de /connect.
 expect "site servi : aucun lien vers le Compte sur la page Solutions" 0 \
@@ -395,11 +399,12 @@ expect "refus : cookies Google Analytics effacés" 2 "$(grep -ciE '^Set-Cookie: 
 expect "jeton signé : choix forgé refusé" 400 "$(curl -s -o /dev/null -w '%{http_code}' -X POST -d 'token=1.2.3&choice=granted' "$BASE_URL/consent.php")"
 
 echo "2 quindecies. Écosystème Noorwan (D63)"
-eco() { env ECOSYSTEM_RESERVA_URL= ECOSYSTEM_INTEEK_URL= "$@" "$PHP" -r '$_GET["lang"] = "fr"; require "public/index.php";' 2>&1 | sed -n '/<nav class="ecosystem"/,/<\/nav>/p'; }
+eco() { env ECOSYSTEM_CONNECT_URL= ECOSYSTEM_RESERVA_URL= ECOSYSTEM_INTEEK_URL= "$@" "$PHP" -r '$_GET["lang"] = "fr"; require "public/index.php";' 2>&1 | sed -n '/<nav class="ecosystem"/,/<\/nav>/p'; }
 expect "aucune adresse : bloc masqué" 0 "$(eco | grep -c 'ecosystem')"
 block=$(eco ECOSYSTEM_ACCOUNT_URL=https://compte.example.invalid ECOSYSTEM_RESERVA_URL=https://reserva.example.invalid ECOSYSTEM_INTEEK_URL=)
 grep -q 'Écosystème Noorwan' <<< "$block" && pass "titre « Écosystème Noorwan »" || fail "titre de l'écosystème"
-grep -q '<li><span aria-current="page">Noorwan</span></li>' <<< "$block" && pass "site courant nommé sans lien" || fail "site courant"
+# Charte commune (M-120) : le site courant n'est plus dans la ligne.
+if grep -qE 'aria-current|>Noorwan<' <<< "$block"; then fail "site courant dans l'écosystème"; else pass "site courant absent de l'écosystème"; fi
 # v6 : le Compte Noorwan ne figure plus dans le bloc, même si l'ancienne variable traîne dans un .env.
 expect "Reserva lié, Compte Noorwan absent, Inteek sans adresse masqué" "https://reserva.example.invalid|0|0" \
     "$(grep -oE 'href="[^"]+"' <<< "$block" | sed -E 's/href="([^"]+)"/\1/' | paste -sd '|' -)|$(grep -ciE 'compte|account' <<< "$block")|$(grep -c 'Inteek' <<< "$block")"
@@ -696,7 +701,8 @@ for lang in fr en ar; do
         done
     done
     home=$(curl -s "$BASE_URL/?lang=$lang")
-    expect "accueil : aucun onglet actif ($lang)" 0 "$(sed -n '/<nav class="nav-desktop"/,/<\/nav>/p;/<nav id="nav-mobile"/,/<\/nav>/p' <<< "$home" | grep -c 'aria-current="page"')"
+    expect "accueil : aucun onglet actif dans la barre, « Accueil » actif dans le volet ($lang)" "0|1" \
+        "$(sed -n '/<nav class="nav-desktop"/,/<\/nav>/p' <<< "$home" | grep -c 'aria-current="page"')|$(sed -n '/<nav id="nav-mobile"/,/<\/nav>/p' <<< "$home" | grep -c "href=\"./?lang=$lang\" aria-current=\"page\"")"
     expect "titre « Une même exigence, quel que soit le projet » ($lang)" 1 "$(grep -c "id=\"why-title\" class=\"h2\">$(by_lang "$lang" "Une même exigence, quel que soit le projet" "One standard, whatever the project" "معيار واحد، أيًّا كان المشروع")<" <<< "$home")"
     for page in "" consulting; do
         if curl -s "$BASE_URL/$page?lang=$lang" | grep -qiE 'trois (métiers|univers)|three (trades|areas|worlds)|ثلاث مهن|ثلاثة مجالات'; then fail "« trois métiers » ou « trois univers » encore sur /$page ($lang)"; else pass "ni « trois métiers » ni « trois univers » sur /$page ($lang)"; fi
@@ -758,14 +764,14 @@ contrast=$("$PHP" -r '$css = file_get_contents("public/assets/css/site.css");
 expect "contraste AA des textes gris et des liens" AA "$contrast"
 
 echo "Thème sombre (v9)"
-# Bouton du thème sur toutes les pages : rond dans la barre, ligne dans le menu mobile, libellés traduits.
+# Bouton du thème sur toutes les pages : rond dans la barre, sur toutes les largeurs (charte commune), libellés traduits.
 for page in "" consulting solutions.php edition.php connect contact.php mentions-legales.php confidentialite.php cookies.php; do
     for lang in fr en ar; do
         html=$(curl -s "$BASE_URL/$page?lang=$lang")
         to_dark=$(by_lang "$lang" "Passer en sombre" "Switch to dark" "التبديل إلى الوضع الداكن")
         to_light=$(by_lang "$lang" "Passer en clair" "Switch to light" "التبديل إلى الوضع الفاتح")
-        expect "bouton du thème dans la barre et le menu, libellés traduits (/${page:-index}, $lang)" "1|1|2" \
-            "$(sed -n '/<div class="header-tools">/,/<details/p' <<< "$html" | grep -c '<button class="theme-toggle theme-toggle-bar" type="button" hidden')|$(sed -n '/<nav id="nav-mobile"/,/<\/nav>/p' <<< "$html" | grep -c '<button class="theme-toggle theme-toggle-row" type="button" hidden')|$(grep -cF "data-label-dark=\"$to_dark\" data-label-light=\"$to_light\"" <<< "$html")"
+        expect "bouton du thème dans la barre, un seul, libellés traduits (/${page:-index}, $lang)" "1|1" \
+            "$(sed -n '/<div class="header-tools">/,/<\/header>/p' <<< "$html" | grep -c '<button class="theme-toggle theme-toggle-bar" type="button" hidden')|$(grep -cF "data-label-dark=\"$to_dark\" data-label-light=\"$to_light\"" <<< "$html")"
         head=$(sed -n '/<head>/,/<\/head>/p' <<< "$html")
         expect "theme-init.js dans <head>, sans defer, avant la feuille de style (/${page:-index}, $lang)" "theme-init|site.css" \
             "$(grep -oE '<script src="assets/js/theme-init\.js\?v=[0-9]+"></script>|<link rel="stylesheet" href="assets/css/site\.css' <<< "$head" | sed -E 's/.*(theme-init|site\.css).*/\1/' | paste -sd '|' -)"
