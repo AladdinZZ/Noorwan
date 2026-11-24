@@ -1,34 +1,49 @@
 // Thème clair ou sombre (v9). Chargé dans <head> sans defer, avant la feuille de style : le thème choisi
 // est posé avant le premier rendu, sans éclair blanc. Fichier du site : autorisé par la CSP (script-src 'self').
 // À l'arrivée, le site suit l'appareil (feuille de style, @media prefers-color-scheme). Un choix différent de
-// l'appareil est gardé dans localStorage (aucun cookie) et posé en data-theme sur <html> ; un choix qui
-// redevient celui de l'appareil est oublié, et le site suit de nouveau l'appareil.
+// l'appareil est gardé six mois sur l'appareil dans le cookie nw_theme (« dark » ou « light », non chiffré, aucune
+// donnée personnelle, socle du lanceur L6) et posé en data-theme sur <html> ; un choix qui redevient celui de
+// l'appareil est oublié, et le site suit de nouveau l'appareil. Un ancien choix gardé dans localStorage (nw-theme,
+// avant le lanceur) passe une fois dans le cookie, puis localStorage est vidé.
 (function () {
     'use strict';
 
-    var KEY = 'nw-theme';
+    var COOKIE = 'nw_theme';
+    var MAX_AGE = 182 * 86400;
+    var LEGACY_KEY = 'nw-theme';
     var root = document.documentElement;
     var device = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null;
 
-    function readChoice() {
-        try {
-            var value = window.localStorage.getItem(KEY);
-            return value === 'dark' || value === 'light' ? value : null;
-        } catch (error) {
-            return null;
-        }
+    function valid(value) {
+        return value === 'dark' || value === 'light' ? value : null;
+    }
+
+    function readCookie() {
+        var match = document.cookie.match(/(?:^|;\s*)nw_theme=(dark|light)(?:;|$)/);
+        return match ? match[1] : null;
     }
 
     function saveChoice(value) {
+        var tail = '; Path=/; SameSite=Lax' + (window.location.protocol === 'https:' ? '; Secure' : '');
+        document.cookie = COOKIE + '=' + (value ? value + '; Max-Age=' + MAX_AGE : '; Max-Age=0') + tail;
+    }
+
+    // Ancien choix de localStorage : repris une fois dans le cookie, puis effacé.
+    function readChoice() {
+        var value = readCookie();
         try {
-            if (value) {
-                window.localStorage.setItem(KEY, value);
-            } else {
-                window.localStorage.removeItem(KEY);
+            var legacy = valid(window.localStorage.getItem(LEGACY_KEY));
+            if (legacy !== null) {
+                window.localStorage.removeItem(LEGACY_KEY);
+                if (value === null) {
+                    value = legacy;
+                    saveChoice(value);
+                }
             }
         } catch (error) {
-            // Stockage refusé (navigation privée) : le choix vaut pour la page seulement.
+            // Stockage refusé (navigation privée) : rien à reprendre.
         }
+        return value;
     }
 
     function deviceTheme() {
@@ -121,11 +136,4 @@
             device.addListener(onDeviceChange);
         }
     }
-
-    // Choix fait dans un autre onglet du site.
-    window.addEventListener('storage', function (event) {
-        if (event.key === KEY) {
-            apply(readChoice() || deviceTheme());
-        }
-    });
 })();

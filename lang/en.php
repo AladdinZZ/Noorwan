@@ -481,6 +481,13 @@ return [
                         'When you click "Accept" or "Decline", the website sets the nw_consent cookie, which keeps your answer for six months. Its only purpose is not to ask you again on every page. After six months, you are asked again.',
                     ],
                 ],
+                // Cookie du thème (socle du lanceur L6) : texte à fournir par Marwan.
+                [
+                    'title' => 'nw_theme',
+                    'body' => [
+                        '[À COMPLÉTER]',
+                    ],
+                ],
                 [
                     'title' => 'Audience measurement, only with your consent',
                     'body' => [

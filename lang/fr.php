@@ -481,6 +481,13 @@ return [
                         'Quand vous cliquez sur « Accepter » ou « Refuser », le site dépose le cookie nw_consent, qui garde votre réponse six mois. Il sert seulement à ne pas vous reposer la question à chaque page. Au bout de six mois, elle vous est posée à nouveau.',
                     ],
                 ],
+                // Cookie du thème (socle du lanceur L6) : texte à fournir par Marwan.
+                [
+                    'title' => 'nw_theme',
+                    'body' => [
+                        '[À COMPLÉTER]',
+                    ],
+                ],
                 [
                     'title' => 'Mesure d\'audience, seulement avec votre accord',
                     'body' => [
