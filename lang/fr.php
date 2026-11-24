@@ -47,7 +47,7 @@ return [
     ],
     'common' => [
         'foot_line' => 'Des idées pour des solutions concrètes.',
-        'copy' => '© :year Noorwan',
+        'copy' => '© :year Noorwan SARL',
         'arrow' => '→',
         'arrow_up' => '↗',
         'list_sep' => ', ',
@@ -353,7 +353,7 @@ return [
                 'title' => 'Page en cours de mise à jour',
                 'text' => 'Les informations légales complètes seront publiées prochainement. Ce qui est connu à ce jour :',
                 'list' => [
-                    'Site édité par Noorwan.',
+                    'Site édité par Noorwan SARL.',
                     'Contact : contact@noorwan.com',
                     'Hébergement : serveur IONOS.',
                 ],
