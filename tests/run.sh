@@ -834,6 +834,85 @@ for word in djiboutien PromptEspace "Labo Tech" CEREBRO OnePay googleapis gstati
     fi
 done
 
+echo "5. Charte commune (M-116, M-118, M-120)"
+# Rendu hors serveur avec tous les réglages : Compte en service, Tag Manager, trois autres sites dans l'écosystème.
+full() {
+    ECOSYSTEM_CONNECT_URL=https://connect.example.invalid ECOSYSTEM_RESERVA_URL=https://reserva.example.invalid ECOSYSTEM_INTEEK_URL=https://inteek.example.invalid \
+        "$PHP" -r '[, $page, $lang] = $argv; define("COMPTE_LINK_ENABLED", true); define("GTM_ID", "GTM-TEST000");
+        $_GET["lang"] = $lang; require "public/" . $page;' "$@" 2>&1
+}
+for page in index.php consulting.php solutions.php edition.php connect.php contact.php mentions-legales.php confidentialite.php cookies.php; do
+    for lang in fr en ar; do
+        html=$(curl -s "$BASE_URL/${page/consulting.php/consulting}?lang=$lang")
+        header=$(sed -n '/<header class="site-header">/,/<\/header>/p' <<< "$html")
+        # En-tête fixe : Menu, logo, liens, langue, thème, Connexion, dans cet ordre.
+        expect "en-tête : Menu, logo, liens, langue, thème, Connexion (${page%.php}, $lang)" "menu-toggle|logo|nav-desktop|lang-menu|theme-toggle|account-toggle" \
+            "$(grep -oE 'class="(menu-toggle|logo|nav-desktop|lang-menu|theme-toggle theme-toggle-bar|account-toggle)"' <<< "$header" | sed -E 's/class="([a-z-]+).*/\1/' | paste -sd '|' -)"
+        # Deux volets : menu en début de ligne, connexion en fin de ligne, chacun avec voile et croix.
+        expect "volets : menu au début, connexion à la fin, voile et croix (${page%.php}, $lang)" "1|1|2|2|2" \
+            "$(grep -c '<div id="menu-panel" class="panel-layer panel-start" data-panel>' <<< "$html")|$(grep -c '<div id="connect-panel" class="panel-layer panel-end" data-panel>' <<< "$html")|$(grep -c '<a class="panel-scrim" href="#" tabindex="-1" aria-hidden="true" data-panel-close></a>' <<< "$html")|$(grep -c "<a class=\"panel-close\" href=\"#\" data-panel-close><span class=\"visually-hidden\">$(by_lang "$lang" "Fermer" "Close" "إغلاق")</span>" <<< "$html")|$(grep -c 'role="dialog" aria-modal="true"' <<< "$html")"
+        footer=$(sed -n '/<footer class="site-footer">/,/<\/footer>/p' <<< "$html")
+        expect "pied de page : logo et phrase, quatre colonnes, ligne légale (${page%.php}, $lang)" "1|1|4|1|1" \
+            "$(grep -c '<div class="footer-brand">' <<< "$footer")|$(grep -c "<p class=\"footer-tagline\">$(by_lang "$lang" "Des idées pour des solutions concrètes." "Ideas for concrete solutions." "أفكار من أجل حلول ملموسة.")</p>" <<< "$footer")|$(grep -c '<p class="footer-h">' <<< "$(sed -n '/<nav class="footer-cols"/,/<\/nav>/p' <<< "$footer")")|$(grep -c "<p class=\"footer-copy\" dir=\"ltr\">© $(date +%Y) Noorwan</p>" <<< "$footer")|$(grep -c "href=\"confidentialite.php?lang=$lang\"" <<< "$footer")"
+        rendered=$(full "$page" "$lang")
+        if grep -qE 'Noorwan( |&nbsp;|'$'\xc2\xa0'')Connect|Compte Noorwan|Noorwan Account|Continuer avec Noorwan Connect' <<< "$(sed -e 's/<[^>]*>//g' <<< "$rendered")"; then
+            fail "texte « Noorwan Connect » ou « Compte Noorwan » affiché (${page%.php}, $lang)"
+        else
+            pass "aucun « Noorwan Connect » ni « Compte Noorwan » affiché (${page%.php}, $lang)"
+        fi
+        if grep -qi 'onepay' <<< "$rendered"; then fail "OnePay présent, tout activé (${page%.php}, $lang)"; else pass "OnePay absent, tout activé (${page%.php}, $lang)"; fi
+    done
+done
+for lang in fr en ar; do
+    html=$(full solutions.php "$lang")
+    # Écosystème : les autres sites, dans le pied de page et le volet du menu ; jamais noorwan.com ni OnePay.
+    eco_footer=$(sed -n '/<nav class="ecosystem"/,/<\/nav>/p' <<< "$html")
+    eco_panel=$(sed -n '/<nav class="panel-ecosystem"/,/<\/nav>/p' <<< "$html")
+    expect "écosystème du pied de page : Connect, Reserva, Inteek ($lang)" "https://connect.example.invalid|https://reserva.example.invalid|https://inteek.example.invalid" \
+        "$(grep -oE 'href="[^"]+"' <<< "$eco_footer" | sed -E 's/href="([^"]+)"/\1/' | paste -sd '|' -)"
+    expect "écosystème du volet du menu : mêmes sites ($lang)" "https://connect.example.invalid|https://reserva.example.invalid|https://inteek.example.invalid" \
+        "$(grep -oE 'href="[^"]+"' <<< "$eco_panel" | sed -E 's/href="([^"]+)"/\1/' | paste -sd '|' -)"
+    expect "écosystème : ni le site courant ni OnePay ($lang)" "0|0" \
+        "$(grep -ciE 'noorwan\.com|aria-current|>(Noorwan|نوروان)<' <<< "$eco_footer$eco_panel")|$(grep -ci 'onepay' <<< "$eco_footer$eco_panel")"
+    # Volet de connexion : Connect, présentation de /connect, « Continuer avec Noorwan » en bleu, « En savoir plus ».
+    panel=$(sed -n '/<div id="connect-panel"/,/<\/section>/p' <<< "$html")
+    expect "volet de connexion : titre, logotype Connect, bouton, lien vers /connect ($lang)" "1|1|1|1" \
+        "$(grep -c "<h2 id=\"connect-panel-title\" class=\"panel-title\">$(by_lang "$lang" "Connexion" "Sign in" "الدخول")</h2>" <<< "$panel")|$(grep -c '<p class="connect-lockup" dir="ltr" lang="en">noorwan<span class="logo-dot">.</span><span class="connect-lockup-name">Connect</span></p>' <<< "$panel")|$(grep -c ">$(by_lang "$lang" "Continuer avec Noorwan" "Continue with Noorwan" "المتابعة باستخدام Noorwan")</a>" <<< "$panel")|$(grep -c "<a class=\"more\" href=\"connect?lang=$lang\">" <<< "$panel")"
+    # Menu des langues : trois langues, la langue active cochée.
+    expect "menu des langues : trois langues, une seule cochée ($lang)" "3|1" \
+        "$(sed -n '/<ul class="lang-list"/,/<\/ul>/p' <<< "$html" | grep -c '<li>')|$(sed -n '/<ul class="lang-list"/,/<\/ul>/p' <<< "$html" | grep -c 'aria-current="true"')"
+    # Bandeau de consentement inchangé ; « Gérer les cookies » dans la ligne légale.
+    grep -q "<a href=\"cookies.php?lang=$lang#consent-manage\" data-consent-open>" <<< "$(sed -n '/<div class="footer-legal">/,/<\/div>/p' <<< "$html")" \
+        && pass "« Gérer les cookies » dans la ligne légale ($lang)" || fail "« Gérer les cookies » absent de la ligne légale ($lang)"
+done
+html=$(render solutions.php fr false)
+expect "Compte hors service : volet sans bouton, lien vers /connect gardé" "0|1" \
+    "$(grep -c 'connect-continue' <<< "$html")|$(sed -n '/<div id="connect-panel"/,/<\/section>/p' <<< "$html" | grep -c '<a class="more" href="connect?lang=fr">')"
+# Feuille et script : volets en propriétés logiques, ouverture par l'ancre sans script, Échap, retour arrière, voile.
+panel_css=$(sed -n '/Volets (M-118)/,/Volet de connexion : logotype/p' public/assets/css/site.css)
+if grep -qE '(^|[^-])(left|right)\s*:|margin-(left|right)|padding-(left|right)|border-(left|right)' <<< "$panel_css"; then fail "volets : propriété physique (left, right)"; else pass "volets : propriétés logiques seulement"; fi
+grep -q ':root:not(.js-panels) .panel-layer:target' <<< "$panel_css" && pass "volets : ouverts par leur ancre sans JavaScript" || fail "volets : ouverture sans JavaScript"
+grep -q 'width: min(100%, var(--panel-w));' <<< "$panel_css" && grep -q '^    --panel-w: 400px;$' public/assets/css/site.css && pass "volets : plein écran au téléphone, 400 px au plus" || fail "volets : largeur"
+expect "site.js : Échap, retour arrière, voile et croix" "1|1|1" \
+    "$(grep -c "event.key === 'Escape'" <<< "$(sed -n '/Volets de la charte commune/,/^})();/p' public/assets/js/site.js)")|$(grep -c "addEventListener('popstate'" public/assets/js/site.js)|$(grep -c "closest('\[data-panel-close\]')" public/assets/js/site.js)"
+grep -q '@media (min-width: 900px)' <<< "$(sed -n '/Grand écran (charte commune)/,$p' public/assets/css/site.css)" && pass "liens de la barre dès 900 px" || fail "seuil de 900 px absent"
+# Aucune fenêtre surgissante : ni <dialog>, ni fenêtre modale centrée, ni confirm(), alert() ou window.open().
+if grep -rniE '<dialog|class="[^"]*modal|\.modal|confirm\(|alert\(|window\.open|popup' app public/*.php public/assets/js public/assets/css lang >/dev/null; then
+    fail "fenêtre surgissante :"; grep -rniE '<dialog|class="[^"]*modal|\.modal|confirm\(|alert\(|window\.open|popup' app public/*.php public/assets/js public/assets/css lang
+else
+    pass "aucune fenêtre surgissante"
+fi
+# Police unique : système en latin, IBM Plex Sans Arabic servie par le site en arabe ; aucune autre police.
+expect "polices servies : IBM Plex Sans Arabic seulement" 4 "$(ls public/assets/fonts/*.woff2 | grep -c 'IBMPlexSansArabic-')"
+expect "polices déclarées : système et IBM Plex Sans Arabic seulement" 0 \
+    "$(grep -oE 'font-family:[^;]+' public/assets/css/site.css | grep -vE "var\(--font\)|-apple-system|'IBM Plex Sans Arabic'" | wc -l | tr -d ' ')"
+if grep -qE '@import|fonts\.googleapis|font-face[^}]*url\(https?:' public/assets/css/site.css; then fail "police chez un tiers"; else pass "aucune police chez un tiers"; fi
+# « Continuer avec Noorwan » toujours bleu, jamais recoloré par le thème sombre.
+grep -q '^\.btn-connect {$' public/assets/css/site.css && [[ "$(sed -n '/^\.btn-connect {$/,/^}/p' public/assets/css/site.css)" == *"background: #0071E3;"* ]] \
+    && pass "« Continuer avec Noorwan » en bleu #0071E3" || fail "couleur du bouton Connect"
+expect "jetons de la charte commune (clair, sombre manuel, sombre appareil)" "3|3|3" \
+    "$(grep -cE '^ *--control-line: #' public/assets/css/site.css)|$(grep -cE '^ *--scrim: rgba' public/assets/css/site.css)|$(grep -cE '^ *--focus: #' public/assets/css/site.css)"
+
 echo
 if [[ $failures -eq 0 ]]; then echo "Tous les tests passent."; else echo "$failures test(s) en échec."; fi
 exit $(( failures > 0 ))
