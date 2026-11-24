@@ -141,25 +141,31 @@ if (!defined('COMPTE_LINK_ENABLED')) {
 /**
  * Lanceur des sites (bouton « grille » de l'en-tête, M-121) : liste publique des sites du groupe, dans l'ordre noorwan.com,
  * Connect, Reserva, Inteek. noorwan.com n'a pas de session Connect : c'est toujours cette liste. Le site courant
- * (noorwan.com) y reste, marqué, et mène à l'accueil ; les autres adresses viennent de .env (LAUNCHER_*_URL, puis les
- * anciennes ECOSYSTEM_*_URL en repli), en https seulement ; une entrée sans adresse est masquée (Connect et le lien
- * « Mon compte Connect » aussi : l'adresse du Compte n'est jamais déduite de COMPTE_URL, v5 bis). Couleurs et lettres :
- * celles de Connect. Jamais de projet confidentiel.
+ * (Noorwan) y reste, marqué, et mène à l'accueil ; les autres adresses viennent de .env (LAUNCHER_*_URL, puis les
+ * anciennes ECOSYSTEM_*_URL en repli), sinon des adresses par défaut, comme dans les autres sites du groupe ; https
+ * seulement, une adresse invalide masque l'entrée (l'adresse du Compte n'est jamais déduite de COMPTE_URL, v5 bis).
+ * Couleurs et lettres : celles de Connect. Jamais de projet confidentiel.
  *
  * @return list<array{key: string, label: string, url: string, color: string, letter: string, current: bool}>
  */
 function launcher_sites(): array
 {
-    $external = static function (string $name): string {
-        $value = (string) env('LAUNCHER_' . $name . '_URL', (string) env('ECOSYSTEM_' . $name . '_URL', ''));
+    $external = static function (string $name, string $default): string {
+        $value = trim((string) env('LAUNCHER_' . $name . '_URL', ''));
+        if ($value === '') {
+            $value = trim((string) env('ECOSYSTEM_' . $name . '_URL', ''));
+        }
+        if ($value === '') {
+            $value = $default;
+        }
 
         return preg_match('#^https://[^\s"<>]+$#', $value) === 1 ? $value : '';
     };
     $sites = [
         ['key' => 'noorwan', 'label' => 'launcher.noorwan', 'url' => url('index'), 'color' => '#0071E3', 'letter' => 'n', 'current' => true],
-        ['key' => 'connect', 'label' => 'launcher.connect', 'url' => $external('CONNECT'), 'color' => '#0071E3', 'letter' => 'C', 'current' => false],
-        ['key' => 'reserva', 'label' => 'launcher.reserva', 'url' => $external('RESERVA'), 'color' => '#0F6F66', 'letter' => 'r', 'current' => false],
-        ['key' => 'inteek', 'label' => 'launcher.inteek', 'url' => $external('INTEEK'), 'color' => '#A85A00', 'letter' => 'i', 'current' => false],
+        ['key' => 'connect', 'label' => 'launcher.connect', 'url' => $external('CONNECT', 'https://compte.noorwan.com/home'), 'color' => '#0071E3', 'letter' => 'c', 'current' => false],
+        ['key' => 'reserva', 'label' => 'launcher.reserva', 'url' => $external('RESERVA', 'https://dev.reserva.noorwan.com'), 'color' => '#0F6F66', 'letter' => 'r', 'current' => false],
+        ['key' => 'inteek', 'label' => 'launcher.inteek', 'url' => $external('INTEEK', 'https://dev.inteek.noorwan.com'), 'color' => '#A85A00', 'letter' => 'i', 'current' => false],
     ];
 
     return array_values(array_filter($sites, static fn (array $site): bool => $site['url'] !== ''));

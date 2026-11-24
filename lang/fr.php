@@ -59,7 +59,7 @@ return [
     'launcher' => [
         'title' => 'Sites Noorwan',
         'account' => 'Mon compte Connect',
-        'noorwan' => 'noorwan.com',
+        'noorwan' => 'Noorwan',
         'connect' => 'Connect',
         'reserva' => 'Reserva',
         'inteek' => 'Inteek',

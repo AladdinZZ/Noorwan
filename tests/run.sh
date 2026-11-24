@@ -285,9 +285,10 @@ done
 echo "2 undecies. Aucun lien vers le Compte Noorwan hors de /connect (v5 bis)"
 # Rendu hors serveur, constantes fixées avant l'amorçage : les états se testent sans toucher au .env.
 # render PAGE LANGUE ACTIVÉ [ADRESSE, « - » pour une adresse vide] [GTM_ID] [CHOIX]
-# Lanceur sans adresse : les pages rendues ne dépendent pas des réglages du .env local.
+# Lanceur hors de compte.noorwan.com : les pages rendues ne dépendent pas des réglages du .env local et les liens
+# vers le Compte comptés ici sont ceux de l'en-tête et des volets, pas la tuile Connect du lanceur.
 render() {
-    LAUNCHER_CONNECT_URL= LAUNCHER_RESERVA_URL= LAUNCHER_INTEEK_URL= ECOSYSTEM_CONNECT_URL= ECOSYSTEM_RESERVA_URL= ECOSYSTEM_INTEEK_URL= "$PHP" -r '[, $page, $lang, $enabled, $url, $gtm, $consent] = $argv + [4 => "", 5 => "", 6 => ""];
+    LAUNCHER_CONNECT_URL=https://connect.example.invalid/home LAUNCHER_RESERVA_URL= LAUNCHER_INTEEK_URL= ECOSYSTEM_CONNECT_URL= ECOSYSTEM_RESERVA_URL= ECOSYSTEM_INTEEK_URL= "$PHP" -r '[, $page, $lang, $enabled, $url, $gtm, $consent] = $argv + [4 => "", 5 => "", 6 => ""];
         define("COMPTE_LINK_ENABLED", $enabled === "true");
         if ($url === "-") { define("COMPTE_URL", ""); } elseif ($url !== "") { define("COMPTE_URL", $url); }
         define("GTM_ID", $gtm);
@@ -329,8 +330,8 @@ done
 expect "adresse du Compte modifiable sans toucher aux vues (trois liens de /connect, deux des volets)" 5 \
     "$(render connect.php en true https://compte.example.invalid | grep -c 'href="https://compte.example.invalid/?lang=en"')"
 # Site servi : quel que soit COMPTE_LINK_ENABLED, aucun lien vers le Compte hors de /connect.
-expect "site servi : aucun lien vers le Compte sur la page Solutions" 0 \
-    "$(curl -s "$BASE_URL/solutions.php?lang=fr" | grep -cE 'compte\.noorwan\.com|nav-account|btn-account')"
+expect "site servi : aucun lien vers le Compte sur la page Solutions (hors lanceur)" 0 \
+    "$(curl -s "$BASE_URL/solutions.php?lang=fr" | sed '/<div id="launcher-panel"/,/^<\/div>/d' | grep -cE 'compte\.noorwan\.com|nav-account|btn-account')"
 expect "adresse du Compte vide : aucun lien" 0 "$(render connect.php fr true - | grep -cE 'nav-account|btn-account|connect-create')"
 grep -q '^COMPTE_LINK_ENABLED=false$' .env.example && pass ".env.example : lien désactivé par défaut" || fail ".env.example : COMPTE_LINK_ENABLED=false absent"
 
@@ -406,29 +407,29 @@ expect "refus : cookies Google Analytics effacés" 2 "$(grep -ciE '^Set-Cookie: 
 expect "jeton signé : choix forgé refusé" 400 "$(curl -s -o /dev/null -w '%{http_code}' -X POST -d 'token=1.2.3&choice=granted' "$BASE_URL/consent.php")"
 
 echo "2 quindecies. Lanceur des sites (M-121)"
-# launch [VARIABLE=valeur ...] : accueil en français rendu hors serveur, lanceur et anciennes adresses vides par défaut.
+# launch [VARIABLE=valeur ...] : accueil en français rendu hors serveur, lanceur et anciennes adresses vides (adresses par défaut).
 launch() { env LAUNCHER_CONNECT_URL= LAUNCHER_RESERVA_URL= LAUNCHER_INTEEK_URL= ECOSYSTEM_CONNECT_URL= ECOSYSTEM_RESERVA_URL= ECOSYSTEM_INTEEK_URL= "$@" "$PHP" -r '$_GET["lang"] = "fr"; require "public/index.php";' 2>&1; }
 launcher_panel() { sed -n '/<div id="launcher-panel"/,/^<\/div>/p'; }
 launcher_sites() { grep -oE 'data-launcher-site="[a-z]+"' | sed -E 's/.*="([a-z]+)"/\1/' | paste -sd '|' -; }
 html=$(launch)
-expect "aucune adresse : noorwan.com seul, marqué, vers l'accueil, sans « Mon compte Connect »" "noorwan|1|1|0" \
-    "$(launcher_panel <<< "$html" | launcher_sites)|$(grep -c '<a class="launcher-tile" href="./?lang=fr" data-launcher-site="noorwan" aria-current="page">' <<< "$html")|$(launcher_panel <<< "$html" | grep -c 'aria-current')|$(grep -c 'launcher-account' <<< "$html")"
+expect "aucune adresse dans .env : tous les sites aux adresses par défaut, Noorwan marqué, avec « Mon compte Connect »" "noorwan|connect|reserva|inteek|1|1|1|1" \
+    "$(launcher_panel <<< "$html" | launcher_sites)|$(grep -c '<a class="launcher-tile" href="./?lang=fr" data-launcher-site="noorwan" aria-current="page">' <<< "$html")|$(launcher_panel <<< "$html" | grep -c 'aria-current')|$(grep -c 'launcher-account' <<< "$html")|$(launcher_panel <<< "$html" | grep -c 'href="https://dev.reserva.noorwan.com" data-launcher-site')"
 html=$(launch LAUNCHER_CONNECT_URL=https://compte.example.invalid/home LAUNCHER_RESERVA_URL=https://reserva.example.invalid LAUNCHER_INTEEK_URL=https://inteek.example.invalid)
 panel=$(launcher_panel <<< "$html")
-expect "liste publique dans l'ordre : noorwan.com, Connect, Reserva, Inteek" "noorwan|connect|reserva|inteek" "$(launcher_sites <<< "$panel")"
+expect "liste publique dans l'ordre : Noorwan, Connect, Reserva, Inteek" "noorwan|connect|reserva|inteek" "$(launcher_sites <<< "$panel")"
 expect "adresses de .env, noms, pastilles (couleur et lettre)" "https://compte.example.invalid/home|https://reserva.example.invalid|https://inteek.example.invalid|4|4" \
-    "$(grep -oE 'href="https://[^"]+" data-launcher-site' <<< "$panel" | sed -E 's/href="([^"]+)".*/\1/' | paste -sd '|' -)|$(grep -cE '<bdi>(noorwan\.com|Connect|Reserva|Inteek)</bdi>' <<< "$panel")|$(grep -cE '<circle cx="24" cy="24" r="23" fill="#(0071E3|0F6F66|A85A00)"/><text [^>]*>(n|C|r|i)</text>' <<< "$panel")"
+    "$(grep -oE 'href="https://[^"]+" data-launcher-site' <<< "$panel" | sed -E 's/href="([^"]+)".*/\1/' | paste -sd '|' -)|$(grep -cE '<bdi>(Noorwan|Connect|Reserva|Inteek)</bdi>' <<< "$panel")|$(grep -cE '<circle cx="24" cy="24" r="23" fill="#(0071E3|0F6F66|A85A00)"/><text [^>]*>(n|c|r|i)</text>' <<< "$panel")"
 expect "« Mon compte Connect » en bas, vers l'accueil du compte" 1 \
     "$(grep -c '<a class="launcher-account" href="https://compte.example.invalid/home" rel="noopener">Mon compte Connect</a>' <<< "$panel")"
 expect "volet du lanceur : fin de ligne, voile, titre, croix" "1|1|1|1" \
     "$(grep -c '<div id="launcher-panel" class="panel-layer panel-end panel-launcher" data-panel>' <<< "$html")|$(grep -c '<a class="panel-scrim" href="#" tabindex="-1" aria-hidden="true" data-panel-close></a>' <<< "$panel")|$(grep -c '<h2 id="launcher-panel-title" class="panel-title">Sites Noorwan</h2>' <<< "$panel")|$(grep -c 'class="panel-close" href="#" data-panel-close' <<< "$panel")"
-expect "anciennes adresses ECOSYSTEM_*_URL lues en repli" "noorwan|reserva" \
-    "$(launch ECOSYSTEM_RESERVA_URL=https://reserva.example.invalid | launcher_panel | launcher_sites)"
+expect "anciennes adresses ECOSYSTEM_*_URL lues en repli" 1 \
+    "$(launch ECOSYSTEM_RESERVA_URL=https://reserva.example.invalid | launcher_panel | grep -c 'https://reserva.example.invalid')"
 expect "LAUNCHER_*_URL l'emporte sur l'ancienne adresse" 1 \
     "$(launch LAUNCHER_RESERVA_URL=https://neuf.example.invalid ECOSYSTEM_RESERVA_URL=https://ancien.example.invalid | launcher_panel | grep -c 'https://neuf.example.invalid')"
-expect "adresse non https ignorée" "noorwan" "$(launch 'LAUNCHER_RESERVA_URL=javascript:alert(1)' LAUNCHER_INTEEK_URL=http://inteek.example.invalid | launcher_panel | launcher_sites)"
-expect "Compte en service : l'adresse du lanceur n'est jamais déduite de COMPTE_URL" "noorwan|0" \
-    "$(launch COMPTE_LINK_ENABLED=true | launcher_panel | launcher_sites)|$(launch COMPTE_LINK_ENABLED=true | grep -c 'launcher-account')"
+expect "adresse non https : entrée masquée" "noorwan|connect" "$(launch 'LAUNCHER_RESERVA_URL=javascript:alert(1)' LAUNCHER_INTEEK_URL=http://inteek.example.invalid | launcher_panel | launcher_sites)"
+expect "Compte en service : l'adresse du lanceur n'est jamais déduite de COMPTE_URL" 0 \
+    "$(launch COMPTE_LINK_ENABLED=true COMPTE_URL=https://autre-compte.example.invalid | launcher_panel | grep -c 'autre-compte.example.invalid')"
 if grep -qi 'onepay' <<< "$(launch LAUNCHER_CONNECT_URL=https://a.invalid LAUNCHER_RESERVA_URL=https://b.invalid LAUNCHER_INTEEK_URL=https://c.invalid)"; then fail "OnePay dans le lanceur"; else pass "OnePay absent du lanceur"; fi
 expect "plus aucune ligne « Écosystème Noorwan » (pied de page, volet du menu, réglages, textes)" "0|0|0|0" \
     "$(grep -cE 'class="(ecosystem|panel-ecosystem)"|Écosystème Noorwan|Noorwan ecosystem|منظومة Noorwan' <<< "$html")|$(grep -c 'ecosystem' app/layout/header.php app/layout/footer.php public/assets/css/site.css | awk -F: '{ n += $2 } END { print n }')|$(grep -c '^ECOSYSTEM_' .env.example)|$(grep -c "'ecosystem' =>" lang/fr.php lang/en.php lang/ar.php | awk -F: '{ n += $2 } END { print n }')"
