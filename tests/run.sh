@@ -945,6 +945,57 @@ grep -q '^\.btn-connect {$' public/assets/css/site.css && [[ "$(sed -n '/^\.btn-
 expect "jetons de la charte commune (clair, sombre manuel, sombre appareil)" "3|3|3" \
     "$(grep -cE '^ *--control-line: #' public/assets/css/site.css)|$(grep -cE '^ *--scrim: rgba' public/assets/css/site.css)|$(grep -cE '^ *--focus: #' public/assets/css/site.css)"
 
+echo "6. Application Android (M-122)"
+# Tout est dans mobile/ (le site n'a pas d'outil de build) : jamais servi, jamais dans public/.
+cap=mobile/capacitor.config.json
+cap_value() { "$PHP" -r '$c = json_decode(file_get_contents($argv[1]), true); $v = eval("return \$c" . $argv[2] . ";"); echo is_bool($v) ? ($v ? "true" : "false") : (is_array($v) ? implode(",", $v) : $v);' "$cap" "$1" 2>/dev/null; }
+expect "application : identifiant" "com.noorwan.site" "$(cap_value "['appId']")"
+expect "application : nom" "Noorwan" "$(cap_value "['appName']")"
+expect "application : dossier web dans mobile/" "www" "$(cap_value "['webDir']")"
+expect "application : adresse du site" "https://noorwan.com" "$(cap_value "['server']['url']")"
+expect "application : ni clair ni contenu mixte, schéma https" "false|https|false" \
+    "$(cap_value "['server']['cleartext']")|$(cap_value "['server']['androidScheme']")|$(cap_value "['android']['allowMixedContent']")"
+expect "application : navigation permise vers le Compte seulement" "compte.noorwan.com" "$(cap_value "['server']['allowNavigation']")"
+expect "application : page de secours" "index.html" "$(cap_value "['server']['errorPath']")"
+expect "application : paquets Capacitor en 8.x" "3" \
+    "$(grep -cE '"@capacitor/(core|cli|android)": "\^8\.' mobile/package.json)"
+# Page hors ligne : française, sans script en ligne ni ressource externe, « Réessayer » vers le site.
+offline=mobile/www/index.html
+expect "page hors ligne : français, « Pas de connexion », « Réessayer »" "1|1|1" \
+    "$(grep -c '<html lang="fr">' $offline)|$(grep -c '<h1>Pas de connexion</h1>' $offline)|$(grep -c '>Réessayer</button>' $offline)"
+if grep -qiE '<script([^>]*)>' $offline && grep -iE '<script([^>]*)>' $offline | grep -qv 'src='; then fail "page hors ligne : script en ligne"; else pass "page hors ligne : aucun script en ligne"; fi
+if grep -qE '(src|href)="https?://' $offline; then fail "page hors ligne : ressource externe"; else pass "page hors ligne : aucune ressource externe"; fi
+grep -q "var SITE_URL = 'https://noorwan.com/';" mobile/www/offline.js && pass "« Réessayer » renvoie vers l'adresse du site" || fail "adresse de offline.js différente de server.url"
+# Projet Android : identité, barre d'état, icônes de la famille commune.
+res=mobile/android/app/src/main/res
+expect "projet Android : nom (titre et application), identifiant, activité" "2|1|1" \
+    "$(grep -c '>Noorwan<' $res/values/strings.xml)|$(grep -c 'applicationId "com.noorwan.site"' mobile/android/app/build.gradle)|$(ls mobile/android/app/src/main/java/com/noorwan/site/MainActivity.java 2>/dev/null | wc -l | tr -d ' ')"
+expect "barre d'état #1D1D1F, statusBarColor du thème et fond de l'icône #1D1D1F" "1|1|1" \
+    "$(grep -c '<color name="colorPrimaryDark">#1D1D1F<' $res/values/colors.xml)|$(grep -c 'statusBarColor' $res/values/styles.xml)|$(grep -c '#1D1D1F' $res/values/ic_launcher_background.xml)"
+grep -q 'ic_launcher_foreground' $res/mipmap-anydpi-v26/ic_launcher.xml && grep -q 'ic_launcher_background' $res/mipmap-anydpi-v26/ic_launcher.xml \
+    && pass "icône adaptative : fond et premier plan" || fail "icône adaptative"
+icon_sizes=""
+for entry in mdpi:48 hdpi:72 xhdpi:96 xxhdpi:144 xxxhdpi:192; do
+    density="${entry%%:*}"; size="${entry##*:}"; fg=$(( size * 108 / 48 ))
+    for name in ic_launcher ic_launcher_round; do
+        icon_sizes+="$(file "$res/mipmap-$density/$name.png" | grep -c "$size x $size") "
+    done
+    icon_sizes+="$(file "$res/mipmap-$density/ic_launcher_foreground.png" | grep -c "$fg x $fg") "
+done
+expect "icônes du lanceur : carrée, ronde et premier plan aux cinq densités" "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 " "$icon_sizes"
+expect "écrans de démarrage présents" "11" "$(ls $res/drawable/splash.png $res/drawable-land-*/splash.png $res/drawable-port-*/splash.png | wc -l | tr -d ' ')"
+# Rien de l'application dans public/ ni servi ; ce qui ne se versionne pas est ignoré.
+if ls -A public | grep -qiE 'android|mobile|capacitor|node_modules|package'; then fail "application dans public/ : $(ls -A public | grep -iE 'android|mobile|capacitor|node_modules|package')"; else pass "rien de l'application dans public/"; fi
+if grep -rqiE 'capacitor|com\.noorwan\.site' public app lang; then fail "référence à l'application dans le site"; else pass "le site ne connaît pas l'application"; fi
+expect "git ignore : dépendances, compilation, clés de signature" "5" \
+    "$(grep -cxE 'mobile/node_modules/|mobile/android/app/build/|\*\.jks|\*\.keystore|keystore\.properties' .gitignore)"
+if git ls-files --error-unmatch mobile/node_modules >/dev/null 2>&1 || [[ -n "$(git ls-files 'mobile/android/app/build' '*.jks' '*.keystore' 2>/dev/null)" ]]; then fail "fichier ignoré versionné"; else pass "ni dépendances, ni compilation, ni clé versionnées"; fi
+# OnePay, tiret cadratin et mot interdit absents de l'application.
+files=(mobile/capacitor.config.json mobile/package.json mobile/www mobile/android/app/src docs/Tech-Notes/Application-Android.md)
+if grep -rniE 'onepay' "${files[@]}" >/dev/null 2>&1; then fail "OnePay présent dans l'application"; else pass "OnePay absent de l'application"; fi
+if grep -rn $'—' "${files[@]}" >/dev/null 2>&1; then fail "tiret cadratin dans l'application"; else pass "aucun tiret cadratin dans l'application"; fi
+if grep -rniE 'djiboutien' "${files[@]}" >/dev/null 2>&1; then fail "« djiboutien » dans l'application"; else pass "aucun « djiboutien » dans l'application"; fi
+
 echo
 if [[ $failures -eq 0 ]]; then echo "Tous les tests passent."; else echo "$failures test(s) en échec."; fi
 exit $(( failures > 0 ))
