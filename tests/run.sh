@@ -237,7 +237,7 @@ for lang in fr en ar; do
         card=$(sed -n '/id="product-connect"/,/<\/article>/p' <<< "$html")
         lead=$(by_lang "$lang" "Un compte par personne, avec votre numéro de téléphone." "One account per person, with your phone number." "حساب واحد لكل شخص، برقم هاتفك.")
         expect "carte Noorwan Connect : nom, introduction, catégorie, lien, pas confidentielle (${page:-index}, $lang)" "1|1|1|1|0" \
-            "$(grep -c '<h2 id="product-connect-name" class="h2 product-name">Noorwan Connect</h2>' <<< "$card")|$(grep -cF "<p class=\"product-text\">$lead" <<< "$card")|$(grep -c "<p class=\"eyebrow eyebrow-sol product-cat\">$(by_lang "$lang" "Numérique" "Digital" "رقمي")</p>" <<< "$card")|$(grep -c "<a class=\"more\" href=\"connect?lang=$lang\">$(by_lang "$lang" "En savoir plus" "Learn more" "اعرف المزيد")</a>" <<< "$card")|$(grep -c 'badge-confidential' <<< "$card")"
+            "$(grep -c '<h2 id="product-connect-name" class="h2 product-name">Connect</h2>' <<< "$card")|$(grep -cF "<p class=\"product-text\">$lead" <<< "$card")|$(grep -c "<p class=\"eyebrow eyebrow-sol product-cat\">$(by_lang "$lang" "Numérique" "Digital" "رقمي")</p>" <<< "$card")|$(grep -c "<a class=\"more\" href=\"connect?lang=$lang\">$(by_lang "$lang" "En savoir plus" "Learn more" "اعرف المزيد")</a>" <<< "$card")|$(grep -c 'badge-confidential' <<< "$card")"
         grep -qF '<div class="product-row-visual"><picture><source srcset="assets/img/connect-hero-dark.svg" media="(prefers-color-scheme: dark)" data-theme-media="dark"><img src="assets/img/connect-hero.svg" alt=""' <<< "$card" \
             && pass "carte Noorwan Connect : illustration de sa page, sans miroir (${page:-index}, $lang)" || fail "carte Noorwan Connect : illustration (${page:-index}, $lang)"
         expect "Immobilier et Shopping « bientôt » (${page:-index}, $lang)" 2 "$(sed -n '/<div class="soon-row">/,/<\/ul>/p' <<< "$html" | grep -c '<li>')"
@@ -307,7 +307,7 @@ for lang in fr en ar; do
         "$(sed -n '/<nav class="footer-cols"/,/<\/nav>/p' <<< "$html" | grep -oE 'href="[^"]+"' | tail -n 2 | sed -E 's/href="([^"]+)"/\1/' | paste -sd '|' -)"
     phrase=$(by_lang "$lang" "Un seul compte pour tous les services Noorwan." "One account for all Noorwan services." "حساب واحد لجميع خدمات نوروان.")
     nbsp=$'\xc2\xa0'
-    link=$(by_lang "$lang" "Découvrir Noorwan${nbsp}Connect" "Discover Noorwan${nbsp}Connect" "اكتشف${nbsp}"$'\xe2\x81\xa6'"Noorwan${nbsp}Connect"$'\xe2\x81\xa9')
+    link=$(by_lang "$lang" "Découvrir Connect" "Discover Connect" "اكتشف${nbsp}"$'\xe2\x81\xa6'"Connect"$'\xe2\x81\xa9')
     for state in true false; do
         hero=$(sed -n '/<section class="page-hero/,/<\/section>/p' <<< "$(render solutions.php "$lang" "$state")" | grep 'class="page-connect"')
         grep -qF "<p class=\"page-connect\">$phrase <a href=\"connect?lang=$lang\">$link " <<< "$hero" \
@@ -446,17 +446,17 @@ for lang in fr en ar; do
     already=$(by_lang "$lang" "J&apos;ai déjà un compte" "I already have an account" "لديّ حساب بالفعل")
     grep -qF "<p class=\"connect-already\"><a href=\"$href\">$already</a></p>" <<< "$html" && pass "activé : « $already » vers le Compte ($lang)" || fail "activé : lien « $already » ($lang)"
     nbsp=$'\xc2\xa0'
-    dest=$(by_lang "$lang" "votre compte Noorwan${nbsp}Connect" "your Noorwan${nbsp}Connect account" "حسابك على")
+    dest=$(by_lang "$lang" "votre compte Connect" "your Connect account" "حسابك على")
     expect "textes : « $dest » deux fois, plus de « Mon compte » ($lang)" "2|0" \
         "$(sed -n '/id="donnees"/,/<\/section>/p' <<< "$html" | grep -o "$dest" | wc -l | tr -d ' ')|$(grep -cE 'Mon compte|My account|«حسابي»' <<< "$html")"
     grep -q 'id="creer"' <<< "$html" && pass "activé : bandeau final ($lang)" || fail "activé : bandeau final absent ($lang)"
-    final=$(by_lang "$lang" "Créez votre compte Noorwan${nbsp}Connect" "Create your Noorwan${nbsp}Connect account" "أنشئ حسابك على Noorwan${nbsp}Connect")
+    final=$(by_lang "$lang" "Créez votre compte Connect" "Create your Connect account" "أنشئ حسابك على Connect")
     grep -qF "<h2 id=\"creer-title\" class=\"h2 h2-section\">$final</h2>" <<< "$html" && pass "bandeau final : « $final » ($lang)" || fail "bandeau final : titre ($lang)"
     html=$(render connect.php "$lang" false)
     expect "désactivé : ni bouton ni bandeau final, page complète ($lang)" "0|0|5" \
         "$(grep -c 'connect-create' <<< "$html")|$(grep -c 'id="creer"' <<< "$html")|$(grep -c 'connect-section' <<< "$html")"
     footer=$(sed -n '/<nav class="footer-cols"/,/<\/nav>/p' <<< "$html")
-    grep -q "href=\"connect?lang=$lang\">Noorwan Connect<" <<< "$footer" && pass "pied de page : Noorwan Connect ($lang)" || fail "pied de page : lien Noorwan Connect ($lang)"
+    grep -q "href=\"connect?lang=$lang\">Connect<" <<< "$footer" && pass "pied de page : Connect ($lang)" || fail "pied de page : lien Noorwan Connect ($lang)"
 done
 grep -q '\[dir="rtl"\] \.connect-visual \.illus' public/assets/css/site.css && pass "illustrations de Noorwan Connect sans miroir (coches)" || fail "règle sans miroir des illustrations de Noorwan Connect"
 
