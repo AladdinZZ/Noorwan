@@ -63,6 +63,7 @@ return [
         'connect' => 'Connect',
         'reserva' => 'Reserva',
         'inteek' => 'Inteek',
+        'onepay' => 'OnePay',
     ],
     'legal_nav' => [
         'mentions' => 'Mentions légales',
