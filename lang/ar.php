@@ -66,7 +66,7 @@ return [
     'launcher' => [
         'title' => 'مواقع Noorwan',
         'account' => 'حسابي في Connect',
-        'noorwan' => 'noorwan.com',
+        'noorwan' => 'Noorwan',
         'connect' => 'Connect',
         'reserva' => 'Reserva',
         'inteek' => 'Inteek',
