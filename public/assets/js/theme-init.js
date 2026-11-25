@@ -66,8 +66,8 @@
         }
     }
 
-    // Boutons « Passer en sombre » et « Passer en clair » : l'icône montre le thème affiché
-    // (soleil en clair, croissant de lune en sombre), le libellé dit ce que fait le clic.
+    // Boutons « Passer en sombre » et « Passer en clair » : l'icône annonce le thème vers lequel on bascule
+    // (croissant de lune en clair, soleil en sombre), le libellé dit ce que fait le clic.
     function updateButtons() {
         var shown = choice || deviceTheme();
         var buttons = document.querySelectorAll('.theme-toggle');

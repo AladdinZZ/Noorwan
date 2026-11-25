@@ -684,7 +684,8 @@ main:focus {
 }
 
 /* Bouton du thème (v9) : rond de 44 px dans la barre, sur toutes les largeurs.
-   L'icône montre le thème affiché : soleil en clair, croissant de lune en sombre (data-shown, theme-init.js). */
+   L'icône annonce le thème vers lequel on bascule, comme sur les autres sites : croissant de lune en clair,
+   soleil en sombre (data-shown, theme-init.js). */
 .theme-toggle {
     display: flex;
     align-items: center;
@@ -717,8 +718,8 @@ main:focus {
     flex: none;
 }
 
-.theme-toggle[data-shown="dark"] .theme-icon-sun,
-.theme-toggle:not([data-shown="dark"]) .theme-icon-moon {
+.theme-toggle[data-shown="dark"] .theme-icon-moon,
+.theme-toggle:not([data-shown="dark"]) .theme-icon-sun {
     display: none;
 }
 

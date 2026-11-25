@@ -41,7 +41,8 @@ $asset = static fn (string $path): string => $path . '?v=' . (string) @filemtime
 
 // Bouton du thème (v9), dans la barre sur toutes les largeurs (charte commune) : masqué sans JavaScript
 // (le site suit alors l'appareil), réglé par theme-init.js.
-// Icône du thème affiché (soleil en clair, croissant de lune en sombre) ; le libellé dit ce que fait le clic.
+// Icône du thème vers lequel on bascule (croissant de lune en clair, soleil en sombre), comme sur les autres sites ;
+// le libellé dit ce que fait le clic.
 $themeToggle = static function (): string {
     $icons = '<svg class="theme-icon theme-icon-sun" width="20" height="20" viewBox="0 0 20 20" aria-hidden="true" focusable="false">'
         . '<g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="10" cy="10" r="3.5"/>'
