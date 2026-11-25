@@ -967,17 +967,23 @@ main:focus {
     margin-inline-start: 6px;
 }
 
-/* Dès 640 px : panneau sous l'en-tête, aligné sur la fin de ligne comme le menu des langues ; le voile reste
-   (transparent) pour qu'un toucher à côté ferme. Au téléphone, volet de fin de ligne plein écran. */
+/* Dès 640 px : panneau de 328 px sous l'en-tête, comme sur Connect, son bord de fin aligné sur celui du bouton
+   « grille » (--launcher-end, posé par site.js ; 8 px sans script) ; pas de croix (Échap, toucher à côté et le bouton
+   ferment) ; le voile reste (transparent) pour qu'un toucher à côté ferme. Au téléphone, volet de fin de ligne plein
+   écran, avec sa croix. */
 @media (min-width: 640px) {
     .panel-launcher .panel-scrim {
         background: transparent;
     }
 
+    .panel-launcher .panel-close {
+        display: none;
+    }
+
     .panel-launcher .panel {
         inset-block: calc(var(--header-h) + 4px) auto;
-        inset-inline-end: 8px;
-        width: 344px;
+        inset-inline-end: var(--launcher-end, 8px);
+        width: 328px;
         max-height: calc(100vh - var(--header-h) - 16px);
         border: 1px solid var(--line);
         border-radius: 14px;
