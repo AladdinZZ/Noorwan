@@ -936,6 +936,41 @@ main:focus {
     font-weight: 600;
 }
 
+/* Icône du site en 48 px (famille commune, coins de l'icône respectés), trait fin en sombre. La pastille est cachée
+   tant que l'icône se charge ; si elle ne se charge pas, site.js pose .is-failed et la pastille la remplace. */
+.launcher-icon {
+    display: block;
+    flex: none;
+    width: 48px;
+    height: 48px;
+}
+
+.launcher-img {
+    display: block;
+    width: 48px;
+    height: 48px;
+    border-radius: 10.5px;
+}
+
+[data-theme="dark"] .launcher-img {
+    box-shadow: 0 0 0 1px var(--line);
+}
+
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .launcher-img {
+        box-shadow: 0 0 0 1px var(--line);
+    }
+}
+
+.launcher-icon .launcher-dot,
+.launcher-icon.is-failed .launcher-img {
+    display: none;
+}
+
+.launcher-icon.is-failed .launcher-dot {
+    display: block;
+}
+
 .launcher-dot {
     flex: none;
 }

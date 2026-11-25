@@ -29,8 +29,9 @@ $navCurrent = static fn (array $item): string => $item['page'] === current_page(
 $accountUrl = account_url();
 $closeIcon = '<svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M5 5l10 10M15 5L5 15" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>';
 
-// Lanceur des sites (M-121) : liste publique (launcher_sites()) et lien « Mon compte Connect » (masqué sans adresse).
-// Pastille d'un site : rond à sa couleur, sa lettre en blanc, en SVG (couleur par l'attribut fill, jamais de style en ligne).
+// Lanceur des sites (M-121, M-124) : liste publique (launcher_sites()) et lien « Mon compte Connect ».
+// Tuile : icône du site (charte commune) ; si elle ne se charge pas, site.js montre la pastille, rond à sa couleur et
+// sa lettre en blanc, en SVG (couleur par l'attribut fill, jamais de style en ligne).
 $launcherAccount = launcher_account_url();
 $launcherDot = static fn (string $color, string $letter): string => '<svg class="launcher-dot" width="48" height="48" viewBox="0 0 48 48"'
     . ' aria-hidden="true" focusable="false"><circle cx="24" cy="24" r="23" fill="' . e($color) . '"/>'
@@ -166,7 +167,7 @@ gtag('consent', 'update', { analytics_storage: 'granted' });
         <div class="panel-body">
             <ul class="launcher-grid">
 <?php foreach (launcher_sites() as $site): ?>
-                <li><a class="launcher-tile" href="<?= e($site['url']) ?>" data-launcher-site="<?= e($site['key']) ?>"<?= $site['current'] ? ' aria-current="page"' : ' rel="noopener"' ?>><?= $launcherDot($site['color'], $site['letter']) ?><bdi><?= t($site['label']) ?></bdi></a></li>
+                <li><a class="launcher-tile" href="<?= e($site['url']) ?>" data-launcher-site="<?= e($site['key']) ?>"<?= $site['current'] ? ' aria-current="page"' : ' rel="noopener"' ?>><span class="launcher-icon" data-launcher-icon><img class="launcher-img" src="<?= e($asset($site['icon'])) ?>" alt="" width="48" height="48" decoding="async"><?= $launcherDot($site['color'], $site['letter']) ?></span><bdi><?= t($site['label']) ?></bdi></a></li>
 <?php endforeach; ?>
             </ul>
         </div>

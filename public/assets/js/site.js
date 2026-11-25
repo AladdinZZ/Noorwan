@@ -323,3 +323,31 @@
         }
     });
 })();
+
+// Lanceur des sites (M-124) : une icône de site qui ne se charge pas laisse place à sa pastille (couleur et lettre).
+// L'écoute se fait en phase de capture (l'erreur d'une image ne remonte pas) ; une image déjà en erreur avant ce
+// script est rattrapée par son état (complete sans largeur).
+(function () {
+    'use strict';
+
+    function fail(img) {
+        var holder = img.closest('[data-launcher-icon]');
+        if (holder) {
+            holder.classList.add('is-failed');
+        }
+    }
+
+    document.addEventListener('error', function (event) {
+        var target = event.target;
+        if (target && target.tagName === 'IMG' && target.closest && target.closest('[data-launcher-icon]')) {
+            fail(target);
+        }
+    }, true);
+
+    var images = document.querySelectorAll('[data-launcher-icon] img');
+    for (var i = 0; i < images.length; i++) {
+        if (images[i].complete && images[i].naturalWidth === 0) {
+            fail(images[i]);
+        }
+    }
+})();
