@@ -43,8 +43,28 @@
         }
     }
 
+    // Éléments visibles seulement : la croix du lanceur est masquée dès 640 px.
     function focusables(panel) {
-        return panel.querySelectorAll('.panel a[href], .panel button:not([disabled])');
+        var all = panel.querySelectorAll('.panel a[href], .panel button:not([disabled])');
+        var shown = [];
+        for (var i = 0; i < all.length; i++) {
+            if (all[i].getClientRects().length) {
+                shown.push(all[i]);
+            }
+        }
+        return shown;
+    }
+
+    // Lanceur des sites dès 640 px : le panneau s'aligne sur le bord de fin du bouton « grille » (le bord droit, le
+    // bord gauche en arabe), comme sur Connect ; sans script, il garde la marge de la feuille de style.
+    function placeLauncher(panel, from) {
+        if (!panel.classList.contains('panel-launcher') || !from) {
+            return;
+        }
+        var rect = from.getBoundingClientRect();
+        var rtl = root.getAttribute('dir') === 'rtl';
+        var end = rtl ? rect.left : root.clientWidth - rect.right;
+        panel.style.setProperty('--launcher-end', Math.max(0, Math.round(end)) + 'px');
     }
 
     function show(panel, from) {
@@ -60,9 +80,12 @@
         panel.classList.add('is-open');
         root.classList.add('has-panel');
         setExpanded(panel, true);
+        placeLauncher(panel, opener);
+        // Focus sur la croix, ou sur le premier élément quand elle est masquée (lanceur dès 640 px).
         var close = panel.querySelector('.panel-close');
-        if (close) {
-            close.focus();
+        var items = close && close.getClientRects().length ? [close] : focusables(panel);
+        if (items.length) {
+            items[0].focus();
         }
     }
 
@@ -153,6 +176,12 @@
                 event.preventDefault();
                 first.focus();
             }
+        }
+    });
+
+    window.addEventListener('resize', function () {
+        if (current) {
+            placeLauncher(current, opener || openers(current)[0]);
         }
     });
 

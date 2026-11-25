@@ -451,6 +451,12 @@ expect "« Mon compte Connect » traduit (en, ar)" "My Connect account|حساب�
 launcher_css=$(sed -n '/Lanceur des sites (M-121)/,/En-tête à 390 px : avec le lanceur/p' public/assets/css/site.css)
 expect "feuille : trois tuiles par ligne, panneau dès 640 px, voile transparent" "1|1|1" \
     "$(grep -c 'grid-template-columns: repeat(3, minmax(0, 1fr));' <<< "$launcher_css")|$(grep -c '@media (min-width: 640px)' <<< "$launcher_css")|$(grep -c 'background: transparent;' <<< "$launcher_css")"
+expect "feuille : panneau de 328 px aligné sur le bouton, sans croix dès 640 px (comme Connect)" "1|1|1" \
+    "$(grep -c 'width: 328px;' <<< "$launcher_css")|$(grep -c 'inset-inline-end: var(--launcher-end, 8px);' <<< "$launcher_css")|$(grep -A1 '\.panel-launcher \.panel-close {' <<< "$launcher_css" | grep -c 'display: none;')"
+expect "site.js aligne le panneau sur le bouton « grille »" 1 "$(grep -c "panel.style.setProperty('--launcher-end'" public/assets/js/site.js)"
+logo_css=$(sed -n '/^\.logo {$/,/^}$/p' public/assets/css/site.css)
+expect "mot-symbole de l'en-tête : 20 px, graisse 600" "1|1" "$(grep -c 'font-size: 20px;' <<< "$logo_css")|$(grep -c 'font-weight: 600;' <<< "$logo_css")"
+expect "bouton du thème : lune en clair, soleil en sombre" 1 "$(grep -c '^\.theme-toggle\[data-shown="dark"\] \.theme-icon-moon,$' public/assets/css/site.css)"
 if grep -qE '(^|[^-])(left|right)\s*:|margin-(left|right)|padding-(left|right)|border-(left|right)' <<< "$launcher_css"; then fail "lanceur : propriété physique (left, right)"; else pass "lanceur : propriétés logiques seulement"; fi
 
 echo "2 sexdecies. OnePay absent de toutes les pages, hors grille du lanceur (M-123)"
