@@ -497,13 +497,14 @@ main:focus {
     padding-inline: 4px;
 }
 
-/* Le logo reste en latin et de gauche à droite dans toutes les langues. */
+/* Le logo reste en latin et de gauche à droite dans toutes les langues. Mot-symbole commun des sites Noorwan :
+   20 px, graisse 600, interlettrage -4,5 %. */
 .logo {
     color: var(--ink);
     font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif;
-    font-size: 21px;
-    font-weight: 700;
-    letter-spacing: -0.04em;
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: -0.045em;
     line-height: 1;
 }
 
