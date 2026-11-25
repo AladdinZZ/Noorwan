@@ -420,7 +420,7 @@ html=$(launch LAUNCHER_CONNECT_URL=https://compte.example.invalid/home LAUNCHER_
 panel=$(launcher_panel <<< "$html")
 expect "liste publique dans l'ordre : Noorwan, Connect, Reserva, Inteek, OnePay (M-123)" "noorwan|connect|reserva|inteek|onepay" "$(launcher_sites <<< "$panel")"
 expect "adresses de .env, noms, pastilles (couleur et lettre)" "https://compte.example.invalid/home|https://reserva.example.invalid|https://inteek.example.invalid|https://dev.onepay.noorwan.com|5|5" \
-    "$(grep -oE 'href="https://[^"]+" data-launcher-site' <<< "$panel" | sed -E 's/href="([^"]+)".*/\1/' | paste -sd '|' -)|$(grep -cE '<bdi>(Noorwan|Connect|Reserva|Inteek|OnePay)</bdi>' <<< "$panel")|$(grep -cE '<circle cx="24" cy="24" r="23" fill="#(0071E3|0F6F66|A85A00|5B34C7)"/><text [^>]*>(n|c|r|i|o)</text>' <<< "$panel")"
+    "$(grep -oE 'href="https://[^"]+" data-launcher-site' <<< "$panel" | sed -E 's/href="([^"]+)".*/\1/' | paste -sd '|' -)|$(grep -cE '<bdi>(Noorwan|Connect|Reserva|Inteek|OnePay)</bdi>' <<< "$panel")|$(grep -cE '<circle cx="24" cy="24" r="23" fill="#(0071E3|248A3D|0F6F66|A85A00|5B34C7)"/><text [^>]*>(n|c|r|i|o)</text>' <<< "$panel")"
 expect "« Mon compte Connect » en bas, vers l'accueil du compte" 1 \
     "$(grep -c '<a class="launcher-account" href="https://compte.example.invalid/home" rel="noopener">Mon compte Connect</a>' <<< "$panel")"
 expect "volet du lanceur : fin de ligne, voile, titre, croix" "1|1|1|1" \
@@ -429,13 +429,31 @@ expect "anciennes adresses ECOSYSTEM_*_URL lues en repli" 1 \
     "$(launch ECOSYSTEM_RESERVA_URL=https://reserva.example.invalid | launcher_panel | grep -c 'https://reserva.example.invalid')"
 expect "LAUNCHER_*_URL l'emporte sur l'ancienne adresse" 1 \
     "$(launch LAUNCHER_RESERVA_URL=https://neuf.example.invalid ECOSYSTEM_RESERVA_URL=https://ancien.example.invalid | launcher_panel | grep -c 'https://neuf.example.invalid')"
-expect "adresse non https : entrée masquée" "noorwan|connect|onepay" "$(launch 'LAUNCHER_RESERVA_URL=javascript:alert(1)' LAUNCHER_INTEEK_URL=http://inteek.example.invalid | launcher_panel | launcher_sites)"
+panel=$(launch 'LAUNCHER_RESERVA_URL=javascript:alert(1)' LAUNCHER_INTEEK_URL=http://inteek.example.invalid | launcher_panel)
+expect "adresse non https : adresse par défaut, aucun site masqué (M-124)" "noorwan|connect|reserva|inteek|onepay|1|1|0" \
+    "$(launcher_sites <<< "$panel")|$(grep -c 'href="https://dev.reserva.noorwan.com" data-launcher-site' <<< "$panel")|$(grep -c 'href="https://dev.inteek.noorwan.com" data-launcher-site' <<< "$panel")|$(grep -cE 'javascript:|http://inteek' <<< "$panel")"
 expect "Compte en service : l'adresse du lanceur n'est jamais déduite de COMPTE_URL" 0 \
     "$(launch COMPTE_LINK_ENABLED=true COMPTE_URL=https://autre-compte.example.invalid | launcher_panel | grep -c 'autre-compte.example.invalid')"
 expect "OnePay (M-123) : après Inteek, adresse par défaut, pastille violette et lettre « o »" "1|1" \
     "$(launcher_panel <<< "$html" | grep -c 'href="https://dev.onepay.noorwan.com" data-launcher-site="onepay" rel="noopener"')|$(launcher_panel <<< "$html" | grep -c '<circle cx="24" cy="24" r="23" fill="#5B34C7"/><text [^>]*>o</text>')"
-expect "OnePay : LAUNCHER_ONEPAY_URL l'emporte, une adresse non https le masque" "1|0" \
-    "$(launch LAUNCHER_ONEPAY_URL=https://onepay.example.invalid | launcher_panel | grep -c 'https://onepay.example.invalid')|$(launch LAUNCHER_ONEPAY_URL=http://onepay.example.invalid | launcher_panel | grep -c 'data-launcher-site="onepay"')"
+expect "OnePay : LAUNCHER_ONEPAY_URL l'emporte, une adresse non https prend l'adresse par défaut" "1|1" \
+    "$(launch LAUNCHER_ONEPAY_URL=https://onepay.example.invalid | launcher_panel | grep -c 'https://onepay.example.invalid')|$(launch LAUNCHER_ONEPAY_URL=http://onepay.example.invalid | launcher_panel | grep -c 'href="https://dev.onepay.noorwan.com" data-launcher-site="onepay"')"
+# Icônes des sites (M-124) : copies de la charte commune servies par le site sous images/sites/, jamais sous /icons/
+# (réservé par Apache sur Ubuntu) ; pastille couleur et lettre gardée pour le cas où l'icône ne se charge pas.
+panel=$(launch | launcher_panel)
+expect "icônes : une par site, sous images/sites/, versionnées, sans texte de remplacement, chacune avec sa pastille de secours" "5|5|5" \
+    "$(grep -cE '<span class="launcher-icon" data-launcher-icon><img class="launcher-img" src="images/sites/(noorwan|connect|reserva|inteek|onepay)\.svg\?v=[0-9]+" alt="" width="48" height="48" decoding="async"><svg class="launcher-dot"' <<< "$panel")|$(for k in noorwan connect reserva inteek onepay; do [[ -s "public/images/sites/$k.svg" ]] && echo "$k"; done | wc -l | tr -d ' ')|$(grep -c 'class="launcher-dot"' <<< "$panel")"
+[[ ! -e public/icons ]] && pass "aucun dossier public/icons (réservé par Apache)" || fail "dossier public/icons présent"
+expect "icône de Connect au point vert #30D158, pastille de Connect #248A3D" "1|1" \
+    "$(grep -c '#30D158' public/images/sites/connect.svg)|$(grep -c '<circle cx="24" cy="24" r="23" fill="#248A3D"/><text [^>]*>c</text>' <<< "$panel")"
+expect "icône de noorwan.com identique au favicon du site" 0 "$(cmp -s public/favicon.svg public/images/sites/noorwan.svg; echo $?)"
+expect "icônes servies par le site" "200|200" "$(curl -s -o /dev/null -w '%{http_code}' "$BASE_URL/images/sites/connect.svg")|$(curl -s -o /dev/null -w '%{http_code}' "$BASE_URL/images/sites/onepay.svg")"
+expect "site.js montre la pastille quand une icône ne se charge pas" "1|1" \
+    "$(grep -c "holder.classList.add('is-failed');" public/assets/js/site.js)|$(grep -c 'images\[i\].complete && images\[i\].naturalWidth === 0' public/assets/js/site.js)"
+expect "feuille : pastille cachée tant que l'icône s'affiche, montrée en cas d'échec" "1|1" \
+    "$(grep -c '^\.launcher-icon\.is-failed \.launcher-img {$' public/assets/css/site.css)|$(grep -c '^\.launcher-icon\.is-failed \.launcher-dot {$' public/assets/css/site.css)"
+# En-tête (M-124) : le groupe de fin reste en bout de ligne même sans liens principaux (le logo pousse par sa marge).
+expect "en-tête : le logo pousse le groupe de fin en bout de ligne" 1 "$(sed -n '/^\.header-bar \.logo {$/,/^}$/p' public/assets/css/site.css | grep -c 'margin-inline: 4px auto;')"
 if grep -qi 'onepay' <<< "$(launch | without_launcher)"; then fail "OnePay hors du lanceur"; else pass "OnePay absent hors du lanceur"; fi
 expect "plus aucune ligne « Écosystème Noorwan » (pied de page, volet du menu, réglages, textes)" "0|0|0|0" \
     "$(grep -cE 'class="(ecosystem|panel-ecosystem)"|Écosystème Noorwan|Noorwan ecosystem|منظومة Noorwan' <<< "$html")|$(grep -c 'ecosystem' app/layout/header.php app/layout/footer.php public/assets/css/site.css | awk -F: '{ n += $2 } END { print n }')|$(grep -c '^ECOSYSTEM_' .env.example)|$(grep -c "'ecosystem' =>" lang/fr.php lang/en.php lang/ar.php | awk -F: '{ n += $2 } END { print n }')"

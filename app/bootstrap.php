@@ -139,41 +139,50 @@ if (!defined('COMPTE_LINK_ENABLED')) {
 }
 
 /**
- * Lanceur des sites (bouton « grille » de l'en-tête, M-121) : liste publique des sites du groupe, dans l'ordre noorwan.com,
- * Connect, Reserva, Inteek. noorwan.com n'a pas de session Connect : c'est toujours cette liste. Le site courant
- * (Noorwan) y reste, marqué, et mène à l'accueil ; les autres adresses viennent de .env (LAUNCHER_*_URL, puis les
- * anciennes ECOSYSTEM_*_URL en repli), sinon des adresses par défaut, comme dans les autres sites du groupe ; https
- * seulement, une adresse invalide masque l'entrée (l'adresse du Compte n'est jamais déduite de COMPTE_URL, v5 bis).
- * Couleurs et lettres : celles de Connect. Jamais de projet confidentiel.
+ * Lanceur des sites (bouton « grille » de l'en-tête, M-121, M-124) : liste publique des sites du groupe, toujours
+ * complète, dans l'ordre noorwan.com, Connect, Reserva, Inteek et le site de paiement (M-123). noorwan.com n'a pas de
+ * session Connect : c'est toujours cette liste. Le site courant (Noorwan) y reste, marqué, et mène à son accueil ; les
+ * autres adresses viennent de .env (LAUNCHER_*_URL, puis les anciennes ECOSYSTEM_*_URL en repli), sinon des adresses
+ * par défaut ; une adresse non https prend l'adresse par défaut, aucun site n'est jamais masqué (l'adresse du Compte
+ * n'est jamais déduite de COMPTE_URL, v5 bis). Icône : copie sans modification de la charte commune, servie par le site
+ * (public/images/sites/<clé>.svg, jamais sous /icons/, réservé par Apache) ; pastille couleur et lettre si elle ne se
+ * charge pas. Jamais d'autre projet confidentiel.
  *
- * @return list<array{key: string, label: string, url: string, color: string, letter: string, current: bool}>
+ * @return list<array{key: string, label: string, url: string, color: string, letter: string, icon: string, current: bool}>
  */
 function launcher_sites(): array
 {
     $external = static function (string $name, string $default): string {
-        $value = trim((string) env('LAUNCHER_' . $name . '_URL', ''));
-        if ($value === '') {
-            $value = trim((string) env('ECOSYSTEM_' . $name . '_URL', ''));
-        }
-        if ($value === '') {
-            $value = $default;
+        foreach (['LAUNCHER_', 'ECOSYSTEM_'] as $prefix) {
+            $value = trim((string) env($prefix . $name . '_URL', ''));
+            if ($value !== '') {
+                return preg_match('#^https://[^\s"<>]+$#', $value) === 1 ? $value : $default;
+            }
         }
 
-        return preg_match('#^https://[^\s"<>]+$#', $value) === 1 ? $value : '';
+        return $default;
     };
-    $sites = [
-        ['key' => 'noorwan', 'label' => 'launcher.noorwan', 'url' => url('index'), 'color' => '#0071E3', 'letter' => 'n', 'current' => true],
-        ['key' => 'connect', 'label' => 'launcher.connect', 'url' => $external('CONNECT', 'https://compte.noorwan.com/home'), 'color' => '#0071E3', 'letter' => 'c', 'current' => false],
-        ['key' => 'reserva', 'label' => 'launcher.reserva', 'url' => $external('RESERVA', 'https://dev.reserva.noorwan.com'), 'color' => '#0F6F66', 'letter' => 'r', 'current' => false],
-        ['key' => 'inteek', 'label' => 'launcher.inteek', 'url' => $external('INTEEK', 'https://dev.inteek.noorwan.com'), 'color' => '#A85A00', 'letter' => 'i', 'current' => false],
-        ['key' => 'onepay', 'label' => 'launcher.onepay', 'url' => $external('ONEPAY', 'https://dev.onepay.noorwan.com'), 'color' => '#5B34C7', 'letter' => 'o', 'current' => false],
+    $site = static fn (string $key, string $url, string $color, string $letter, bool $current = false): array => [
+        'key' => $key,
+        'label' => 'launcher.' . $key,
+        'url' => $url,
+        'color' => $color,
+        'letter' => $letter,
+        'icon' => 'images/sites/' . $key . '.svg',
+        'current' => $current,
     ];
 
-    return array_values(array_filter($sites, static fn (array $site): bool => $site['url'] !== ''));
+    return [
+        $site('noorwan', url('index'), '#0071E3', 'n', true),
+        $site('connect', $external('CONNECT', 'https://compte.noorwan.com/home'), '#248A3D', 'c'),
+        $site('reserva', $external('RESERVA', 'https://dev.reserva.noorwan.com'), '#0F6F66', 'r'),
+        $site('inteek', $external('INTEEK', 'https://dev.inteek.noorwan.com'), '#A85A00', 'i'),
+        $site('onepay', $external('ONEPAY', 'https://dev.onepay.noorwan.com'), '#5B34C7', 'o'), // launcher seulement (M-123)
+    ];
 }
 
 /**
- * Lien « Mon compte Connect » du bas du lanceur : l'adresse de Connect du lanceur, ou null sans elle (lien masqué).
+ * Lien « Mon compte Connect » du bas du lanceur : l'adresse de Connect du lanceur (toujours présente).
  */
 function launcher_account_url(): ?string
 {
