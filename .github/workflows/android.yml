@@ -14,7 +14,7 @@ on:
       - 'mobile/capacitor.config.json'
       - 'mobile/package.json'
       - 'mobile/package-lock.json'
-      - 'mobile/mobile/www/**'
+      - 'mobile/www/**'
       - '.github/workflows/android.yml'
   workflow_dispatch:
 
