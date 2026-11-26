@@ -52,7 +52,7 @@ $footerColumns = [
                 <a href="<?= e(url('confidentialite')) ?>"><?= t('legal_nav.privacy') ?></a>
                 <a href="<?= e(url('cookies')) ?>"><?= t('legal_nav.cookies') ?></a>
 <?php if (GTM_ID !== ''): ?>
-                <a href="<?= e(url('cookies', 'consent-manage')) ?>" data-consent-open><?= t('consent.manage') ?></a>
+                <a href="#consent-panel" aria-controls="consent-panel" aria-expanded="false" data-panel-open><?= t('consent.manage') ?></a>
 <?php endif; ?>
             </div>
         </div>

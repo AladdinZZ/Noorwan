@@ -347,19 +347,27 @@ return [
             'server' => 'حال خطأ تقني دون الإرسال. حاول مجددًا بعد بضع دقائق.',
         ],
     ],
-    // Bandeau de consentement à la mesure d'audience (M-59). A VALIDER PAR MARWAN, à relire par un arabophone.
+    // Choix de cookies commun à tous les sites Noorwan (M-129, texte commun de la charte).
     'consent' => [
-        'title' => 'قياس عدد الزوار',
-        // Nom latin isolé (LRI ... PDI) : les parenthèses restent à leur place en RTL.
-        'text' => "بموافقتك، نقيس زيارات الموقع إحصائيًا (\u{2066}Google Analytics\u{2069})، دون أي إعلانات. يُحفظ اختيارك ستة أشهر.",
+        'title' => 'ملفات تعريف الارتباط',
+        'text' => 'تستخدم نوروان ملفات تعريف الارتباط لقياس جمهور مواقعها، وللإعلانات إن قبلت ذلك. يسري اختيارك على جميع مواقع نوروان.',
         'more' => 'اعرف المزيد',
-        'accept' => 'أوافق',
-        'refuse' => 'أرفض',
+        'accept_all' => 'قبول الكل',
+        'refuse_all' => 'رفض الكل',
+        'choose' => 'اختيار',
+        'panel_title' => 'ملفات تعريف الارتباط',
+        'panel_lead' => 'يسري اختيارك على جميع مواقع نوروان. يمكنك تغييره في أي وقت عبر «إدارة ملفات تعريف الارتباط».',
+        'analytics' => 'قياس الجمهور',
+        'analytics_hint' => 'الصفحات التي تمت زيارتها، لتحسين المواقع، دون اسمك أو رقمك أو بريدك الإلكتروني.',
+        'ads' => 'الإعلانات',
+        'ads_hint' => 'قياس إعلانات نوروان وعرضها.',
+        'save' => 'حفظ',
         'manage' => 'إدارة ملفات تعريف الارتباط',
         'manage_title' => 'إدارة اختياراتك',
-        'state_granted' => 'اختيارك الحالي: قبول قياس عدد الزوار.',
-        'state_denied' => 'اختيارك الحالي: رفض قياس عدد الزوار.',
-        'state_none' => 'لم تحدد اختيارك بعد: لا يجري أي قياس لعدد الزوار.',
+        'state_line' => ':name: :state',
+        'state_on' => 'تم القبول',
+        'state_off' => 'تم الرفض',
+        'state_none' => 'لم تحدد اختيارك بعد: لا قياس للجمهور ولا إعلانات.',
     ],
     // Pages légales : A FAIRE RELIRE PAR UN JURISTE, traduction à relire par un arabophone.
     'legal' => [

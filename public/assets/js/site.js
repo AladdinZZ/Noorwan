@@ -45,7 +45,7 @@
 
     // Éléments visibles seulement : la croix du lanceur est masquée dès 640 px.
     function focusables(panel) {
-        var all = panel.querySelectorAll('.panel a[href], .panel button:not([disabled])');
+        var all = panel.querySelectorAll('.panel a[href], .panel button:not([disabled]), .panel input:not([type="hidden"])');
         var shown = [];
         for (var i = 0; i < all.length; i++) {
             if (all[i].getClientRects().length) {
@@ -248,19 +248,23 @@
     }
 })();
 
-// Consentement à la mesure d'audience (M-59). Sans JavaScript, les boutons envoient le formulaire à consent.php
-// et la page revient avec le choix enregistré. Ici : envoi en arrière-plan, puis chargement de Tag Manager
-// sur « Accepter » ; « Refuser » après un accord recharge la page pour retirer Tag Manager.
+// Choix de cookies commun (M-129). Sans JavaScript, les formulaires du bandeau et du volet « Choisir » vont à
+// consent.php et la page revient avec le choix enregistré. Ici : envoi en arrière-plan ; un nouvel accord à la mesure
+// charge Tag Manager selon le choix (publicité seulement si elle est acceptée) ; un accord retiré, ou un choix fait
+// depuis la page Cookies (état affiché), recharge la page sans mesure.
 (function () {
     'use strict';
 
-    var banner = document.getElementById('consent');
+    var panel = document.getElementById('consent-panel');
     var bootstrap = document.getElementById('gtm-bootstrap');
-    if (!banner || !bootstrap) {
+    if (!panel || !bootstrap || !window.fetch || !window.FormData) {
         return;
     }
+    var banner = document.getElementById('consent');
 
-    function loadTagManager() {
+    function loadTagManager(ads) {
+        var state = ads ? 'granted' : 'denied';
+        window.gtag('consent', 'update', { analytics_storage: 'granted', ad_storage: state, ad_user_data: state, ad_personalization: state });
         if (document.querySelector('script[src^="https://www.googletagmanager.com/gtm.js"]')) {
             return;
         }
@@ -272,55 +276,59 @@
         document.head.appendChild(script);
     }
 
-    function close() {
-        banner.hidden = true;
+    function wanted(form, submitter) {
+        var choice = submitter && submitter.name === 'choice' ? submitter.value : (form.elements.choice ? form.elements.choice.value : 'none');
+        if (choice === 'custom') {
+            return { choice: choice, analytics: form.elements.analytics.checked, ads: form.elements.ads.checked };
+        }
+        return { choice: choice, analytics: choice === 'all', ads: choice === 'all' };
     }
 
     document.addEventListener('submit', function (event) {
         var form = event.target;
-        if (!form.classList || !form.classList.contains('consent-actions') || !window.fetch || !window.FormData) {
+        if (!form.hasAttribute || !form.hasAttribute('data-consent-form')) {
             return;
         }
         event.preventDefault();
+        var next = wanted(form, event.submitter);
         var data = new FormData(form);
-        var choice = event.submitter ? event.submitter.value : 'denied';
-        data.set('choice', choice);
+        data.set('choice', next.choice);
 
         fetch(form.action, { method: 'POST', body: data, headers: { Accept: 'application/json' }, credentials: 'same-origin' })
             .then(function (response) {
                 if (!response.ok) {
                     throw new Error('consent');
                 }
-                var previous = banner.getAttribute('data-state');
-                banner.setAttribute('data-state', choice);
-                // Page Cookies (état affiché) ou retrait d'un accord : la page se recharge sans Tag Manager.
-                if (form.closest('#consent-manage') || (choice === 'denied' && previous === 'granted')) {
+                var hadAnalytics = panel.getAttribute('data-analytics') === '1';
+                var hadAds = panel.getAttribute('data-ads') === '1';
+                if (document.getElementById('consent-manage') || (hadAnalytics && !next.analytics) || (hadAds && !next.ads)) {
                     window.location.reload();
                     return;
                 }
-                if (choice === 'granted') {
-                    window.gtag('consent', 'update', { analytics_storage: 'granted' });
-                    loadTagManager();
+                panel.setAttribute('data-analytics', next.analytics ? '1' : '0');
+                panel.setAttribute('data-ads', next.ads ? '1' : '0');
+                var boxes = document.getElementById('consent-choice');
+                boxes.elements.analytics.checked = next.analytics;
+                boxes.elements.ads.checked = next.ads;
+                if (next.analytics) {
+                    loadTagManager(next.ads);
                 }
-                close();
+                if (banner) {
+                    banner.hidden = true;
+                }
+                if (panel.classList.contains('is-open')) {
+                    panel.querySelector('[data-panel-close]').click();
+                }
             })
             .catch(function () {
+                // Envoi ordinaire : le bouton pressé n'est pas transmis par submit(), le choix passe par un champ caché.
+                var field = document.createElement('input');
+                field.type = 'hidden';
+                field.name = 'choice';
+                field.value = next.choice;
+                form.appendChild(field);
                 form.submit();
             });
-    });
-
-    // « Gérer les cookies » rouvre le bandeau au lieu de quitter la page.
-    document.addEventListener('click', function (event) {
-        var link = event.target.closest('[data-consent-open]');
-        if (!link) {
-            return;
-        }
-        event.preventDefault();
-        banner.hidden = false;
-        var first = banner.querySelector('button');
-        if (first) {
-            first.focus();
-        }
     });
 })();
 

@@ -337,43 +337,73 @@ expect "site servi : aucun lien vers le Compte sur la page Solutions (hors lance
 expect "adresse du Compte vide : aucun lien" 0 "$(render connect.php fr true - | grep -cE 'nav-account|btn-account|connect-create')"
 grep -q '^COMPTE_LINK_ENABLED=false$' .env.example && pass ".env.example : lien désactivé par défaut" || fail ".env.example : COMPTE_LINK_ENABLED=false absent"
 
-echo "2 duodecies. Consentement et Tag Manager (M-59)"
+echo "2 duodecies. Choix de cookies commun et Tag Manager (M-59, M-129)"
 GTM_TEST="GTM-TEST000"
 for lang in fr en ar; do
     for page in index.php contact.php cookies.php; do
         html=$(render "$page" "$lang" false "" "")
-        expect "GTM_ID vide : ni Google, ni bandeau, ni « Gérer les cookies », $page ($lang)" 0 \
-            "$(grep -cE 'googletagmanager|gtm-bootstrap|id="consent"|data-consent-open|consent-manage' <<< "$html")"
+        expect "GTM_ID vide : ni Google, ni bandeau, ni volet, ni « Gérer les cookies », $page ($lang)" 0 \
+            "$(grep -cE 'googletagmanager|gtm-bootstrap|id="consent"|consent-panel|consent-manage' <<< "$html")"
     done
     html=$(render index.php "$lang" false "" "$GTM_TEST")
-    expect "sans accord : aucun script Tag Manager ($lang)" 0 "$(grep -c 'googletagmanager' <<< "$html")"
-    grep -q "<script nonce=\"[A-Za-z0-9+/=]\{24\}\" id=\"gtm-bootstrap\" data-gtm-id=\"$GTM_TEST\">" <<< "$html" && pass "sans accord : amorçage avec nonce ($lang)" || fail "sans accord : amorçage absent ($lang)"
+    expect "sans cookie : aucun script Tag Manager ($lang)" 0 "$(grep -c 'googletagmanager' <<< "$html")"
+    grep -q "<script nonce=\"[A-Za-z0-9+/=]\{24\}\" id=\"gtm-bootstrap\" data-gtm-id=\"$GTM_TEST\">" <<< "$html" && pass "sans cookie : amorçage avec nonce ($lang)" || fail "sans cookie : amorçage absent ($lang)"
     grep -q "gtag('consent', 'default', { ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied', analytics_storage: 'denied' });" <<< "$html" \
-        && pass "sans accord : mode consentement « default » à « denied » ($lang)" || fail "sans accord : consentement par défaut ($lang)"
+        && pass "sans cookie : mode consentement tout refusé par défaut ($lang)" || fail "sans cookie : consentement par défaut ($lang)"
+    expect "sans cookie : aucune mise à jour du consentement ($lang)" 0 "$(grep -c "gtag('consent', 'update'" <<< "$html")"
     banner=$(sed -n '/<section id="consent"/,/<\/section>/p' <<< "$html")
-    title=$(by_lang "$lang" "Mesure d&apos;audience" "Audience measurement" "قياس عدد الزوار")
-    grep -qF "$title" <<< "$banner" && pass "bandeau ouvert, « $title » ($lang)" || fail "bandeau absent ($lang)"
-    if head -n 1 <<< "$banner" | grep -q ' hidden'; then fail "bandeau masqué avant tout choix ($lang)"; else pass "bandeau visible avant tout choix ($lang)"; fi
-    expect "bandeau : Refuser et Accepter, même style ($lang)" "denied|granted" \
-        "$(grep -oE 'class="btn btn-consent" type="submit" name="choice" value="[a-z]+"' <<< "$banner" | sed -E 's/.*value="([a-z]+)"/\1/' | paste -sd '|' -)"
-    grep -q "data-consent-open>$(by_lang "$lang" "Gérer les cookies" "Manage cookies" "إدارة ملفات تعريف الارتباط")<" <<< "$html" && pass "« Gérer les cookies » dans le pied de page ($lang)" || fail "« Gérer les cookies » absent ($lang)"
+    text=$(by_lang "$lang" "Noorwan utilise des cookies pour mesurer l&apos;audience de ses sites et, si vous l&apos;acceptez, pour la publicité. Votre choix vaut pour tous les sites Noorwan." \
+        "Noorwan uses cookies to measure the audience of its sites and, if you accept, for advertising. Your choice applies to all Noorwan sites." \
+        "تستخدم نوروان ملفات تعريف الارتباط لقياس جمهور مواقعها، وللإعلانات إن قبلت ذلك. يسري اختيارك على جميع مواقع نوروان.")
+    grep -qF "<p class=\"consent-text\">$text <a href=\"confidentialite.php?lang=$lang\">" <<< "$banner" && pass "bandeau : texte commun et lien vers Confidentialité ($lang)" || fail "bandeau : texte commun ($lang)"
+    expect "bandeau : « Tout accepter » et « Tout refuser » de même forme, puis « Choisir » vers le volet ($lang)" "all|none|1" \
+        "$(grep -oE 'class="btn btn-outline btn-consent" type="submit" name="choice" value="[a-z]+"' <<< "$banner" | sed -E 's/.*value="([a-z]+)"/\1/' | paste -sd '|' -)|$(grep -c "<a class=\"consent-choose\" href=\"#consent-panel\" aria-controls=\"consent-panel\" aria-expanded=\"false\" data-panel-open>$(by_lang "$lang" "Choisir" "Choose" "اختيار")</a>" <<< "$banner")"
+    expect "bandeau : textes des boutons ($lang)" 2 "$(grep -cE ">($(by_lang "$lang" "Tout accepter|Tout refuser" "Accept all|Refuse all" "قبول الكل|رفض الكل"))</button>" <<< "$banner")"
+    panel=$(sed -n '/<div id="consent-panel"/,/^<\/div>/p' <<< "$html")
+    expect "volet « Choisir » : fin de ligne, deux interrupteurs éteints, « Enregistrer » ($lang)" "1|2|0|1|1" \
+        "$(grep -c '<div id="consent-panel" class="panel-layer panel-end" data-panel data-analytics="0" data-ads="0">' <<< "$panel")|$(grep -c 'type="checkbox" role="switch"' <<< "$panel")|$(grep -c ' checked>' <<< "$panel")|$(grep -c '<input type="hidden" name="choice" value="custom">' <<< "$panel")|$(grep -c ">$(by_lang "$lang" "Enregistrer" "Save" "حفظ")</button>" <<< "$panel")"
+    grep -q "<a href=\"#consent-panel\" aria-controls=\"consent-panel\" aria-expanded=\"false\" data-panel-open>$(by_lang "$lang" "Gérer les cookies" "Manage cookies" "إدارة ملفات تعريف الارتباط")</a>" <<< "$(sed -n '/<div class="footer-legal">/,/<\/div>/p' <<< "$html")" \
+        && pass "« Gérer les cookies » au pied de page rouvre le volet ($lang)" || fail "« Gérer les cookies » absent ou mal relié ($lang)"
 
-    html=$(render index.php "$lang" false "" "$GTM_TEST" granted)
+    html=$(render index.php "$lang" false "" "$GTM_TEST" v1.a1.m0)
     grep -q "j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i;" <<< "$html" && grep -q "'dataLayer', '$GTM_TEST');" <<< "$html" \
-        && pass "après accord : script Tag Manager présent ($lang)" || fail "après accord : script Tag Manager absent ($lang)"
-    grep -q "gtag('consent', 'update', { analytics_storage: 'granted' });" <<< "$html" && pass "après accord : « update » à « granted » ($lang)" || fail "après accord : mise à jour du consentement ($lang)"
-    expect "après accord : tout script en ligne porte le nonce, un seul nonce ($lang)" "0|1" \
+        && pass "a1 : Tag Manager chargé ($lang)" || fail "a1 : Tag Manager absent ($lang)"
+    grep -q "gtag('consent', 'update', { analytics_storage: 'granted', ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied' });" <<< "$html" \
+        && pass "a1.m0 : mesure accordée, publicité refusée ($lang)" || fail "a1.m0 : mise à jour du consentement ($lang)"
+    expect "a1 : tout script en ligne porte le nonce, un seul nonce ($lang)" "0|1" \
         "$(grep -E '<script( |>)' <<< "$html" | grep -v ' src=' | grep -vc 'nonce=')|$(grep -oE 'nonce="[^"]+"' <<< "$html" | sort -u | wc -l | tr -d ' ')"
-    grep -q '<section id="consent" class="consent" aria-labelledby="consent-title" hidden data-state="granted">' <<< "$html" && pass "après accord : bandeau fermé ($lang)" || fail "après accord : bandeau encore ouvert ($lang)"
+    expect "a1 : bandeau absent, volet réglé sur le choix ($lang)" "0|1|1" \
+        "$(grep -c '<section id="consent"' <<< "$html")|$(grep -c 'data-analytics="1" data-ads="0"' <<< "$html")|$(grep -c 'name="analytics" value="1" checked>' <<< "$html")"
+    html=$(render index.php "$lang" false "" "$GTM_TEST" v1.a1.m1)
+    grep -q "gtag('consent', 'update', { analytics_storage: 'granted', ad_storage: 'granted', ad_user_data: 'granted', ad_personalization: 'granted' });" <<< "$html" \
+        && pass "a1.m1 : mesure et publicité accordées ($lang)" || fail "a1.m1 : publicité non accordée ($lang)"
+    for value in v1.a0.m0 v1.a0.m1; do
+        html=$(render index.php "$lang" false "" "$GTM_TEST" "$value")
+        expect "$value : aucun Tag Manager, aucune mise à jour, bandeau fermé ($lang)" "0|0|0" \
+            "$(grep -c 'googletagmanager' <<< "$html")|$(grep -c "gtag('consent', 'update'" <<< "$html")|$(grep -c '<section id="consent"' <<< "$html")"
+    done
+    html=$(render index.php "$lang" false "" "$GTM_TEST" v2.a1.m1)
+    expect "valeur inconnue : comme sans cookie ($lang)" "0|1" "$(grep -c 'googletagmanager' <<< "$html")|$(grep -c '<section id="consent"' <<< "$html")"
+    html=$(render index.php "$lang" false "" "$GTM_TEST" granted)
+    expect "ancienne valeur « granted » reprise : mesure seule ($lang)" "1|1|0" \
+        "$(grep -c "ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied' });" <<< "$html")|$(grep -c "gtm.js?id=' + i;" <<< "$html")|$(grep -c '<section id="consent"' <<< "$html")"
     html=$(render index.php "$lang" false "" "$GTM_TEST" denied)
-    expect "après refus : aucun script Tag Manager, bandeau fermé ($lang)" "0|1" \
-        "$(grep -c 'googletagmanager' <<< "$html")|$(grep -c 'hidden data-state="denied"' <<< "$html")"
-    html=$(render cookies.php "$lang" false "" "$GTM_TEST" denied)
-    grep -q '<section id="consent-manage"' <<< "$html" && grep -qF "$(by_lang "$lang" "mesure d&apos;audience refusée" "audience measurement declined" "رفض قياس عدد الزوار")" <<< "$html" \
-        && pass "page Cookies : « Gérer vos choix » et état actuel ($lang)" || fail "page Cookies : gestion des choix ($lang)"
+    expect "ancienne valeur « denied » reprise : rien ($lang)" "0|0" "$(grep -c 'googletagmanager' <<< "$html")|$(grep -c '<section id="consent"' <<< "$html")"
+    html=$(render cookies.php "$lang" false "" "$GTM_TEST" v1.a1.m0)
+    manage=$(sed -n '/<section id="consent-manage"/,/<\/section>/p' <<< "$html")
+    expect "page Cookies : choix actuel et bouton vers le volet ($lang)" "1|1|1" \
+        "$(grep -c "$(by_lang "$lang" "Mesure d&apos;audience : acceptée" "Audience measurement: accepted" "قياس الجمهور: تم القبول")" <<< "$manage")|$(grep -c "$(by_lang "$lang" "Publicité : refusée" "Advertising: refused" "الإعلانات: تم الرفض")" <<< "$manage")|$(grep -c 'class="btn btn-outline consent-manage-open" href="#consent-panel"' <<< "$manage")"
 done
 expect "identifiant mal formé ignoré" 0 "$(GTM_ID='GTM-x"><script>' "$PHP" -r '$_GET["lang"]="fr"; require "public/index.php";' 2>&1 | grep -c 'gtm-bootstrap')"
 grep -q '^GTM_ID=$' .env.example && pass ".env.example : GTM_ID vide par défaut" || fail ".env.example : GTM_ID absent ou rempli"
+# Cookie commun : les deux cookies reçus sous le même nom (ancien de l'hôte, commun de .noorwan.com), la valeur commune l'emporte.
+expect "deux cookies nw_consent reçus : la valeur commune l'emporte" "v1.a0.m1" \
+    "$("$PHP" -r '$_SERVER["HTTP_COOKIE"] = "nw_consent=granted; nw_consent=v1.a0.m1"; require "app/bootstrap.php"; $c = consent_choice(); echo "v1.a" . (int) $c["analytics"] . ".m" . (int) $c["ads"];' 2>&1)"
+options() { "$PHP" -r '[, $host, $https] = $argv; $_SERVER["HTTP_HOST"] = $host; if ($https === "on") { $_SERVER["HTTPS"] = "on"; } require "app/bootstrap.php"; $o = consent_cookie_options(); echo ($o["domain"] ?? "-") . "|" . ($o["expires"] - time()) . "|" . $o["path"] . "|" . $o["samesite"] . "|" . var_export($o["secure"], true) . "|" . var_export($o["httponly"], true);' "$@" 2>&1; }
+expect "noorwan.com en https : domaine commun, six mois, Secure, jamais HttpOnly" ".noorwan.com|15552000|/|Lax|true|false" "$(options noorwan.com on)"
+expect "sous-domaine (dev.noorwan.com:443) : domaine commun" ".noorwan.com|15552000|/|Lax|true|false" "$(options dev.noorwan.com:443 on)"
+expect "autre hôte (127.0.0.1) : hôte seul" "-|15552000|/|Lax|false|false" "$(options 127.0.0.1:8010 off)"
+expect "faux sous-domaine (evilnoorwan.com) : hôte seul" "-" "$(options evilnoorwan.com on | cut -d'|' -f1)"
 
 echo "2 terdecies. CSP"
 csp_served=$(curl -sI "$BASE_URL/?lang=fr" | grep -i '^Content-Security-Policy:')
@@ -391,22 +421,41 @@ if grep -q 'unsafe-inline\|unsafe-eval' <<< "$csp_gtm"; then fail "CSP avec GTM_
 echo "2 quaterdecies. Enregistrement du choix (consent.php)"
 consent_token() { "$PHP" -r 'require "app/bootstrap.php"; echo Csrf::token("consent");' 2>/dev/null; }
 expect "GET refusé" 405 "$(curl -s -o /dev/null -w '%{http_code}' "$BASE_URL/consent.php")"
-expect "jeton absent refusé" 400 "$(curl -s -o /dev/null -w '%{http_code}' -X POST -d 'choice=granted' "$BASE_URL/consent.php")"
-expect "choix inconnu refusé" 400 "$(curl -s -o /dev/null -w '%{http_code}' -X POST --data-urlencode "token=$(consent_token)" -d 'choice=peut-etre' "$BASE_URL/consent.php")"
-response=$(curl -s -D - -o /dev/null -X POST --data-urlencode "token=$(consent_token)" -d 'choice=granted' --data-urlencode 'back=edition.php?lang=ar' "$BASE_URL/consent.php?lang=ar")
-grep -q '^HTTP/[0-9.]* 303' <<< "$response" && pass "accord : redirection 303" || fail "accord : $(head -n 1 <<< "$response")"
-grep -qi '^Location: edition.php?lang=ar' <<< "$response" && pass "accord : retour à la page d'origine" || fail "accord : mauvais retour"
+expect "jeton absent refusé" 400 "$(curl -s -o /dev/null -w '%{http_code}' -X POST -d 'choice=all' "$BASE_URL/consent.php")"
+expect "choix inconnu refusé" 400 "$(curl -s -o /dev/null -w '%{http_code}' -X POST --data-urlencode "token=$(consent_token)" -d 'choice=granted' "$BASE_URL/consent.php")"
+response=$(curl -s -D - -o /dev/null -X POST --data-urlencode "token=$(consent_token)" -d 'choice=all' --data-urlencode 'back=edition.php?lang=ar' "$BASE_URL/consent.php?lang=ar")
+grep -q '^HTTP/[0-9.]* 303' <<< "$response" && pass "Tout accepter : redirection 303" || fail "Tout accepter : $(head -n 1 <<< "$response")"
+grep -qi '^Location: edition.php?lang=ar' <<< "$response" && pass "Tout accepter : retour à la page d'origine" || fail "Tout accepter : mauvais retour"
 cookie=$(grep -i '^Set-Cookie: nw_consent=' <<< "$response")
-grep -q 'nw_consent=granted' <<< "$cookie" && grep -q 'Max-Age=15724800' <<< "$cookie" && grep -qi 'HttpOnly' <<< "$cookie" && grep -qi 'SameSite=Lax' <<< "$cookie" && grep -q 'path=/' <<< "$cookie" \
-    && pass "accord : cookie nw_consent, six mois, HttpOnly, SameSite=Lax" || fail "accord : cookie $cookie"
+grep -q 'nw_consent=v1.a1.m1;' <<< "$cookie" && grep -q 'Max-Age=15552000' <<< "$cookie" && grep -qi 'SameSite=Lax' <<< "$cookie" && grep -q 'path=/' <<< "$cookie" \
+    && pass "Tout accepter : nw_consent=v1.a1.m1, six mois, SameSite=Lax, Path=/" || fail "Tout accepter : cookie $cookie"
+if grep -qi 'HttpOnly' <<< "$cookie"; then fail "cookie commun en HttpOnly"; else pass "cookie commun jamais HttpOnly"; fi
+if grep -qi 'domain=' <<< "$cookie"; then fail "hôte local : domaine posé ($cookie)"; else pass "hôte local : cookie sur l'hôte seul"; fi
 expect "un seul cookie posé" 1 "$(grep -ci '^Set-Cookie:' <<< "$response")"
-response=$(curl -s -D - -o /dev/null -X POST --data-urlencode "token=$(consent_token)" -d 'choice=granted' --data-urlencode 'back=https://exemple.invalid/' "$BASE_URL/consent.php")
+response=$(curl -s -D - -o /dev/null -X POST --data-urlencode "token=$(consent_token)" -d 'choice=all' --data-urlencode 'back=https://exemple.invalid/' "$BASE_URL/consent.php")
 grep -qi '^Location: ./?lang=fr' <<< "$response" && pass "retour vers un site externe refusé" || fail "retour externe : $(grep -i '^Location' <<< "$response")"
-response=$(curl -s -D - -o /dev/null -X POST -H 'Accept: application/json' -H 'Cookie: _ga=GA1.1.1; _ga_ABC123=GS1.1' --data-urlencode "token=$(consent_token)" -d 'choice=denied' "$BASE_URL/consent.php")
-grep -q '^HTTP/[0-9.]* 204' <<< "$response" && pass "refus en arrière-plan : réponse 204" || fail "refus en arrière-plan : $(head -n 1 <<< "$response")"
-grep -q 'nw_consent=denied' <<< "$response" && pass "refus : cookie nw_consent=denied" || fail "refus : cookie absent"
-expect "refus : cookies Google Analytics effacés" 2 "$(grep -ciE '^Set-Cookie: _ga(_ABC123)?=deleted' <<< "$response")"
-expect "jeton signé : choix forgé refusé" 400 "$(curl -s -o /dev/null -w '%{http_code}' -X POST -d 'token=1.2.3&choice=granted' "$BASE_URL/consent.php")"
+response=$(curl -s -D - -o /dev/null -X POST -H 'Accept: application/json' -H 'Cookie: _ga=GA1.1.1; _ga_ABC123=GS1.1' --data-urlencode "token=$(consent_token)" -d 'choice=none' "$BASE_URL/consent.php")
+grep -q '^HTTP/[0-9.]* 204' <<< "$response" && pass "Tout refuser en arrière-plan : réponse 204" || fail "Tout refuser en arrière-plan : $(head -n 1 <<< "$response")"
+grep -q 'nw_consent=v1.a0.m0;' <<< "$response" && pass "Tout refuser : nw_consent=v1.a0.m0" || fail "Tout refuser : cookie absent"
+expect "Tout refuser : cookies Google Analytics effacés" 2 "$(grep -ciE '^Set-Cookie: _ga(_ABC123)?=deleted' <<< "$response")"
+for case in "analytics=1|v1.a1.m0" "ads=1|v1.a0.m1" "analytics=1&ads=1|v1.a1.m1" "x=1|v1.a0.m0"; do
+    response=$(curl -s -D - -o /dev/null -X POST -H 'Accept: application/json' --data-urlencode "token=$(consent_token)" -d "choice=custom&${case%%|*}" "$BASE_URL/consent.php")
+    grep -q "nw_consent=${case##*|};" <<< "$response" && pass "Choisir (${case%%|*}) : nw_consent=${case##*|}" || fail "Choisir (${case%%|*}) : $(grep -i '^Set-Cookie: nw_consent' <<< "$response")"
+done
+response=$(curl -s -D - -o /dev/null -X POST -H 'Host: www.noorwan.com' -H 'Accept: application/json' --data-urlencode "token=$(consent_token)" -d 'choice=all' "$BASE_URL/consent.php")
+expect "www.noorwan.com : ancien cookie de l'hôte effacé, puis cookie commun sur .noorwan.com" "1|1" \
+    "$(grep -ciE '^Set-Cookie: nw_consent=deleted;.*path=/' <<< "$(grep -vi 'domain=' <<< "$response")")|$(grep -ciE '^Set-Cookie: nw_consent=v1\.a1\.m1;.*domain=\.noorwan\.com' <<< "$response")"
+expect "jeton signé : choix forgé refusé" 400 "$(curl -s -o /dev/null -w '%{http_code}' -X POST -d 'token=1.2.3&choice=all' "$BASE_URL/consent.php")"
+# Ancienne valeur du site : recopiée dans la valeur commune à la première page vue (« granted » : la mesure seule).
+response=$(curl -s -D - -o /dev/null -H 'Cookie: nw_consent=granted' "$BASE_URL/?lang=fr")
+grep -q 'Set-Cookie: nw_consent=v1.a1.m0;' <<< "$response" && pass "ancien « granted » recopié en v1.a1.m0" || fail "ancien « granted » : $(grep -i '^Set-Cookie' <<< "$response")"
+response=$(curl -s -D - -o /dev/null -H 'Cookie: nw_consent=denied' "$BASE_URL/?lang=fr")
+grep -q 'Set-Cookie: nw_consent=v1.a0.m0;' <<< "$response" && pass "ancien « denied » recopié en v1.a0.m0" || fail "ancien « denied » : $(grep -i '^Set-Cookie' <<< "$response")"
+response=$(curl -s -D - -o /dev/null -H 'Host: noorwan.com' -H 'Cookie: nw_consent=granted' "$BASE_URL/?lang=fr")
+expect "noorwan.com : ancien cookie de l'hôte effacé et recopié sur .noorwan.com" "1|1" \
+    "$(grep -vi 'domain=' <<< "$response" | grep -ci '^Set-Cookie: nw_consent=deleted')|$(grep -ciE '^Set-Cookie: nw_consent=v1\.a1\.m0;.*domain=\.noorwan\.com' <<< "$response")"
+expect "valeur commune déjà là : rien n'est recopié" 0 "$(curl -s -D - -o /dev/null -H 'Cookie: nw_consent=v1.a0.m0' "$BASE_URL/?lang=fr" | grep -ci '^Set-Cookie: nw_consent')"
+expect "sans cookie : aucun cookie posé" 0 "$(curl -s -D - -o /dev/null "$BASE_URL/?lang=fr" | grep -ci '^Set-Cookie: nw_consent')"
 
 echo "2 quindecies. Lanceur des sites (M-121)"
 # launch [VARIABLE=valeur ...] : accueil en français rendu hors serveur, lanceur et anciennes adresses vides (adresses par défaut).
@@ -947,8 +996,8 @@ for lang in fr en ar; do
     # Menu des langues : trois langues, la langue active cochée.
     expect "menu des langues : trois langues, une seule cochée ($lang)" "3|1" \
         "$(sed -n '/<ul class="lang-list"/,/<\/ul>/p' <<< "$html" | grep -c '<li>')|$(sed -n '/<ul class="lang-list"/,/<\/ul>/p' <<< "$html" | grep -c 'aria-current="true"')"
-    # Bandeau de consentement inchangé ; « Gérer les cookies » dans la ligne légale.
-    grep -q "<a href=\"cookies.php?lang=$lang#consent-manage\" data-consent-open>" <<< "$(sed -n '/<div class="footer-legal">/,/<\/div>/p' <<< "$html")" \
+    # « Gérer les cookies » dans la ligne légale, vers le volet du choix commun.
+    grep -q "<a href=\"#consent-panel\" aria-controls=\"consent-panel\" aria-expanded=\"false\" data-panel-open>" <<< "$(sed -n '/<div class="footer-legal">/,/<\/div>/p' <<< "$html")" \
         && pass "« Gérer les cookies » dans la ligne légale ($lang)" || fail "« Gérer les cookies » absent de la ligne légale ($lang)"
 done
 html=$(render solutions.php fr false)

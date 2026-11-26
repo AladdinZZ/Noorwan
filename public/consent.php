@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 require __DIR__ . '/../app/bootstrap.php';
 
-// Enregistre le choix de mesure d'audience (bandeau ou page Cookies) dans le cookie nw_consent, pour six mois.
-// Un refus efface aussi les cookies de Google Analytics déjà posés. Réponse 204 à site.js, sinon retour à la page.
+// Enregistre le choix de cookies commun (M-129) dans nw_consent : « all » (Tout accepter), « none » (Tout refuser) ou
+// « custom » (volet « Choisir » : cases analytics et ads). Un refus de la mesure efface aussi les cookies de Google
+// Analytics déjà posés. Réponse 204 à site.js, sinon retour à la page.
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
@@ -14,21 +15,16 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 
 $choice = $_POST['choice'] ?? '';
-if (!in_array($choice, ['granted', 'denied'], true) || !Csrf::isValid('consent', $_POST['token'] ?? null)) {
+if (!in_array($choice, ['all', 'none', 'custom'], true) || !Csrf::isValid('consent', $_POST['token'] ?? null)) {
     http_response_code(400);
     exit;
 }
 
-$secure = str_starts_with((string) env('APP_URL', ''), 'https://');
-setcookie(CONSENT_COOKIE, $choice, [
-    'expires' => time() + CONSENT_MAX_AGE,
-    'path' => '/',
-    'secure' => $secure,
-    'httponly' => true,
-    'samesite' => 'Lax',
-]);
+$analytics = $choice === 'all' || ($choice === 'custom' && ($_POST['analytics'] ?? '') === '1');
+$ads = $choice === 'all' || ($choice === 'custom' && ($_POST['ads'] ?? '') === '1');
+consent_store($analytics, $ads);
 
-if ($choice === 'denied') {
+if (!$analytics) {
     // Cookies de Google Analytics (_ga, _ga_XXXX) : posés sur le domaine principal, retirés sur ce domaine et sur l'hôte.
     $host = (string) parse_url((string) env('APP_URL', ''), PHP_URL_HOST);
     $domain = preg_replace('/^www\./', '', $host);
