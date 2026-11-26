@@ -76,6 +76,8 @@ $themeToggle = static function (): string {
 <link rel="icon" href="<?= e($asset('favicon.svg')) ?>" type="image/svg+xml">
 <link rel="icon" href="<?= e($asset('favicon.ico')) ?>" sizes="48x48">
 <link rel="apple-touch-icon" href="<?= e($asset('apple-touch-icon.png')) ?>">
+<?php // Manifeste de l'application installable sans magasin (M-132) ; use-credentials : le manifeste passe aussi derrière un mot de passe Apache. ?>
+<link rel="manifest" href="manifest.json" crossorigin="use-credentials">
 <?php if (is_rtl()): ?>
 <link rel="preload" href="assets/fonts/IBMPlexSansArabic-Regular.woff2" as="font" type="font/woff2" crossorigin>
 <?php endif; ?>

@@ -383,8 +383,9 @@ function content_security_policy(): string
         $connect .= ' https://www.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com';
     }
 
+    // Service worker et manifeste (M-132) : du site seulement, écrits pour ne pas dépendre de default-src.
     return "default-src 'self'; img-src " . $img . '; script-src ' . $script . "; style-src 'self'; font-src 'self'; "
-        . 'connect-src ' . $connect . "; form-action 'self'; frame-ancestors 'none'; base-uri 'self'; object-src 'none'";
+        . 'connect-src ' . $connect . "; worker-src 'self'; manifest-src 'self'; form-action 'self'; frame-ancestors 'none'; base-uri 'self'; object-src 'none'";
 }
 
 // En-têtes de sécurité.

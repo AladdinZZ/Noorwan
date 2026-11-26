@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<!--
+    Page hors ligne de noorwan.com (M-132), gardée par le service worker (sw.js) et montrée quand une page ne peut
+    pas être chargée. Textes en trois langues, recopiés de lang/*.php (offline.*, contrôlé par tests/run.sh).
+    Aucune ressource externe, aucun script ni style en ligne. « Réessayer » recharge l'accueil.
+-->
+<html lang="fr" dir="ltr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="color-scheme" content="light dark">
+    <meta name="theme-color" content="#1D1D1F">
+    <meta name="robots" content="noindex">
+    <title>Noorwan</title>
+    <link rel="stylesheet" href="assets/css/offline.css">
+</head>
+<body>
+    <main class="card">
+        <img class="logo" src="images/icons/icon-192.png" alt="" width="64" height="64">
+        <h1>Pas de connexion</h1>
+        <p>Impossible d'afficher Noorwan pour le moment. Vérifiez votre connexion Internet, puis réessayez.</p>
+        <a class="retry" href="./">Réessayer</a>
+        <section class="other" lang="en" dir="ltr">
+            <h2>No connection</h2>
+            <p>Noorwan cannot be displayed right now. Check your Internet connection, then try again.</p>
+            <a href="./?lang=en">Try again</a>
+        </section>
+        <section class="other" lang="ar" dir="rtl">
+            <h2>لا يوجد اتصال</h2>
+            <p>يتعذّر عرض Noorwan حاليًا. تحقّق من اتصالك بالإنترنت، ثم أعد المحاولة.</p>
+            <a href="./?lang=ar">إعادة المحاولة</a>
+        </section>
+    </main>
+</body>
+</html>
