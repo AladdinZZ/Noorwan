@@ -161,7 +161,7 @@ Direction visuelle : maquette A épurée (M-56), validée par Marwan le 6/11/202
 - Menu : Consulting (accueil), Solutions, Édition (page Édition), Contact (page Contact). « Connexion » devient une pastille noire dans la barre (et le dernier lien du menu mobile, et la colonne Noorwan du pied de page), toujours masquée tant que `COMPTE_LINK_ENABLED` vaut `false`.
 - Pied de page en quatre colonnes : Consulting (Découvrir nos expertises, Parlons de votre projet), Solutions (Découvrir nos solutions, Demander une présentation), Édition (Voir le catalogue, Publier votre livre), Noorwan (Contact, Connexion). Puis « Écosystème Noorwan » (D63 : Noorwan, Compte Noorwan, Reserva, Inteek ; entrée sans adresse masquée), puis « Des idées pour des solutions concrètes. », « © année Noorwan SARL », liens légaux et « Gérer les cookies ».
 - Bandeau « Un projet en tête ? » : même texte, bouton bleu, adresse contact@noorwan.com dessous.
-- Bandeau de consentement (M-59), seulement si `GTM_ID` est réglé : « Mesure d'audience » ; « Avec votre accord, nous mesurons la fréquentation du site de façon statistique (Google Analytics), sans publicité. Votre choix est gardé six mois. » ; « En savoir plus » ; [Refuser] [Accepter], de même poids.
+- Choix de cookies commun à tous les sites Noorwan (M-129, remplace le bandeau M-59), seulement si `GTM_ID` est réglé : bandeau en bas, « Noorwan utilise des cookies pour mesurer l'audience de ses sites et, si vous l'acceptez, pour la publicité. Votre choix vaut pour tous les sites Noorwan. » ; « En savoir plus » (Confidentialité) ; [Tout accepter] [Tout refuser], de même forme ; lien « Choisir » qui ouvre le volet « Cookies » : « Mesure d'audience » (« Les pages visitées, pour améliorer les sites, sans votre nom, votre numéro ni votre e-mail. »), « Publicité » (« Mesurer et montrer les publicités de Noorwan. »), [Enregistrer]. Textes anglais et arabes repris de Connect (Noorwan écrit « نوروان » en arabe, comme le reste du site).
 
 ### Accueil
 
@@ -181,6 +181,7 @@ Ordre : haut de page · Consulting (01) · Solutions (02) · Édition (03) · pr
 - Édition : en-tête, prestation en quatre étapes sur fond sombre, catalogue. **[À FOURNIR : ASIN des cinq livres parus]** sous le titre du catalogue ; **[À FOURNIR : phrase d'auteur]** sous la présentation de {méta}Physique.
 - Contact : même formulaire sur un panneau blanc ; adresse contact@noorwan.com sous l'introduction.
 - Confidentialité et Cookies (datées du 6 novembre 2026) : mesure d'audience par Google Analytics seulement avec accord ; cookie `nw_consent` six mois ; cookies `_ga` 13 mois au plus ; données dans Google Analytics 14 mois au plus ; Google Ireland Limited comme sous-traitant, transfert possible aux États-Unis (Data Privacy Framework) ; retrait par « Gérer les cookies » ; section « Gérer vos choix » sur la page Cookies. Mentions légales : la phrase « aucun cookie » renvoie désormais à la page Cookies.
+- Confidentialité et Cookies (datées du 26 novembre 2026, M-129) : responsable du traitement Noorwan SARL ; `nw_consent` est un cookie commun à tous les sites Noorwan, gardé six mois, et le choix vaut pour tous ces sites ; publicité seulement avec un accord à part ; « Gérer les cookies » rouvre le volet des choix.
 
 ## État du site au 10/11/2026 (v3, branche `feat/v3-textes-visuels`, à relire avant fusion)
 
