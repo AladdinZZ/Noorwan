@@ -72,6 +72,22 @@ return [
         'inteek' => 'Inteek',
         'onepay' => 'OnePay',
     ],
+    // Installer le site sans magasin (M-132), textes repris de Reserva.
+    'install' => [
+        'title' => 'ثبّت تطبيق Noorwan',
+        'text' => 'يُفتح كتطبيق دون المرور بمتجر، ويتحدّث تلقائيًا.',
+        'ios_share' => 'المس زر المشاركة',
+        'ios_home' => 'ثم « إضافة إلى الشاشة الرئيسية »',
+        'now' => 'تثبيت',
+        'later' => 'لاحقًا',
+        'menu' => 'تثبيت التطبيق',
+    ],
+    // Page hors ligne du service worker (public/offline.html, recopiée telle quelle : test 7).
+    'offline' => [
+        'title' => 'لا يوجد اتصال',
+        'text' => 'يتعذّر عرض Noorwan حاليًا. تحقّق من اتصالك بالإنترنت، ثم أعد المحاولة.',
+        'retry' => 'إعادة المحاولة',
+    ],
     'legal_nav' => [
         'mentions' => 'الإشعارات القانونية',
         'privacy' => 'الخصوصية',
@@ -507,6 +523,13 @@ return [
                     'title' => 'ملف تعريف الارتباط الخاص باختيارك',
                     'body' => [
                         'عند نقرك على «قبول الكل» أو «رفض الكل» أو «حفظ»، تضع Noorwan SARL ملف nw_consent المشترك بين جميع مواقع Noorwan (noorwan.com ونطاقاته الفرعية)، الذي يحفظ إجابتك ستة أشهر: قبول قياس الجمهور أو رفضه، وقبول الإعلانات أو رفضها. ولا غرض منه سوى عدم تكرار السؤال في كل صفحة وعلى كل موقع. ويسري اختيارك على جميع مواقع Noorwan: أي اختيار جديد يحل محل السابق في كل مكان. وبعد ستة أشهر، يُطرح عليك السؤال من جديد.',
+                    ],
+                ],
+                // « Plus tard » de la barre d'installation (M-132). À faire relire avec les autres pages légales.
+                [
+                    'title' => 'nw_install_later',
+                    'body' => [
+                        'إذا لمست «لاحقًا» تحت «ثبّت تطبيق Noorwan»، يضع الموقع ملف تعريف الارتباط nw_install_later لمدة ستة أشهر. ولا غرض منه سوى التوقف عن اقتراح التثبيت تلقائيًا خلال هذه المدة. ولا يحتوي على أي بيانات شخصية ولا يسري إلا على noorwan.com.',
                     ],
                 ],
                 // Cookie du thème (socle du lanceur L6) : texte à fournir par Marwan.

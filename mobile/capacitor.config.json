@@ -2,6 +2,7 @@
   "appId": "com.noorwan.site",
   "appName": "Noorwan",
   "webDir": "www",
+  "appendUserAgent": "NoorwanApp/Noorwan",
   "server": {
     "url": "https://noorwan.com",
     "cleartext": false,

@@ -195,6 +195,81 @@ function launcher_account_url(): ?string
     return null;
 }
 
+// Installer le site sans magasin (M-132, modèle Reserva) : barre « Installer l'application Noorwan » en bas de l'écran
+// (app/layout/install.php), ouverte par public/assets/js/site.js. Elle n'existe pas dans l'application Android
+// (agent qui contient NoorwanApp) ; elle s'ouvre d'elle-même sur l'accueil et à l'arrivée par un code QR (?via=qr)
+// ou par la grille des sites (?via=launcher), sauf après « Plus tard » : cookie nw_install_later=1, six mois, non
+// chiffré, sans donnée personnelle, Path=/, SameSite=Lax, Secure en https (posé par site.js, lu ici).
+const INSTALL_COOKIE = 'nw_install_later';
+const INSTALL_MAX_AGE = 15552000;
+const INSTALL_PARAM = 'via';
+const INSTALL_ORIGINS = ['qr', 'launcher'];
+const APP_AGENT_MARK = 'NoorwanApp';
+
+/**
+ * Page affichée dans l'application Android du groupe : son agent porte « NoorwanApp » (appendUserAgent).
+ */
+function in_native_app(): bool
+{
+    return str_contains((string) ($_SERVER['HTTP_USER_AGENT'] ?? ''), APP_AGENT_MARK);
+}
+
+/**
+ * La barre d'installation et l'entrée du menu existent-elles sur cette page ? Jamais dans l'application Android.
+ */
+function install_available(): bool
+{
+    return !in_native_app();
+}
+
+/**
+ * « Plus tard » choisi il y a moins de six mois.
+ */
+function install_postponed(): bool
+{
+    return ($_COOKIE[INSTALL_COOKIE] ?? null) === '1';
+}
+
+/**
+ * Origine reconnue de l'arrivée (« qr », « launcher »), sinon null.
+ */
+function install_origin(): ?string
+{
+    $via = $_GET[INSTALL_PARAM] ?? null;
+
+    return is_string($via) && in_array($via, INSTALL_ORIGINS, true) ? $via : null;
+}
+
+/**
+ * La barre s'ouvre-t-elle d'elle-même sur cette page ? Accueil, ou arrivée par un code QR ou par la grille des sites.
+ */
+function install_auto(): bool
+{
+    if (!install_available() || install_postponed()) {
+        return false;
+    }
+
+    return current_page() === 'index' || install_origin() !== null;
+}
+
+/**
+ * Adresse complétée de son origine (?via=qr ou ?via=launcher, ou &via=...), sans doublon, avant l'ancre éventuelle.
+ */
+function with_origin(string $url, string $origin): string
+{
+    if (!in_array($origin, INSTALL_ORIGINS, true) || preg_match('/[?&]' . INSTALL_PARAM . '=/', $url) === 1) {
+        return $url;
+    }
+    $fragment = '';
+    $hash = strpos($url, '#');
+    if ($hash !== false) {
+        $fragment = substr($url, $hash);
+        $url = substr($url, 0, $hash);
+    }
+
+    return $url . (str_contains($url, '?') ? '&' : '?') . INSTALL_PARAM . '=' . $origin . $fragment;
+}
+
 error_reporting(E_ALL);
 ini_set('display_errors', is_local() ? '1' : '0');
 ini_set('log_errors', '1');

@@ -9,7 +9,7 @@ Le site n'a pas d'outil de build (PHP sans framework, sans Composer) : tout ce q
 | Élément | Où |
 |---|---|
 | Paquets | `mobile/package.json` : `@capacitor/core`, `@capacitor/cli`, `@capacitor/android` en 8.x (verrou `mobile/package-lock.json`) |
-| Réglages | `mobile/capacitor.config.json` : `appId` `com.noorwan.site`, `appName` « Noorwan », `webDir` `www`, `server.url` `https://noorwan.com`, `cleartext` faux, `androidScheme` `https`, `allowMixedContent` faux, `allowNavigation` vers `compte.noorwan.com` (l'entrée passe par Connect), `errorPath` `index.html` |
+| Réglages | `mobile/capacitor.config.json` : `appId` `com.noorwan.site`, `appName` « Noorwan », `webDir` `www`, `server.url` `https://noorwan.com`, `cleartext` faux, `androidScheme` `https`, `allowMixedContent` faux, `allowNavigation` vers `compte.noorwan.com` (l'entrée passe par Connect), `errorPath` `index.html`, `appendUserAgent` « NoorwanApp/Noorwan » (M-132 : le site ne propose pas l'installation sans magasin dans l'application) |
 | Page hors ligne | `mobile/www/` (`index.html`, `offline.css`, `offline.js`) : sans script en ligne, sans ressource externe ; « Réessayer » renvoie vers le site, l'adresse de `offline.js` doit rester celle de `server.url` |
 | Projet Android | `mobile/android/` (modèle Capacitor), icônes du lanceur et écrans de démarrage de la famille commune, fond #1D1D1F, barre d'état #1D1D1F |
 | Test | section « 6. Application Android (M-122) » de `tests/run.sh` |

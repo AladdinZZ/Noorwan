@@ -151,6 +151,12 @@ gtag('consent', 'update', { analytics_storage: 'granted', ad_storage: '<?= $adsS
 <?php endforeach; ?>
                 </ul>
             </nav>
+<?php if (install_available()): ?>
+<?php // « Installer l'application » (M-132) : montrée par site.js seulement quand l'installation est possible (Android) ou expliquée (iPhone, iPad) ; sans JavaScript, rien. ?>
+            <ul class="panel-list panel-install" data-install-entry hidden>
+                <li><button class="panel-install-btn" type="button" data-install-open><?= t('install.menu') ?></button></li>
+            </ul>
+<?php endif; ?>
         </div>
 <?php if ($accountUrl !== null): ?>
         <div class="panel-foot">
