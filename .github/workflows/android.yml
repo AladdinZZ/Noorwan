@@ -1,0 +1,63 @@
+name: Application Android
+
+# Construit l'application Android (APK de test, modèle d'OnePay et de Reserva, M-122).
+# L'application affiche le site en ligne https://noorwan.com (voir mobile/capacitor.config.json) :
+# toute amélioration du site s'y voit sans la reconstruire. Il faut la reconstruire seulement
+# quand la partie Android change (icônes, page hors ligne, configuration).
+# L'APK se télécharge dans l'onglet Actions, rubrique « Artifacts » de l'exécution.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'mobile/android/**'
+      - 'mobile/capacitor.config.json'
+      - 'mobile/package.json'
+      - 'mobile/package-lock.json'
+      - 'mobile/www/**'
+      - '.github/workflows/android.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: android-build
+  cancel-in-progress: true
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: mobile
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: mobile/package-lock.json
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Installer Capacitor et préparer le projet Android
+        run: |
+          npm ci --no-audit --no-fund
+          npx cap sync android
+
+      - name: Construire l'APK
+        run: |
+          cd android
+          chmod +x gradlew
+          ./gradlew --no-daemon assembleDebug
+          apk=$(ls app/build/outputs/apk/debug/*.apk | head -n 1)
+          echo "::notice::APK construit : $(basename "$apk") ($(du -h "$apk" | cut -f1))"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: noorwan-android-${{ github.run_number }}
+          path: mobile/android/app/build/outputs/apk/debug/*.apk
+          retention-days: 30
