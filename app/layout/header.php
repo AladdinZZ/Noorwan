@@ -30,6 +30,8 @@ $accountUrl = account_url();
 $closeIcon = '<svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M5 5l10 10M15 5L5 15" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>';
 
 // Lanceur des sites (M-121, M-124) : liste publique (launcher_sites()) et lien « Mon compte Connect ».
+// Les tuiles des autres sites portent ?via=launcher (M-132 : leur barre d'installation s'ouvre à l'arrivée), jamais
+// la tuile de noorwan.com ni « Mon compte Connect ».
 // Tuile : icône du site (charte commune) ; si elle ne se charge pas, site.js montre la pastille, rond à sa couleur et
 // sa lettre en blanc, en SVG (couleur par l'attribut fill, jamais de style en ligne).
 $launcherAccount = launcher_account_url();
@@ -175,7 +177,7 @@ gtag('consent', 'update', { analytics_storage: 'granted', ad_storage: '<?= $adsS
         <div class="panel-body">
             <ul class="launcher-grid">
 <?php foreach (launcher_sites() as $site): ?>
-                <li><a class="launcher-tile" href="<?= e($site['url']) ?>" data-launcher-site="<?= e($site['key']) ?>"<?= $site['current'] ? ' aria-current="page"' : ' rel="noopener"' ?>><span class="launcher-icon" data-launcher-icon><img class="launcher-img" src="<?= e($asset($site['icon'])) ?>" alt="" width="48" height="48" decoding="async"><?= $launcherDot($site['color'], $site['letter']) ?></span><bdi><?= t($site['label']) ?></bdi></a></li>
+                <li><a class="launcher-tile" href="<?= e($site['current'] ? $site['url'] : with_origin($site['url'], 'launcher')) ?>" data-launcher-site="<?= e($site['key']) ?>"<?= $site['current'] ? ' aria-current="page"' : ' rel="noopener"' ?>><span class="launcher-icon" data-launcher-icon><img class="launcher-img" src="<?= e($asset($site['icon'])) ?>" alt="" width="48" height="48" decoding="async"><?= $launcherDot($site['color'], $site['letter']) ?></span><bdi><?= t($site['label']) ?></bdi></a></li>
 <?php endforeach; ?>
             </ul>
         </div>
