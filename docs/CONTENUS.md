@@ -125,7 +125,7 @@ Ordre : haut de page · trois univers · approche · Consulting · Solutions · 
 ### Page Solutions (`solutions.php`) : textes à valider
 
 - En-tête : étiquette « Noorwan Solutions », titre et introduction de la section Solutions de l'accueil, bouton [Demander une présentation] (formulaire, univers Solutions présélectionné).
-- Sous l'introduction, quand le lien « Connexion » est activé : « Un seul compte pour tous les services Noorwan. » suivi du lien « Connexion » (EN « One account for all Noorwan services. », AR « حساب واحد لجميع خدمات نوروان. », à relire par un arabophone).
+- Sous l'introduction, quand le lien « Connexion » est activé : « Un seul compte pour tous les services Noorwan. » suivi du lien « Connexion » (EN « One account for all Noorwan services. », AR « حساب واحد لجميع خدمات Noorwan. », à relire par un arabophone).
 - « Notre façon de faire » :
   - Pensés pour le téléphone d'abord : « Chaque écran est conçu pour le téléphone, puis adapté à l'ordinateur. »
   - Trois langues, dont l'arabe : « Français, anglais et arabe, avec un affichage de droite à gauche pour l'arabe. »
@@ -161,7 +161,7 @@ Direction visuelle : maquette A épurée (M-56), validée par Marwan le 6/11/202
 - Menu : Consulting (accueil), Solutions, Édition (page Édition), Contact (page Contact). « Connexion » devient une pastille noire dans la barre (et le dernier lien du menu mobile, et la colonne Noorwan du pied de page), toujours masquée tant que `COMPTE_LINK_ENABLED` vaut `false`.
 - Pied de page en quatre colonnes : Consulting (Découvrir nos expertises, Parlons de votre projet), Solutions (Découvrir nos solutions, Demander une présentation), Édition (Voir le catalogue, Publier votre livre), Noorwan (Contact, Connexion). Puis « Écosystème Noorwan » (D63 : Noorwan, Compte Noorwan, Reserva, Inteek ; entrée sans adresse masquée), puis « Des idées pour des solutions concrètes. », « © année Noorwan SARL », liens légaux et « Gérer les cookies ».
 - Bandeau « Un projet en tête ? » : même texte, bouton bleu, adresse contact@noorwan.com dessous.
-- Choix de cookies commun à tous les sites Noorwan (M-129, remplace le bandeau M-59), seulement si `GTM_ID` est réglé : bandeau en bas, « Noorwan utilise des cookies pour mesurer l'audience de ses sites et, si vous l'acceptez, pour la publicité. Votre choix vaut pour tous les sites Noorwan. » ; « En savoir plus » (Confidentialité) ; [Tout accepter] [Tout refuser], de même forme ; lien « Choisir » qui ouvre le volet « Cookies » : « Mesure d'audience » (« Les pages visitées, pour améliorer les sites, sans votre nom, votre numéro ni votre e-mail. »), « Publicité » (« Mesurer et montrer les publicités de Noorwan. »), [Enregistrer]. Textes anglais et arabes repris de Connect (Noorwan écrit « نوروان » en arabe, comme le reste du site).
+- Choix de cookies commun à tous les sites Noorwan (M-129, remplace le bandeau M-59), seulement si `GTM_ID` est réglé : bandeau en bas, « Noorwan utilise des cookies pour mesurer l'audience de ses sites et, si vous l'acceptez, pour la publicité. Votre choix vaut pour tous les sites Noorwan. » ; « En savoir plus » (Confidentialité) ; [Tout accepter] [Tout refuser], de même forme ; lien « Choisir » qui ouvre le volet « Cookies » : « Mesure d'audience » (« Les pages visitées, pour améliorer les sites, sans votre nom, votre numéro ni votre e-mail. »), « Publicité » (« Mesurer et montrer les publicités de Noorwan. »), [Enregistrer]. Textes anglais et arabes repris de Connect (Noorwan écrit « Noorwan » en arabe, comme le reste du site).
 
 ### Accueil
 
@@ -283,7 +283,7 @@ Ordre : haut de page · 01 Consulting · 02 Solutions · 03 Noorwan Connect · D
 
 ### Page Consulting (`/consulting`, nouvelle)
 
-- Haut de page : « Noorwan Consulting » (EN identique, AR « نوروان للاستشارات ») ; « Clarifier avant d'accélérer. » ; « Vingt ans de digital, de marketing et d'eCommerce au service d'une question simple : quelle est la prochaine étape utile pour votre projet ? » ; bouton « Parlons de votre projet » (univers Consulting) ; illustration du Consulting.
+- Haut de page : « Noorwan Consulting » (EN identique, AR « Noorwan للاستشارات ») ; « Clarifier avant d'accélérer. » ; « Vingt ans de digital, de marketing et d'eCommerce au service d'une question simple : quelle est la prochaine étape utile pour votre projet ? » ; bouton « Parlons de votre projet » (univers Consulting) ; illustration du Consulting.
 - « Nos expertises » (EN « Our expertise », AR « خبراتنا ») : les cinq expertises de la v4, puis « Une étape utile livrée vaut mieux qu'un grand plan sur le papier. »
 - « Accompagnement et édition » (EN « Support and publishing », AR « المرافقة والنشر ») : « Des livres, du manuscrit à Amazon » ; texte de l'univers Édition ; **[À FOURNIR : accompagnement à l'écriture, ce que comprend la prestation]** ; couvertures d'Harmonie et Lumière, Vibration « À paraître » ; « {méta}Physique : » suivi de la phrase d'auteur ; « Chemins de l'Âme : Le Mal, Le Bien, Être pour Avoir » ; liens « En savoir plus » (page Édition) et « Publier votre livre » (formulaire, univers Édition).
 - Bandeau de contact, univers Consulting.
@@ -310,7 +310,7 @@ Brief v5 bis de Maestro du 16/11/2026, d'après Marwan : le site institutionnel 
 
 ### Page Solutions
 
-- Sous l'introduction, toujours affichée : « Un seul compte pour tous les services Noorwan. **Découvrir Noorwan Connect** → », lien vers `/connect` (EN : « One account for all Noorwan services. Discover Noorwan Connect » ; AR : « حساب واحد لجميع خدمات نوروان. اكتشف Noorwan Connect »). Plus de lien vers le Compte.
+- Sous l'introduction, toujours affichée : « Un seul compte pour tous les services Noorwan. **Découvrir Noorwan Connect** → », lien vers `/connect` (EN : « One account for all Noorwan services. Discover Noorwan Connect » ; AR : « حساب واحد لجميع خدمات Noorwan. اكتشف Noorwan Connect »). Plus de lien vers le Compte.
 
 ### Page Noorwan Connect (`/connect`)
 

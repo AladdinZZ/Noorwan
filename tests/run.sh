@@ -319,7 +319,7 @@ for lang in fr en ar; do
         "$(sed -n '/<nav id="nav-mobile"/,/<\/nav>/p' <<< "$html" | grep -c 'connect?')|$(sed '/<div id="launcher-panel"/,/^<\/div>/d' <<< "$html" | grep -cE 'Mon compte|My account|«حسابي»')"
     expect "pied de page : colonne Noorwan, Noorwan Connect puis Contact ($lang)" "connect?lang=$lang|contact.php?lang=$lang" \
         "$(sed -n '/<nav class="footer-cols"/,/<\/nav>/p' <<< "$html" | grep -oE 'href="[^"]+"' | tail -n 2 | sed -E 's/href="([^"]+)"/\1/' | paste -sd '|' -)"
-    phrase=$(by_lang "$lang" "Un seul compte pour tous les services Noorwan." "One account for all Noorwan services." "حساب واحد لجميع خدمات نوروان.")
+    phrase=$(by_lang "$lang" "Un seul compte pour tous les services Noorwan." "One account for all Noorwan services." "حساب واحد لجميع خدمات Noorwan.")
     nbsp=$'\xc2\xa0'
     link=$(by_lang "$lang" "Découvrir Connect" "Discover Connect" "اكتشف${nbsp}"$'\xe2\x81\xa6'"Connect"$'\xe2\x81\xa9')
     for state in true false; do
@@ -354,7 +354,7 @@ for lang in fr en ar; do
     banner=$(sed -n '/<section id="consent"/,/<\/section>/p' <<< "$html")
     text=$(by_lang "$lang" "Noorwan utilise des cookies pour mesurer l&apos;audience de ses sites et, si vous l&apos;acceptez, pour la publicité. Votre choix vaut pour tous les sites Noorwan." \
         "Noorwan uses cookies to measure the audience of its sites and, if you accept, for advertising. Your choice applies to all Noorwan sites." \
-        "تستخدم نوروان ملفات تعريف الارتباط لقياس جمهور مواقعها، وللإعلانات إن قبلت ذلك. يسري اختيارك على جميع مواقع نوروان.")
+        "تستخدم Noorwan ملفات تعريف الارتباط لقياس جمهور مواقعها، وللإعلانات إن قبلت ذلك. يسري اختيارك على جميع مواقع Noorwan.")
     grep -qF "<p class=\"consent-text\">$text <a href=\"confidentialite.php?lang=$lang\">" <<< "$banner" && pass "bandeau : texte commun et lien vers Confidentialité ($lang)" || fail "bandeau : texte commun ($lang)"
     expect "bandeau : « Tout accepter » et « Tout refuser » de même forme, puis « Choisir » vers le volet ($lang)" "all|none|1" \
         "$(grep -oE 'class="btn btn-outline btn-consent" type="submit" name="choice" value="[a-z]+"' <<< "$banner" | sed -E 's/.*value="([a-z]+)"/\1/' | paste -sd '|' -)|$(grep -c "<a class=\"consent-choose\" href=\"#consent-panel\" aria-controls=\"consent-panel\" aria-expanded=\"false\" data-panel-open>$(by_lang "$lang" "Choisir" "Choose" "اختيار")</a>" <<< "$banner")"
@@ -546,7 +546,7 @@ for lang in fr en ar; do
     expect "menu : plus de Noorwan Connect, aucun onglet actif sur sa page ($lang)" "0|0" \
         "$(grep -c 'href="connect?' <<< "$nav")|$(grep -c 'aria-current="page"' <<< "$nav")"
     grep -q "<link rel=\"canonical\" href=\"[^\"]*/connect?lang=$lang\">" <<< "$html" && pass "adresse canonique /connect ($lang)" || fail "adresse canonique ($lang)"
-    title=$(by_lang "$lang" "Un seul compte pour tous les services Noorwan" "One account for all Noorwan services" "حساب واحد لجميع خدمات نوروان")
+    title=$(by_lang "$lang" "Un seul compte pour tous les services Noorwan" "One account for all Noorwan services" "حساب واحد لجميع خدمات Noorwan")
     grep -qF "<h1 id=\"page-title\" class=\"h1 h1-page\">$title</h1>" <<< "$html" && pass "titre ($lang)" || fail "titre de la page Noorwan Connect ($lang)"
     expect "sections particuliers, professionnels, sans mot de passe, données, partenaires ($lang)" "particuliers|professionnels|sans-mot-de-passe|donnees|partenaires" \
         "$(grep -oE '<section id="[a-z-]+" class="screen[^"]*connect-section' <<< "$html" | sed -E 's/<section id="([a-z-]+)".*/\1/' | paste -sd '|' -)"
