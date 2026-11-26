@@ -330,23 +330,32 @@ return [
             'server' => 'Une erreur technique empêche l\'envoi. Réessayez dans quelques minutes.',
         ],
     ],
-    // Bandeau de consentement à la mesure d'audience (M-59). A VALIDER PAR MARWAN.
+    // Choix de cookies commun à tous les sites Noorwan (M-129, texte commun de la charte).
     'consent' => [
-        'title' => 'Mesure d\'audience',
-        'text' => 'Avec votre accord, nous mesurons la fréquentation du site de façon statistique (Google Analytics), sans publicité. Votre choix est gardé six mois.',
+        'title' => 'Cookies',
+        'text' => 'Noorwan utilise des cookies pour mesurer l\'audience de ses sites et, si vous l\'acceptez, pour la publicité. Votre choix vaut pour tous les sites Noorwan.',
         'more' => 'En savoir plus',
-        'accept' => 'Accepter',
-        'refuse' => 'Refuser',
+        'accept_all' => 'Tout accepter',
+        'refuse_all' => 'Tout refuser',
+        'choose' => 'Choisir',
+        'panel_title' => 'Cookies',
+        'panel_lead' => 'Votre choix vaut pour tous les sites Noorwan. Vous pouvez le changer à tout moment avec « Gérer les cookies ».',
+        'analytics' => 'Mesure d\'audience',
+        'analytics_hint' => 'Les pages visitées, pour améliorer les sites, sans votre nom, votre numéro ni votre e-mail.',
+        'ads' => 'Publicité',
+        'ads_hint' => 'Mesurer et montrer les publicités de Noorwan.',
+        'save' => 'Enregistrer',
         'manage' => 'Gérer les cookies',
         'manage_title' => 'Gérer vos choix',
-        'state_granted' => 'Votre choix actuel : mesure d\'audience acceptée.',
-        'state_denied' => 'Votre choix actuel : mesure d\'audience refusée.',
-        'state_none' => 'Vous n\'avez pas encore fait de choix : aucune mesure d\'audience n\'a lieu.',
+        'state_line' => ':name : :state',
+        'state_on' => 'acceptée',
+        'state_off' => 'refusée',
+        'state_none' => 'Vous n\'avez pas encore fait de choix : ni mesure d\'audience ni publicité.',
     ],
     // Pages légales : A FAIRE RELIRE PAR UN JURISTE.
     'legal' => [
         'eyebrow' => 'Informations légales',
-        'updated' => 'Dernière mise à jour : 6 novembre 2026',
+        'updated' => 'Dernière mise à jour : 26 novembre 2026',
         'mentions' => [
             'title' => 'Mentions légales',
             'intro' => 'Informations sur l\'éditeur et l\'hébergeur du site noorwan.com.',
@@ -387,7 +396,7 @@ return [
                 [
                     'title' => 'Responsable du traitement',
                     'body' => [
-                        'Le responsable du traitement est Noorwan, éditeur du site noorwan.com.',
+                        'Le responsable du traitement est Noorwan SARL, éditeur du site noorwan.com.',
                         'Pour toute question sur vos données : contact@noorwan.com, ou le formulaire de la page Contact en choisissant « Autre ».',
                     ],
                 ],
@@ -406,7 +415,7 @@ return [
                             ],
                         ],
                         'Lorsque vous acceptez la mesure d\'audience : Google Analytics enregistre, de façon statistique, les pages vues, la durée de la visite, le type d\'appareil et de navigateur, le pays approximatif et la page d\'origine. Google Analytics 4 n\'enregistre pas votre adresse IP.',
-                        'Sans votre accord, aucune de ces données n\'est collectée et aucun script de Google n\'est chargé. Ni profilage, ni publicité. Les pages, les images et les polices de caractères sont servies par le site lui-même.',
+                        'Sans votre accord, aucune de ces données n\'est collectée et aucun script de Google n\'est chargé. Aucun profilage ; la publicité seulement si vous l\'acceptez aussi. Les pages, les images et les polices de caractères sont servies par le site lui-même.',
                     ],
                 ],
                 [
@@ -418,6 +427,7 @@ return [
                                 'Vous adresser les offres de Noorwan, seulement si vous avez coché la case correspondante. Base légale : votre consentement.',
                                 'Vous adresser les offres des partenaires de Noorwan, seulement si vous avez coché la case correspondante. Base légale : votre consentement. Aucune donnée n\'est transmise à un partenaire à ce jour. La liste des partenaires sera publiée ici avant toute transmission.',
                                 'Mesurer la fréquentation du site pour l\'améliorer, seulement si vous l\'acceptez. Base légale : votre consentement.',
+                                'Mesurer et montrer les publicités de Noorwan, seulement si vous l\'acceptez aussi. Base légale : votre consentement.',
                                 'Protéger le formulaire contre les abus (limite d\'envois, empreinte de l\'adresse IP). Base légale : l\'intérêt légitime de Noorwan à la sécurité du site.',
                             ],
                         ],
@@ -438,7 +448,7 @@ return [
                                 'Demandes de contact et données associées : 3 ans après votre dernière demande envoyée par ce formulaire, puis suppression.',
                                 'Accord pour recevoir des offres : jusqu\'à ce que vous le retiriez, et au plus 3 ans après votre dernière demande envoyée par ce formulaire.',
                                 'Données de limitation des envois (empreinte de l\'adresse IP) : 2 heures au plus.',
-                                'Votre choix sur la mesure d\'audience (cookie nw_consent) : six mois, puis la question vous est posée à nouveau.',
+                                'Votre choix de cookies (cookie nw_consent, commun à tous les sites Noorwan) : six mois, puis la question vous est posée à nouveau. Ce choix vaut pour tous les sites Noorwan.',
                                 'Cookies de Google Analytics : 13 mois au plus ; données de mesure d\'audience dans Google Analytics : 14 mois au plus.',
                             ],
                         ],
@@ -448,7 +458,7 @@ return [
                     'title' => 'Retirer votre accord',
                     'body' => [
                         'Vous pouvez retirer à tout moment votre accord pour recevoir les offres de Noorwan ou de ses partenaires : écrivez-nous par le formulaire de la page Contact (objet « Autre ») ou à contact@noorwan.com. Chaque offre envoyée par e-mail contiendra aussi un lien de désinscription. Le retrait vaut pour l\'avenir et ne remet pas en cause les envois passés.',
-                        'Votre accord à la mesure d\'audience se retire aussi simplement qu\'il se donne : lien « Gérer les cookies » en bas de chaque page, ou page Cookies.',
+                        'Votre accord à la mesure d\'audience et à la publicité se retire aussi simplement qu\'il se donne : lien « Gérer les cookies » en bas de chaque page des sites Noorwan, ou page Cookies.',
                     ],
                 ],
                 [
@@ -474,12 +484,12 @@ return [
         ],
         'cookies' => [
             'title' => 'Cookies',
-            'intro' => 'Le site noorwan.com mesure son audience seulement avec votre accord. Votre choix est gardé six mois dans un cookie, nw_consent.',
+            'intro' => 'Le site noorwan.com mesure son audience, et sert à la publicité, seulement avec votre accord. Votre choix est gardé six mois dans nw_consent, un cookie commun à tous les sites Noorwan : il vaut pour tous ces sites.',
             'sections' => [
                 [
                     'title' => 'Le cookie de votre choix',
                     'body' => [
-                        'Quand vous cliquez sur « Accepter » ou « Refuser », le site dépose le cookie nw_consent, qui garde votre réponse six mois. Il sert seulement à ne pas vous reposer la question à chaque page. Au bout de six mois, elle vous est posée à nouveau.',
+                        'Quand vous cliquez sur « Tout accepter », « Tout refuser » ou « Enregistrer », Noorwan SARL dépose le cookie nw_consent, commun à tous les sites Noorwan (noorwan.com et ses sous-domaines), qui garde votre réponse six mois : mesure d\'audience acceptée ou non, publicité acceptée ou non. Il sert seulement à ne pas vous reposer la question à chaque page ni sur chaque site. Votre choix vaut pour tous les sites Noorwan : un nouveau choix remplace l\'ancien partout. Au bout de six mois, la question vous est posée à nouveau.',
                     ],
                 ],
                 // Cookie du thème (socle du lanceur L6) : texte à fournir par Marwan.
@@ -490,16 +500,17 @@ return [
                     ],
                 ],
                 [
-                    'title' => 'Mesure d\'audience, seulement avec votre accord',
+                    'title' => 'Mesure d\'audience et publicité, seulement avec votre accord',
                     'body' => [
-                        'Si vous acceptez, le site charge Google Tag Manager et Google Analytics, qui déposent les cookies _ga et _ga_ suivi d\'un identifiant (13 mois au plus) pour compter les visites de façon statistique. Ils ne servent ni à la publicité ni au profilage.',
+                        'Si vous acceptez, le site charge Google Tag Manager et Google Analytics, qui déposent les cookies _ga et _ga_ suivi d\'un identifiant (13 mois au plus) pour compter les visites de façon statistique. Ils ne servent pas au profilage.',
+                        'Si vous acceptez aussi la publicité, Google peut s\'en servir pour mesurer et montrer les publicités de Noorwan. Sans cet accord, la publicité reste refusée.',
                         'Si vous refusez, ou tant que vous n\'avez pas répondu, aucun script de Google n\'est chargé et aucun de ces cookies n\'est déposé.',
                     ],
                 ],
                 [
                     'title' => 'Changer d\'avis',
                     'body' => [
-                        'Le lien « Gérer les cookies », en bas de chaque page, rouvre le bandeau ; les boutons de la section « Gérer vos choix », plus bas, font de même. Un refus après un accord efface les cookies de Google Analytics.',
+                        'Le lien « Gérer les cookies », en bas de chaque page, rouvre le volet de vos choix ; le bouton de la section « Gérer vos choix », plus bas, fait de même. Un refus de la mesure d\'audience après un accord efface les cookies de Google Analytics.',
                     ],
                 ],
                 [

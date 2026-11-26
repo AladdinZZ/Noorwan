@@ -330,23 +330,32 @@ return [
             'server' => 'A technical error prevented sending. Please try again in a few minutes.',
         ],
     ],
-    // Bandeau de consentement à la mesure d'audience (M-59). A VALIDER PAR MARWAN.
+    // Choix de cookies commun à tous les sites Noorwan (M-129, texte commun de la charte).
     'consent' => [
-        'title' => 'Audience measurement',
-        'text' => 'With your consent, we measure visits to the site statistically (Google Analytics), with no advertising. Your choice is kept for six months.',
+        'title' => 'Cookies',
+        'text' => 'Noorwan uses cookies to measure the audience of its sites and, if you accept, for advertising. Your choice applies to all Noorwan sites.',
         'more' => 'Learn more',
-        'accept' => 'Accept',
-        'refuse' => 'Decline',
+        'accept_all' => 'Accept all',
+        'refuse_all' => 'Refuse all',
+        'choose' => 'Choose',
+        'panel_title' => 'Cookies',
+        'panel_lead' => 'Your choice applies to all Noorwan sites. You can change it at any time with "Manage cookies".',
+        'analytics' => 'Audience measurement',
+        'analytics_hint' => 'Pages visited, to improve the sites, without your name, number or email.',
+        'ads' => 'Advertising',
+        'ads_hint' => 'Measuring and showing Noorwan advertising.',
+        'save' => 'Save',
         'manage' => 'Manage cookies',
         'manage_title' => 'Manage your choices',
-        'state_granted' => 'Your current choice: audience measurement accepted.',
-        'state_denied' => 'Your current choice: audience measurement declined.',
-        'state_none' => 'You have not made a choice yet: no audience measurement takes place.',
+        'state_line' => ':name: :state',
+        'state_on' => 'accepted',
+        'state_off' => 'refused',
+        'state_none' => 'You have not made a choice yet: no audience measurement and no advertising.',
     ],
     // Pages légales : A FAIRE RELIRE PAR UN JURISTE.
     'legal' => [
         'eyebrow' => 'Legal information',
-        'updated' => 'Last updated: 6 November 2026',
+        'updated' => 'Last updated: 26 November 2026',
         'mentions' => [
             'title' => 'Legal notice',
             'intro' => 'Information about the publisher and the host of the noorwan.com website.',
@@ -387,7 +396,7 @@ return [
                 [
                     'title' => 'Data controller',
                     'body' => [
-                        'The data controller is Noorwan, publisher of the noorwan.com website.',
+                        'The data controller is Noorwan SARL, publisher of the noorwan.com website.',
                         'For any question about your data: contact@noorwan.com, or the form on the Contact page, choosing "Other".',
                     ],
                 ],
@@ -406,7 +415,7 @@ return [
                             ],
                         ],
                         'When you accept audience measurement: Google Analytics records, statistically, the pages viewed, the length of the visit, the type of device and browser, the approximate country and the referring page. Google Analytics 4 does not store your IP address.',
-                        'Without your consent, none of this data is collected and no Google script is loaded. No profiling, no advertising. Pages, images and fonts are served by the website itself.',
+                        'Without your consent, none of this data is collected and no Google script is loaded. No profiling; advertising only if you also accept it. Pages, images and fonts are served by the website itself.',
                     ],
                 ],
                 [
@@ -418,6 +427,7 @@ return [
                                 'To send you offers from Noorwan, only if you ticked the matching box. Legal basis: your consent.',
                                 'To send you offers from Noorwan\'s partners, only if you ticked the matching box. Legal basis: your consent. No data is passed on to any partner to date. The list of partners will be published here before any data is passed on.',
                                 'To measure visits to the website in order to improve it, only if you accept. Legal basis: your consent.',
+                                'To measure and show Noorwan advertising, only if you also accept it. Legal basis: your consent.',
                                 'To protect the form against abuse (sending limit, IP address fingerprint). Legal basis: Noorwan\'s legitimate interest in the security of the website.',
                             ],
                         ],
@@ -438,7 +448,7 @@ return [
                                 'Contact requests and related data: 3 years after the last request you sent through this form, then deleted.',
                                 'Consent to receive offers: until you withdraw it, and at most 3 years after the last request you sent through this form.',
                                 'Sending limit data (IP address fingerprint): 2 hours at most.',
-                                'Your audience measurement choice (nw_consent cookie): six months, after which you are asked again.',
+                                'Your cookie choice (nw_consent cookie, shared by all Noorwan sites): six months, after which you are asked again. This choice applies to all Noorwan sites.',
                                 'Google Analytics cookies: 13 months at most; audience measurement data in Google Analytics: 14 months at most.',
                             ],
                         ],
@@ -448,7 +458,7 @@ return [
                     'title' => 'Withdrawing your consent',
                     'body' => [
                         'You can withdraw your consent to receive offers from Noorwan or its partners at any time: write to us through the form on the Contact page (subject "Other") or at contact@noorwan.com. Every offer sent by email will also contain an unsubscribe link. Withdrawal applies to the future and does not affect past mailings.',
-                        'Your consent to audience measurement is as easy to withdraw as to give: "Manage cookies" link at the bottom of every page, or the Cookies page.',
+                        'Your consent to audience measurement and advertising is as easy to withdraw as to give: "Manage cookies" link at the bottom of every page of the Noorwan sites, or the Cookies page.',
                     ],
                 ],
                 [
@@ -474,12 +484,12 @@ return [
         ],
         'cookies' => [
             'title' => 'Cookies',
-            'intro' => 'The noorwan.com website measures its audience only with your consent. Your choice is kept for six months in a cookie, nw_consent.',
+            'intro' => 'The noorwan.com website measures its audience, and is used for advertising, only with your consent. Your choice is kept for six months in nw_consent, a cookie shared by all Noorwan sites: it applies to all of them.',
             'sections' => [
                 [
                     'title' => 'The cookie that keeps your choice',
                     'body' => [
-                        'When you click "Accept" or "Decline", the website sets the nw_consent cookie, which keeps your answer for six months. Its only purpose is not to ask you again on every page. After six months, you are asked again.',
+                        'When you click "Accept all", "Refuse all" or "Save", Noorwan SARL sets the nw_consent cookie, shared by all Noorwan sites (noorwan.com and its subdomains), which keeps your answer for six months: audience measurement accepted or not, advertising accepted or not. Its only purpose is not to ask you again on every page or every site. Your choice applies to all Noorwan sites: a new choice replaces the previous one everywhere. After six months, you are asked again.',
                     ],
                 ],
                 // Cookie du thème (socle du lanceur L6) : texte à fournir par Marwan.
@@ -490,16 +500,17 @@ return [
                     ],
                 ],
                 [
-                    'title' => 'Audience measurement, only with your consent',
+                    'title' => 'Audience measurement and advertising, only with your consent',
                     'body' => [
-                        'If you accept, the website loads Google Tag Manager and Google Analytics, which set the _ga cookie and a _ga_ cookie followed by an identifier (13 months at most) to count visits statistically. They are used neither for advertising nor for profiling.',
+                        'If you accept, the website loads Google Tag Manager and Google Analytics, which set the _ga cookie and a _ga_ cookie followed by an identifier (13 months at most) to count visits statistically. They are not used for profiling.',
+                        'If you also accept advertising, Google may use them to measure and show Noorwan advertising. Without that consent, advertising stays refused.',
                         'If you decline, or as long as you have not answered, no Google script is loaded and none of these cookies is set.',
                     ],
                 ],
                 [
                     'title' => 'Changing your mind',
                     'body' => [
-                        'The "Manage cookies" link at the bottom of every page reopens the banner; the buttons in the "Manage your choices" section below do the same. Declining after accepting deletes the Google Analytics cookies.',
+                        'The "Manage cookies" link at the bottom of every page reopens the panel with your choices; the button in the "Manage your choices" section below does the same. Refusing audience measurement after accepting it deletes the Google Analytics cookies.',
                     ],
                 ],
                 [

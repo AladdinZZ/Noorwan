@@ -86,9 +86,9 @@ window.dataLayer = window.dataLayer || [];
 function gtag() { window.dataLayer.push(arguments); }
 gtag('consent', 'default', { ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied', analytics_storage: 'denied' });
 </script>
-<?php if (consent_state() === 'granted'): ?>
+<?php if (consent_analytics()): $adsState = consent_ads() ? 'granted' : 'denied'; ?>
 <script nonce="<?= e(csp_nonce()) ?>">
-gtag('consent', 'update', { analytics_storage: 'granted' });
+gtag('consent', 'update', { analytics_storage: 'granted', ad_storage: '<?= $adsState ?>', ad_user_data: '<?= $adsState ?>', ad_personalization: '<?= $adsState ?>' });
 (function (w, d, s, l, i) {
     w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
     var f = d.getElementsByTagName(s)[0], j = d.createElement(s);

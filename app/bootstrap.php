@@ -201,7 +201,7 @@ ini_set('log_errors', '1');
 mb_internal_encoding('UTF-8');
 date_default_timezone_set('UTC');
 
-// Mesure d'audience par Google Tag Manager (M-59), chargée seulement après accord (cookie nw_consent).
+// Mesure d'audience par Google Tag Manager (M-59, M-129), chargée seulement après l'accord « mesure d'audience ».
 // GTM_ID vide ou mal formé : rien n'est chargé et la CSP reste fermée à Google (développement, tests).
 if (!defined('GTM_ID')) {
     $gtmId = (string) env('GTM_ID', '');
@@ -209,18 +209,153 @@ if (!defined('GTM_ID')) {
     unset($gtmId);
 }
 
-// Choix de mesure d'audience : seul cookie du site, gardé six mois (182 jours), posé par public/consent.php.
+// Choix de cookies commun à tous les sites Noorwan (M-129, règle charte-commune/consentement.md), comme Connect :
+// cookie nw_consent, valeur « v1.a{0|1}.m{0|1} » (a : mesure d'audience, m : publicité), six mois, Path=/,
+// SameSite=Lax, Secure en https, non chiffré et jamais HttpOnly (les autres sites le lisent et le réécrivent en
+// JavaScript), posé sur .noorwan.com quand l'hôte est noorwan.com ou un de ses sous-domaines, sinon sur l'hôte seul.
+// Ancienne valeur du site (« granted » ou « denied », sur l'hôte seul) : reprise une fois par consent_migrate().
 const CONSENT_COOKIE = 'nw_consent';
-const CONSENT_MAX_AGE = 182 * 86400;
+const CONSENT_MAX_AGE = 15552000;
 
 /**
- * Choix enregistré (« granted » ou « denied »), ou null tant que la personne n'a pas répondu.
+ * Choix lu dans une valeur du cookie, ou null si elle n'est pas de la forme commune.
+ *
+ * @return array{analytics: bool, ads: bool}|null
  */
-function consent_state(): ?string
+function consent_parse(mixed $value): ?array
 {
-    $value = $_COOKIE[CONSENT_COOKIE] ?? null;
+    if (!is_string($value) || preg_match('/^v1\.a([01])\.m([01])$/', $value, $match) !== 1) {
+        return null;
+    }
 
-    return in_array($value, ['granted', 'denied'], true) ? $value : null;
+    return ['analytics' => $match[1] === '1', 'ads' => $match[2] === '1'];
+}
+
+function consent_encode(bool $analytics, bool $ads): string
+{
+    return 'v1.a' . (int) $analytics . '.m' . (int) $ads;
+}
+
+/**
+ * Toutes les valeurs de nw_consent reçues : l'ancien cookie de l'hôte et le cookie commun de .noorwan.com peuvent
+ * arriver ensemble sous le même nom, $_COOKIE n'en garde qu'un.
+ *
+ * @return list<string>
+ */
+function consent_values(): array
+{
+    $values = [];
+    foreach (explode(';', (string) ($_SERVER['HTTP_COOKIE'] ?? '')) as $pair) {
+        [$name, $value] = array_map('trim', explode('=', $pair, 2) + [1 => '']);
+        if ($name === CONSENT_COOKIE) {
+            $values[] = rawurldecode($value);
+        }
+    }
+    if (isset($_COOKIE[CONSENT_COOKIE]) && is_string($_COOKIE[CONSENT_COOKIE])) {
+        $values[] = $_COOKIE[CONSENT_COOKIE];
+    }
+
+    return $values;
+}
+
+/**
+ * Ancienne valeur du site (« granted » : la seule mesure d'audience), lue tant qu'il n'y a pas de valeur commune.
+ *
+ * @return array{analytics: bool, ads: bool}|null
+ */
+function consent_legacy(): ?array
+{
+    $values = consent_values();
+    foreach ($values as $value) {
+        if (consent_parse($value) !== null) {
+            return null;
+        }
+    }
+    foreach ($values as $value) {
+        if ($value === 'granted' || $value === 'denied') {
+            return ['analytics' => $value === 'granted', 'ads' => false];
+        }
+    }
+
+    return null;
+}
+
+/**
+ * Choix du visiteur, ou null tant qu'il n'a pas répondu.
+ *
+ * @return array{analytics: bool, ads: bool}|null
+ */
+function consent_choice(): ?array
+{
+    foreach (consent_values() as $value) {
+        $choice = consent_parse($value);
+        if ($choice !== null) {
+            return $choice;
+        }
+    }
+
+    return consent_legacy();
+}
+
+function consent_analytics(): bool
+{
+    return consent_choice()['analytics'] ?? false;
+}
+
+function consent_ads(): bool
+{
+    return consent_choice()['ads'] ?? false;
+}
+
+/**
+ * Domaine du cookie : « .noorwan.com » pour noorwan.com et ses sous-domaines, sinon null (l'hôte seul).
+ */
+function consent_domain(): ?string
+{
+    $host = strtolower((string) ($_SERVER['HTTP_HOST'] ?? parse_url((string) env('APP_URL', ''), PHP_URL_HOST) ?? ''));
+    $host = preg_replace('/:\d+$/', '', $host);
+
+    return $host === 'noorwan.com' || str_ends_with($host, '.noorwan.com') ? '.noorwan.com' : null;
+}
+
+/**
+ * Réglages du cookie commun : six mois, Path=/, SameSite=Lax, Secure en https, jamais HttpOnly, domaine commun.
+ *
+ * @return array{expires: int, path: string, secure: bool, httponly: bool, samesite: string, domain?: string}
+ */
+function consent_cookie_options(): array
+{
+    $secure = ($_SERVER['HTTPS'] ?? '') === 'on' || str_starts_with((string) env('APP_URL', ''), 'https://');
+    $options = ['expires' => time() + CONSENT_MAX_AGE, 'path' => '/', 'secure' => $secure, 'httponly' => false, 'samesite' => 'Lax'];
+    $domain = consent_domain();
+    if ($domain !== null) {
+        $options['domain'] = $domain;
+    }
+
+    return $options;
+}
+
+/**
+ * Pose le choix pour six mois. Sur le domaine commun, l'ancien cookie de l'hôte seul est d'abord effacé.
+ */
+function consent_store(bool $analytics, bool $ads): void
+{
+    $options = consent_cookie_options();
+    if (isset($options['domain'])) {
+        setcookie(CONSENT_COOKIE, '', ['expires' => 1, 'path' => '/', 'secure' => $options['secure'], 'samesite' => 'Lax']);
+    }
+    setcookie(CONSENT_COOKIE, consent_encode($analytics, $ads), $options);
+}
+
+/**
+ * Reprise de l'ancienne valeur du site : recopiée dans la valeur commune, à la première page vue.
+ */
+function consent_migrate(): void
+{
+    $legacy = consent_legacy();
+    if ($legacy !== null && !headers_sent()) {
+        consent_store($legacy['analytics'], $legacy['ads']);
+    }
 }
 
 /**
@@ -263,6 +398,7 @@ if (!headers_sent()) {
     if (!is_indexable()) {
         header('X-Robots-Tag: noindex, nofollow');
     }
+    consent_migrate();
 }
 
 require __DIR__ . '/i18n.php';
