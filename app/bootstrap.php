@@ -243,10 +243,10 @@ function launcher_account_url(): ?string
 // Installer le site sans magasin (M-132, modèle Reserva) : barre « Installer l'application Noorwan » en bas de l'écran
 // (app/layout/install.php), ouverte par public/assets/js/site.js. Elle n'existe pas dans l'application Android
 // (agent qui contient NoorwanApp) ; elle s'ouvre d'elle-même sur l'accueil et à l'arrivée par un code QR (?via=qr)
-// ou par la grille des sites (?via=launcher), sauf après « Plus tard » : cookie nw_install_later=1, six mois, non
-// chiffré, sans donnée personnelle, Path=/, SameSite=Lax, Secure en https (posé par site.js, lu ici).
-const INSTALL_COOKIE = 'nw_install_later';
-const INSTALL_MAX_AGE = 15552000;
+// ou par la grille des sites (?via=launcher), à chaque visite (décision de Marwan du 27/11/2026) : « Plus tard » la
+// ferme pour la page en cours seulement, sans cookie. L'ancien cookie « Plus tard » (nw_install_later, hôte seul,
+// Path=/) n'est plus lu : install_forget_legacy() l'efface chez un visiteur qui l'a encore.
+const INSTALL_LEGACY_COOKIE = 'nw_install_later';
 const INSTALL_PARAM = 'via';
 const INSTALL_ORIGINS = ['qr', 'launcher'];
 const APP_AGENT_MARK = 'NoorwanApp';
@@ -268,11 +268,15 @@ function install_available(): bool
 }
 
 /**
- * « Plus tard » choisi il y a moins de six mois.
+ * Ancien cookie « Plus tard » (six mois jusqu'au 27/11/2026) : effacé une fois, même hôte et même chemin.
  */
-function install_postponed(): bool
+function install_forget_legacy(): void
 {
-    return ($_COOKIE[INSTALL_COOKIE] ?? null) === '1';
+    if (isset($_COOKIE[INSTALL_LEGACY_COOKIE]) && !headers_sent()) {
+        $secure = ($_SERVER['HTTPS'] ?? '') === 'on' || str_starts_with((string) env('APP_URL', ''), 'https://');
+        setcookie(INSTALL_LEGACY_COOKIE, '', ['expires' => 1, 'path' => '/', 'secure' => $secure, 'samesite' => 'Lax']);
+        unset($_COOKIE[INSTALL_LEGACY_COOKIE]);
+    }
 }
 
 /**
@@ -290,7 +294,7 @@ function install_origin(): ?string
  */
 function install_auto(): bool
 {
-    if (!install_available() || install_postponed()) {
+    if (!install_available()) {
         return false;
     }
 
@@ -520,6 +524,7 @@ if (!headers_sent()) {
         header('X-Robots-Tag: noindex, nofollow');
     }
     consent_migrate();
+    install_forget_legacy();
 }
 
 require __DIR__ . '/i18n.php';
