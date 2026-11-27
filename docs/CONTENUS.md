@@ -6,7 +6,7 @@
 
 | Page | État |
 |---|---|
-| Accueil | **v2 en ligne. v3 (textes fournis, Reserva confidentiel, illustrations) sur la branche `feat/v3-textes-visuels` ; v4 (textes resserrés, méthode en trois étapes, illustrations dessinées) sur `feat/v4-textes-visuels`, à relire par Marwan avant fusion.** Voir « État du site au 11/11/2026 (v4) ». |
+| Accueil | **Arbre des applications (27/11/2026, branche `feat/arbre-des-applications`) : titre et phrase à fournir.** **v2 en ligne. v3 (textes fournis, Reserva confidentiel, illustrations) sur la branche `feat/v3-textes-visuels` ; v4 (textes resserrés, méthode en trois étapes, illustrations dessinées) sur `feat/v4-textes-visuels`, à relire par Marwan avant fusion.** Voir « État du site au 11/11/2026 (v4) ». |
 | Consulting | **Page propre depuis la v6 (branche `feat/v6-navigation`)** à l'adresse `/consulting` : expertises, puis « Accompagnement et édition ». Voir « État du site au 17/11/2026 (v6) ». |
 | Solutions | **En ligne, textes à valider** (lot v1.1, 27/10/2026) : `solutions.php`. Reserva, Immobilier, Shopping et page Développeurs hors site. |
 | Édition | **En ligne, hors du menu depuis la v6** (pied de page et plan du site seulement ; présentée dans la page Consulting). Prestation (4 étapes **à valider**) et catalogue ; annonce Ikra.M **à valider** (27/10/2026). |
@@ -493,3 +493,14 @@ Décision M-132 (26/11/2026, Marwan : « sans avoir besoin de passer sur le stor
 - **Grille des sites** : les tuiles de Connect, Reserva, Inteek et OnePay portent `?via=launcher` ; ni la tuile de noorwan.com ni « Mon compte Connect ».
 - **Application installée** : nom « Noorwan : conseil, solutions et édition », nom court « Noorwan », description « Partir d'un besoin réel, livrer vite, améliorer ensuite. », icônes de la famille commune, captures de l'accueil sur téléphone et sur ordinateur.
 - **Page hors ligne** (quand l'application ou le site n'ont pas de réseau), en trois langues : « Pas de connexion », « Impossible d'afficher Noorwan pour le moment. Vérifiez votre connexion Internet, puis réessayez. », [Réessayer] (EN « No connection », « Noorwan cannot be displayed right now. Check your Internet connection, then try again. », « Try again » ; AR « لا يوجد اتصال »، « يتعذّر عرض Noorwan حاليًا. تحقّق من اتصالك بالإنترنت، ثم أعد المحاولة. »، « إعادة المحاولة »).
+
+
+## État du site au 27/11/2026 (arbre des applications, branche `feat/arbre-des-applications`, à relire avant fusion)
+
+Demande de Marwan, brief de Maestro (27/11/2026) : « une illustration d'un arbre avec les différentes applications ». Aucun texte nouveau inventé : seuls des noms déjà affichés sur le site.
+
+- **Accueil, nouvelle section « arbre »** (ancre `#arbre`), juste après les trois résumés d'univers (Consulting, Solutions, Connect) qu'elle rassemble, avant « De l'idée à l'action ». Ordre de l'accueil : haut de page · 01 Consulting · 02 Solutions · 03 Connect · **arbre des applications** · De l'idée à l'action · Pourquoi Noorwan · contact.
+- **Titre** : **[À FOURNIR : titre de la section arbre]** ; **phrase** sous le titre : **[À FOURNIR : phrase de la section arbre]** (clés `home.tree_h` et `home.tree_text` des trois langues, surlignées sur le site).
+- **Dessin** : SVG original dessiné dans la page, sans image tierce. Tronc « Noorwan » (pastille sombre, sans lien) ; trois branches aux couleurs des univers, chacune vers sa page : Consulting, Solutions, Édition (noms existants, traduits) ; au bout de la branche Solutions, trois fruits : **Reserva**, **Inteek**, **Connect**, chacun avec son icône de la famille commune et son nom, vers l'adresse de la grille des sites suivie de `?lang=` et `?via=launcher`. Jamais OnePay, ni Noor, ni son moteur.
+- Téléphone : arbre vertical ; dès 768 px : arbre large. En arabe, le dessin passe en miroir, les noms restent lisibles. Thème sombre par les variables du site. Aucune animation.
+- Captures : `docs/Audit/arbre-des-applications/`.

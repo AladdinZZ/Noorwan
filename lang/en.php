@@ -106,6 +106,9 @@ return [
             ['title' => 'What we do best', 'text' => 'What we learn in one area serves the others.'],
             ['title' => 'Tools designed for Africa', 'text' => 'Our solutions are built for the phone first, in French, English and Arabic.'],
         ],
+        // Arbre des applications (27/11/2026) : textes à fournir par Marwan, rien dans docs/CONTENUS.md.
+        'tree_h' => '[À FOURNIR : titre de la section arbre]',
+        'tree_text' => '[À FOURNIR : phrase de la section arbre]',
         'app_h' => 'From idea to action',
         'steps' => [
             ['title' => 'Start from the field', 'text' => 'We first look at how you work today and what wastes your time. The real need comes before the idea.'],

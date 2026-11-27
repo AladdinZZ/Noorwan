@@ -114,6 +114,9 @@ return [
             ['title' => 'خبراتنا', 'text' => 'ما نتعلمه في مجال يخدم المجالات الأخرى.'],
             ['title' => 'أدوات مصممة لأفريقيا', 'text' => 'حلولنا مصممة للهاتف أولًا، بالفرنسية والإنجليزية والعربية.'],
         ],
+        // Arbre des applications (27/11/2026) : textes à fournir par Marwan, rien dans docs/CONTENUS.md.
+        'tree_h' => '[À FOURNIR : titre de la section arbre]',
+        'tree_text' => '[À FOURNIR : phrase de la section arbre]',
         'app_h' => 'من الفكرة إلى الفعل',
         'steps' => [
             ['title' => 'الانطلاق من الواقع', 'text' => 'ننظر أولًا في طريقة عملك اليوم وفي ما يضيّع وقتك. الحاجة الحقيقية تسبق الفكرة.'],

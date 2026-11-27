@@ -66,6 +66,9 @@
     --night-muted: #A1A1A6;
     /* Carte sombre des expertises (planche « Nos expertises ») ; noir franc en thème sombre. */
     --motto-card: #1D1D1F;
+    /* Arbre des applications (accueil) : écorce et houppier du dessin. */
+    --tree-bark: #A89C86;
+    --tree-canopy: #F3F2ED;
 
     /* Code couleur des univers : trait, texte, fond teinté. */
     --cons: #A8915F;
@@ -161,6 +164,8 @@
     --consent-bg: rgba(28, 28, 30, 0.96);
     --logo-dot: var(--link-dark);
     --motto-card: #000000;
+    --tree-bark: #6B6253;
+    --tree-canopy: #232325;
     --control-line: #7C7C80;
     --scrim: rgba(0, 0, 0, 0.6);
     --focus: #2997FF;
@@ -198,6 +203,8 @@
         --consent-bg: rgba(28, 28, 30, 0.96);
         --logo-dot: var(--link-dark);
         --motto-card: #000000;
+        --tree-bark: #6B6253;
+        --tree-canopy: #232325;
         --control-line: #7C7C80;
         --scrim: rgba(0, 0, 0, 0.6);
         --focus: #2997FF;
@@ -1511,6 +1518,271 @@ main:focus {
     .why-points {
         grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: 32px;
+    }
+}
+
+/* ---------- Arbre des applications (accueil, 27/11/2026) ----------
+   Dessin SVG dans la page (app/layout/tree.php), décoratif ; noms et liens en HTML posés par-dessus en pourcentage
+   du dessin (centre de chaque nœud, .tree-at-*). Téléphone : arbre vertical (360 x 520) ; dès 768 px : arbre large
+   (1000 x 560). En arabe, le dessin passe en miroir et inset-inline-start suit le sens de lecture. Aucune animation :
+   rien à couper pour prefers-reduced-motion. Couleurs par variables (thème sombre compris). */
+
+.tree-screen {
+    background: var(--paper);
+}
+
+.tree {
+    position: relative;
+    width: min(100% - 2 * var(--gutter), 400px);
+    margin: 48px auto 0;
+    aspect-ratio: 360 / 520;
+}
+
+.tree-art {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.tree-art-wide {
+    display: none;
+}
+
+[dir="rtl"] .tree-art {
+    transform: scaleX(-1);
+}
+
+.tree-canopy {
+    fill: var(--tree-canopy);
+}
+
+.tree-ground,
+.tree-root {
+    fill: none;
+    stroke: var(--line-2);
+    stroke-width: 2;
+    stroke-linecap: round;
+}
+
+.tree-bark {
+    fill: var(--tree-bark);
+}
+
+.tree-limb,
+.tree-twig {
+    fill: none;
+    stroke-linecap: round;
+}
+
+.tree-limb {
+    stroke-width: 10;
+}
+
+.tree-twig {
+    stroke-width: 5;
+}
+
+.tree-limb-cons {
+    stroke: var(--cons);
+}
+
+.tree-limb-sol {
+    stroke: var(--sol);
+}
+
+.tree-limb-ed {
+    stroke: var(--ed);
+}
+
+.tree-leaf {
+    stroke-width: 1.5;
+}
+
+.tree-leaf-cons {
+    fill: var(--cons-tint);
+    stroke: var(--cons);
+}
+
+.tree-leaf-sol {
+    fill: var(--sol-tint);
+    stroke: var(--sol);
+}
+
+.tree-leaf-ed {
+    fill: var(--ed-tint);
+    stroke: var(--ed);
+}
+
+.tree-bud-cons {
+    fill: var(--cons);
+}
+
+.tree-bud-sol {
+    fill: var(--sol);
+}
+
+.tree-bud-ed {
+    fill: var(--ed);
+}
+
+/* Nœuds : centrés sur leur point du dessin (le décalage horizontal s'inverse en arabe). */
+.tree-node {
+    position: absolute;
+    transform: translate(-50%, -50%);
+}
+
+[dir="rtl"] .tree-node {
+    transform: translate(50%, -50%);
+}
+
+/* Tronc et branches : pastilles de 44 px, texte dans la couleur de l'univers. */
+.tree-trunk,
+.tree-branch {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding-inline: 18px;
+    border-radius: 22px;
+    font-size: 16px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.tree-trunk {
+    background: var(--ink);
+    color: var(--on-ink);
+}
+
+.tree-branch {
+    border: 1px solid var(--line-2);
+    background: var(--paper);
+}
+
+.tree-branch-consulting {
+    color: var(--cons-text);
+}
+
+.tree-branch-solutions {
+    color: var(--sol-text);
+}
+
+.tree-branch-edition {
+    color: var(--ed-text);
+}
+
+/* Applications : icône de 48 px (famille commune, pastille de secours) et nom dessous. */
+.tree-app {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    min-width: 76px;
+    padding: 4px;
+    border-radius: 14px;
+    color: var(--ink);
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.2;
+    white-space: nowrap;
+}
+
+.tree-app:hover bdi {
+    text-decoration: underline;
+}
+
+.tree-app:hover {
+    text-decoration: none;
+}
+
+/* Positions sur l'arbre vertical (centre du nœud, en % du dessin 360 x 520). */
+.tree-at-noorwan {
+    inset-inline-start: 50%;
+    inset-block-start: 82.7%;
+}
+
+.tree-at-consulting {
+    inset-inline-start: 17.2%;
+    inset-block-start: 57.7%;
+}
+
+.tree-at-solutions {
+    inset-inline-start: 50%;
+    inset-block-start: 48%;
+}
+
+.tree-at-edition {
+    inset-inline-start: 82.8%;
+    inset-block-start: 57.7%;
+}
+
+.tree-at-reserva {
+    inset-inline-start: 19.4%;
+    inset-block-start: 18.3%;
+}
+
+.tree-at-inteek {
+    inset-inline-start: 50%;
+    inset-block-start: 10.6%;
+}
+
+.tree-at-connect {
+    inset-inline-start: 80.6%;
+    inset-block-start: 18.3%;
+}
+
+@media (min-width: 768px) {
+    .tree {
+        width: min(100% - 2 * var(--gutter), 1000px);
+        margin-block-start: 64px;
+        aspect-ratio: 1000 / 560;
+    }
+
+    .tree-art-narrow {
+        display: none;
+    }
+
+    .tree-art-wide {
+        display: block;
+    }
+
+    .tree-trunk,
+    .tree-branch {
+        font-size: 17px;
+    }
+
+    /* Positions sur l'arbre large (en % du dessin 1000 x 560). */
+    .tree-at-noorwan {
+        inset-block-start: 84%;
+    }
+
+    .tree-at-consulting {
+        inset-inline-start: 15%;
+        inset-block-start: 46.8%;
+    }
+
+    .tree-at-solutions {
+        inset-block-start: 51.8%;
+    }
+
+    .tree-at-edition {
+        inset-inline-start: 85%;
+        inset-block-start: 46.8%;
+    }
+
+    .tree-at-reserva {
+        inset-inline-start: 33%;
+        inset-block-start: 20%;
+    }
+
+    .tree-at-inteek {
+        inset-block-start: 12.9%;
+    }
+
+    .tree-at-connect {
+        inset-inline-start: 67%;
+        inset-block-start: 20%;
     }
 }
 
