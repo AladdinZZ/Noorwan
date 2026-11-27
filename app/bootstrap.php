@@ -181,6 +181,51 @@ function launcher_sites(): array
     ];
 }
 
+// Arbre des applications de l'accueil (27/11/2026) : applications publiques du groupe, toutes rattachées à l'univers
+// Solutions, dans cet ordre. Liste fermée : jamais le site de paiement (M-123, lanceur seulement), jamais l'IA du groupe
+// ni son moteur. Adresses et icônes reprises du lanceur.
+const TREE_APPS = ['reserva', 'inteek', 'connect'];
+
+/**
+ * Applications de l'arbre, avec l'adresse du lanceur suivie de la langue (?lang=) et de l'origine (?via=launcher),
+ * comme les tuiles de la grille.
+ *
+ * @return list<array{key: string, label: string, url: string, color: string, letter: string, icon: string, current: bool}>
+ */
+function tree_apps(): array
+{
+    $sites = [];
+    foreach (launcher_sites() as $site) {
+        $sites[$site['key']] = $site;
+    }
+    $apps = [];
+    foreach (TREE_APPS as $key) {
+        $site = $sites[$key];
+        $site['url'] = with_origin(with_lang($site['url']), 'launcher');
+        $apps[] = $site;
+    }
+
+    return $apps;
+}
+
+/**
+ * Adresse d'un autre site complétée de la langue courante (?lang= ou &lang=), sans doublon, avant l'ancre éventuelle.
+ */
+function with_lang(string $url): string
+{
+    if (preg_match('/[?&]lang=/', $url) === 1) {
+        return $url;
+    }
+    $fragment = '';
+    $hash = strpos($url, '#');
+    if ($hash !== false) {
+        $fragment = substr($url, $hash);
+        $url = substr($url, 0, $hash);
+    }
+
+    return $url . (str_contains($url, '?') ? '&' : '?') . 'lang=' . lang() . $fragment;
+}
+
 /**
  * Lien « Mon compte Connect » du bas du lanceur : l'adresse de Connect du lanceur (toujours présente).
  */

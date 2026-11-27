@@ -6,8 +6,8 @@ require __DIR__ . '/../app/bootstrap.php';
 
 // Accueil, maquette A épurée (M-56, validée le 6/11/2026) : un message par écran.
 // v6 : une page par onglet, l'accueil résume chaque onglet en quelques lignes avec « En savoir plus » vers sa page.
-// Ordre : haut de page, Consulting, Solutions, Noorwan Connect (un écran chacun), méthode en trois étapes,
-// Pourquoi Noorwan, contact. Illustrations dessinées dans assets/img, décoratives (alt vide).
+// Ordre : haut de page, Consulting, Solutions, Noorwan Connect (un écran chacun), arbre des applications (après les univers,
+// qu'il rassemble), méthode en trois étapes, Pourquoi Noorwan, contact. Illustrations dessinées dans assets/img, décoratives (alt vide).
 // Les anciennes ancres (#consulting, #edition-univers, #edition) mènent à la page Consulting (data-hash-redirect, site.js) ;
 // sans JavaScript, elles tombent sur le résumé du Consulting, qui y mène aussi.
 current_page('index');
@@ -69,6 +69,8 @@ require ROOT_DIR . '/app/layout/header.php';
     <div class="shape"><?= illustration('connect-hero', 'illus', 640, 400, ['loading' => 'lazy', 'decoding' => 'async']) ?></div>
 </section>
 </div>
+
+<?php require ROOT_DIR . '/app/layout/tree.php'; ?>
 
 <section id="methode" class="screen method" aria-labelledby="method-title">
     <div class="wrap">

@@ -106,6 +106,9 @@ return [
             ['title' => 'Nos savoir-faire', 'text' => 'Ce que nous apprenons dans un domaine sert les autres.'],
             ['title' => 'Des outils pensés pour l\'Afrique', 'text' => 'Nos solutions sont conçues pour le téléphone d\'abord, en français, en anglais et en arabe.'],
         ],
+        // Arbre des applications (27/11/2026) : textes à fournir par Marwan, rien dans docs/CONTENUS.md.
+        'tree_h' => '[À FOURNIR : titre de la section arbre]',
+        'tree_text' => '[À FOURNIR : phrase de la section arbre]',
         'app_h' => 'De l\'idée à l\'action',
         'steps' => [
             ['title' => 'Partir du terrain', 'text' => 'Nous regardons d\'abord comment vous travaillez aujourd\'hui et ce qui vous fait perdre du temps. Le besoin réel passe avant l\'idée.'],
