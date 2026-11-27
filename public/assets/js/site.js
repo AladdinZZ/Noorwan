@@ -315,6 +315,8 @@
                 }
                 if (banner) {
                     banner.hidden = true;
+                    // La barre d'installation (M-132) attend ce choix pour venir à son tour.
+                    document.dispatchEvent(new CustomEvent('nw-consent-closed'));
                 }
                 if (panel.classList.contains('is-open')) {
                     panel.querySelector('[data-panel-close]').click();
@@ -358,4 +360,171 @@
             fail(images[i]);
         }
     }
+})();
+
+// Installer le site sans magasin (M-132, modèle Reserva). Service worker minimal (sw.js : page hors ligne seulement)
+// et barre « Installer l'application Noorwan » (#install-bar, app/layout/install.php), jamais une fenêtre surgissante :
+// - Android : seulement quand le navigateur propose l'installation (beforeinstallprompt, gardé par preventDefault) ;
+//   ouverte d'elle-même sur un téléphone quand la page le demande (data-auto : accueil, ?via=qr, ?via=launcher) ;
+// - iPhone et iPad : mode d'emploi « Partager, puis Sur l'écran d'accueil » ;
+// - jamais en mode application ni dans l'application Android (agent NoorwanApp) ; jamais tant que le bandeau des
+//   cookies attend un choix (elle vient juste après) ;
+// - « Plus tard » : cookie nw_install_later=1 six mois, non chiffré, jamais le stockage du navigateur.
+// L'entrée « Installer l'application » du volet du menu ([data-install-open]) lance l'installation ou montre le mode
+// d'emploi, même après « Plus tard ». Mesure : seulement l'étape app_installed, sans paramètre, après l'accord a1.
+(function () {
+    'use strict';
+
+    var ua = window.navigator.userAgent || '';
+    if (ua.indexOf('NoorwanApp') !== -1) {
+        return;
+    }
+
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function () {
+            navigator.serviceWorker.register('sw.js', { scope: './' }).catch(function () {
+                // Pas de service worker (navigation privée, http) : le site marche sans.
+            });
+        });
+    }
+
+    var bar = document.getElementById('install-bar');
+    var entries = document.querySelectorAll('[data-install-entry]');
+    var media = function (query) {
+        return window.matchMedia ? window.matchMedia(query).matches : false;
+    };
+    var standalone = media('(display-mode: standalone)') || media('(display-mode: minimal-ui)') || window.navigator.standalone === true;
+    var isIos = /iphone|ipad|ipod/i.test(ua) || (window.navigator.platform === 'MacIntel' && window.navigator.maxTouchPoints > 1);
+    var isAndroidPhone = /android/i.test(ua) && /mobile/i.test(ua);
+    var deferred = null;
+    var shown = false;
+
+    function mode() {
+        if (standalone) {
+            return null;
+        }
+        if (deferred) {
+            return 'android';
+        }
+        return isIos ? 'ios' : null;
+    }
+
+    function refreshEntries() {
+        var visible = mode() !== null;
+        for (var i = 0; i < entries.length; i++) {
+            entries[i].hidden = !visible;
+        }
+    }
+
+    function postponed() {
+        var name = bar ? bar.getAttribute('data-cookie') : '';
+        return !!name && new RegExp('(?:^|;\\s*)' + name + '=1(?:;|$)').test(document.cookie);
+    }
+
+    // Le choix des cookies attend : bandeau présent et pas encore fermé.
+    function consentPending() {
+        var consent = document.getElementById('consent');
+        return !!consent && !consent.hidden;
+    }
+
+    function show() {
+        var current = mode();
+        if (!bar || !current || consentPending()) {
+            return false;
+        }
+        bar.setAttribute('data-mode', current);
+        bar.hidden = false;
+        shown = true;
+        return true;
+    }
+
+    function hide() {
+        if (bar && shown) {
+            bar.hidden = true;
+            shown = false;
+        }
+    }
+
+    // Ouverture d'elle-même : page qui le demande, pas de « Plus tard », téléphone Android ou iPhone.
+    function auto() {
+        if (!bar || shown || bar.getAttribute('data-auto') !== '1' || postponed()) {
+            return;
+        }
+        var current = mode();
+        if ((current === 'android' && isAndroidPhone) || current === 'ios') {
+            show();
+        }
+    }
+
+    function later() {
+        var secure = bar.getAttribute('data-secure') === '1' || window.location.protocol === 'https:' ? '; Secure' : '';
+        document.cookie = bar.getAttribute('data-cookie') + '=1; Max-Age=' + (bar.getAttribute('data-max-age') || '15552000') + '; Path=/; SameSite=Lax' + secure;
+        hide();
+    }
+
+    // Ouvre la fenêtre d'installation du navigateur (une seule fois par événement).
+    function promptInstall() {
+        if (!deferred) {
+            return;
+        }
+        hide();
+        var prompt = deferred;
+        deferred = null;
+        prompt.prompt();
+        var done = function () {
+            refreshEntries();
+        };
+        if (prompt.userChoice && prompt.userChoice.then) {
+            prompt.userChoice.then(done, done);
+        } else {
+            done();
+        }
+    }
+
+    window.addEventListener('beforeinstallprompt', function (event) {
+        event.preventDefault();
+        if (standalone) {
+            return;
+        }
+        deferred = event;
+        refreshEntries();
+        auto();
+    });
+
+    window.addEventListener('appinstalled', function () {
+        deferred = null;
+        standalone = true;
+        hide();
+        refreshEntries();
+        if (/(?:^|;\s*)nw_consent=v1\.a1\.m[01](?:;|$)/.test(document.cookie) && window.dataLayer) {
+            window.dataLayer.push({ event: 'app_installed' });
+        }
+    });
+
+    if (bar) {
+        bar.querySelector('[data-install-now]').addEventListener('click', promptInstall);
+        bar.querySelector('[data-install-later]').addEventListener('click', later);
+        document.addEventListener('nw-consent-closed', auto);
+        // iPhone : aucun événement du navigateur, la barre vient après le chargement.
+        window.addEventListener('load', auto);
+    }
+
+    document.addEventListener('click', function (event) {
+        var trigger = event.target.closest ? event.target.closest('[data-install-open]') : null;
+        if (!trigger) {
+            return;
+        }
+        event.preventDefault();
+        var close = document.querySelector('.panel-layer.is-open .panel-close');
+        if (close) {
+            close.click();
+        }
+        if (deferred) {
+            promptInstall();
+        } else if (mode() === 'ios') {
+            show();
+        }
+    });
+
+    refreshEntries();
 })();

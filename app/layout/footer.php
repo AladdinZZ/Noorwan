@@ -59,5 +59,6 @@ $footerColumns = [
     </div>
 </footer>
 <?php require ROOT_DIR . '/app/layout/consent.php'; ?>
+<?php require ROOT_DIR . '/app/layout/install.php'; ?>
 </body>
 </html>

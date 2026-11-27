@@ -2653,6 +2653,149 @@ main:focus {
     margin-block-start: 8px;
 }
 
+/* ---------- Installer l'application sans magasin (M-132) : barre en bas, comme le bandeau des cookies ---------- */
+
+/* Même place et même fond que le bandeau des cookies, qu'elle ne recouvre jamais (site.js attend le choix) ;
+   sans voile ; cachée tant que site.js ne l'ouvre pas, donc jamais sans JavaScript. */
+.install-bar {
+    position: fixed;
+    inset-inline: 0;
+    inset-block-end: 0;
+    z-index: 70;
+    padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+    border-block-start: 1px solid var(--line);
+    background: var(--consent-bg);
+    -webkit-backdrop-filter: saturate(180%) blur(18px);
+    backdrop-filter: saturate(180%) blur(18px);
+}
+
+.install-bar[hidden],
+.install-bar [hidden] {
+    display: none;
+}
+
+.install-inner {
+    display: grid;
+    grid-template-columns: 44px minmax(0, 1fr);
+    gap: 12px;
+    align-items: start;
+    max-width: 1040px;
+    margin-inline: auto;
+}
+
+/* L'icône encre se perd sur le fond sombre : anneau d'un pixel, comme dans le lanceur. */
+.install-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    box-shadow: 0 0 0 1px var(--line);
+}
+
+.install-body {
+    min-width: 0;
+}
+
+.install-title {
+    color: var(--ink);
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.35;
+}
+
+.install-text {
+    margin-block-start: 2px;
+    color: var(--text);
+    font-size: 14px;
+    line-height: 1.45;
+}
+
+/* Mode d'emploi de l'iPhone : deux lignes, chacune avec son dessin. */
+.install-steps {
+    display: grid;
+    gap: 4px;
+    margin: 6px 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.install-steps li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text);
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.install-glyph {
+    flex: none;
+    color: var(--link);
+}
+
+.install-actions {
+    display: flex;
+    grid-column: 1 / -1;
+    gap: 8px;
+}
+
+.btn-install {
+    flex: 1 1 0;
+    min-width: 0;
+    min-height: 44px;
+    padding-inline: 12px;
+    font-size: 15px;
+    white-space: nowrap;
+}
+
+/* La forme qui ne sert pas sur cet appareil (Android ou iPhone) est cachée. */
+.install-bar[data-mode="android"] [data-install-for="ios"],
+.install-bar[data-mode="ios"] [data-install-for="android"] {
+    display: none;
+}
+
+@media (min-width: 760px) {
+    .install-inner {
+        grid-template-columns: 44px minmax(0, 1fr) auto;
+        align-items: center;
+        gap: 16px;
+    }
+
+    .install-actions {
+        grid-column: auto;
+    }
+
+    .btn-install {
+        min-width: 148px;
+    }
+}
+
+@media print {
+    .install-bar {
+        display: none;
+    }
+}
+
+/* Entrée « Installer l'application » du volet du menu : comme les liens de la liste, montrée par site.js. */
+.panel-install[hidden] {
+    display: none;
+}
+
+.panel-install-btn {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    min-height: 48px;
+    padding: 0;
+    border: 0;
+    border-block-end: 1px solid var(--line);
+    background: none;
+    color: var(--ink);
+    font: inherit;
+    font-size: 17px;
+    text-align: start;
+    cursor: pointer;
+}
+
 /* Grand écran (charte commune) : les liens principaux remplacent le bouton Menu, l'en-tête prend ses marges. */
 @media (min-width: 900px) {
     .header-bar {

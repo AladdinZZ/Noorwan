@@ -464,11 +464,11 @@ launcher_panel() { sed -n '/<div id="launcher-panel"/,/^<\/div>/p'; }
 launcher_sites() { grep -oE 'data-launcher-site="[a-z]+"' | sed -E 's/.*="([a-z]+)"/\1/' | paste -sd '|' -; }
 html=$(launch)
 expect "aucune adresse dans .env : tous les sites (OnePay après Inteek) aux adresses par défaut, Noorwan marqué, avec « Mon compte Connect »" "noorwan|connect|reserva|inteek|onepay|1|1|1|1" \
-    "$(launcher_panel <<< "$html" | launcher_sites)|$(grep -c '<a class="launcher-tile" href="./?lang=fr" data-launcher-site="noorwan" aria-current="page">' <<< "$html")|$(launcher_panel <<< "$html" | grep -c 'aria-current')|$(grep -c 'launcher-account' <<< "$html")|$(launcher_panel <<< "$html" | grep -c 'href="https://dev.reserva.noorwan.com" data-launcher-site')"
+    "$(launcher_panel <<< "$html" | launcher_sites)|$(grep -c '<a class="launcher-tile" href="./?lang=fr" data-launcher-site="noorwan" aria-current="page">' <<< "$html")|$(launcher_panel <<< "$html" | grep -c 'aria-current')|$(grep -c 'launcher-account' <<< "$html")|$(launcher_panel <<< "$html" | grep -c 'href="https://dev.reserva.noorwan.com?via=launcher" data-launcher-site')"
 html=$(launch LAUNCHER_CONNECT_URL=https://compte.example.invalid/home LAUNCHER_RESERVA_URL=https://reserva.example.invalid LAUNCHER_INTEEK_URL=https://inteek.example.invalid)
 panel=$(launcher_panel <<< "$html")
 expect "liste publique dans l'ordre : Noorwan, Connect, Reserva, Inteek, OnePay (M-123)" "noorwan|connect|reserva|inteek|onepay" "$(launcher_sites <<< "$panel")"
-expect "adresses de .env, noms, pastilles (couleur et lettre)" "https://compte.example.invalid/home|https://reserva.example.invalid|https://inteek.example.invalid|https://dev.onepay.noorwan.com|5|5" \
+expect "adresses de .env, noms, pastilles (couleur et lettre)" "https://compte.example.invalid/home?via=launcher|https://reserva.example.invalid?via=launcher|https://inteek.example.invalid?via=launcher|https://dev.onepay.noorwan.com?via=launcher|5|5" \
     "$(grep -oE 'href="https://[^"]+" data-launcher-site' <<< "$panel" | sed -E 's/href="([^"]+)".*/\1/' | paste -sd '|' -)|$(grep -cE '<bdi>(Noorwan|Connect|Reserva|Inteek|OnePay)</bdi>' <<< "$panel")|$(grep -cE '<circle cx="24" cy="24" r="23" fill="#(0071E3|248A3D|0F6F66|A85A00|5B34C7)"/><text [^>]*>(n|c|r|i|o)</text>' <<< "$panel")"
 expect "« Mon compte Connect » en bas, vers l'accueil du compte" 1 \
     "$(grep -c '<a class="launcher-account" href="https://compte.example.invalid/home" rel="noopener">Mon compte Connect</a>' <<< "$panel")"
@@ -480,13 +480,13 @@ expect "LAUNCHER_*_URL l'emporte sur l'ancienne adresse" 1 \
     "$(launch LAUNCHER_RESERVA_URL=https://neuf.example.invalid ECOSYSTEM_RESERVA_URL=https://ancien.example.invalid | launcher_panel | grep -c 'https://neuf.example.invalid')"
 panel=$(launch 'LAUNCHER_RESERVA_URL=javascript:alert(1)' LAUNCHER_INTEEK_URL=http://inteek.example.invalid | launcher_panel)
 expect "adresse non https : adresse par défaut, aucun site masqué (M-124)" "noorwan|connect|reserva|inteek|onepay|1|1|0" \
-    "$(launcher_sites <<< "$panel")|$(grep -c 'href="https://dev.reserva.noorwan.com" data-launcher-site' <<< "$panel")|$(grep -c 'href="https://dev.inteek.noorwan.com" data-launcher-site' <<< "$panel")|$(grep -cE 'javascript:|http://inteek' <<< "$panel")"
+    "$(launcher_sites <<< "$panel")|$(grep -c 'href="https://dev.reserva.noorwan.com?via=launcher" data-launcher-site' <<< "$panel")|$(grep -c 'href="https://dev.inteek.noorwan.com?via=launcher" data-launcher-site' <<< "$panel")|$(grep -cE 'javascript:|http://inteek' <<< "$panel")"
 expect "Compte en service : l'adresse du lanceur n'est jamais déduite de COMPTE_URL" 0 \
     "$(launch COMPTE_LINK_ENABLED=true COMPTE_URL=https://autre-compte.example.invalid | launcher_panel | grep -c 'autre-compte.example.invalid')"
 expect "OnePay (M-123) : après Inteek, adresse par défaut, pastille violette et lettre « o »" "1|1" \
-    "$(launcher_panel <<< "$html" | grep -c 'href="https://dev.onepay.noorwan.com" data-launcher-site="onepay" rel="noopener"')|$(launcher_panel <<< "$html" | grep -c '<circle cx="24" cy="24" r="23" fill="#5B34C7"/><text [^>]*>o</text>')"
+    "$(launcher_panel <<< "$html" | grep -c 'href="https://dev.onepay.noorwan.com?via=launcher" data-launcher-site="onepay" rel="noopener"')|$(launcher_panel <<< "$html" | grep -c '<circle cx="24" cy="24" r="23" fill="#5B34C7"/><text [^>]*>o</text>')"
 expect "OnePay : LAUNCHER_ONEPAY_URL l'emporte, une adresse non https prend l'adresse par défaut" "1|1" \
-    "$(launch LAUNCHER_ONEPAY_URL=https://onepay.example.invalid | launcher_panel | grep -c 'https://onepay.example.invalid')|$(launch LAUNCHER_ONEPAY_URL=http://onepay.example.invalid | launcher_panel | grep -c 'href="https://dev.onepay.noorwan.com" data-launcher-site="onepay"')"
+    "$(launch LAUNCHER_ONEPAY_URL=https://onepay.example.invalid | launcher_panel | grep -c 'https://onepay.example.invalid')|$(launch LAUNCHER_ONEPAY_URL=http://onepay.example.invalid | launcher_panel | grep -c 'href="https://dev.onepay.noorwan.com?via=launcher" data-launcher-site="onepay"')"
 # Icônes des sites (M-124) : copies de la charte commune servies par le site sous images/sites/, jamais sous /icons/
 # (réservé par Apache sur Ubuntu) ; pastille couleur et lettre gardée pour le cas où l'icône ne se charge pas.
 panel=$(launch | launcher_panel)
@@ -1078,6 +1078,102 @@ files=(mobile/capacitor.config.json mobile/package.json mobile/www mobile/androi
 if grep -rniE 'onepay' "${files[@]}" >/dev/null 2>&1; then fail "OnePay présent dans l'application"; else pass "OnePay absent de l'application"; fi
 if grep -rn $'—' "${files[@]}" >/dev/null 2>&1; then fail "tiret cadratin dans l'application"; else pass "aucun tiret cadratin dans l'application"; fi
 if grep -rniE 'djiboutien' "${files[@]}" >/dev/null 2>&1; then fail "« djiboutien » dans l'application"; else pass "aucun « djiboutien » dans l'application"; fi
+
+echo "7. Installer le site sans magasin (M-132)"
+# Manifeste : critères d'installation de Chrome, couleurs de la charte, icônes de la famille commune.
+manifest_value() { "$PHP" -r '$m = json_decode(file_get_contents("public/manifest.json"), true, 512, JSON_THROW_ON_ERROR); $v = eval("return \$m" . $argv[1] . ";"); echo is_bool($v) ? ($v ? "true" : "false") : $v;' "$1" 2>&1; }
+expect "manifeste servi en JSON" "200|application/json" "$(curl -s -o /dev/null -w '%{http_code}|%{content_type}' "$BASE_URL/manifest.json" | sed 's/;.*//')"
+expect "manifeste : nom court, id, adresse de départ, portée, affichage" "Noorwan|./|./|./|standalone|false" \
+    "$(manifest_value "['short_name']")|$(manifest_value "['id']")|$(manifest_value "['start_url']")|$(manifest_value "['scope']")|$(manifest_value "['display']")|$(manifest_value "['prefer_related_applications']")"
+expect "manifeste : couleurs de la charte commune" "#1D1D1F|#F6F5F1" "$(manifest_value "['theme_color']")|$(manifest_value "['background_color']")"
+expect "manifeste : icônes 192 et 512, any et maskable" "images/icons/icon-192.png 192x192 any|images/icons/icon-512.png 512x512 any|images/icons/icon-maskable-192.png 192x192 maskable|images/icons/icon-maskable-512.png 512x512 maskable" \
+    "$("$PHP" -r '$m = json_decode(file_get_contents("public/manifest.json"), true); echo implode("|", array_map(fn ($i) => $i["src"] . " " . $i["sizes"] . " " . $i["purpose"], $m["icons"]));')"
+icon_ok=0
+for entry in icon-192:192 icon-512:512 icon-maskable-192:192 icon-maskable-512:512; do
+    f="public/images/icons/${entry%%:*}.png"; n="${entry##*:}"
+    file "$f" | grep -q "PNG image data, $n x $n" && [[ "$(curl -s -o /dev/null -w '%{http_code}' "$BASE_URL/images/icons/${entry%%:*}.png")" == 200 ]] && icon_ok=$((icon_ok + 1))
+done
+expect "icônes du manifeste : PNG à la bonne taille, servies" 4 "$icon_ok"
+expect "icône maskable distincte de l'icône aux coins arrondis, aucune adresse externe dans le manifeste" "1|0" \
+    "$(cmp -s public/images/icons/icon-512.png public/images/icons/icon-maskable-512.png; echo $?)|$(grep -cE '"(src|start_url|scope|id)": "https?://' public/manifest.json)"
+shots_ok=0
+for entry in app-accueil:540x960 app-ordinateur:1280x720; do
+    f="public/images/screenshots/${entry%%:*}.jpg"; n="${entry##*:}"
+    file "$f" | grep -q "${n/x/x}" && grep -q "\"src\": \"images/screenshots/${entry%%:*}.jpg\"" public/manifest.json && grep -q "\"sizes\": \"$n\"" public/manifest.json && shots_ok=$((shots_ok + 1))
+done
+expect "captures du manifeste (téléphone et ordinateur) à leur taille" 2 "$shots_ok"
+for lang in fr en ar; do
+    expect "manifeste déclaré avec les identifiants ($lang)" 1 "$(curl -s "$BASE_URL/contact.php?lang=$lang" | grep -c '<link rel="manifest" href="manifest.json" crossorigin="use-credentials">')"
+done
+csp=$(curl -sI "$BASE_URL/?lang=fr" | grep -i '^Content-Security-Policy:')
+expect "CSP : worker-src et manifest-src du site seulement" "1|1" "$(grep -c "worker-src 'self';" <<< "$csp")|$(grep -c "manifest-src 'self';" <<< "$csp")"
+# Service worker : à la racine du site, page hors ligne seulement, jamais une page ni une réponse gardée.
+expect "service worker et page hors ligne servis" "200|200|200" \
+    "$(curl -s -o /dev/null -w '%{http_code}' "$BASE_URL/sw.js")|$(curl -s -o /dev/null -w '%{http_code}' "$BASE_URL/offline.html")|$(curl -s -o /dev/null -w '%{http_code}' "$BASE_URL/assets/css/offline.css")"
+expect "service worker : gestionnaire fetch, navigations par le réseau, page hors ligne en secours, rien d'autre gardé" "1|1|1|0|0" \
+    "$(grep -c "addEventListener('fetch'" public/sw.js)|$(grep -c "request.mode === 'navigate'" public/sw.js)|$(grep -c 'return caches.match(OFFLINE);' public/sw.js)|$(grep -cE 'cache\.put|localStorage|indexedDB' public/sw.js)|$(grep -c "request.method !== 'GET'" public/sw.js | sed 's/^1$/0/')"
+expect "service worker : trois fichiers gardés (page hors ligne, feuille, icône)" "offline.html|assets/css/offline.css|images/icons/icon-192.png" \
+    "$(grep -oE "new URL\('[^']+'" public/sw.js | sed -E "s/new URL\('//; s/'$//" | paste -sd '|' -)"
+offline=public/offline.html
+if grep -iE '<script|style=|<style' $offline >/dev/null; then fail "page hors ligne : script ou style en ligne"; else pass "page hors ligne : ni script ni style en ligne"; fi
+if grep -qE '(src|href)="https?://' $offline; then fail "page hors ligne : ressource externe"; else pass "page hors ligne : aucune ressource externe"; fi
+for lang in fr en ar; do
+    texts=$("$PHP" -r '$a = require "lang/" . $argv[1] . ".php"; echo implode("\n", [$a["offline"]["title"], $a["offline"]["text"], $a["offline"]["retry"]]);' "$lang")
+    found=0
+    while IFS= read -r line; do grep -qF ">$line<" $offline && found=$((found + 1)); done <<< "$texts"
+    expect "page hors ligne : textes de lang/$lang.php (offline.*)" 3 "$found"
+done
+# Barre « Installer l'application Noorwan » : cachée sans JavaScript, ouverte d'elle-même sur l'accueil et à l'arrivée
+# par un QR code ou la grille des sites, jamais après « Plus tard », absente de l'application Android.
+bar_auto() { curl -s "$@" | grep -oE '<section id="install-bar" class="install-bar" aria-labelledby="install-bar-title" data-auto="[01]" data-cookie="nw_install_later" data-max-age="15552000" data-secure="[01]" hidden>' | grep -oE 'data-auto="[01]"' | grep -oE '[01]'; }
+expect "barre : accueil 1, autre page 0, ?via=qr 1, ?via=launcher 1, ?via inconnu 0" "1|0|1|1|0" \
+    "$(bar_auto "$BASE_URL/?lang=fr")|$(bar_auto "$BASE_URL/contact.php?lang=fr")|$(bar_auto "$BASE_URL/contact.php?lang=fr&via=qr")|$(bar_auto "$BASE_URL/edition.php?lang=en&via=launcher")|$(bar_auto "$BASE_URL/contact.php?lang=fr&via=autre")"
+expect "barre : « Plus tard » (nw_install_later=1) la garde fermée, même sur l'accueil ou par un QR code" "0|0" \
+    "$(bar_auto -H 'Cookie: nw_install_later=1' "$BASE_URL/?lang=fr")|$(bar_auto -H 'Cookie: nw_install_later=1' "$BASE_URL/contact.php?lang=fr&via=qr")"
+app_ua='Mozilla/5.0 (Linux; Android 14; Pixel 8; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/131.0.0.0 Mobile Safari/537.36 NoorwanApp/Noorwan'
+for path in "/?lang=fr" "/contact.php?lang=ar&via=qr"; do
+    html=$(curl -s -A "$app_ua" "$BASE_URL$path")
+    expect "application Android (agent NoorwanApp) : ni barre ni entrée du menu ($path)" "0|0" "$(grep -c 'id="install-bar"' <<< "$html")|$(grep -c 'data-install-open' <<< "$html")"
+done
+for lang in fr en ar; do
+    html=$(curl -s "$BASE_URL/?lang=$lang")
+    bar=$(sed -n '/<section id="install-bar"/,/<\/section>/p' <<< "$html")
+    expect "barre traduite : titre, phrase, deux étapes de l'iPhone, Installer, Plus tard ($lang)" "1|1|1|1|1|1" \
+        "$(grep -c "<p id=\"install-bar-title\" class=\"install-title\">$(by_lang "$lang" "Installer l&apos;application Noorwan" "Install the Noorwan app" "ثبّت تطبيق Noorwan")</p>" <<< "$bar")|$(grep -c 'class="install-text" data-install-for="android"' <<< "$bar")|$(grep -c "<span>$(by_lang "$lang" "Touchez le bouton Partager" "Tap the Share button" "المس زر المشاركة")</span>" <<< "$bar")|$(grep -c '<rect x="4" y="4" width="16" height="16" rx="4"/>' <<< "$bar")|$(grep -c "data-install-for=\"android\" data-install-now>$(by_lang "$lang" "Installer" "Install" "تثبيت")</button>" <<< "$bar")|$(grep -c "data-install-later>$(by_lang "$lang" "Plus tard" "Later" "لاحقًا")</button>" <<< "$bar")"
+    menu=$(sed -n '/<div id="menu-panel"/,/^<\/div>/p' <<< "$html")
+    expect "volet du menu : « Installer l'application », caché jusqu'à ce que site.js le montre ($lang)" 1 \
+        "$(grep -c "<ul class=\"panel-list panel-install\" data-install-entry hidden>" <<< "$menu")"
+    grep -q "data-install-open>$(by_lang "$lang" "Installer l&apos;application" "Install the app" "تثبيت التطبيق")</button>" <<< "$menu" && pass "entrée du menu traduite ($lang)" || fail "entrée du menu ($lang)"
+    if grep -iE 'apple|safari' <<< "$bar" >/dev/null; then fail "barre : marque Apple ($lang)"; else pass "barre : aucune marque Apple ($lang)"; fi
+done
+# Les cookies d'abord : avec Tag Manager et sans choix, le bandeau des cookies vient avant la barre dans la page.
+html=$(render index.php fr false "" "$GTM_TEST")
+expect "bandeau des cookies puis barre d'installation, dans cet ordre" "consent|install-bar" \
+    "$(grep -oE '<section id="(consent|install-bar)"' <<< "$html" | sed -E 's/.*id="([a-z-]+)"/\1/' | paste -sd '|' -)"
+expect "site.js : la barre attend le choix des cookies, puis vient (événement nw-consent-closed)" "1|1|1" \
+    "$(grep -c "document.dispatchEvent(new CustomEvent('nw-consent-closed'));" public/assets/js/site.js)|$(grep -c "document.addEventListener('nw-consent-closed', auto);" public/assets/js/site.js)|$(grep -c "return !!consent && !consent.hidden;" public/assets/js/site.js)"
+install_js=$(sed -n '/^\/\/ Installer le site sans magasin (M-132/,$p' public/assets/js/site.js)
+expect "site.js : beforeinstallprompt gardé, téléphone Android, iPhone et iPad, mode application, application Android" "1|1|1|1|1" \
+    "$(grep -A1 "window.addEventListener('beforeinstallprompt', function (event) {" <<< "$install_js" | grep -c 'event.preventDefault();')|$(grep -c '/android/i.test(ua) && /mobile/i.test(ua)' <<< "$install_js")|$(grep -c 'iphone|ipad|ipod' <<< "$install_js")|$(grep -c "display-mode: standalone" <<< "$install_js")|$(grep -c "ua.indexOf('NoorwanApp') !== -1" <<< "$install_js")"
+expect "site.js : « Plus tard » en cookie six mois, Path=/, SameSite=Lax, jamais le stockage du navigateur" "1|0" \
+    "$(grep -c "'=1; Max-Age=' + (bar.getAttribute('data-max-age') || '15552000') + '; Path=/; SameSite=Lax' + secure" <<< "$install_js")|$(grep -cE 'localStorage|sessionStorage' <<< "$install_js")"
+expect "site.js : seule l'étape app_installed, sans paramètre, après l'accord de mesure" 1 \
+    "$(grep -cF 'nw_consent=v1\.a1\.m[01](?:;|$)/.test(document.cookie) && window.dataLayer' <<< "$install_js")"
+grep -q "window.dataLayer.push({ event: 'app_installed' });" <<< "$install_js" && pass "site.js : étape app_installed" || fail "site.js : étape app_installed"
+install_css=$(sed -n "/Installer l'application sans magasin (M-132)/,/^\.panel-install-btn {/p" public/assets/css/site.css)
+if grep -qE '(^|[^-])(left|right)\s*:|margin-(left|right)|padding-(left|right)|border-(left|right)|text-align: (left|right)' <<< "$install_css"; then fail "barre : propriété physique (left, right)"; else pass "barre : propriétés logiques seulement"; fi
+expect "barre : cachée tant que site.js ne l'ouvre pas (hidden), sans voile" "1|0" "$(grep -c '^\.install-bar\[hidden\],$' <<< "$install_css")|$(grep -c 'scrim' <<< "$install_css")"
+# Grille des sites : ?via=launcher vers les autres sites, jamais sur la tuile de noorwan.com ni « Mon compte Connect ».
+panel=$(launch | launcher_panel)
+expect "grille : via=launcher sur les quatre autres sites, ni sur Noorwan ni sur « Mon compte Connect »" "4|1|1" \
+    "$(grep -cE 'href="https://[^"]+\?via=launcher" data-launcher-site="(connect|reserva|inteek|onepay)"' <<< "$panel")|$(grep -c 'href="./?lang=fr" data-launcher-site="noorwan"' <<< "$panel")|$(grep -c '<a class="launcher-account" href="https://compte.noorwan.com/home" rel="noopener">' <<< "$panel")"
+expect "with_origin : ajout, & après une requête, avant l'ancre, sans doublon, origine inconnue ignorée" "https://a.invalid?via=launcher|https://a.invalid/?x=1&via=qr|https://a.invalid/p?via=qr#s|https://a.invalid?via=qr|https://a.invalid" \
+    "$("$PHP" -r 'require "app/bootstrap.php"; echo implode("|", [with_origin("https://a.invalid", "launcher"), with_origin("https://a.invalid/?x=1", "qr"), with_origin("https://a.invalid/p#s", "qr"), with_origin("https://a.invalid?via=qr", "launcher"), with_origin("https://a.invalid", "mail")]);' 2>&1)"
+# Page Cookies : nw_install_later expliqué dans les trois langues.
+for lang in fr en ar; do
+    expect "page Cookies : section nw_install_later ($lang)" 1 "$(curl -s "$BASE_URL/cookies.php?lang=$lang" | grep -c '<h2[^>]*>nw_install_later</h2>')"
+done
+expect "application Android : agent NoorwanApp/Noorwan (le site n'y propose pas l'installation)" "NoorwanApp/Noorwan" "$(cap_value "['appendUserAgent']")"
 
 echo
 if [[ $failures -eq 0 ]]; then echo "Tous les tests passent."; else echo "$failures test(s) en échec."; fi

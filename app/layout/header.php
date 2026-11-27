@@ -30,6 +30,8 @@ $accountUrl = account_url();
 $closeIcon = '<svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M5 5l10 10M15 5L5 15" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>';
 
 // Lanceur des sites (M-121, M-124) : liste publique (launcher_sites()) et lien « Mon compte Connect ».
+// Les tuiles des autres sites portent ?via=launcher (M-132 : leur barre d'installation s'ouvre à l'arrivée), jamais
+// la tuile de noorwan.com ni « Mon compte Connect ».
 // Tuile : icône du site (charte commune) ; si elle ne se charge pas, site.js montre la pastille, rond à sa couleur et
 // sa lettre en blanc, en SVG (couleur par l'attribut fill, jamais de style en ligne).
 $launcherAccount = launcher_account_url();
@@ -76,6 +78,8 @@ $themeToggle = static function (): string {
 <link rel="icon" href="<?= e($asset('favicon.svg')) ?>" type="image/svg+xml">
 <link rel="icon" href="<?= e($asset('favicon.ico')) ?>" sizes="48x48">
 <link rel="apple-touch-icon" href="<?= e($asset('apple-touch-icon.png')) ?>">
+<?php // Manifeste de l'application installable sans magasin (M-132) ; use-credentials : le manifeste passe aussi derrière un mot de passe Apache. ?>
+<link rel="manifest" href="manifest.json" crossorigin="use-credentials">
 <?php if (is_rtl()): ?>
 <link rel="preload" href="assets/fonts/IBMPlexSansArabic-Regular.woff2" as="font" type="font/woff2" crossorigin>
 <?php endif; ?>
@@ -149,6 +153,12 @@ gtag('consent', 'update', { analytics_storage: 'granted', ad_storage: '<?= $adsS
 <?php endforeach; ?>
                 </ul>
             </nav>
+<?php if (install_available()): ?>
+<?php // « Installer l'application » (M-132) : montrée par site.js seulement quand l'installation est possible (Android) ou expliquée (iPhone, iPad) ; sans JavaScript, rien. ?>
+            <ul class="panel-list panel-install" data-install-entry hidden>
+                <li><button class="panel-install-btn" type="button" data-install-open><?= t('install.menu') ?></button></li>
+            </ul>
+<?php endif; ?>
         </div>
 <?php if ($accountUrl !== null): ?>
         <div class="panel-foot">
@@ -167,7 +177,7 @@ gtag('consent', 'update', { analytics_storage: 'granted', ad_storage: '<?= $adsS
         <div class="panel-body">
             <ul class="launcher-grid">
 <?php foreach (launcher_sites() as $site): ?>
-                <li><a class="launcher-tile" href="<?= e($site['url']) ?>" data-launcher-site="<?= e($site['key']) ?>"<?= $site['current'] ? ' aria-current="page"' : ' rel="noopener"' ?>><span class="launcher-icon" data-launcher-icon><img class="launcher-img" src="<?= e($asset($site['icon'])) ?>" alt="" width="48" height="48" decoding="async"><?= $launcherDot($site['color'], $site['letter']) ?></span><bdi><?= t($site['label']) ?></bdi></a></li>
+                <li><a class="launcher-tile" href="<?= e($site['current'] ? $site['url'] : with_origin($site['url'], 'launcher')) ?>" data-launcher-site="<?= e($site['key']) ?>"<?= $site['current'] ? ' aria-current="page"' : ' rel="noopener"' ?>><span class="launcher-icon" data-launcher-icon><img class="launcher-img" src="<?= e($asset($site['icon'])) ?>" alt="" width="48" height="48" decoding="async"><?= $launcherDot($site['color'], $site['letter']) ?></span><bdi><?= t($site['label']) ?></bdi></a></li>
 <?php endforeach; ?>
             </ul>
         </div>
