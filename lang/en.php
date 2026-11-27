@@ -511,13 +511,6 @@ return [
                         'When you click "Accept all", "Refuse all" or "Save", Noorwan SARL sets the nw_consent cookie, shared by all Noorwan sites (noorwan.com and its subdomains), which keeps your answer for six months: audience measurement accepted or not, advertising accepted or not. Its only purpose is not to ask you again on every page or every site. Your choice applies to all Noorwan sites: a new choice replaces the previous one everywhere. After six months, you are asked again.',
                     ],
                 ],
-                // « Plus tard » de la barre d'installation (M-132). À faire relire avec les autres pages légales.
-                [
-                    'title' => 'nw_install_later',
-                    'body' => [
-                        'If you tap "Later" under "Install the Noorwan app", the site sets the nw_install_later cookie for six months. Its only purpose is to stop offering the installation on its own during that time. It contains no personal data and applies to noorwan.com only.',
-                    ],
-                ],
                 // Cookie du thème (socle du lanceur L6) : texte à fournir par Marwan.
                 [
                     'title' => 'nw_theme',

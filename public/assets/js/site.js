@@ -369,9 +369,10 @@
 // - iPhone et iPad : mode d'emploi « Partager, puis Sur l'écran d'accueil » ;
 // - jamais en mode application ni dans l'application Android (agent NoorwanApp) ; jamais tant que le bandeau des
 //   cookies attend un choix (elle vient juste après) ;
-// - « Plus tard » : cookie nw_install_later=1 six mois, non chiffré, jamais le stockage du navigateur.
+// - « Plus tard » : ferme la barre pour la page en cours seulement, sans cookie ni stockage du navigateur ; elle revient
+//   à chaque visite là où elle s'ouvre d'elle-même (décision de Marwan du 27/11/2026).
 // L'entrée « Installer l'application » du volet du menu ([data-install-open]) lance l'installation ou montre le mode
-// d'emploi, même après « Plus tard ». Mesure : seulement l'étape app_installed, sans paramètre, après l'accord a1.
+// d'emploi. Mesure : seulement l'étape app_installed, sans paramètre, après l'accord a1.
 (function () {
     'use strict';
 
@@ -416,11 +417,6 @@
         }
     }
 
-    function postponed() {
-        var name = bar ? bar.getAttribute('data-cookie') : '';
-        return !!name && new RegExp('(?:^|;\\s*)' + name + '=1(?:;|$)').test(document.cookie);
-    }
-
     // Le choix des cookies attend : bandeau présent et pas encore fermé.
     function consentPending() {
         var consent = document.getElementById('consent');
@@ -445,9 +441,9 @@
         }
     }
 
-    // Ouverture d'elle-même : page qui le demande, pas de « Plus tard », téléphone Android ou iPhone.
+    // Ouverture d'elle-même : page qui le demande, téléphone Android ou iPhone.
     function auto() {
-        if (!bar || shown || bar.getAttribute('data-auto') !== '1' || postponed()) {
+        if (!bar || shown || bar.getAttribute('data-auto') !== '1') {
             return;
         }
         var current = mode();
@@ -456,9 +452,8 @@
         }
     }
 
+    // « Plus tard » : pour la page en cours seulement.
     function later() {
-        var secure = bar.getAttribute('data-secure') === '1' || window.location.protocol === 'https:' ? '; Secure' : '';
-        document.cookie = bar.getAttribute('data-cookie') + '=1; Max-Age=' + (bar.getAttribute('data-max-age') || '15552000') + '; Path=/; SameSite=Lax' + secure;
         hide();
     }
 

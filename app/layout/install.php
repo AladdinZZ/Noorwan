@@ -9,14 +9,13 @@ declare(strict_types=1);
 // - Android (le navigateur a proposé l'installation, beforeinstallprompt) : « Installer » ouvre sa petite fenêtre ;
 // - iPhone et iPad (Safari) : mode d'emploi « Partager, puis Sur l'écran d'accueil », dessins faits ici, sans marque.
 // Elle s'ouvre d'elle-même sur un téléphone seulement si data-auto vaut 1 (install_auto() : accueil, ?via=qr,
-// ?via=launcher, pas de « Plus tard ») ; « Installer l'application » du volet du menu l'ouvre aussi. « Plus tard » :
-// cookie nw_install_later six mois. Rien en mode application ni dans l'application Android.
+// ?via=launcher, à chaque visite) ; « Installer l'application » du volet du menu l'ouvre aussi. « Plus tard » la ferme
+// pour la page en cours seulement, sans cookie. Rien en mode application ni dans l'application Android.
 if (!install_available()) {
     return;
 }
-$installSecure = ($_SERVER['HTTPS'] ?? '') === 'on' || str_starts_with((string) env('APP_URL', ''), 'https://');
 ?>
-<section id="install-bar" class="install-bar" aria-labelledby="install-bar-title" data-auto="<?= install_auto() ? '1' : '0' ?>" data-cookie="<?= e(INSTALL_COOKIE) ?>" data-max-age="<?= INSTALL_MAX_AGE ?>" data-secure="<?= $installSecure ? '1' : '0' ?>" hidden>
+<section id="install-bar" class="install-bar" aria-labelledby="install-bar-title" data-auto="<?= install_auto() ? '1' : '0' ?>" hidden>
     <div class="install-inner">
         <img class="install-icon" src="<?= e($asset('images/icons/icon-192.png')) ?>" alt="" width="44" height="44">
         <div class="install-body">
