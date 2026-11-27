@@ -1128,12 +1128,14 @@ for lang in fr en ar; do
     expect "page hors ligne : textes de lang/$lang.php (offline.*)" 3 "$found"
 done
 # Barre « Installer l'application Noorwan » : cachée sans JavaScript, ouverte d'elle-même sur l'accueil et à l'arrivée
-# par un QR code ou la grille des sites, jamais après « Plus tard », absente de l'application Android.
-bar_auto() { curl -s "$@" | grep -oE '<section id="install-bar" class="install-bar" aria-labelledby="install-bar-title" data-auto="[01]" data-cookie="nw_install_later" data-max-age="15552000" data-secure="[01]" hidden>' | grep -oE 'data-auto="[01]"' | grep -oE '[01]'; }
+# par un QR code ou la grille des sites, à chaque visite (« Plus tard » sans cookie), absente de l'application Android.
+bar_auto() { curl -s "$@" | grep -oE '<section id="install-bar" class="install-bar" aria-labelledby="install-bar-title" data-auto="[01]" hidden>' | grep -oE 'data-auto="[01]"' | grep -oE '[01]'; }
 expect "barre : accueil 1, autre page 0, ?via=qr 1, ?via=launcher 1, ?via inconnu 0" "1|0|1|1|0" \
     "$(bar_auto "$BASE_URL/?lang=fr")|$(bar_auto "$BASE_URL/contact.php?lang=fr")|$(bar_auto "$BASE_URL/contact.php?lang=fr&via=qr")|$(bar_auto "$BASE_URL/edition.php?lang=en&via=launcher")|$(bar_auto "$BASE_URL/contact.php?lang=fr&via=autre")"
-expect "barre : « Plus tard » (nw_install_later=1) la garde fermée, même sur l'accueil ou par un QR code" "0|0" \
-    "$(bar_auto -H 'Cookie: nw_install_later=1' "$BASE_URL/?lang=fr")|$(bar_auto -H 'Cookie: nw_install_later=1' "$BASE_URL/contact.php?lang=fr&via=qr")"
+expect "barre : revient à chaque visite, même avec l'ancien cookie « Plus tard » (accueil, ?via=qr, ?via=launcher)" "1|1|1" \
+    "$(bar_auto -H 'Cookie: nw_install_later=1' "$BASE_URL/?lang=fr")|$(bar_auto -H 'Cookie: nw_install_later=1' "$BASE_URL/contact.php?lang=fr&via=qr")|$(bar_auto -H 'Cookie: nw_install_later=1' "$BASE_URL/edition.php?lang=fr&via=launcher")"
+expect "ancien cookie « Plus tard » effacé une fois (hôte seul, Path=/), rien posé sans lui" "1|0" \
+    "$(curl -s -o /dev/null -D - -H 'Cookie: nw_install_later=1' "$BASE_URL/?lang=fr" | grep -ciE '^set-cookie: nw_install_later=deleted; expires=[^;]+; Max-Age=0; path=/; samesite=lax')|$(curl -s -o /dev/null -D - "$BASE_URL/?lang=fr" | grep -ci '^set-cookie: nw_install_later')"
 app_ua='Mozilla/5.0 (Linux; Android 14; Pixel 8; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/131.0.0.0 Mobile Safari/537.36 NoorwanApp/Noorwan'
 for path in "/?lang=fr" "/contact.php?lang=ar&via=qr"; do
     html=$(curl -s -A "$app_ua" "$BASE_URL$path")
@@ -1159,8 +1161,8 @@ expect "site.js : la barre attend le choix des cookies, puis vient (événement 
 install_js=$(sed -n '/^\/\/ Installer le site sans magasin (M-132/,$p' public/assets/js/site.js)
 expect "site.js : beforeinstallprompt gardé, téléphone Android, iPhone et iPad, mode application, application Android" "1|1|1|1|1" \
     "$(grep -A1 "window.addEventListener('beforeinstallprompt', function (event) {" <<< "$install_js" | grep -c 'event.preventDefault();')|$(grep -c '/android/i.test(ua) && /mobile/i.test(ua)' <<< "$install_js")|$(grep -c 'iphone|ipad|ipod' <<< "$install_js")|$(grep -c "display-mode: standalone" <<< "$install_js")|$(grep -c "ua.indexOf('NoorwanApp') !== -1" <<< "$install_js")"
-expect "site.js : « Plus tard » en cookie six mois, Path=/, SameSite=Lax, jamais le stockage du navigateur" "1|0" \
-    "$(grep -c "'=1; Max-Age=' + (bar.getAttribute('data-max-age') || '15552000') + '; Path=/; SameSite=Lax' + secure" <<< "$install_js")|$(grep -cE 'localStorage|sessionStorage' <<< "$install_js")"
+expect "site.js : « Plus tard » ferme la barre sans cookie ni stockage du navigateur" "1|0|0" \
+    "$(grep -A2 '    function later() {' <<< "$install_js" | grep -c '^        hide();$')|$(grep -c 'document.cookie = ' <<< "$install_js")|$(grep -cE 'localStorage|sessionStorage' <<< "$install_js")"
 expect "site.js : seule l'étape app_installed, sans paramètre, après l'accord de mesure" 1 \
     "$(grep -cF 'nw_consent=v1\.a1\.m[01](?:;|$)/.test(document.cookie) && window.dataLayer' <<< "$install_js")"
 grep -q "window.dataLayer.push({ event: 'app_installed' });" <<< "$install_js" && pass "site.js : étape app_installed" || fail "site.js : étape app_installed"
@@ -1173,9 +1175,9 @@ expect "grille : via=launcher sur les quatre autres sites, ni sur Noorwan ni sur
     "$(grep -cE 'href="https://[^"]+\?via=launcher" data-launcher-site="(connect|reserva|inteek|onepay)"' <<< "$panel")|$(grep -c 'href="./?lang=fr" data-launcher-site="noorwan"' <<< "$panel")|$(grep -c '<a class="launcher-account" href="https://compte.noorwan.com/home" rel="noopener">' <<< "$panel")"
 expect "with_origin : ajout, & après une requête, avant l'ancre, sans doublon, origine inconnue ignorée" "https://a.invalid?via=launcher|https://a.invalid/?x=1&via=qr|https://a.invalid/p?via=qr#s|https://a.invalid?via=qr|https://a.invalid" \
     "$("$PHP" -r 'require "app/bootstrap.php"; echo implode("|", [with_origin("https://a.invalid", "launcher"), with_origin("https://a.invalid/?x=1", "qr"), with_origin("https://a.invalid/p#s", "qr"), with_origin("https://a.invalid?via=qr", "launcher"), with_origin("https://a.invalid", "mail")]);' 2>&1)"
-# Page Cookies : nw_install_later expliqué dans les trois langues.
+# Page Cookies : plus de cookie « Plus tard » (nw_install_later) dans les trois langues.
 for lang in fr en ar; do
-    expect "page Cookies : section nw_install_later ($lang)" 1 "$(curl -s "$BASE_URL/cookies.php?lang=$lang" | grep -c '<h2[^>]*>nw_install_later</h2>')"
+    expect "page Cookies : plus de nw_install_later ($lang)" 0 "$(curl -s "$BASE_URL/cookies.php?lang=$lang" | grep -c 'nw_install_later')"
 done
 expect "application Android : agent NoorwanApp/Noorwan (le site n'y propose pas l'installation)" "NoorwanApp/Noorwan" "$(cap_value "['appendUserAgent']")"
 
