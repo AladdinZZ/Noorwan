@@ -169,7 +169,9 @@ for lang in fr en ar; do
     footer=$(sed -n '/<nav class="footer-cols"/,/<\/nav>/p' <<< "$home")
     grep -q "href=\"edition.php?lang=$lang#catalogue\"" <<< "$footer" && pass "pied de page : page Édition gardée ($lang)" || fail "pied de page : lien vers la page Édition ($lang)"
     grep -q 'id="contact" class="screen screen-mist cta"' <<< "$home" && pass "bandeau contact en bas de l'accueil ($lang)" || fail "bandeau contact ($lang)"
-    expect "accueil : aucun texte à fournir ($lang)" 0 "$(grep -c '<mark class="todo">' <<< "$home")"
+    # Seuls textes à fournir de l'accueil : titre et phrase de l'arbre des applications (27/11/2026).
+    expect "accueil : textes à fournir seulement dans l'arbre des applications ($lang)" "2|0" \
+        "$(sed -n '/<section id="arbre"/,/<\/section>/p' <<< "$home" | grep -c '<mark class="todo">')|$(sed '/<section id="arbre"/,/<\/section>/d' <<< "$home" | grep -c '<mark class="todo">')"
     why=$(sed -n '/aria-labelledby="why-title"/,/<\/section>/p' <<< "$home")
     expect "Pourquoi Noorwan : texte et trois points forts, sans chiffre ($lang)" "1|3|0" \
         "$(grep -c '<p class="lead">' <<< "$why")|$(sed -n '/<ul class="why-points">/,/<\/ul>/p' <<< "$why" | grep -c '<li>')|$(sed -n '/<ul class="why-points">/,/<\/ul>/p' <<< "$why" | grep -cE '[0-9]')"
@@ -836,7 +838,9 @@ echo "« Nos savoir-faire », phrases retirées, titre de contact avant la photo
 # La catégorie de Noorwan Connect est fournie (« Numérique », 20/11/2026) : la clé solutions.connect_cat disparaît.
 expect "« À FOURNIR » dans lang/ : plus de catégorie de Noorwan Connect à fournir" 0 "$(cat lang/*.php | grep -c 'connect_cat\|catégorie de Noorwan Connect')"
 expect "« À FOURNIR » dans lang/ : texte alternatif de la photo d'en-tête restante (Édition)" 3 "$(cat lang/*.php | grep -c "'hero_alt' => '\[À FOURNIR : description de la photo d.*en-tête de la page Édition\]'")"
-expect "« À FOURNIR » dans lang/ : rien d'autre" 3 "$(cat lang/*.php | grep -c 'À FOURNIR')"
+expect "« À FOURNIR » dans lang/ : titre et phrase de l'arbre des applications" "3|3" \
+    "$(cat lang/*.php | grep -c "'tree_h' => '\[À FOURNIR : titre de la section arbre\]'")|$(cat lang/*.php | grep -c "'tree_text' => '\[À FOURNIR : phrase de la section arbre\]'")"
+expect "« À FOURNIR » dans lang/ : rien d'autre" 9 "$(cat lang/*.php | grep -c 'À FOURNIR')"
 for lang in fr en ar; do
     expect "texte alternatif de la photo d'en-tête de Solutions écrit ($lang)" 1 \
         "$(grep -cF "'hero_alt' => '$(by_lang "$lang" "Illustration : deux personnes assemblent des écrans d\\'application et des modules reliés entre eux." "Illustration: two people assemble app screens and connected modules." "رسم توضيحي: شخصان يجمّعان شاشات تطبيقات ووحدات مترابطة.")'," "lang/$lang.php")"
@@ -1174,6 +1178,35 @@ for lang in fr en ar; do
     expect "page Cookies : section nw_install_later ($lang)" 1 "$(curl -s "$BASE_URL/cookies.php?lang=$lang" | grep -c '<h2[^>]*>nw_install_later</h2>')"
 done
 expect "application Android : agent NoorwanApp/Noorwan (le site n'y propose pas l'installation)" "NoorwanApp/Noorwan" "$(cap_value "['appendUserAgent']")"
+
+echo "8. Arbre des applications (accueil, 27/11/2026)"
+for lang in fr en ar; do
+    home=$(curl -s "$BASE_URL/?lang=$lang")
+    tree=$(sed -n '/<section id="arbre"/,/<\/section>/p' <<< "$home")
+    expect "arbre : après les univers, avant la méthode ($lang)" "univers|arbre|methode" \
+        "$(grep -oE '<(div|section) id="(univers|arbre|methode)"' <<< "$home" | sed -E 's/.*id="([a-z]+)"/\1/' | paste -sd '|' -)"
+    expect "arbre : tronc Noorwan, trois branches vers leur page, langue gardée ($lang)" "1|consulting?lang=$lang|solutions.php?lang=$lang|edition.php?lang=$lang" \
+        "$(grep -c '<span class="tree-node tree-trunk tree-at-noorwan">Noorwan</span>' <<< "$tree")|$(grep -oE 'class="tree-node tree-branch [^"]+" href="[^"]+"' <<< "$tree" | sed -E 's/.*href="([^"]+)"/\1/' | paste -sd '|' -)"
+    expect "arbre : Reserva, Inteek et Connect sous Solutions, avec ?lang= et ?via=launcher ($lang)" \
+        "https://dev.reserva.noorwan.com?lang=$lang&amp;via=launcher|https://dev.inteek.noorwan.com?lang=$lang&amp;via=launcher|https://compte.noorwan.com/home?lang=$lang&amp;via=launcher|3" \
+        "$(grep -oE 'class="tree-node tree-app [^"]+" href="[^"]+"' <<< "$tree" | sed -E 's/.*href="([^"]+)"/\1/' | paste -sd '|' -)|$(sed -n '/tree-branch-solutions/,/<\/ul>/p' <<< "$tree" | grep -c 'class="tree-node tree-app ')"
+    expect "arbre : icône de la famille commune et pastille de secours pour chaque application ($lang)" "3|3" \
+        "$(grep -cE '<img class="launcher-img" src="images/sites/(reserva|inteek|connect)\.svg\?v=[0-9]+" alt="" width="48" height="48" loading="lazy" decoding="async">' <<< "$tree")|$(grep -c 'class="launcher-dot"' <<< "$tree")"
+    if grep -qiE 'onepay|noor([^w]|$)|cerebro' <<< "$tree"; then fail "arbre : OnePay, Noor ou Cerebro présent ($lang)"; else pass "arbre : ni OnePay, ni Noor, ni Cerebro ($lang)"; fi
+    expect "arbre : dessins décoratifs, liste nommée par le titre, aucun style ni script en ligne ($lang)" "2|1|0|0" \
+        "$(grep -c '<svg class="tree-art tree-art-[a-z]*" viewBox="[0-9 ]*" width="[0-9]*" height="[0-9]*" aria-hidden="true" focusable="false">' <<< "$tree")|$(grep -c '<ul class="tree-map" aria-labelledby="tree-title">' <<< "$tree")|$(grep -ciE ' style=|<script' <<< "$tree")|$(grep -ciE '<image|xlink:href|https?://[^"]*\.(png|jpe?g|webp)' <<< "$tree")"
+done
+# Tout réglage d'adresse : l'arbre ne prend que les trois applications publiques, jamais la cinquième tuile du lanceur.
+tree_all=$(env LAUNCHER_ONEPAY_URL=https://pay.example.invalid LAUNCHER_RESERVA_URL=https://reserva.example.invalid "$PHP" -r '$_GET["lang"] = "fr"; require "public/index.php";' 2>&1 | sed -n '/<section id="arbre"/,/<\/section>/p')
+expect "arbre : adresses du lanceur (.env), liste fermée Reserva, Inteek, Connect" "reserva|inteek|connect|1|0" \
+    "$(grep -oE 'data-tree-app="[a-z]+"' <<< "$tree_all" | sed -E 's/.*="([a-z]+)"/\1/' | paste -sd '|' -)|$(grep -c 'href="https://reserva.example.invalid?lang=fr&amp;via=launcher"' <<< "$tree_all")|$(grep -ciE 'onepay|pay\.example' <<< "$tree_all")"
+expect "with_lang : ajout, & après une requête, avant l'ancre, sans doublon" "https://a.invalid?lang=fr|https://a.invalid/?x=1&lang=fr|https://a.invalid/p?lang=fr#s|https://a.invalid?lang=en" \
+    "$("$PHP" -r 'require "app/bootstrap.php"; echo implode("|", [with_lang("https://a.invalid"), with_lang("https://a.invalid/?x=1"), with_lang("https://a.invalid/p#s"), with_lang("https://a.invalid?lang=en")]);' 2>&1)"
+tree_css=$(sed -n '/Arbre des applications (accueil, 27\/11\/2026)/,/Bandeau « Un projet en tête ? »/p' public/assets/css/site.css)
+if grep -qE '(^|[^-])(left|right)\s*:|margin-(left|right)|padding-(left|right)|border-(left|right)|text-align: (left|right)' <<< "$tree_css"; then fail "arbre : propriété physique (left, right)"; else pass "arbre : propriétés logiques seulement"; fi
+expect "arbre : miroir en arabe, aucune animation ni transition, couleurs par variables" "1|1|0|0" \
+    "$(grep -c '^\[dir="rtl"\] \.tree-art {$' <<< "$tree_css")|$(grep -c '^\[dir="rtl"\] \.tree-node {$' <<< "$tree_css")|$(grep -cE '^\s+(animation|transition)' <<< "$tree_css")|$(grep -E '^\s+(fill|stroke|background|color):' <<< "$tree_css" | grep -v 'var(--' | grep -vc ': none;')"
+expect "arbre : écorce et houppier dans le thème sombre (deux blocs)" "2|2" "$(grep -c -- '--tree-bark: #6B6253;' public/assets/css/site.css)|$(grep -c -- '--tree-canopy: #232325;' public/assets/css/site.css)"
 
 echo
 if [[ $failures -eq 0 ]]; then echo "Tous les tests passent."; else echo "$failures test(s) en échec."; fi
